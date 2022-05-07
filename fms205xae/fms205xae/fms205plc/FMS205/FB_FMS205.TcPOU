@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_FMS205" Id="{a261f573-1402-443e-9bab-e88e0bf02070}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205
+VAR_INPUT
+	    MaximoTiempoRespuesta: TIME := T#5S;
+
+END_VAR
+VAR_OUTPUT
+	CondicionesIniciales : BOOL;
+END_VAR
+VAR
+	ctInp: S_ControllerInput;
+	ctOut: S_ControllerOutput;
+
+	Execute : BOOL;
+	Ack : BOOL;
+	
+	mdAlimentador			: FB_Alimentador			(ID:=0, MRT:=MaximoTiempoRespuesta);
+	mdPickAndPlaceCarga 	: FB_PickAndPlace			(ID:=1, MRT:=MaximoTiempoRespuesta);
+	mdMedidorTapa			: FB_MedidorTapa			(ID:=3, MRT:=MaximoTiempoRespuesta);
+	mdCaptadorInductivo 	: FB_CaptadorInductivo		(ID:=4, MRT:=MaximoTiempoRespuesta);
+	mdDetectorFotoelectrico : FB_DetectorFotoelectrico	(ID:=5, MRT:=MaximoTiempoRespuesta);
+	mdPickAndPlaceDescarga 	: FB_PickAndPlace			(ID:=8, MRT:=MaximoTiempoRespuesta);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(*CondicionesIniciales:=
+	mdPickAndPlaceCarga.IC AND
+	mdMedidorTapa.IC AND 
+	mdCaptadorInductivo.IC AND
+	mdDetectorFotoelectrico.IC AND
+	mdPickAndPlaceDescarga.IC; *) 
+	
+mdPickAndPlaceCarga.ctInp.Execute := Execute;
+
+mdPickAndPlaceCarga.ModuleProcessCycle();
+IF mdPickAndPlaceCarga.ctOut.Done THEN
+	mdPickAndPlaceCarga.ctInp.Ack := TRUE;	
+END_IF
+
+mdMedidorTapa.ctInp.Execute := mdPickAndPlaceCarga.ctOut.Done;
+mdMedidorTapa.ModuleProcessCycle();
+IF mdMedidorTapa.ctOut.Done THEN
+	mdMedidorTapa.ctInp.Ack := TRUE;	
+END_IF
+
+(*mdCaptadorInductivo.ModuleProcessCycle(Execute:=Execute, Ack:=Ack);
+mdDetectorFotoelectrico.ModuleProcessCycle(Execute:=Execute, Ack:=Ack);
+mdPickAndPlaceDescarga.ModuleProcessCycle(Execute:=Execute, Ack:=Ack); 
+mdCaptadorInductivo.ModuleProcessCycle(Execute:=Execute, Ack:=Ack); 
+*)]]></ST>
+    </Implementation>
+    <LineIds Name="FB_FMS205">
+      <LineId Id="9" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="30" Count="1" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="40" Count="1" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="44" Count="1" />
+      <LineId Id="49" Count="0" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="51" Count="2" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="34" Count="2" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="43" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

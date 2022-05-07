@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_Alimentador" Id="{c5b5144c-73a3-412e-b858-b842aecaf92f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Alimentador EXTENDS FB_Module
+(*
+MÓDULO ALIMENTACIÓN - Manual de usuario #31/27
+
+Para el almacenamiento y posterior alimentación de las tapas, se utiliza un 
+cargador de gravedad, provisto de un empujador accionado mediante cilindro 
+neumático que realiza la extracción 
+
+*)
+
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	(* Sensores Alimentador *)
+	k1 AT %I*: BOOL; (* Se corresponde con empujador tapa delante c1 *)
+
+	(* Sensores Alimentador *)
+	(* dh AT %I*: UINT; (* Dectector altura (valor) fv *) *)
+
+	(* Actuadores Alimentador *)
+	K_1 AT %Q*: BOOL; (* Se corresponde con el cTAP *)
+	fbController: FB_Alimentador_SFC;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="ModuleControlFlow" Id="{d7358fc0-6ede-496b-926f-c7f1a8440317}">
+      <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbController(ctInp:=ctInp, ctOut=>ctOut);]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_Alimentador">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Alimentador.ModuleControlFlow">
+      <LineId Id="3" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

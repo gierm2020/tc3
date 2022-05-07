@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_Evacuador" Id="{50116491-c91a-4b60-887b-578d95c086cb}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Evacuador EXTENDS FB_Module
+(* 
+ESTACIÓN DE EVACUACIÓN DE TAPA INCORRECTA - Manual de usuario #33/29
+
+En caso de que la tapa que llegue a la penúltima de 
+las estaciones del plato divisor, tras haber pasado por 
+los diferentes sensores encargados de determinar su 
+material y su altura, no coincida con lo indicado por el 
+controlador central encargado de planificar la producción,
+ha de ser rechazada. Para ello se ha dispuesto en esta 
+estación un manipulador de dos ejes que en caso de 
+recibir la orden correspondiente, recoge la tapa del plato 
+divisor y la deposita sobre una rampa de evacuación.
+
+Los componentes que forman parte de este manipulador son dos cilindros 
+neumáticos de vástagos paralelos a modo de ejes, sobre los que se ha 
+fijado como elemento terminal una placa con tres ventosas para sujeción
+por vacío
+
+*)
+
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	fbController: FB_Evacuador_SFC;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="ModuleControlFlow" Id="{088423ab-0767-49f6-96df-c713fe6fe249}">
+      <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbController(ctInp:=ctInp, ctOut=>ctOut);]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_Evacuador">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Evacuador.ModuleControlFlow">
+      <LineId Id="3" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

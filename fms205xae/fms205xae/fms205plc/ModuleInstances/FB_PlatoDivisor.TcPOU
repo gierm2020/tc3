@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_PlatoDivisor" Id="{c71a4a01-3eb1-443b-a07e-accb57d2980d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_PlatoDivisor EXTENDS FB_Module
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	fbController: FB_PlatoDivisor_SFC;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="ModuleControlFlow" Id="{a7156aed-454d-425e-80f1-664f90d71526}">
+      <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbController(ctInp:=ctInp, ctOut=>ctOut);]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_PlatoDivisor">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_PlatoDivisor.ModuleControlFlow">
+      <LineId Id="3" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

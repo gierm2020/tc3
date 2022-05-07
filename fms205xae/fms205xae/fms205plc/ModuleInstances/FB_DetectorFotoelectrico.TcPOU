@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_DetectorFotoelectrico" Id="{9c6b326b-8120-4a79-942a-3ee0b68cb66a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_DetectorFotoelectrico EXTENDS FB_Module
+(*
+
+ESTACIONES DE DETECCIÓN DE MATERIAL - Manual de usuario #32/28
+
+Con el fin de diferenciar finalmente las tapas de nylon blanco de las de
+color negro, se ha incluido un detector fotoeléctrico. Dicho componente 
+proporciona una señal de detección únicamente, de las tapas de color 
+blanco
+ 
+*)
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <LineIds Name="FB_DetectorFotoelectrico">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

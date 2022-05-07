@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_Module" Id="{cba3fcf8-6c8d-4174-8dda-f766b8b369f3}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Module
+VAR_INPUT
+	ctInp: S_ControllerInput;
+END_VAR
+
+VAR_OUTPUT
+	ctOut: S_ControllerOutput;
+//	IC: BOOL;
+//	Done: BOOL;
+END_VAR
+VAR
+	// Parámetros que se establecen en el constructor
+	ModuleID: BYTE; // identificador del módulo
+	ModuleMRT: TIME; // maximo tiempo de respuesta; si se excede hay un fallo en el módulo	
+	
+	// Variables que permanecen durante la ejecución del objeto
+	fbModuleController: FB_Module_SFC;	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="FB_init" Id="{3a8a37b7-5b89-40d4-9fc1-d2a364173cd9}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	// Datos que se pasan al crear la variable y se guardan sólo una vez
+	ID: BYTE; 
+	MRT: TIME;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// guardar los paraámetros de entrada que se indican cuando se crea la variable
+ModuleID := ID;
+ModuleMRT := MRT;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ModuleControlFlow" Id="{9383c466-5ef4-45f2-bc56-c203e01f0aa7}">
+      <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbModuleController(ctInp:=ctInp, ctOut=>ctOut);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ModuleManageErrors" Id="{8ade10c1-f39a-4934-8daa-f961efae09a8}">
+      <Declaration><![CDATA[METHOD ModuleManageErrors : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ModulePerformActions" Id="{17632846-53ea-4ba0-9b40-61e8d351137e}">
+      <Declaration><![CDATA[METHOD ModulePerformActions : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ModuleProcessCycle" Id="{f59c6a25-056d-46b7-b6cf-2d87510fdf05}">
+      <Declaration><![CDATA[METHOD ModuleProcessCycle : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ModuleReadInputs();
+ModuleControlFlow();
+ModulePerformActions();
+ModuleManageErrors();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ModuleReadInputs" Id="{72cc98b4-db8c-4331-bea1-c85f00e58403}">
+      <Declaration><![CDATA[METHOD ModuleReadInputs : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// leer los sensores y guardar el resultados
+;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_Module">
+      <LineId Id="18" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Module.FB_init">
+      <LineId Id="14" Count="0" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="11" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Module.ModuleControlFlow">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Module.ModuleManageErrors">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Module.ModulePerformActions">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Module.ModuleProcessCycle">
+      <LineId Id="10" Count="2" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Module.ModuleReadInputs">
+      <LineId Id="5" Count="1" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

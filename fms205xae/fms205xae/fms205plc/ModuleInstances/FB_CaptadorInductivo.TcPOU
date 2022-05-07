@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_CaptadorInductivo" Id="{2358bbd4-4505-47c4-8c5f-b848f9a2a136}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_CaptadorInductivo EXTENDS FB_Module
+(*
+
+ESTACIONES DE DETECCIÓN DE MATERIAL - Manual de usuario #31/27
+
+Para poder diferenciar las tapas del primero de estos tipos, la segunda de 
+las estaciones del plato divisor está dotada con un captador inductivo. Éste 
+proporciona una señal al PLC, únicamente en el caso de que la tapa que el 
+plato sitúa frente a él cada vez que realiza un giro, sea de aluminio.
+
+*)
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	// Sensores
+    di         AT %I*: BOOL; (* ei (nombre=di c=I31 B=J1 b=13 módulo=EL1008 T=7 C=7 etiqueta=-B19, input) Detector inductivo *)
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="ModulePerformActions" Id="{92b62e2d-235a-4064-b6db-fd2bfc42a191}">
+      <Declaration><![CDATA[METHOD ModulePerformActions : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(*
+Plato[4].TapaClara := SEL(ef,vTapaClaraNo,vTapaClaraSi);
+Plato[4].TapaMedida := SEL(Plato[4].TapaClara <> vIndefinido,vTapaMedidaNo,vTapaMedidaSi);
+Plato[4].Fin := (Plato[4].TapaMedida <> vIndefinido);
+*)]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_CaptadorInductivo">
+      <LineId Id="10" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_CaptadorInductivo.ModulePerformActions">
+      <LineId Id="5" Count="0" />
+      <LineId Id="7" Count="1" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
