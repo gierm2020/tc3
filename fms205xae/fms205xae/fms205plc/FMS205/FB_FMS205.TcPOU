@@ -23,6 +23,11 @@ VAR
 	mdDetectorFotoelectrico : FB_DetectorFotoelectrico	(ID:=5, MRT:=MaximoTiempoRespuesta);
 	mdEvacuador			 	: FB_Evacuador				(ID:=7, MRT:=MaximoTiempoRespuesta);
 	mdPickAndPlaceDescarga 	: FB_PickAndPlace			(ID:=8, MRT:=MaximoTiempoRespuesta);
+	
+	mdFMS205_SFC			: FB_FMS205_SFC;
+	mdFMS205_Producir_SFC	: FB_FMS205_Producir_SFC;
+	
+	
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -34,7 +39,15 @@ END_VAR
 	mdDetectorFotoelectrico.ctOut.IC AND
 	mdEvacuador.ctOut.IC AND
 	mdPickAndPlaceDescarga.ctOut.IC; 
+
 	
+mdFMS205_SFC(Producir:=Execute, Restaurar:=FALSE);
+mdFMS205_Producir_SFC(
+	Producir:=mdFMS205_SFC.Produce, 
+	mdAlimentador := mdAlimentador,
+	mdPickAndPlaceCarga := mdPickAndPlaceCarga);
+
+(*	
 mdAlimentador.ctInp.Execute := Execute;
 mdAlimentador.ctInp.Ack := Ack;
 mdAlimentador.ModuleProcessCycle();
@@ -42,6 +55,8 @@ mdAlimentador.ModuleProcessCycle();
 mdCaptadorInductivo.ctInp.Execute := Execute AND mdAlimentador.ctOut.Done;
 mdCaptadorInductivo.ctInp.Ack := Ack;
 mdCaptadorInductivo.ModuleProcessCycle();
+*)
+
 
 (*
 	

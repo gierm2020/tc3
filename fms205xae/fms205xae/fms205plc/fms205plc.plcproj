@@ -23,7 +23,13 @@
     <Compile Include="DUTs\S_ControllerOutput.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FMS205\Director.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FMS205\FB_FMS205.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FMS205\FB_FMS205_Producir_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FMS205\FB_FMS205_SFC.TcPOU">
