@@ -3,58 +3,64 @@
   <POU Name="FB_Director" Id="{7ba3b411-03e2-4744-bc96-6b241362c795}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Director
 VAR_INPUT
-    Marcha: BOOL; // se pulsa el botón de marcha, empezar a producir
+	fbPanel: FB_Panel; 	// estado del panel de control
 
-    Cancela: BOOL; (**)
-    Continua: BOOL; (**)
-    Emergencia: BOOL;
-    Fallo: BOOL; (**)
-    Finalizada: BOOL;
-    FinTarea: BOOL;
-    FinCiclo: BOOL;
-    Manual: BOOL;
-    Para: BOOL; (* Detiene la produccion a final del ciclo *)
-    Preparada: BOOL;
-    Reinicia: BOOL;
-    Restaurada: BOOL;
+	IC: BOOL; 			// todos los módulos están en condiciones iniciales
+    Preparada: BOOL;	// la estación está preparada después de encender
+	FinCiclo: BOOL;		// una pieza se ha completado
+	FinTarea: BOOL;		// el lote se ha completado
+	Fallo: BOOL; 		// al menos un módulo ha fallado
+    Finalizada: BOOL;	// la estación está lista para apagarse    
+    
+    // Marcha: BOOL; // se pulsa el botón de marcha, empezar a producir
+    // Cancela: BOOL; (**)
+    // Continua: BOOL; (**)
+    // Emergencia: BOOL;
+    // Manual: BOOL;
+    // Para: BOOL; (* Detiene la produccion a final del ciclo *)
+    // Reinicia: BOOL;
+    // Restaurada: BOOL;
 END_VAR
 VAR_OUTPUT
-	HayRestaurar	: BOOL; // Estación restaurándose al estado inicial
-    HayProducir		: BOOL; // Estacion en produccion 
+	// HayRestaurar	: BOOL; // Estación restaurándose al estado inicial
+    // HayProducir		: BOOL; // Estacion en produccion 
 	
     Modo: E_GEMMA := E_GEMMA.A6Inicializando;
-    Defecto: BOOL; (* Procedimientos de defecto *)
-    Funcionamiento: BOOL; (* Procedimientos de funcionamiento*)
     Parada: BOOL; (* Procedimientos de parada *)
-    Pausa: BOOL;
-
+    Funcionamiento: BOOL; (* Procedimientos de funcionamiento*)
+    Defecto: BOOL; (* Procedimientos de defecto *)
+    // Pausa: BOOL;
+	
+	
 END_VAR
 VAR
     Previo: E_GEMMA; (* Modo anterior *)
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[(* PARAMETROS DE SALIDA *)
+      <ST><![CDATA[
+
+
+
+
+(* Este código debería estar después de los cambios de estado 	
+
 Parada := (Modo >= E_GEMMA.A1ParadaInicial) AND (Modo <= E_GEMMA.A7SituandoEstado);
 Funcionamiento:= (Modo >= E_GEMMA.F1ProduccionNormal) AND (Modo <= E_GEMMA.F6Probando);
 Defecto := (Modo >= E_GEMMA.D1ParadaEmergencia) AND (Modo <= E_GEMMA.D3ProducirConFallos);
-
-
-Pausa := (Modo = E_GEMMA.A3ParadaEstado) OR (Modo = E_GEMMA.A4ParadaObtenida) OR (Modo = E_GEMMA.A5PreparandoTrasFallo)
-    OR (Modo = E_GEMMA.D1ParadaEmergencia) OR (Modo = E_GEMMA.D2TratamientoFallos);
-
-(* Este código debería estar después de los cambios de estado 	
 Produccion := (Modo = E_GEMMA.A2ParaFinCiclo) OR (Modo = E_GEMMA.A3ParadaEstado) OR (Modo = E_GEMMA.F1ProduccionNormal)
     OR (Modo = E_GEMMA.F2SecuenciaPreparacion) OR (Modo = E_GEMMA.F3SecuenciaFinalizacion) OR (Modo = E_GEMMA.F5VerificacionOrdenada)
     OR (Modo = E_GEMMA.F6Probando) OR (Modo = E_GEMMA.D3ProducirConFallos);
+Pausa := (Modo = E_GEMMA.A3ParadaEstado) OR (Modo = E_GEMMA.A4ParadaObtenida) OR (Modo = E_GEMMA.A5PreparandoTrasFallo)
+    OR (Modo = E_GEMMA.D1ParadaEmergencia) OR (Modo = E_GEMMA.D2TratamientoFallos);
 *)
 	
 (* FUNCION DE ESTADO *)
-IF Emergencia THEN
+IF fbPanel.Emergencia THEN
     Modo := E_GEMMA.D1ParadaEmergencia;
 	
 	
-ELSIF Reinicia THEN
+ELSIF fbPanel.Reinicia THEN
     Modo := E_GEMMA.A6Inicializando;
 
 
@@ -65,11 +71,11 @@ ELSE
         (* ------------------------------------------------------------ Procedimientos de parada *)
 		
         E_GEMMA.A1ParadaInicial: (* Parada en el estado inicial *)
-            IF NOT Restaurada THEN
+            IF NOT IC THEN // IF NOT Restaurada THEN
                 Modo := E_GEMMA.A6Inicializando;
-            ELSIF Manual THEN
+            ELSIF fbPanel.Manual THEN
                 Modo := E_GEMMA.F4VerificacionSinOrden;
-            ELSIF Marcha THEN
+            ELSIF fbPanel.Marcha AND IC THEN  // ELSIF Marcha THEN
                 Modo := E_GEMMA.F2SecuenciaPreparacion;
 			ELSE
 				; // Esperar a que se pulse el bortón de marcha
@@ -93,16 +99,16 @@ ELSE
             ; // estado no tratado en la FMS205
         
 		E_GEMMA.A5PreparandoTrasFallo: (* Preparando de reanudacion tras el fallo *)
-            IF Continua THEN
+            IF fbPanel.Marcha THEN // Continua
                 Modo := Previo;
-            ELSIF Cancela THEN
+            ELSIF fbPanel.Para THEN // Cancela
                 Modo := E_GEMMA.A6Inicializando;
             END_IF
 			
         E_GEMMA.A6Inicializando: (* Situando la PO en el estado inicial *)
-            IF Restaurada THEN
+            IF IC THEN // Restaurada
                 Modo := E_GEMMA.A1ParadaInicial;
-            ELSIF Manual THEN
+            ELSIF fbPanel.Manual THEN
                 Modo := E_GEMMA.F4VerificacionSinOrden;
             END_IF
 			
@@ -119,7 +125,7 @@ ELSE
                 Modo := E_GEMMA.D2TratamientoFallos;
             ELSIF FinTarea THEN
                 Modo := E_GEMMA.F3SecuenciaFinalizacion;
-            ELSIF Para THEN
+            ELSIF fbPanel.Para THEN
                 Modo := E_GEMMA.A2ParaFinCiclo;
             END_IF
 			
@@ -143,7 +149,7 @@ ELSE
             IF Fallo THEN
                 Previo := E_GEMMA.A2ParaFinCiclo; //!!! Creo que está mal, no debería ser F4?
                 Modo := E_GEMMA.D2TratamientoFallos;
-            ELSIF NOT Manual THEN
+            ELSIF NOT fbPanel.Manual THEN
                 Modo := E_GEMMA.A6Inicializando; // después del modo manual, volver a inicializar
             ELSE
                 // Seguir en modo manual hasta que halla un fallo o se vuelva al modo automático
@@ -160,7 +166,7 @@ ELSE
 			
         (* ------------------------------------------------------------ Procedimientos de defecto *)
         E_GEMMA.D1ParadaEmergencia: (* Parada de emergencia *)
-            IF NOT Emergencia THEN
+            IF NOT fbPanel.Emergencia THEN
                 Modo := E_GEMMA.A6Inicializando; // Al quitar la parada de emergencia hay que reinicializar la estación
             ELSE
                 // Esperar a que se quite la parada de emergencia
@@ -181,18 +187,11 @@ ELSE
     END_CASE
 END_IF
 
+(* PARAMETROS DE SALIDA *)
+Parada := (Modo >= E_GEMMA.A1ParadaInicial) AND (Modo <= E_GEMMA.A7SituandoEstado);
+Funcionamiento:= (Modo >= E_GEMMA.F1ProduccionNormal) AND (Modo <= E_GEMMA.F6Probando);
+Defecto := (Modo >= E_GEMMA.D1ParadaEmergencia) AND (Modo <= E_GEMMA.D3ProducirConFallos);
 
-HayRestaurar := Modo=E_GEMMA.A6Inicializando;
-
-HayProducir := 
-	(Modo = E_GEMMA.A2ParaFinCiclo) OR 
-	(Modo = E_GEMMA.A3ParadaEstado) OR 
-	(Modo = E_GEMMA.F1ProduccionNormal) OR 
-	(Modo = E_GEMMA.F2SecuenciaPreparacion) OR 
-	(Modo = E_GEMMA.F3SecuenciaFinalizacion) OR 
-	(Modo = E_GEMMA.F5VerificacionOrdenada) OR 
-	(Modo = E_GEMMA.F6Probando) OR 
-	(Modo = E_GEMMA.D3ProducirConFallos);
 	
 ]]></ST>
     </Implementation>

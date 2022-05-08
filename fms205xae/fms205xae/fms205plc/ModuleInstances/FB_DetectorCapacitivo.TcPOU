@@ -12,14 +12,17 @@ en su rango de detección una pieza de cualquier material
 
 *)
 VAR_INPUT
+
 END_VAR
 VAR_OUTPUT
+	CapacidadDetectada: BOOL;
+	TapaMetalica: BOOL;
 END_VAR
 VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[// Falta este módulo]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

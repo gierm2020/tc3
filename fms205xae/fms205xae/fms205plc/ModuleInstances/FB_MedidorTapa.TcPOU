@@ -33,10 +33,27 @@ este dato es posible determinar de forma directa la altura de la tapa
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
+	AlturaMedida	: BOOL;
+	Altura_mm		: REAL;
+	Altura_Pulsos	: UINT;
 END_VAR
 VAR
+	(* Controlador  específico *)
 	fbController: FB_MedidorTapa_SFC;
+
+	(* Temporizadores específicos *)
+	TMED: TIME := T#1S;	
+	
+	(* Sensores específicos *)
+	fv  AT %I*: UINT; (*Detector valor altura *)
+
+	(* Actuadores específicos *)
+	L_1 AT %Q*: BOOL; (* Medidor de altura baja *)	
 END_VAR
+
+
+	
+	
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -45,14 +62,46 @@ END_VAR
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[fbController(ctInp:=ctInp, ctOut=>ctOut);]]></ST>
+        <ST><![CDATA[fbController(
+	TMED		:= TMED,	
+
+	ctInp 		:= ctInp, 
+	fv			:= fv,
+	
+	ctOut 		=> ctOut,
+	L_1			=> L_1);
+
+]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_MedidorTapa">
-      <LineId Id="9" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_MedidorTapa.ModuleControlFlow">
-      <LineId Id="3" Count="0" />
-    </LineIds>
+    <Method Name="ModulePerformActions" Id="{b4054fc3-aaf4-4e13-a441-22d4b11db75a}">
+      <Declaration><![CDATA[METHOD ModulePerformActions : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// el alimentador siempre está en condiciones iniciales
+ctOut.IC := TRUE; 
+
+// si no eestamos en modo manual, actualizar los actuadores con el estado del controlador
+IF NOT ctInp.Manual THEN
+	L_1 := fbController.L_1;
+END_IF
+
+IF ctOut.Done THEN
+	// si ha terminado de medir: guardar y convertir las medidas
+	AlturaMedida	:= TRUE;
+	Altura_Pulsos	:= fv;
+	Altura_mm		:= -0.0257*fv + 52.532;				 // calcular la altura con la ecuación de regresión
+	Altura_mm 		:= SEL(Altura_mm < 0, Altura_mm, 0); // si la altura es negativa dejar cero
+
+ELSIF ctInp.Ack THEN
+	// si el controlador usó los valores: inicializarlos para la siguiente medición
+	AlturaMedida	:= FALSE;
+	Altura_Pulsos	:= 0;
+	Altura_mm		:= 0;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>

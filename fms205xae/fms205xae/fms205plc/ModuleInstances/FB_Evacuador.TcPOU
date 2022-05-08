@@ -27,36 +27,59 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-	fbController: FB_Evacuador_SFC;
+	fbController		: FB_Evacuador_SFC; 		// controlador para ejecución normal
 	
-	f0 AT %I*: BOOL; (* Pick and place de rechazo detras *)
-	f1 AT %I*: BOOL; (* Pick and place de rechazo delante *)
-	g0 AT %I*: BOOL; (* Pick and place de rechazo arriba *)
-	v1 AT %I*: BOOL; (* Pick and place de rechazo vacio *)
+    f0        AT %I*: BOOL; (* gh0 (nombre=f0  c=I22 B=J2 b=22 módulo=EL1008 T=6  C=6 etiqueta=-B10, input) Pick and place de rechazo detrás *)
+    f1        AT %I*: BOOL; (* gh1 (nombre=f1  c=I23 B=J2 b=06 módulo=EL1008 T=6  C=6 etiqueta=-B11, input) Pick and place de rechazo delante *)
+    g0        AT %I*: BOOL; (* gv1 (nombre=g0  c=I24 B=J2 b=31 módulo=EL1008 T=6  C=6 etiqueta=-B12, input) Pick and place de rechazo arriba *)
+    v1        AT %I*: BOOL; (* ge1 (nombre=v1  c=I25 B=J1 b=25 módulo=EL1008 T=7  C=7 etiqueta=-B13, input) Pick and place de rechazo vacío *)
 
-	F_0 AT %Q*: BOOL; (* Pick and place de rechazo atras *)
-	F_1 AT %Q*: BOOL; (* Pick and place de rechazo adelante *)
-	G_1 AT %Q*: BOOL; (* Pick and place de rechazo abajo *)
-	V_1 AT %Q*: BOOL; (* Pick and place de rechazo succiona *)
+    F_1       AT %Q*: BOOL; (* gHRA (nombre=F+  c=Q22 B=J2  b=35 módulo=EL2008 T=8 C=8 etiqueta=-Y8,  output) Pick and place de rechazo avanza (afuera) *)
+    F_0       AT %Q*: BOOL; (* gHRR (nombre=F-  c=Q23 B=J2  b=32 módulo=EL2008 T=8 C=8 etiqueta=-Y9,  output) Pick and place de rechazo retrocede *)
+    G_1       AT %Q*: BOOL; (* gVER (nombre=G+  c=Q24 B=J2  b=11 módulo=EL2008 T=8 C=8 etiqueta=-Y10, output) Pick and place de rechazo baja *)
+    V_1       AT %Q*: BOOL; (* gEYE (nombre=V+  c=Q25 B=J2  b=08 módulo=EL2008 T=9 C=9 etiqueta=-Y11, output) Pick and place de rechazo succiona *)
 END_VAR
+
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[fbController();
+]]></ST>
     </Implementation>
     <Method Name="ModuleControlFlow" Id="{088423ab-0767-49f6-96df-c713fe6fe249}">
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[fbController(ctInp:=ctInp, ctOut=>ctOut);]]></ST>
+        <ST><![CDATA[fbController(
+	// sin temporizadores
+	
+	ctInp 	:= ctInp, 
+    f0      := f0,
+    f1      := f1,
+    g0      := g0,
+    v1      := v1,
+
+	ctOut 	=> ctOut);
+]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ModuleReadInputs" Id="{f04c5cd4-a346-42d0-8284-541f8d7c5d59}">
-      <Declaration><![CDATA[METHOD ModuleReadInputs : BOOL
+    <Method Name="ModulePerformActions" Id="{bff6b0cc-aa53-4cb9-b32f-a444e3596ef9}">
+      <Declaration><![CDATA[METHOD ModulePerformActions : BOOL
 VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[ctOut.IC := f1 AND g0 AND NOT v1;]]></ST>
+        <ST><![CDATA[// el alimentador está en condiciones iniciales si k1 está desactivado
+ctOut.IC := f1 AND g0 AND NOT v1;
+
+// si no eestamos en modo manual, actualizar los actuadores con el estado del controlador
+IF NOT ctInp.Manual THEN
+    F_1       := fbController.F_1;
+    F_0       := fbController.F_0;
+    G_1       := fbController.G_1;
+    V_1       := fbController.V_1;
+END_IF
+
+]]></ST>
       </Implementation>
     </Method>
   </POU>

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_Panel" Id="{514e5db3-ac71-4add-977b-df9fa295436c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Panel
+VAR_INPUT
+	Modo: E_GEMMA;
+	TR: TIME := T#3S; 	// Tiempo de reinicio
+END_VAR
+
+VAR_OUTPUT	
+    Emergencia: BOOL; 	// := PE 				Parada de emergencia (seta) 
+						// POC - 				Conmutador PO Conectada  (negra)
+	Marcha: BOOL; 		// :=FP_PM.Q 			Pulsador de marcha (verde)
+    Reinicia: BOOL; 	// :=T(PM AND NOT PS) 	Restablece situacion inicial
+	Restablece: BOOL;	// :=PM					Restablece la condición de fallo
+	Restaura: BOOL;		// :=PM					Restaura condiciones iniciales
+	
+	Para: BOOL; 		// :=NOT PS				Pulsador de parada (rojo)
+    Manual: BOOL; 		// :=SM			Conmutador de automático/manual (negro)
+						// Pulsador de reset (azul)												
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// pendiente vincular y codificar]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -12,17 +12,18 @@ neumático que realiza la extracción
 *)
 
 VAR
-	TK_1: TIME := T#1S;	
-
-	(* Controlador del alimentador *)
+	(* Controlador  específico *)
 	fbController: FB_Alimentador_SFC;
 
-	(* Sensores Alimentador *)
+	(* Temporizadores específicos *)
+	TK_1: TIME := T#1S;	
+
+	(* Sensores específicos *)
 	k1 AT %I*: BOOL; (* Se corresponde con empujador tapa delante c1 *)
 
-
-	(* Actuadores Alimentador *)
+	(* Actuadores específicos *)
 	K_1 AT %Q*: BOOL; (* Se corresponde con el cTAP *)
+	FM AT %Q*: BOOL;  (* Se corresponde con el zFM *)
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -32,10 +33,33 @@ END_VAR
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[fbController(ctInp:=ctInp, ctOut=>ctOut,
-	k1 := k1,
-	TK_1 := TK_1	
-);]]></ST>
+        <ST><![CDATA[fbController(
+	TK_1 	:= TK_1,
+	
+	ctInp 	:= ctInp, 
+	k1 		:= k1,
+	
+	ctOut 	=> ctOut);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ModulePerformActions" Id="{355ba2a1-3d02-4714-aad4-f747202fae09}">
+      <Declaration><![CDATA[METHOD ModulePerformActions : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// el alimentador está en condiciones iniciales si k1 está desactivado
+ctOut.IC := NOT k1; 
+
+// si no eestamos en modo manual, actualizar los actuadores con el estado del controlador
+IF NOT ctInp.Manual THEN
+	K_1 := fbController.K_1;
+END_IF
+
+// el actuador de falta de material es independiente del modo manual
+FM := fbcontroller.FM;
+]]></ST>
       </Implementation>
     </Method>
   </POU>

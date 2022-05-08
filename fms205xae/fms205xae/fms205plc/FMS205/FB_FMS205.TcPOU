@@ -3,18 +3,26 @@
   <POU Name="FB_FMS205" Id="{a261f573-1402-443e-9bab-e88e0bf02070}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205
 VAR_INPUT
-	    MaximoTiempoRespuesta: TIME := T#5S;
-
+	MaximoTiempoRespuesta: TIME := T#5S;
+	ManiobrasDeseadas: UINT;
 END_VAR
+
 VAR_OUTPUT
-	CondicionesIniciales : BOOL;
+	ManiobrasRealizadas: UINT := 0;
+	ManiobrasPendientes: UINT;
+	
+	IC: 		BOOL := FALSE; 	// todos los módulos están en condiciones iniciales
+    Preparada : BOOL := TRUE;	// la estación está preparada después de encender
+	FinCiclo: 	BOOL := FALSE;	// una pieza se ha completado
+	FinTarea: 	BOOL := FALSE;	// el lote se ha completado
+	Fallo: 		BOOL := FALSE;	// al menos un módulo ha fallado
+    Finalizada: BOOL := TRUE;	// la estación está lista para apagarse    	
 END_VAR
-VAR
-	ctInp: S_ControllerInput;
-	ctOut: S_ControllerOutput;
 
-	Execute : BOOL;
-	Ack : BOOL;
+VAR
+	// instrucciones de entrada a los controladores de los módulos
+	fbDirector				: FB_Director;
+	ctInp 					: S_ControllerInput;
 	
 	// módulos de la FMS205
 	mdAlimentador			: FB_Alimentador			(ID:=0, MRT:=MaximoTiempoRespuesta);
@@ -26,15 +34,28 @@ VAR
 	mdPickAndPlaceDescarga 	: FB_PickAndPlace			(ID:=8, MRT:=MaximoTiempoRespuesta);
 	
 	// controladores de la máquina, la función de producción y la guía GEMMA 
+	fbPanel					: FB_Panel;
 	fbFMS205_SFC			: FB_FMS205_SFC;
 	fbFMS205_Producir_SFC	: FB_FMS205_Producir_SFC;
-	fbDirector				: FB_Director;
-	
-	
+
+	// pendiente renombrar - variables en interfaz de usuario
+	Execute : BOOL;
+	Ack : BOOL;
+
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[CondicionesIniciales:=
+      <ST><![CDATA[fbPanel();
+fbDirector(
+	fbPanel 	:= fbPanel,
+	IC 			:= IC, 
+	Preparada 	:= Preparada,
+	FinCiclo	:= FinCiclo,
+	FinTarea	:= FinTarea,
+	Fallo		:= Fallo,
+	Finalizada	:= Finalizada);
+ 
+IC:=
 	mdAlimentador.ctOut.IC AND
 	mdPickAndPlaceCarga.ctOut.IC AND
 	mdMedidorTapa.ctOut.IC AND 
@@ -43,19 +64,68 @@ END_VAR
 	mdEvacuador.ctOut.IC AND
 	mdPickAndPlaceDescarga.ctOut.IC; 
 
-fbDirector(Marcha:=Execute);
+Fallo:=
+	mdAlimentador.ctOut.Fail OR
+	mdPickAndPlaceCarga.ctOut.Fail OR
+	mdMedidorTapa.ctOut.Fail OR 
+	mdCaptadorInductivo.ctOut.Fail OR
+	mdDetectorFotoelectrico.ctOut.Fail OR
+	mdEvacuador.ctOut.Fail OR
+	mdPickAndPlaceDescarga.ctOut.Fail; 
+
+
+
+ctInp.Execute :=  (* El coordinador indica que hay empezar *)
+	((fbDirector.Modo = E_GEMMA.A2ParaFinCiclo) OR 
+	 (fbDirector.Modo = E_GEMMA.A3ParadaEstado) OR 
+	 (fbDirector.Modo = E_GEMMA.F1ProduccionNormal) OR 
+	 (fbDirector.Modo = E_GEMMA.F2SecuenciaPreparacion) OR 
+	 (fbDirector.Modo = E_GEMMA.F3SecuenciaFinalizacion) OR 
+	 (fbDirector.Modo = E_GEMMA.F5VerificacionOrdenada) OR 
+	 (fbDirector.Modo = E_GEMMA.F6Probando) OR 
+	 (fbDirector.Modo = E_GEMMA.D3ProducirConFallos))
+	; // AND NOT IC;
+
+ctInp.Ack := FALSE; (* El coordinador sabe que el brazo ha terminado *)
+
+
+ctInp.Manual := (* Establece modo de funcionamiento manual *) 
+	(fbDirector.Modo = E_GEMMA.F4VerificacionSinOrden);
+
+ctInp.Pause := (* Pausa la ejecucion de la funcionalidad  *)
+	(fbDirector.Modo = E_GEMMA.A3ParadaEstado) OR 
+	(fbDirector.Modo = E_GEMMA.A4ParadaObtenida) OR 
+	(fbDirector.Modo = E_GEMMA.A5PreparandoTrasFallo) OR 
+	(fbDirector.Modo = E_GEMMA.D1ParadaEmergencia) OR 
+	(fbDirector.Modo = E_GEMMA.D2TratamientoFallos);
+
+ctInp.Reset := (* Restablece la condicion de fallo *)
+    (fbDirector.Modo = E_GEMMA.A5PreparandoTrasFallo);
+
+ctInp.Restart := (* Reinicia el estado del controlador *)
+	(fbDirector.Modo = E_GEMMA.A6Inicializando);
+
+ctInp.Restore := (* Restaura las condiciones iniciales (referencia) *)
+    (fbDirector.Modo=E_GEMMA.A6Inicializando); 
+
+ctInp.Resume := (* Continua la ejecucion de la funcionalidad en curso *)
+	(FALSE);
+	
+ctInp.Safe := (* Condicion de seguridad para iniciar una funcionalidad *)
+	(TRUE);
+
 	
 fbFMS205_SFC(
-	EmpProducir		:= fbDirector.HayProducir, 
-	DejProducir		:= NOT fbDirector.HayProducir,
+	ctInp 		:= ctInp,
+	FinCiclo 	:= FinCiclo,
+	IC 			:= IC);
 	
-	EmpRestaurar	:= fbDirector.HayRestaurar,
-	DejRestaurar	:= NOT fbDirector.HayRestaurar);
 	
 fbFMS205_Producir_SFC(
 	HayProducir:=fbFMS205_SFC.HayProducir, 
 	mdAlimentador := mdAlimentador,
 	mdPickAndPlaceCarga := mdPickAndPlaceCarga);
+
 
 (*	
 mdAlimentador.ctInp.Execute := Execute;

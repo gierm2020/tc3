@@ -3,14 +3,14 @@
   <DUT Name="S_ControllerInput" Id="{f66ec164-db3c-42fd-9e30-4c9cd868e6f1}">
     <Declaration><![CDATA[TYPE S_ControllerInput :
 STRUCT
-	Execute: BOOL; (* El coordinador indica que hay empezar *)
-	Ack: BOOL; (* El coordinador sabe que el brazo ha terminado *)
-	Manual: BOOL; (* Establece modo de funcionamiento manual *)
-	Pause: BOOL; (* Pausa la ejecucion de la funcionalidad  *)
-    Reset: BOOL; (* Restablece la condicion de fallo *)
-    Restart: BOOL; (* Reinicia el estado del controlador *)
-    Restore: BOOL; (* Restaura las condiciones iniciales (referencia) *)
-    Resume: BOOL; (* Continua la ejecucion de la funcionalidad en curso *)
+	Execute: BOOL; 	(* El coordinador indica que hay empezar *)
+	Ack: BOOL; 		(* El coordinador sabe que el brazo ha terminado *)
+	Manual: BOOL; 	(* Establece modo de funcionamiento manual *)
+	Pause: BOOL; 	(* Pausa la ejecucion de la funcionalidad  *)
+    Reset: BOOL; 	(* Restablece la condicion de fallo *)
+    Restart: BOOL; 	(* Reinicia el estado del controlador *)
+    Restore: BOOL; 	(* Restaura las condiciones iniciales (referencia) *)
+    Resume: BOOL; 	(* Continua la ejecucion de la funcionalidad en curso *)
     Safe: BOOL := TRUE; (* Condicion de seguridad para iniciar una funcionalidad *)
     
 END_STRUCT

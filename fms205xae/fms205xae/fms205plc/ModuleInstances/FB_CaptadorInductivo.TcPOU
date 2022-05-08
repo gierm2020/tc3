@@ -13,13 +13,16 @@ plato sitúa frente a él cada vez que realiza un giro, sea de aluminio.
 
 *)
 VAR_INPUT
+    ei         AT %I*: BOOL; (* ei (nombre=di c=I31 B=J1 b=13 módulo=EL1008 T=7 C=7 etiqueta=-B19, input) Detector inductivo *)
 END_VAR
+
 VAR_OUTPUT
+	InduccionCaptada: BOOL;
 	TapaMetalica: BOOL;
 END_VAR
+
 VAR
-	// Sensores
-    di         AT %I*: BOOL; (* ei (nombre=di c=I31 B=J1 b=13 módulo=EL1008 T=7 C=7 etiqueta=-B19, input) Detector inductivo *)
+    
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -31,15 +34,31 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF ctinp.Execute THEN
-	TapaMetalica := di;
+        <ST><![CDATA[// el captador inductivo siempre está en condiciones iniciales
+ctOut.IC := TRUE; 
+
+// si no eestamos en modo manual, actualizar los actuadores con el estado del controlador
+IF NOT ctInp.Manual THEN
+	;
 END_IF
+
+IF ctOut.Done THEN
+	// si ha terminado de captar: guardar resultado
+	InduccionCaptada	:= TRUE;
+	TapaMetalica		:= ei;
+
+ELSIF ctInp.Ack THEN
+	// si el controlador usó los valores: inicializarlos para la siguiente medición
+	InduccionCaptada	:= FALSE;
+END_IF
+
 
 (*
 Plato[4].TapaClara := SEL(ef,vTapaClaraNo,vTapaClaraSi);
 Plato[4].TapaMedida := SEL(Plato[4].TapaClara <> vIndefinido,vTapaMedidaNo,vTapaMedidaSi);
 Plato[4].Fin := (Plato[4].TapaMedida <> vIndefinido);
-*)]]></ST>
+*)
+]]></ST>
       </Implementation>
     </Method>
   </POU>

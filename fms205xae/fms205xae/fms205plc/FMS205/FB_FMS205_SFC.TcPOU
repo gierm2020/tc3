@@ -3,16 +3,18 @@
   <POU Name="FB_FMS205_SFC" Id="{e9cd1dca-e7a6-4d28-ad92-4284024c4317}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205_SFC
 VAR_INPUT
-	EmpProducir: BOOL; // se pide a la fms205 que empiece a producr
-	DejProducir: BOOL; // se pide a la fms205 que deje de producir 
+	ctInp		: S_ControllerInput;
+	FinCiclo	: BOOL;
+	IC			: BOOL;
+	//EmpProducir: BOOL; // se pide a la fms205 que empiece a producr
+	//DejProducir: BOOL; // se pide a la fms205 que deje de producir 
 	
-	EmpRestaurar: BOOL; // se pide a la fms205 que hay que empezar restaurar
-	DejRestaurar: BOOL; // se pide a la fms205 que deje de restaurar 
+	//EmpRestaurar: BOOL; // se pide a la fms205 que hay que empezar restaurar
+	//DejRestaurar: BOOL; // se pide a la fms205 que deje de restaurar 
 END_VAR
 VAR_OUTPUT
 	HayProducir: BOOL;  // la fms205 indica a los módulos que hay que producir
 	HayRestaurar: BOOL; // la fms205 indica a los módulos que hay que restaurar
-	
 	Hecho: BOOL; // la fms205 informa al director que ha hecho lo que se le ha pedidod
 END_VAR
 VAR
@@ -156,7 +158,7 @@ END_VAR
                                     <o>
                                       <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                       <o n="Value" t="StringValue">
-                                        <v n="Value">"EmpProducir"</v>
+                                        <v n="Value">"ctInp.Execute"</v>
                                         <v n="DefaultValue">""</v>
                                       </o>
                                       <v n="Id">23L</v>
@@ -393,7 +395,7 @@ END_VAR
                                     <o>
                                       <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                       <o n="Value" t="StringValue">
-                                        <v n="Value">"DejProducir"</v>
+                                        <v n="Value">"FinCiclo"</v>
                                         <v n="DefaultValue">""</v>
                                       </o>
                                       <v n="Id">85L</v>
@@ -497,7 +499,7 @@ END_VAR
                                     <o>
                                       <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                       <o n="Value" t="StringValue">
-                                        <v n="Value">"EmpRestaurar"</v>
+                                        <v n="Value">"ctInp.Restore"</v>
                                         <v n="DefaultValue">""</v>
                                       </o>
                                       <v n="Id">47L</v>
@@ -734,7 +736,7 @@ END_VAR
                                     <o>
                                       <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                       <o n="Value" t="StringValue">
-                                        <v n="Value">"DejRestaurar"</v>
+                                        <v n="Value">"IC"</v>
                                         <v n="DefaultValue">""</v>
                                       </o>
                                       <v n="Id">66L</v>

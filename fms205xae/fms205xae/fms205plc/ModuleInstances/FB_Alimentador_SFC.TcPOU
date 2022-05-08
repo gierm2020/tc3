@@ -89,7 +89,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"Init"</v>
+                            <v n="Value">"Alim0"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">11L</v>
@@ -192,7 +192,7 @@ END_VAR
                       <v n="IdParent">9L</v>
                     </o>
                     <o t="SFCTransition">
-                      <v n="VariableName">"Init__to__A1"</v>
+                      <v n="VariableName">"Alim0__to__Alim1"</v>
                       <n n="EmbeddedTransition" />
                       <l2 n="EmbeddedTransitionProperties" />
                       <l2 n="Attributes" cet="SFCAttribute">
@@ -326,7 +326,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"A1"</v>
+                            <v n="Value">"Alim1"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">118L</v>
@@ -429,14 +429,14 @@ END_VAR
                       <v n="IdParent">9L</v>
                     </o>
                     <o t="SFCTransition">
-                      <v n="VariableName">"A1__to__A2"</v>
+                      <v n="VariableName">"Alim1__to__Alim2"</v>
                       <n n="EmbeddedTransition" />
                       <l2 n="EmbeddedTransitionProperties" />
                       <l2 n="Attributes" cet="SFCAttribute">
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"A1.t&gt; TK_1"</v>
+                            <v n="Value">"Alim1.t&gt; TK_1"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">130L</v>
@@ -563,7 +563,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"A2"</v>
+                            <v n="Value">"Alim2"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">143L</v>
@@ -666,7 +666,7 @@ END_VAR
                       <v n="IdParent">9L</v>
                     </o>
                     <o t="SFCTransition">
-                      <v n="VariableName">"A2__to__Init"</v>
+                      <v n="VariableName">"Alim2__to__Alim0"</v>
                       <n n="EmbeddedTransition" />
                       <l2 n="EmbeddedTransitionProperties" />
                       <l2 n="Attributes" cet="SFCAttribute">
@@ -737,7 +737,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"Init"</v>
+                            <v n="Value">"Alim0"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">30L</v>

@@ -41,13 +41,26 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
+	(* Controlador  específico *)
 	fbController: FB_PickAndPlace_SFC;
 
-    (* Temporizadores de fallo *)
-    TemporizadorFinCarreraHorizontal: TON;
+	(* Temporizadores específicos *)
+	TPIN: TIME := T#1S;	
 
+	(* Sensores específicos *)
+	h0 AT %I*: BOOL; (* Final de carrera horizontal retraida *)
+	h1 AT %I*: BOOL; (* Final de carrera horizontal extendido *)
+	v1 AT %I*: BOOL; (*Final de carrera vertical abajo*)
+	v0 AT %I*: BOOL; (*Final de carrera vertical arriba*)
+
+	(* Actuadores específicos *)
+	HOR AT %Q*: BOOL; (* Actuador de extension de brazo horizontal *)
+	VER AT %Q*: BOOL; (* Actuador de movimiento vertical de brazo*)
+	PIN AT %Q*: BOOL; (*Actuador de pinza de brazo*)
 END_VAR
-]]></Declaration>
+
+
+	]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
@@ -55,16 +68,36 @@ END_VAR
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[fbController(ctInp:=ctInp, ctOut=>ctOut);]]></ST>
+        <ST><![CDATA[fbController(
+	TPIN 	:= TPIN,
+	
+	ctInp 	:= ctInp, 
+	h0 		:= h0,
+	h1 		:= h1,
+	v0 		:= v0,
+	v1 		:= v1,
+	
+	ctOut 	=> ctOut);
+
+]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ModuleReadInputs" Id="{abc29991-da1c-4fe9-9bfd-6e3413988dab}">
-      <Declaration><![CDATA[METHOD ModuleReadInputs : BOOL
+    <Method Name="ModulePerformActions" Id="{e3820e39-c043-40cb-babf-d57ef6c637b0}">
+      <Declaration><![CDATA[METHOD ModulePerformActions : BOOL
 VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[ctOut.IC := TRUE; // meter sensores de condiciones iniciales]]></ST>
+        <ST><![CDATA[// el brazo está en condiciones iniciales h0 y v0
+ctOut.IC := h0 AND v0; 
+
+// si no eestamos en modo manual, actualizar los actuadores con el estado del controlador
+IF NOT ctInp.Manual THEN
+	HOR := fbController.HOR;
+	VER := fbController.VER;
+	PIN := fbController.PIN;
+END_IF
+]]></ST>
       </Implementation>
     </Method>
   </POU>

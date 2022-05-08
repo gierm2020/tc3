@@ -38,6 +38,9 @@
     <Compile Include="FMS205\FB_FMS205_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FMS205\FB_Panel.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="GlobalTextList.TcGTLO">
       <SubType>Code</SubType>
     </Compile>
