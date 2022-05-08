@@ -21,16 +21,20 @@ VAR
 	mdMedidorTapa			: FB_MedidorTapa			(ID:=3, MRT:=MaximoTiempoRespuesta);
 	mdCaptadorInductivo 	: FB_CaptadorInductivo		(ID:=4, MRT:=MaximoTiempoRespuesta);
 	mdDetectorFotoelectrico : FB_DetectorFotoelectrico	(ID:=5, MRT:=MaximoTiempoRespuesta);
+	mdEvacuador			 	: FB_Evacuador				(ID:=7, MRT:=MaximoTiempoRespuesta);
 	mdPickAndPlaceDescarga 	: FB_PickAndPlace			(ID:=8, MRT:=MaximoTiempoRespuesta);
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[(*CondicionesIniciales:=
-	mdPickAndPlaceCarga.IC AND
-	mdMedidorTapa.IC AND 
-	mdCaptadorInductivo.IC AND
-	mdDetectorFotoelectrico.IC AND
-	mdPickAndPlaceDescarga.IC; *) 
+      <ST><![CDATA[CondicionesIniciales:=
+	mdAlimentador.ctOut.IC AND
+	mdPickAndPlaceCarga.ctOut.IC AND
+	mdMedidorTapa.ctOut.IC AND 
+	mdCaptadorInductivo.ctOut.IC AND
+	mdDetectorFotoelectrico.ctOut.IC AND
+	mdEvacuador.ctOut.IC AND
+	mdPickAndPlaceDescarga.ctOut.IC; 
+	
 mdAlimentador.ctInp.Execute := Execute;
 mdAlimentador.ctInp.Ack := Ack;
 mdAlimentador.ModuleProcessCycle();

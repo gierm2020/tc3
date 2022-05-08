@@ -38,6 +38,7 @@ END_VAR
         <ST><![CDATA[// guardar los paraámetros de entrada que se indican cuando se crea la variable
 _ModuleID := ID;
 _ModuleMRT := MRT;
+ctOut.IC := TRUE;
 ]]></ST>
       </Implementation>
     </Method>
@@ -83,7 +84,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[// leer los sensores y guardar el resultados
-;]]></ST>
+ctOut.IC := TRUE;]]></ST>
       </Implementation>
     </Method>
   </POU>

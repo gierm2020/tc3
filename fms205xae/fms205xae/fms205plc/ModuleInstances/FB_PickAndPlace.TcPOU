@@ -58,5 +58,14 @@ END_VAR
         <ST><![CDATA[fbController(ctInp:=ctInp, ctOut=>ctOut);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="ModuleReadInputs" Id="{abc29991-da1c-4fe9-9bfd-6e3413988dab}">
+      <Declaration><![CDATA[METHOD ModuleReadInputs : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ctOut.IC := TRUE; // meter sensores de condiciones iniciales]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>

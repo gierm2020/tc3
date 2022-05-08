@@ -28,6 +28,16 @@ VAR_OUTPUT
 END_VAR
 VAR
 	fbController: FB_Evacuador_SFC;
+	
+	f0 AT %I*: BOOL; (* Pick and place de rechazo detras *)
+	f1 AT %I*: BOOL; (* Pick and place de rechazo delante *)
+	g0 AT %I*: BOOL; (* Pick and place de rechazo arriba *)
+	v1 AT %I*: BOOL; (* Pick and place de rechazo vacio *)
+
+	F_0 AT %Q*: BOOL; (* Pick and place de rechazo atras *)
+	F_1 AT %Q*: BOOL; (* Pick and place de rechazo adelante *)
+	G_1 AT %Q*: BOOL; (* Pick and place de rechazo abajo *)
+	V_1 AT %Q*: BOOL; (* Pick and place de rechazo succiona *)
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -40,11 +50,14 @@ END_VAR
         <ST><![CDATA[fbController(ctInp:=ctInp, ctOut=>ctOut);]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_Evacuador">
-      <LineId Id="9" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Evacuador.ModuleControlFlow">
-      <LineId Id="3" Count="0" />
-    </LineIds>
+    <Method Name="ModuleReadInputs" Id="{f04c5cd4-a346-42d0-8284-541f8d7c5d59}">
+      <Declaration><![CDATA[METHOD ModuleReadInputs : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ctOut.IC := f1 AND g0 AND NOT v1;]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>

@@ -25,12 +25,52 @@
 							<Comment><![CDATA[ ei (nombre=di c=I31 B=J1 b=13 módulo=EL1008 T=7 C=7 etiqueta=-B19, input) Detector inductivo ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdEvacuador.f0</Name>
+							<Comment><![CDATA[ Pick and place de rechazo detras ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdEvacuador.f1</Name>
+							<Comment><![CDATA[ Pick and place de rechazo delante ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdEvacuador.g0</Name>
+							<Comment><![CDATA[ Pick and place de rechazo arriba ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdEvacuador.v1</Name>
+							<Comment><![CDATA[ Pick and place de rechazo vacio ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
 					</Vars>
 					<Vars VarGrpType="2" AreaNo="1">
 						<Name>PlcTask Outputs</Name>
 						<Var>
 							<Name>MAIN.fbFMS205.mdAlimentador.K_1</Name>
 							<Comment><![CDATA[ Se corresponde con el cTAP ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdEvacuador.F_0</Name>
+							<Comment><![CDATA[ Pick and place de rechazo atras ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdEvacuador.F_1</Name>
+							<Comment><![CDATA[ Pick and place de rechazo adelante ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdEvacuador.G_1</Name>
+							<Comment><![CDATA[ Pick and place de rechazo abajo ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdEvacuador.V_1</Name>
+							<Comment><![CDATA[ Pick and place de rechazo succiona ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 					</Vars>
