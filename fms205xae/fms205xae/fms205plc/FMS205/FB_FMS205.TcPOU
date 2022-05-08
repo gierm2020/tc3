@@ -43,10 +43,17 @@ END_VAR
 	mdEvacuador.ctOut.IC AND
 	mdPickAndPlaceDescarga.ctOut.IC; 
 
+fbDirector(Marcha:=Execute);
 	
-mdFMS205_SFC(Producir:=Execute, Restaurar:=FALSE);
-mdFMS205_Producir_SFC(
-	Producir:=mdFMS205_SFC.Produce, 
+fbFMS205_SFC(
+	EmpProducir		:= fbDirector.HayProducir, 
+	DejProducir		:= NOT fbDirector.HayProducir,
+	
+	EmpRestaurar	:= fbDirector.HayRestaurar,
+	DejRestaurar	:= NOT fbDirector.HayRestaurar);
+	
+fbFMS205_Producir_SFC(
+	HayProducir:=fbFMS205_SFC.HayProducir, 
 	mdAlimentador := mdAlimentador,
 	mdPickAndPlaceCarga := mdPickAndPlaceCarga);
 

@@ -3,6 +3,8 @@
   <POU Name="FB_Director" Id="{7ba3b411-03e2-4744-bc96-6b241362c795}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Director
 VAR_INPUT
+    Marcha: BOOL; // se pulsa el botón de marcha, empezar a producir
+
     Cancela: BOOL; (**)
     Continua: BOOL; (**)
     Emergencia: BOOL;
@@ -11,19 +13,21 @@ VAR_INPUT
     FinTarea: BOOL;
     FinCiclo: BOOL;
     Manual: BOOL;
-    Marcha: BOOL;
     Para: BOOL; (* Detiene la produccion a final del ciclo *)
     Preparada: BOOL;
     Reinicia: BOOL;
     Restaurada: BOOL;
 END_VAR
 VAR_OUTPUT
+	HayRestaurar	: BOOL; // Estación restaurándose al estado inicial
+    HayProducir		: BOOL; // Estacion en produccion 
+	
     Modo: E_GEMMA := E_GEMMA.A6Inicializando;
     Defecto: BOOL; (* Procedimientos de defecto *)
     Funcionamiento: BOOL; (* Procedimientos de funcionamiento*)
     Parada: BOOL; (* Procedimientos de parada *)
     Pausa: BOOL;
-    Produccion: BOOL; (* Estacion en produccion *)
+
 END_VAR
 VAR
     Previo: E_GEMMA; (* Modo anterior *)
@@ -39,10 +43,12 @@ Defecto := (Modo >= E_GEMMA.D1ParadaEmergencia) AND (Modo <= E_GEMMA.D3ProducirC
 Pausa := (Modo = E_GEMMA.A3ParadaEstado) OR (Modo = E_GEMMA.A4ParadaObtenida) OR (Modo = E_GEMMA.A5PreparandoTrasFallo)
     OR (Modo = E_GEMMA.D1ParadaEmergencia) OR (Modo = E_GEMMA.D2TratamientoFallos);
 
+(* Este código debería estar después de los cambios de estado 	
 Produccion := (Modo = E_GEMMA.A2ParaFinCiclo) OR (Modo = E_GEMMA.A3ParadaEstado) OR (Modo = E_GEMMA.F1ProduccionNormal)
     OR (Modo = E_GEMMA.F2SecuenciaPreparacion) OR (Modo = E_GEMMA.F3SecuenciaFinalizacion) OR (Modo = E_GEMMA.F5VerificacionOrdenada)
     OR (Modo = E_GEMMA.F6Probando) OR (Modo = E_GEMMA.D3ProducirConFallos);
-
+*)
+	
 (* FUNCION DE ESTADO *)
 IF Emergencia THEN
     Modo := E_GEMMA.D1ParadaEmergencia;
@@ -173,7 +179,22 @@ ELSE
             ; // estado no tratado en la FMS205
 
     END_CASE
-END_IF]]></ST>
+END_IF
+
+
+HayRestaurar := Modo=E_GEMMA.A6Inicializando;
+
+HayProducir := 
+	(Modo = E_GEMMA.A2ParaFinCiclo) OR 
+	(Modo = E_GEMMA.A3ParadaEstado) OR 
+	(Modo = E_GEMMA.F1ProduccionNormal) OR 
+	(Modo = E_GEMMA.F2SecuenciaPreparacion) OR 
+	(Modo = E_GEMMA.F3SecuenciaFinalizacion) OR 
+	(Modo = E_GEMMA.F5VerificacionOrdenada) OR 
+	(Modo = E_GEMMA.F6Probando) OR 
+	(Modo = E_GEMMA.D3ProducirConFallos);
+	
+]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

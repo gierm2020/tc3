@@ -149,7 +149,7 @@ END_VAR
                             <o n="ElementList" t="SFCElementList">
                               <l2 n="InnerList">
                                 <o t="SFCTransition">
-                                  <v n="VariableName">"Branch0__Init__to__Step1"</v>
+                                  <v n="VariableName">"Branch0__Init__to__S1a"</v>
                                   <n n="EmbeddedTransition" />
                                   <l2 n="EmbeddedTransitionProperties" />
                                   <l2 n="Attributes" cet="SFCAttribute">
@@ -283,7 +283,7 @@ END_VAR
                                     <o>
                                       <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                       <o n="Value" t="StringValue">
-                                        <v n="Value">"Step1"</v>
+                                        <v n="Value">"S1a"</v>
                                         <v n="DefaultValue">""</v>
                                       </o>
                                       <v n="Id">73L</v>
@@ -386,7 +386,7 @@ END_VAR
                                   <v n="IdParent">38L</v>
                                 </o>
                                 <o t="SFCTransition">
-                                  <v n="VariableName">"Step1__to__Step2"</v>
+                                  <v n="VariableName">"S1a__to__S2"</v>
                                   <n n="EmbeddedTransition" />
                                   <l2 n="EmbeddedTransitionProperties" />
                                   <l2 n="Attributes" cet="SFCAttribute">
@@ -490,7 +490,7 @@ END_VAR
                             <o n="ElementList" t="SFCElementList">
                               <l2 n="InnerList">
                                 <o t="SFCTransition">
-                                  <v n="VariableName">"Branch1__Init__to__Step0"</v>
+                                  <v n="VariableName">"Branch1__Init__to__S1b"</v>
                                   <n n="EmbeddedTransition" />
                                   <l2 n="EmbeddedTransitionProperties" />
                                   <l2 n="Attributes" cet="SFCAttribute">
@@ -624,7 +624,7 @@ END_VAR
                                     <o>
                                       <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                       <o n="Value" t="StringValue">
-                                        <v n="Value">"Step0"</v>
+                                        <v n="Value">"S1b"</v>
                                         <v n="DefaultValue">""</v>
                                       </o>
                                       <v n="Id">54L</v>
@@ -727,7 +727,7 @@ END_VAR
                                   <v n="IdParent">42L</v>
                                 </o>
                                 <o t="SFCTransition">
-                                  <v n="VariableName">"Step0__to__Step2"</v>
+                                  <v n="VariableName">"S1b__to__S2"</v>
                                   <n n="EmbeddedTransition" />
                                   <l2 n="EmbeddedTransitionProperties" />
                                   <l2 n="Attributes" cet="SFCAttribute">
@@ -938,7 +938,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"Step2"</v>
+                            <v n="Value">"S2"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">155L</v>
@@ -1041,7 +1041,7 @@ END_VAR
                       <v n="IdParent">9L</v>
                     </o>
                     <o t="SFCTransition">
-                      <v n="VariableName">"Step2__to__Init"</v>
+                      <v n="VariableName">"S2__to__Init"</v>
                       <n n="EmbeddedTransition" />
                       <l2 n="EmbeddedTransitionProperties" />
                       <l2 n="Attributes" cet="SFCAttribute">
