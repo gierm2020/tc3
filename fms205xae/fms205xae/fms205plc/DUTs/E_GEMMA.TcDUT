@@ -10,56 +10,56 @@ TYPE E_GEMMA :
     (* [Modes of Study Guide of the Modes of Operating and Stopping] *)
 
     (* Procedimientos de parada [les procédures d'arrets/stop procedures] *)
-    A1, (*  0: parada en el estado inicial
+    A1ParadaInicial, (*  0: parada en el estado inicial
                [arrêt dans etat initial] 
                [stopped in the initial state] *)
-    A2, (*  1: parada solicitada a final de ciclo
+    A2ParaFinCiclo, (*  1: parada solicitada a final de ciclo
                [arret demandé en fin de cycle] 
                [requested end cycle stop] *)
-    A3, (*  2: parada solicitada en un estado determinado
+    A3ParadaEstado, (*  2: parada solicitada en un estado determinado
                [arret demande dans etat determine] 
                [requested particular state stop] *)
-    A4, (*  3: parada obtenida
+    A4ParadaObtenida, (*  3: parada obtenida
                [arret obtenu] 
                [obteined stop] *)
-    A5, (*  4: preparacion para la recuperacion del fallo
+    A5PreparandoTrasFallo, (*  4: preparacion para la recuperacion del fallo
                [preparation pour remise en route apres defaillance] 
                [preparation for the recovery of the failure] *)
-    A6, (*  5: situando la PO en el estado inicial
+    A6Inicializando, (*  5: situando la PO en el estado inicial
                [mise PO dans état initial] 
                [set the PO in initial state] *)
-    A7, (*  6: situando la PO en un estado determinado
+    A7SituandoEstado, (*  6: situando la PO en un estado determinado
                [mise PO dans état déterminé]
                [set the PO in a certain state] *)
 
     (* Procedimientos de funcionamiento [les procédures de fonctionnement/operating procedures] *)
-    F1, (*  7: produccion normal
+    F1ProduccionNormal, (*  7: produccion normal
                [production normale] 
                [normal operation] *)
-    F2, (*  8: secuencia de preparacion
+    F2SecuenciaPreparacion, (*  8: secuencia de preparacion
                [marche de preparation] 
                [preparation sequence] *)
-    F3, (*  9: secuencia de finalizacion
+    F3SecuenciaFinalizacion, (*  9: secuencia de finalizacion
                [marche de cloture] 
                [ending sequence] *)
-    F4, (* 10: verificacion en desorden
+    F4VerificacionSinOrden, (* 10: verificacion en desorden
                [marche de verification dans le desordre] 
                [verification with no order] *)
-    F5, (* 11: verificacion en orden
+    F5VerificacionOrdenada, (* 11: verificacion en orden
                [marche de verification dans l'ordre] 
                [verification whit order] *)
-    F6, (* 12: prueba
+    F6Probando, (* 12: prueba
                [marche de test] 
                [test] *)
 
     (* Procedimientos de fallo [les procédures en défaillances] *)
-    D1, (* 13: parada de emergencia
+    D1ParadaEmergencia, (* 13: parada de emergencia
                [arret d'urgence] 
                [emergency stop] *)
-    D2, (* 14: diagnostico y/o tratamiento de los fallos
+    D2TratamientoFallos, (* 14: diagnostico y/o tratamiento de los fallos
                [diagnostic et/ou traitement de la défaillance] 
                [diagnosis and/or treatment of failures] *)
-    D3  (* 15: produccion a pesar de los fallos
+    D3ProducirConFallos  (* 15: produccion a pesar de los fallos
                [production tout de même] 
                [production despite the failures] *)
 );

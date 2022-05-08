@@ -18,7 +18,7 @@ VAR_INPUT
     Restaurada: BOOL;
 END_VAR
 VAR_OUTPUT
-    Modo: E_GEMMA := E_GEMMA.A6;
+    Modo: E_GEMMA := E_GEMMA.A6Inicializando;
     Defecto: BOOL; (* Procedimientos de defecto *)
     Funcionamiento: BOOL; (* Procedimientos de funcionamiento*)
     Parada: BOOL; (* Procedimientos de parada *)
@@ -31,118 +31,147 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[(* PARAMETROS DE SALIDA *)
-Defecto := (Modo >= E_GEMMA.D1) AND (Modo <= E_GEMMA.D3);
-Funcionamiento:= (Modo >= E_GEMMA.F1) AND (Modo <= E_GEMMA.F6);
-Parada := (Modo >= E_GEMMA.A1) AND (Modo <= E_GEMMA.A7);
+Parada := (Modo >= E_GEMMA.A1ParadaInicial) AND (Modo <= E_GEMMA.A7SituandoEstado);
+Funcionamiento:= (Modo >= E_GEMMA.F1ProduccionNormal) AND (Modo <= E_GEMMA.F6Probando);
+Defecto := (Modo >= E_GEMMA.D1ParadaEmergencia) AND (Modo <= E_GEMMA.D3ProducirConFallos);
 
-Pausa := (Modo = E_GEMMA.A3) OR (Modo = E_GEMMA.A4) OR (Modo = E_GEMMA.A5)
-    OR (Modo = E_GEMMA.D1) OR (Modo = E_GEMMA.D2);
-Produccion := (Modo = E_GEMMA.A2) OR (Modo = E_GEMMA.A3) OR (Modo = E_GEMMA.F1)
-    OR (Modo = E_GEMMA.F2) OR (Modo = E_GEMMA.F3) OR (Modo = E_GEMMA.F5)
-    OR (Modo = E_GEMMA.F6) OR (Modo = E_GEMMA.D3);
+
+Pausa := (Modo = E_GEMMA.A3ParadaEstado) OR (Modo = E_GEMMA.A4ParadaObtenida) OR (Modo = E_GEMMA.A5PreparandoTrasFallo)
+    OR (Modo = E_GEMMA.D1ParadaEmergencia) OR (Modo = E_GEMMA.D2TratamientoFallos);
+
+Produccion := (Modo = E_GEMMA.A2ParaFinCiclo) OR (Modo = E_GEMMA.A3ParadaEstado) OR (Modo = E_GEMMA.F1ProduccionNormal)
+    OR (Modo = E_GEMMA.F2SecuenciaPreparacion) OR (Modo = E_GEMMA.F3SecuenciaFinalizacion) OR (Modo = E_GEMMA.F5VerificacionOrdenada)
+    OR (Modo = E_GEMMA.F6Probando) OR (Modo = E_GEMMA.D3ProducirConFallos);
 
 (* FUNCION DE ESTADO *)
 IF Emergencia THEN
-    Modo := E_GEMMA.D1;
+    Modo := E_GEMMA.D1ParadaEmergencia;
+	
+	
 ELSIF Reinicia THEN
-    Modo := E_GEMMA.A6;
+    Modo := E_GEMMA.A6Inicializando;
+
+
 ELSE
     CASE Modo OF
-        (* Procedimientos de parada *)
-        E_GEMMA.A1: (* Parada en el estado inicial *)
+		
+	
+        (* ------------------------------------------------------------ Procedimientos de parada *)
+		
+        E_GEMMA.A1ParadaInicial: (* Parada en el estado inicial *)
             IF NOT Restaurada THEN
-                Modo := E_GEMMA.A6;
+                Modo := E_GEMMA.A6Inicializando;
             ELSIF Manual THEN
-                Modo := E_GEMMA.F4;
+                Modo := E_GEMMA.F4VerificacionSinOrden;
             ELSIF Marcha THEN
-                Modo := E_GEMMA.F2;
+                Modo := E_GEMMA.F2SecuenciaPreparacion;
+			ELSE
+				; // Esperar a que se pulse el bortón de marcha
             END_IF
-        E_GEMMA.A2: (* Parada solicitada a final de ciclo *)
+			
+        E_GEMMA.A2ParaFinCiclo: (* Parada solicitada a final de ciclo *)
             IF Fallo THEN
-                Previo := E_GEMMA.A2;
-                Modo := E_GEMMA.D2;
+                Previo := E_GEMMA.A2ParaFinCiclo;
+                Modo := E_GEMMA.D2TratamientoFallos;
             ELSIF FinCiclo THEN
-                Modo := E_GEMMA.A1;
+                Modo := E_GEMMA.A1ParadaInicial;
             ELSE
-                (* En este caso no es necesario que suceda nada! *)
+                // Seguir produciendo hasta final de ciclo
                 ;
             END_IF
-        E_GEMMA.A3: (* Parada solicitada en un estado determinado *)
-            ;
-        E_GEMMA.A4: (* Parada obtenida *)
-            ;
-        E_GEMMA.A5: (* Preparando de reanudacion tras el fallo *)
+			
+        E_GEMMA.A3ParadaEstado: (* Parada solicitada en un estado determinado *)
+            ; // estado no tratado en la FMS205
+			
+        E_GEMMA.A4ParadaObtenida: (* Parada obtenida *)
+            ; // estado no tratado en la FMS205
+        
+		E_GEMMA.A5PreparandoTrasFallo: (* Preparando de reanudacion tras el fallo *)
             IF Continua THEN
                 Modo := Previo;
             ELSIF Cancela THEN
-                Modo := E_GEMMA.A6;
+                Modo := E_GEMMA.A6Inicializando;
             END_IF
-        E_GEMMA.A6: (* Situando la PO en el estado inicial *)
+			
+        E_GEMMA.A6Inicializando: (* Situando la PO en el estado inicial *)
             IF Restaurada THEN
-                Modo := E_GEMMA.A1;
+                Modo := E_GEMMA.A1ParadaInicial;
             ELSIF Manual THEN
-                Modo := E_GEMMA.F4;
+                Modo := E_GEMMA.F4VerificacionSinOrden;
             END_IF
-        E_GEMMA.A7: (* Situando la PO en un estado determinado *)
-            ;
+			
+        E_GEMMA.A7SituandoEstado: (* Situando la PO en un estado determinado *)
+            ; // estado no tratado en la FMS205
 
-        (* Procedimientos de funcionamiento *)
-        E_GEMMA.F1: (* Produccion normal *)
+			
+			
+        (* ------------------------------------------------------------ Procedimientos de funcionamiento *)
+        
+		E_GEMMA.F1ProduccionNormal: (* Produccion normal *)
             IF Fallo THEN
-                Previo := E_GEMMA.A2;
-                Modo := E_GEMMA.D2;
+                Previo := E_GEMMA.A2ParaFinCiclo; //!!! Creo que está mal, no debería ser F1?
+                Modo := E_GEMMA.D2TratamientoFallos;
             ELSIF FinTarea THEN
-                Modo := E_GEMMA.F3;
+                Modo := E_GEMMA.F3SecuenciaFinalizacion;
             ELSIF Para THEN
-                Modo := E_GEMMA.A2;
+                Modo := E_GEMMA.A2ParaFinCiclo;
             END_IF
-        E_GEMMA.F2: (* Secuencia de preparacion *)
+			
+        E_GEMMA.F2SecuenciaPreparacion: (* Secuencia de preparacion *)
             IF Preparada THEN
-                Modo := E_GEMMA.F1;
+                Modo := E_GEMMA.F1ProduccionNormal;
             ELSE
-                (* En este caso no es necesario que suceda nada! *)
+                // continuar con la secuencia de preparación hasta que esté preparada o haya un error
                 ;
             END_IF
-        E_GEMMA.F3: (* Secuencia de finalizacion *)
+			
+        E_GEMMA.F3SecuenciaFinalizacion: (* Secuencia de finalizacion *)
             IF Finalizada THEN
-                Modo := E_GEMMA.A1;
+                Modo := E_GEMMA.A1ParadaInicial;
             ELSE
-                (* En este caso no es necesario que suceda nada! *)
+                // continuar con la secuencia de finalización hasta que esté finalizada o haya un error
                 ;
             END_IF
-        E_GEMMA.F4: (* Verificacion sin orden *)
+			
+        E_GEMMA.F4VerificacionSinOrden: (* Verificacion sin orden *)
             IF Fallo THEN
-                Previo := E_GEMMA.A2;
-                Modo := E_GEMMA.D2;
+                Previo := E_GEMMA.A2ParaFinCiclo; //!!! Creo que está mal, no debería ser F4?
+                Modo := E_GEMMA.D2TratamientoFallos;
             ELSIF NOT Manual THEN
-                Modo := E_GEMMA.A6;
+                Modo := E_GEMMA.A6Inicializando; // después del modo manual, volver a inicializar
             ELSE
-                (* En este caso no es necesario que suceda nada! *)
+                // Seguir en modo manual hasta que halla un fallo o se vuelva al modo automático
                 ;
             END_IF
-        E_GEMMA.F5: (* Verificacion en orden *)
-            ;
-        E_GEMMA.F6: (* Prueba *)
-            ;
+			
+        E_GEMMA.F5VerificacionOrdenada: (* Verificacion en orden *)
+            ; // estado no tratado en la FMS205
+			
+        E_GEMMA.F6Probando: (* Prueba *)
+            ; // estado no tratado en la FMS205
 
-        (* Procedimientos de defecto *)
-        E_GEMMA.D1: (* Parada de emergencia *)
+			
+			
+        (* ------------------------------------------------------------ Procedimientos de defecto *)
+        E_GEMMA.D1ParadaEmergencia: (* Parada de emergencia *)
             IF NOT Emergencia THEN
-                Modo := E_GEMMA.A6;
+                Modo := E_GEMMA.A6Inicializando; // Al quitar la parada de emergencia hay que reinicializar la estación
             ELSE
-                (* En este caso no es necesario que suceda nada! *)
+                // Esperar a que se quite la parada de emergencia
                 ;
             END_IF
-        E_GEMMA.D2: (* Diagnostico/tratamiento de los fallos *)
+			
+        E_GEMMA.D2TratamientoFallos: (* Diagnostico/tratamiento de los fallos *)
             IF NOT Fallo THEN
-                Modo := E_GEMMA.A5;
+                Modo := E_GEMMA.A5PreparandoTrasFallo;
             ELSE
-                (* En este caso no es necesario que suceda nada! *)
+                // Esperar a que se resuelva el fallo
                 ;
             END_IF
 
-        E_GEMMA.D3: (* Produccion a pesar de los fallos *)
-            ;
+        E_GEMMA.D3ProducirConFallos: (* Produccion a pesar de los fallos *)
+            ; // estado no tratado en la FMS205
+
     END_CASE
 END_IF]]></ST>
     </Implementation>
