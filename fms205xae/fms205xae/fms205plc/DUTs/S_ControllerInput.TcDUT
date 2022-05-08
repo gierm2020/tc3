@@ -5,9 +5,17 @@
 STRUCT
 	Execute: BOOL; (* El coordinador indica que hay empezar *)
 	Ack: BOOL; (* El coordinador sabe que el brazo ha terminado *)
-	Mode: INT; (* Modo en que está la máquina *)
+	Manual: BOOL; (* Establece modo de funcionamiento manual *)
+	Pause: BOOL; (* Pausa la ejecucion de la funcionalidad  *)
+    Reset: BOOL; (* Restablece la condicion de fallo *)
+    Restart: BOOL; (* Reinicia el estado del controlador *)
+    Restore: BOOL; (* Restaura las condiciones iniciales (referencia) *)
+    Resume: BOOL; (* Continua la ejecucion de la funcionalidad en curso *)
+    Safe: BOOL := TRUE; (* Condicion de seguridad para iniciar una funcionalidad *)
+    
 END_STRUCT
 END_TYPE
+
 ]]></Declaration>
   </DUT>
 </TcPlcObject>

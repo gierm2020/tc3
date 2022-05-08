@@ -31,6 +31,10 @@ END_VAR
 	mdCaptadorInductivo.IC AND
 	mdDetectorFotoelectrico.IC AND
 	mdPickAndPlaceDescarga.IC; *) 
+mdAlimentador.ctInp.Execute := Execute;
+mdAlimentador.ctInp.Ack := Ack;
+mdAlimentador.ModuleProcessCycle();
+(*
 	
 mdPickAndPlaceCarga.ctInp.Execute := Execute;
 
@@ -45,31 +49,11 @@ IF mdMedidorTapa.ctOut.Done THEN
 	mdMedidorTapa.ctInp.Ack := TRUE;	
 END_IF
 
-(*mdCaptadorInductivo.ModuleProcessCycle(Execute:=Execute, Ack:=Ack);
-mdDetectorFotoelectrico.ModuleProcessCycle(Execute:=Execute, Ack:=Ack);
-mdPickAndPlaceDescarga.ModuleProcessCycle(Execute:=Execute, Ack:=Ack); 
-mdCaptadorInductivo.ModuleProcessCycle(Execute:=Execute, Ack:=Ack); 
+mdCaptadorInductivo.ModuleProcessCycle();
+mdDetectorFotoelectrico.ModuleProcessCycle();
+mdPickAndPlaceDescarga.ModuleProcessCycle(); 
+mdCaptadorInductivo.ModuleProcessCycle(); 
 *)]]></ST>
     </Implementation>
-    <LineIds Name="FB_FMS205">
-      <LineId Id="9" Count="0" />
-      <LineId Id="26" Count="0" />
-      <LineId Id="28" Count="0" />
-      <LineId Id="24" Count="0" />
-      <LineId Id="30" Count="1" />
-      <LineId Id="25" Count="0" />
-      <LineId Id="40" Count="1" />
-      <LineId Id="32" Count="0" />
-      <LineId Id="42" Count="0" />
-      <LineId Id="44" Count="1" />
-      <LineId Id="49" Count="0" />
-      <LineId Id="47" Count="0" />
-      <LineId Id="33" Count="0" />
-      <LineId Id="51" Count="2" />
-      <LineId Id="50" Count="0" />
-      <LineId Id="34" Count="2" />
-      <LineId Id="14" Count="0" />
-      <LineId Id="43" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

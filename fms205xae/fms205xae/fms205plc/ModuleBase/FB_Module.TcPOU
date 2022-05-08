@@ -13,8 +13,8 @@ VAR_OUTPUT
 END_VAR
 VAR
 	// Parámetros que se establecen en el constructor
-	ModuleID: BYTE; // identificador del módulo
-	ModuleMRT: TIME; // maximo tiempo de respuesta; si se excede hay un fallo en el módulo	
+	_ModuleID: BYTE; // identificador de la unidad funcional (el módulo)
+	_ModuleMRT: TIME; // Maximo tiempo de respuesta de los dispositivos (Max Response Time)	
 	
 	// Variables que permanecen durante la ejecución del objeto
 	fbModuleController: FB_Module_SFC;	
@@ -36,8 +36,8 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[// guardar los paraámetros de entrada que se indican cuando se crea la variable
-ModuleID := ID;
-ModuleMRT := MRT;
+_ModuleID := ID;
+_ModuleMRT := MRT;
 ]]></ST>
       </Implementation>
     </Method>
@@ -86,30 +86,5 @@ END_VAR
 ;]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_Module">
-      <LineId Id="18" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Module.FB_init">
-      <LineId Id="14" Count="0" />
-      <LineId Id="7" Count="0" />
-      <LineId Id="13" Count="0" />
-      <LineId Id="11" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Module.ModuleControlFlow">
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Module.ModuleManageErrors">
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Module.ModulePerformActions">
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Module.ModuleProcessCycle">
-      <LineId Id="10" Count="2" />
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Module.ModuleReadInputs">
-      <LineId Id="5" Count="1" />
-    </LineIds>
   </POU>
 </TcPlcObject>

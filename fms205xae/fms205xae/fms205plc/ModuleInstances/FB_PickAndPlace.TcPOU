@@ -42,6 +42,10 @@ VAR_OUTPUT
 END_VAR
 VAR
 	fbController: FB_PickAndPlace_SFC;
+
+    (* Temporizadores de fallo *)
+    TemporizadorFinCarreraHorizontal: TON;
+
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -54,11 +58,5 @@ END_VAR
         <ST><![CDATA[fbController(ctInp:=ctInp, ctOut=>ctOut);]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_PickAndPlace">
-      <LineId Id="9" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_PickAndPlace.ModuleControlFlow">
-      <LineId Id="8" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

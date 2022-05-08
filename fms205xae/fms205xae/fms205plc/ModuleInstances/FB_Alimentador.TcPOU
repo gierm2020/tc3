@@ -11,20 +11,16 @@ neumático que realiza la extracción
 
 *)
 
-VAR_INPUT
-END_VAR
-VAR_OUTPUT
-END_VAR
 VAR
+	(* Controlador del alimentador *)
+	fbController: FB_Alimentador_SFC;
+
 	(* Sensores Alimentador *)
 	k1 AT %I*: BOOL; (* Se corresponde con empujador tapa delante c1 *)
 
-	(* Sensores Alimentador *)
-	(* dh AT %I*: UINT; (* Dectector altura (valor) fv *) *)
 
 	(* Actuadores Alimentador *)
 	K_1 AT %Q*: BOOL; (* Se corresponde con el cTAP *)
-	fbController: FB_Alimentador_SFC;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -34,14 +30,9 @@ END_VAR
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[fbController(ctInp:=ctInp, ctOut=>ctOut);]]></ST>
+        <ST><![CDATA[fbController(ctInp:=ctInp, ctOut=>ctOut,
+	k1 := k1);]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_Alimentador">
-      <LineId Id="9" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Alimentador.ModuleControlFlow">
-      <LineId Id="3" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>
