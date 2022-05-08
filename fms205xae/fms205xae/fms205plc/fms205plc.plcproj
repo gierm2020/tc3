@@ -17,6 +17,9 @@
     <LibraryReferences>{6e5a461b-2f01-4787-83d9-6df6717e0be3}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DUTs\E_GEMMA.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\S_ControllerInput.TcDUT">
       <SubType>Code</SubType>
     </Compile>
