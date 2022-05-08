@@ -16,8 +16,21 @@
 					<Vars VarGrpType="1">
 						<Name>PlcTask Inputs</Name>
 						<Var>
+							<Name>MAIN.fbFMS205.mdAlimentador.k1</Name>
+							<Comment><![CDATA[ Se corresponde con empujador tapa delante c1 ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.fbFMS205.mdCaptadorInductivo.di</Name>
 							<Comment><![CDATA[ ei (nombre=di c=I31 B=J1 b=13 módulo=EL1008 T=7 C=7 etiqueta=-B19, input) Detector inductivo ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+					</Vars>
+					<Vars VarGrpType="2" AreaNo="1">
+						<Name>PlcTask Outputs</Name>
+						<Var>
+							<Name>MAIN.fbFMS205.mdAlimentador.K_1</Name>
+							<Comment><![CDATA[ Se corresponde con el cTAP ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 					</Vars>
@@ -42,4 +55,12 @@
 			<Device File="Dispositivo 1 (EtherCAT).xti" Id="1"/>
 		</Io>
 	</Project>
+	<Mappings>
+		<MappingInfo Identifier="{00000000-2001-0850-0020-500820000403}" Id="#x02030010"/>
+		<OwnerA Name="TIPC^fms205plc^fms205plc Instance">
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 7 (EL1008)">
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdCaptadorInductivo.di" VarB="Channel 7^ei"/>
+			</OwnerB>
+		</OwnerA>
+	</Mappings>
 </TcSmProject>
