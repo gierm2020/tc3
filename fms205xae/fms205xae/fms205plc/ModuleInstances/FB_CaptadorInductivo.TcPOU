@@ -15,6 +15,7 @@ plato sitúa frente a él cada vez que realiza un giro, sea de aluminio.
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
+	TapaMetalica: BOOL;
 END_VAR
 VAR
 	// Sensores
@@ -30,21 +31,16 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[(*
+        <ST><![CDATA[IF ctinp.Execute THEN
+	TapaMetalica := di;
+END_IF
+
+(*
 Plato[4].TapaClara := SEL(ef,vTapaClaraNo,vTapaClaraSi);
 Plato[4].TapaMedida := SEL(Plato[4].TapaClara <> vIndefinido,vTapaMedidaNo,vTapaMedidaSi);
 Plato[4].Fin := (Plato[4].TapaMedida <> vIndefinido);
 *)]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_CaptadorInductivo">
-      <LineId Id="10" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_CaptadorInductivo.ModulePerformActions">
-      <LineId Id="5" Count="0" />
-      <LineId Id="7" Count="1" />
-      <LineId Id="6" Count="0" />
-      <LineId Id="9" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>
