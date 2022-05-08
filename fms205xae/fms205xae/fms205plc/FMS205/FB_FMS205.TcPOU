@@ -16,6 +16,7 @@ VAR
 	Execute : BOOL;
 	Ack : BOOL;
 	
+	// módulos de la FMS205
 	mdAlimentador			: FB_Alimentador			(ID:=0, MRT:=MaximoTiempoRespuesta);
 	mdPickAndPlaceCarga 	: FB_PickAndPlace			(ID:=1, MRT:=MaximoTiempoRespuesta);
 	mdMedidorTapa			: FB_MedidorTapa			(ID:=3, MRT:=MaximoTiempoRespuesta);
@@ -24,8 +25,10 @@ VAR
 	mdEvacuador			 	: FB_Evacuador				(ID:=7, MRT:=MaximoTiempoRespuesta);
 	mdPickAndPlaceDescarga 	: FB_PickAndPlace			(ID:=8, MRT:=MaximoTiempoRespuesta);
 	
-	mdFMS205_SFC			: FB_FMS205_SFC;
-	mdFMS205_Producir_SFC	: FB_FMS205_Producir_SFC;
+	// controladores de la máquina, la función de producción y la guía GEMMA 
+	fbFMS205_SFC			: FB_FMS205_SFC;
+	fbFMS205_Producir_SFC	: FB_FMS205_Producir_SFC;
+	fbDirector				: FB_Director;
 	
 	
 END_VAR

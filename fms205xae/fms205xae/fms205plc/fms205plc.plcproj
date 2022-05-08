@@ -26,7 +26,7 @@
     <Compile Include="DUTs\S_ControllerOutput.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FMS205\Director.TcPOU">
+    <Compile Include="FMS205\FB_Director.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FMS205\FB_FMS205.TcPOU">

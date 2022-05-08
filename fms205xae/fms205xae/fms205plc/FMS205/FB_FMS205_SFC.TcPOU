@@ -3,16 +3,17 @@
   <POU Name="FB_FMS205_SFC" Id="{e9cd1dca-e7a6-4d28-ad92-4284024c4317}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205_SFC
 VAR_INPUT
-	Producir: BOOL;
-	Producido: BOOL;
+	EmpProducir: BOOL; // se pide a la fms205 que empiece a producr
+	DejProducir: BOOL; // se pide a la fms205 que deje de producir 
 	
-	Restaurar: BOOL;
-	CI: BOOL;
+	EmpRestaurar: BOOL; // se pide a la fms205 que hay que empezar restaurar
+	DejRestaurar: BOOL; // se pide a la fms205 que deje de restaurar 
 END_VAR
 VAR_OUTPUT
-	Produce: BOOL;
-	Restaura: BOOL;
-	Hecho: BOOL;
+	HayProducir: BOOL;  // la fms205 indica a los módulos que hay que producir
+	HayRestaurar: BOOL; // la fms205 indica a los módulos que hay que restaurar
+	
+	Hecho: BOOL; // la fms205 informa al director que ha hecho lo que se le ha pedidod
 END_VAR
 VAR
 END_VAR
@@ -155,7 +156,7 @@ END_VAR
                                     <o>
                                       <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                       <o n="Value" t="StringValue">
-                                        <v n="Value">"Producir"</v>
+                                        <v n="Value">"EmpProducir"</v>
                                         <v n="DefaultValue">""</v>
                                       </o>
                                       <v n="Id">23L</v>
@@ -228,7 +229,7 @@ END_VAR
                                           <o>
                                             <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                             <o n="Value" t="StringValue">
-                                              <v n="Value">"Produce"</v>
+                                              <v n="Value">"HayProducir"</v>
                                               <v n="DefaultValue">""</v>
                                             </o>
                                             <v n="Id">94L</v>
@@ -392,7 +393,7 @@ END_VAR
                                     <o>
                                       <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                       <o n="Value" t="StringValue">
-                                        <v n="Value">"Producido"</v>
+                                        <v n="Value">"DejProducir"</v>
                                         <v n="DefaultValue">""</v>
                                       </o>
                                       <v n="Id">85L</v>
@@ -496,7 +497,7 @@ END_VAR
                                     <o>
                                       <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                       <o n="Value" t="StringValue">
-                                        <v n="Value">"Restaurar"</v>
+                                        <v n="Value">"EmpRestaurar"</v>
                                         <v n="DefaultValue">""</v>
                                       </o>
                                       <v n="Id">47L</v>
@@ -569,7 +570,7 @@ END_VAR
                                           <o>
                                             <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                             <o n="Value" t="StringValue">
-                                              <v n="Value">"Restaura"</v>
+                                              <v n="Value">"HayRestaurar"</v>
                                               <v n="DefaultValue">""</v>
                                             </o>
                                             <v n="Id">103L</v>
@@ -733,7 +734,7 @@ END_VAR
                                     <o>
                                       <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                       <o n="Value" t="StringValue">
-                                        <v n="Value">"CI"</v>
+                                        <v n="Value">"DejRestaurar"</v>
                                         <v n="DefaultValue">""</v>
                                       </o>
                                       <v n="Id">66L</v>

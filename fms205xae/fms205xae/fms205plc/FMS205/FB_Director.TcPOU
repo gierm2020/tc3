@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
-  <POU Name="Director" Id="{7ba3b411-03e2-4744-bc96-6b241362c795}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK Director
+  <POU Name="FB_Director" Id="{7ba3b411-03e2-4744-bc96-6b241362c795}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Director
 VAR_INPUT
     Cancela: BOOL; (**)
     Continua: BOOL; (**)
