@@ -16,6 +16,8 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
+	TK_1: TIME := T#1S;	
+
 	(* Sensores Alimentador *)
 	k1 AT %I*: BOOL; (* Se corresponde con empujador tapa delante c1 *)
 
@@ -37,11 +39,5 @@ END_VAR
         <ST><![CDATA[fbController(ctInp:=ctInp, ctOut=>ctOut);]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_Alimentador">
-      <LineId Id="9" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Alimentador.ModuleControlFlow">
-      <LineId Id="3" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>
