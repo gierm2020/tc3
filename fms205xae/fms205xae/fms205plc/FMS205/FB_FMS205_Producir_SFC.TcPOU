@@ -18,7 +18,7 @@ VAR_IN_OUT
 	mdPickAndPlaceDescarga 	: FB_PickAndPlace;
 	mdPlatoDivisor			: FB_PlatoDivisor;
 END_VAR
-
+// TODO PENDIENTE TERMINAR EL RESTO DE MÓDULOS
 VAR
 END_VAR
 ]]></Declaration>

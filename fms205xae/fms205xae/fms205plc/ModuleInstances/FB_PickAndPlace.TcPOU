@@ -37,6 +37,7 @@ mediante un actuador neumático rotolineal.
 
 *)
 VAR_INPUT
+	Mover: BOOL := TRUE; // TODO HAY QUE CARGAR O DESCARGAR EN FUNCIÓN DEL RESTO DE LA MÁQUINA Y LAS CONSIGNAS DEL PANEL
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -72,6 +73,7 @@ END_VAR
 	TPIN 	:= TPIN,
 	
 	ctInp 	:= ctInp, 
+	Mover	:= Mover,
 	h0 		:= h0,
 	h1 		:= h1,
 	v0 		:= v0,

@@ -12,6 +12,8 @@ proporciona una señal de detección únicamente, de las tapas de color
 blanco
  
 *)
+
+// TODO PENDIENTE VER QUÉ PASA MIENTRAS SE MUEVE EL PLATO. NO DEBERÍA CAMBIAR EL SENSOR PORQUE NO HA PASADO POR ACK
 VAR_INPUT
     ef         AT %I*: BOOL; (* ef  (nombre=df  c=I32 B=J1 b=04 módulo=EL1008 T=7  C=7 etiqueta=-B20, input) Detector fotoeléctrico *)
 END_VAR
@@ -41,7 +43,7 @@ IF NOT ctInp.Manual THEN
 	;
 END_IF
 
-IF ctOut.Done THEN
+IF ctOut.Done AND NOT FotoelectricoDetectado THEN
 	// si ha terminado de captar: guardar resultado
 	FotoelectricoDetectado	:= TRUE;
 	TapaClara				:= ef;

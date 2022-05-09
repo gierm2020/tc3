@@ -721,7 +721,7 @@ END_VAR
                       <v n="IdParent">9L</v>
                     </o>
                     <o t="SFCTransition">
-                      <v n="VariableName">"Empujar__to__Esperar"</v>
+                      <v n="VariableName">"Empujar__to__Retornar"</v>
                       <n n="EmbeddedTransition" />
                       <l2 n="EmbeddedTransitionProperties" />
                       <l2 n="Attributes" cet="SFCAttribute">
@@ -801,7 +801,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"Esperar"</v>
+                            <v n="Value">"Retornar"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">126L</v>
@@ -904,7 +904,7 @@ END_VAR
                       <v n="IdParent">9L</v>
                     </o>
                     <o t="SFCTransition">
-                      <v n="VariableName">"Esperar__to__Hecho"</v>
+                      <v n="VariableName">"Retornar__to__Hecho"</v>
                       <n n="EmbeddedTransition" />
                       <l2 n="EmbeddedTransitionProperties" />
                       <l2 n="Attributes" cet="SFCAttribute">

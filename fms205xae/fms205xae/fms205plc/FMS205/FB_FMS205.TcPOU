@@ -106,7 +106,11 @@ fbDirector(
  
 
 // IF fbDirector.Modo = E_Gemma.A6Inicializando THEN
-// Informar la estructura ctInp que se copiará a todos y cada uno de los 
+
+
+// Informar la estructura ctInp que se copiará a todos y cada uno de los controladores
+ctInp.ModeAct	:= fbDirector.Modo;
+ctInp.ModePre	:= fbDirector.Previo;
 
 ctInp.Execute :=  (* El coordinador indica que hay empezar *)
 		((fbDirector.Modo = E_GEMMA.A2ParaFinCiclo) OR 
@@ -146,6 +150,8 @@ ctInp.Resume := (* Continua la ejecucion de la funcionalidad en curso *)
 ctInp.Safe := (* Condicion de seguridad para iniciar una funcionalidad *)
 	(TRUE);
 
+	
+// copiar la estructura ctInp en todos los módulos para distribuir la misma información de entrada
 mdAlimentador.ctInp 			:= ctInp;
 mdPickAndPlaceCarga.ctInp 		:= ctInp;
 mdMedidorTapa.ctInp 			:= ctInp;
@@ -156,6 +162,10 @@ mdPickAndPlaceDescarga.ctInp 	:= ctInp;
 mdPlatoDivisor.ctInp 			:= ctInp;
 
 mdEvacuador.Evacuar := TRUE; // PENDIENTE DECISIÓN DE EVACUAR O NO EN FUNCIÓN DEL TIPO DE TAPA
+mdPickAndPlaceCarga.Mover := TRUE;
+mdPickAndPlaceDesscarga.Mover := TRUE;
+
+// TODO CARGA Y DESCARGA TENGAN UNA OPCION DE NO HACER NADA
 
 fbFMS205_Producir_SFC(
 	mdAlimentador 			:= mdAlimentador,
@@ -168,37 +178,7 @@ fbFMS205_Producir_SFC(
 	mdPlatoDivisor			:= mdPlatoDivisor);
 
 
-(*	
-mdAlimentador.ctInp.Execute := Execute;
-mdAlimentador.ctInp.Ack := Ack;
-mdAlimentador.ModuleProcessCycle();
-
-mdCaptadorInductivo.ctInp.Execute := Execute AND mdAlimentador.ctOut.Done;
-mdCaptadorInductivo.ctInp.Ack := Ack;
-mdCaptadorInductivo.ModuleProcessCycle();
-*)
-
-
-(*
-	
-mdPickAndPlaceCarga.ctInp.Execute := Execute;
-
-mdPickAndPlaceCarga.ModuleProcessCycle();
-IF mdPickAndPlaceCarga.ctOut.Done THEN
-	mdPickAndPlaceCarga.ctInp.Ack := TRUE;	
-END_IF
-
-mdMedidorTapa.ctInp.Execute := mdPickAndPlaceCarga.ctOut.Done;
-mdMedidorTapa.ModuleProcessCycle();
-IF mdMedidorTapa.ctOut.Done THEN
-	mdMedidorTapa.ctInp.Ack := TRUE;	
-END_IF
-
-mdCaptadorInductivo.ModuleProcessCycle();
-mdDetectorFotoelectrico.ModuleProcessCycle();
-mdPickAndPlaceDescarga.ModuleProcessCycle(); 
-mdCaptadorInductivo.ModuleProcessCycle(); 
-*)]]></ST>
+]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

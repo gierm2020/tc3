@@ -26,10 +26,11 @@ VAR_OUTPUT
     // HayProducir		: BOOL; // Estacion en produccion 
 	
     Modo: E_GEMMA := E_GEMMA.A6Inicializando;
+    Previo: E_GEMMA := E_GEMMA.A6Inicializando;
     Parada: BOOL; (* Procedimientos de parada *)
     Funcionamiento: BOOL; (* Procedimientos de funcionamiento*)
     Defecto: BOOL; (* Procedimientos de defecto *)
-    // Pausa: BOOL;
+	// Pausa: BOOL;
 	
 	
 END_VAR

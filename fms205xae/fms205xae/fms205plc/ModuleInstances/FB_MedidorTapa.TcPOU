@@ -68,8 +68,7 @@ END_VAR
 	ctInp 		:= ctInp, 
 	fv			:= fv,
 	
-	ctOut 		=> ctOut,
-	L_1			=> L_1);
+	ctOut 		=> ctOut);
 
 ]]></ST>
       </Implementation>
@@ -88,7 +87,7 @@ IF NOT ctInp.Manual THEN
 	L_1 := fbController.L_1;
 END_IF
 
-IF ctOut.Done THEN
+IF ctOut.Done AND NOT AlturaMedida THEN
 	// si ha terminado de medir: guardar y convertir las medidas
 	AlturaMedida	:= TRUE;
 	Altura_Pulsos	:= fv;

@@ -3,6 +3,10 @@
   <DUT Name="S_ControllerInput" Id="{f66ec164-db3c-42fd-9e30-4c9cd868e6f1}">
     <Declaration><![CDATA[TYPE S_ControllerInput :
 STRUCT
+	// Modos de GEMMA	
+	ModeAct: E_GEMMA;  (* Modo de GEMMA en que está la máquina actualmente *)
+	ModePre: E_GEMMA;  (* Modo de GEMMA antes del modo actual *)
+	
 	Execute: BOOL; 	(* El coordinador indica que hay empezar *)
 	Ack: BOOL; 		(* El coordinador sabe que el brazo ha terminado *)
 	Manual: BOOL; 	(* Establece modo de funcionamiento manual *)

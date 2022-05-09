@@ -42,7 +42,7 @@ IF NOT ctInp.Manual THEN
 	;
 END_IF
 
-IF ctOut.Done THEN
+IF ctOut.Done AND NOT InduccionCaptada THEN
 	// si ha terminado de captar: guardar resultado
 	InduccionCaptada	:= TRUE;
 	TapaMetalica		:= ei;
