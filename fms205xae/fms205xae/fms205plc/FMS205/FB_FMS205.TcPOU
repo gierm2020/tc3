@@ -32,10 +32,11 @@ VAR
 	mdDetectorFotoelectrico : FB_DetectorFotoelectrico	(ID:=5, MRT:=MaximoTiempoRespuesta);
 	mdEvacuador			 	: FB_Evacuador				(ID:=7, MRT:=MaximoTiempoRespuesta);
 	mdPickAndPlaceDescarga 	: FB_PickAndPlace			(ID:=8, MRT:=MaximoTiempoRespuesta);
+	mdPlatoDivisor			: FB_PlatoDivisor			(ID:=9, MRT:=MaximoTiempoRespuesta);
 	
 	// controladores de la máquina, la función de producción y la guía GEMMA 
 	fbPanel					: FB_Panel;
-	fbFMS205_SFC			: FB_FMS205_SFC;
+	//fbFMS205_SFC			: FB_FMS205_SFC;
 	fbFMS205_Producir_SFC	: FB_FMS205_Producir_SFC;
 
 	// pendiente renombrar - variables en interfaz de usuario
@@ -46,6 +47,54 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[fbPanel();
+
+
+IC:=				(* La estación está en condiciones iniciales si cada módulo lo está *)
+	mdAlimentador.ctOut.IC AND
+	mdPickAndPlaceCarga.ctOut.IC AND
+	mdMedidorTapa.ctOut.IC AND 
+	mdCaptadorInductivo.ctOut.IC AND
+	mdDetectorFotoelectrico.ctOut.IC AND
+	mdEvacuador.ctOut.IC AND
+	mdPickAndPlaceDescarga.ctOut.IC; 
+
+	
+Preparada := TRUE; // PENDIENTE SI LA ESTACIÓN NECESITA UNA SECUENCIA DE PREPARACIÓN 
+
+
+FinCiclo := 		(* Todos los módulos han terminado su parte del ciclo *)
+	mdAlimentador.ctOut.Done AND
+	mdPickAndPlaceCarga.ctOut.Done AND
+	mdMedidorTapa.ctOut.Done AND
+	mdCaptadorInductivo.ctOut.Done AND
+	mdDetectorFotoelectrico.ctOut.Done AND
+	mdEvacuador.ctOut.Done AND
+	mdPickAndPlaceDescarga.ctOut.Done AND
+	mdPlatoDivisor.ctOut.Done;
+
+IF FinCiclo THEN	
+	// Todos los módulos han terminado su secuencia de producir
+	ManiobrasRealizadas := ManiobrasRealizadas + 1;
+	ManiobrasPendientes := ManiobrasDeseadas - ManiobrasRealizadas;	
+	// Añadir aquí LA LÓGICA DEL FINAL DE CICLO
+	// p. ej. actualización del plato con los resultados de sensores  	
+END_IF
+
+
+FinTarea := ManiobrasPendientes = 0; 	// Se finaliza la tarea si no quedan maniobras pendientes
+
+Fallo:=									// La estaciónn está en fallo si al menos un módulo ha fallado
+	mdAlimentador.ctOut.Fail OR
+	mdPickAndPlaceCarga.ctOut.Fail OR
+	mdMedidorTapa.ctOut.Fail OR 
+	mdCaptadorInductivo.ctOut.Fail OR
+	mdDetectorFotoelectrico.ctOut.Fail OR
+	mdEvacuador.ctOut.Fail OR
+	mdPickAndPlaceDescarga.ctOut.Fail; 
+
+	
+Finalizada := TRUE;	 // PENDIENTE SI LA ESTACIÓN NECESITA UNA SECUENCIA DE PREPARACIÓN 
+
 fbDirector(
 	fbPanel 	:= fbPanel,
 	IC 			:= IC, 
@@ -55,43 +104,26 @@ fbDirector(
 	Fallo		:= Fallo,
 	Finalizada	:= Finalizada);
  
-IC:=
-	mdAlimentador.ctOut.IC AND
-	mdPickAndPlaceCarga.ctOut.IC AND
-	mdMedidorTapa.ctOut.IC AND 
-	mdCaptadorInductivo.ctOut.IC AND
-	mdDetectorFotoelectrico.ctOut.IC AND
-	mdEvacuador.ctOut.IC AND
-	mdPickAndPlaceDescarga.ctOut.IC; 
 
-Fallo:=
-	mdAlimentador.ctOut.Fail OR
-	mdPickAndPlaceCarga.ctOut.Fail OR
-	mdMedidorTapa.ctOut.Fail OR 
-	mdCaptadorInductivo.ctOut.Fail OR
-	mdDetectorFotoelectrico.ctOut.Fail OR
-	mdEvacuador.ctOut.Fail OR
-	mdPickAndPlaceDescarga.ctOut.Fail; 
-
-
+// IF fbDirector.Modo = E_Gemma.A6Inicializando THEN
+// Informar la estructura ctInp que se copiará a todos y cada uno de los 
 
 ctInp.Execute :=  (* El coordinador indica que hay empezar *)
-	((fbDirector.Modo = E_GEMMA.A2ParaFinCiclo) OR 
-	 (fbDirector.Modo = E_GEMMA.A3ParadaEstado) OR 
-	 (fbDirector.Modo = E_GEMMA.F1ProduccionNormal) OR 
-	 (fbDirector.Modo = E_GEMMA.F2SecuenciaPreparacion) OR 
-	 (fbDirector.Modo = E_GEMMA.F3SecuenciaFinalizacion) OR 
-	 (fbDirector.Modo = E_GEMMA.F5VerificacionOrdenada) OR 
-	 (fbDirector.Modo = E_GEMMA.F6Probando) OR 
-	 (fbDirector.Modo = E_GEMMA.D3ProducirConFallos))
+		((fbDirector.Modo = E_GEMMA.A2ParaFinCiclo) OR 
+	 	(fbDirector.Modo = E_GEMMA.A3ParadaEstado) OR 
+	 	(fbDirector.Modo = E_GEMMA.F1ProduccionNormal) OR 
+	 	(fbDirector.Modo = E_GEMMA.F2SecuenciaPreparacion) OR 
+	 	(fbDirector.Modo = E_GEMMA.F3SecuenciaFinalizacion) OR 
+	 	(fbDirector.Modo = E_GEMMA.F5VerificacionOrdenada) OR 
+	 	(fbDirector.Modo = E_GEMMA.F6Probando) OR 
+	 	(fbDirector.Modo = E_GEMMA.D3ProducirConFallos))
 	; // AND NOT IC;
 
-ctInp.Ack := FALSE; (* El coordinador sabe que el brazo ha terminado *)
-
+ctInp.Ack := FinCiclo; 					// Notificar a los módulos que ya pueden volver al inicio
 
 ctInp.Manual := (* Establece modo de funcionamiento manual *) 
 	(fbDirector.Modo = E_GEMMA.F4VerificacionSinOrden);
-
+	
 ctInp.Pause := (* Pausa la ejecucion de la funcionalidad  *)
 	(fbDirector.Modo = E_GEMMA.A3ParadaEstado) OR 
 	(fbDirector.Modo = E_GEMMA.A4ParadaObtenida) OR 
@@ -114,17 +146,26 @@ ctInp.Resume := (* Continua la ejecucion de la funcionalidad en curso *)
 ctInp.Safe := (* Condicion de seguridad para iniciar una funcionalidad *)
 	(TRUE);
 
-	
-fbFMS205_SFC(
-	ctInp 		:= ctInp,
-	FinCiclo 	:= FinCiclo,
-	IC 			:= IC);
-	
-	
+mdAlimentador.ctInp 			:= ctInp;
+mdPickAndPlaceCarga.ctInp 		:= ctInp;
+mdMedidorTapa.ctInp 			:= ctInp;
+mdCaptadorInductivo.ctInp 		:= ctInp;
+mdDetectorFotoelectrico.ctInp 	:= ctInp;
+mdEvacuador.ctInp 				:= ctInp;
+mdPickAndPlaceDescarga.ctInp 	:= ctInp;
+mdPlatoDivisor.ctInp 			:= ctInp;
+
+mdEvacuador.Evacuar := TRUE; // PENDIENTE DECISIÓN DE EVACUAR O NO EN FUNCIÓN DEL TIPO DE TAPA
+
 fbFMS205_Producir_SFC(
-	HayProducir:=fbFMS205_SFC.HayProducir, 
-	mdAlimentador := mdAlimentador,
-	mdPickAndPlaceCarga := mdPickAndPlaceCarga);
+	mdAlimentador 			:= mdAlimentador,
+	mdPickAndPlaceCarga 	:= mdPickAndPlaceCarga,
+	mdMedidorTapa			:= mdMedidorTapa,
+	mdCaptadorInductivo 	:= mdCaptadorInductivo,
+	mdDetectorFotoelectrico := mdDetectorFotoelectrico,
+	mdEvacuador			 	:= mdEvacuador,
+	mdPickAndPlaceDescarga 	:= mdPickAndPlaceDescarga,
+	mdPlatoDivisor			:= mdPlatoDivisor);
 
 
 (*	

@@ -23,7 +23,9 @@ por vacío
 *)
 
 VAR_INPUT
+	Evacuar		: BOOL; // Hay que evacuar la tapa en la posición del módulo	    
 END_VAR
+
 VAR_OUTPUT
 END_VAR
 VAR
@@ -42,7 +44,7 @@ END_VAR
 
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[fbController();
+      <ST><![CDATA[
 ]]></ST>
     </Implementation>
     <Method Name="ModuleControlFlow" Id="{088423ab-0767-49f6-96df-c713fe6fe249}">
@@ -51,9 +53,9 @@ END_VAR
       <Implementation>
         <ST><![CDATA[fbController(
 	// sin temporizadores
-	
 	ctInp 	:= ctInp, 
-    f0      := f0,
+    Evacuar	:= Evacuar,
+	f0      := f0,
     f1      := f1,
     g0      := g0,
     v1      := v1,

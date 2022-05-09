@@ -38,12 +38,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
-
-
-
-
-(* Este código debería estar después de los cambios de estado 	
+      <ST><![CDATA[(* Este código debería estar después de los cambios de estado 	
 
 Parada := (Modo >= E_GEMMA.A1ParadaInicial) AND (Modo <= E_GEMMA.A7SituandoEstado);
 Funcionamiento:= (Modo >= E_GEMMA.F1ProduccionNormal) AND (Modo <= E_GEMMA.F6Probando);
@@ -53,6 +48,7 @@ Produccion := (Modo = E_GEMMA.A2ParaFinCiclo) OR (Modo = E_GEMMA.A3ParadaEstado)
     OR (Modo = E_GEMMA.F6Probando) OR (Modo = E_GEMMA.D3ProducirConFallos);
 Pausa := (Modo = E_GEMMA.A3ParadaEstado) OR (Modo = E_GEMMA.A4ParadaObtenida) OR (Modo = E_GEMMA.A5PreparandoTrasFallo)
     OR (Modo = E_GEMMA.D1ParadaEmergencia) OR (Modo = E_GEMMA.D2TratamientoFallos);
+	
 *)
 	
 (* FUNCION DE ESTADO *)

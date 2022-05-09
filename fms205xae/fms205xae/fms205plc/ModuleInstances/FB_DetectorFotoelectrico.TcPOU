@@ -16,6 +16,7 @@ VAR_INPUT
     ef         AT %I*: BOOL; (* ef  (nombre=df  c=I32 B=J1 b=04 módulo=EL1008 T=7  C=7 etiqueta=-B20, input) Detector fotoeléctrico *)
 END_VAR
 VAR_OUTPUT
+	
 	FotoelectricoDetectado: BOOL;
 	TapaClara: BOOL;
 END_VAR

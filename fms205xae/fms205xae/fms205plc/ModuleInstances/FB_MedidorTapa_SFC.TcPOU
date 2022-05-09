@@ -94,7 +94,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"Med0"</v>
+                            <v n="Value">"Init"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">11L</v>
@@ -197,7 +197,7 @@ END_VAR
                       <v n="IdParent">9L</v>
                     </o>
                     <o t="SFCTransition">
-                      <v n="VariableName">"Med0__to__Med1"</v>
+                      <v n="VariableName">"Init__to__Bajar"</v>
                       <n n="EmbeddedTransition" />
                       <l2 n="EmbeddedTransitionProperties" />
                       <l2 n="Attributes" cet="SFCAttribute">
@@ -331,7 +331,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"Med1"</v>
+                            <v n="Value">"Bajar"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">125L</v>
@@ -434,14 +434,14 @@ END_VAR
                       <v n="IdParent">9L</v>
                     </o>
                     <o t="SFCTransition">
-                      <v n="VariableName">"Med1__to__Med2"</v>
+                      <v n="VariableName">"Bajar__to__Hecho"</v>
                       <n n="EmbeddedTransition" />
                       <l2 n="EmbeddedTransitionProperties" />
                       <l2 n="Attributes" cet="SFCAttribute">
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"Med1.t &gt; TMED"</v>
+                            <v n="Value">"Bajar.t &gt; TMED"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">137L</v>
@@ -568,7 +568,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"Med2"</v>
+                            <v n="Value">"Hecho"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">88L</v>
@@ -671,7 +671,7 @@ END_VAR
                       <v n="IdParent">9L</v>
                     </o>
                     <o t="SFCTransition">
-                      <v n="VariableName">"Med2__to__Med0"</v>
+                      <v n="VariableName">"Hecho__to__Init"</v>
                       <n n="EmbeddedTransition" />
                       <l2 n="EmbeddedTransitionProperties" />
                       <l2 n="Attributes" cet="SFCAttribute">
@@ -742,7 +742,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"Med0"</v>
+                            <v n="Value">"Init"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">30L</v>

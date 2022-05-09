@@ -7,7 +7,21 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
+	(* Controlador  específico *)
 	fbController: FB_PlatoDivisor_SFC;
+	
+	(* Temporizadores específicos *)
+	TRET	   : TIME := T#500MS;	(* Tiempo de actuación del retenedor del plato *)
+	TEMP	   : TIME := T#2S   ;	(* Tiempo de recorrido del empujador del plato *)
+
+	(* Sensores específicos *)
+	d0         AT %I*: BOOL; (* b0  (nombre=d0  c=I21 B=J1 b=29 módulo=EL1008 T=6  C=6 etiqueta=-B9,  input) Empujador del plato detrás *)
+    k1         AT %I*: BOOL; (* c1  (nombre=k1  c=I30 B=J1 b=15 módulo=EL1008 T=7  C=7 etiqueta=-B18, input) Empujador de tapa delante *)
+
+	(* Actuadores específicos *)
+    D_1       AT %Q*: BOOL; (* bEMP (nombre=D+  c=Q20 B=J2  b=05 módulo=EL2008 T=8 C=8 etiqueta=-Y6,  output) Empujador del plato avanza *)
+    E_1       AT %Q*: BOOL; (* bRET (nombre=E+  c=Q21 B=J2  b=02 módulo=EL2008 T=8 C=8 etiqueta=-Y7,  output) Retenedor del plato retrocede *)
+
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -17,14 +31,34 @@ END_VAR
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[fbController(ctInp:=ctInp, ctOut=>ctOut);]]></ST>
+        <ST><![CDATA[fbController(
+	ctInp	:= ctINp,
+	
+	TRET	:= TRET,
+	TEMP	:= TEMP,
+	k1		:= k1,
+	d0  	:= d0, 
+
+	ctOut 	=> ctOut);
+]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_PlatoDivisor">
-      <LineId Id="9" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_PlatoDivisor.ModuleControlFlow">
-      <LineId Id="3" Count="0" />
-    </LineIds>
+    <Method Name="ModulePerformActions" Id="{82fe9592-893f-4945-b82b-6f414cca883e}">
+      <Declaration><![CDATA[METHOD ModulePerformActions : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// el plato siempre está en condiciones iniciales
+ctOut.IC := TRUE;
+
+// si no eestamos en modo manual, actualizar los actuadores con el estado del controlador
+IF NOT ctInp.Manual THEN
+    D_1	:= fbController.D_1;
+	E_1 := fbController.E_1;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>
