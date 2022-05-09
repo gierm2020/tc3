@@ -87,6 +87,7 @@ IF NOT ctInp.Manual THEN
 	L_1 := fbController.L_1;
 END_IF
 
+// TODO HAY QUE CAMBIAR ESTA CONDICION DE CTOUT.DONE
 IF ctOut.Done AND NOT AlturaMedida THEN
 	// si ha terminado de medir: guardar y convertir las medidas
 	AlturaMedida	:= TRUE;

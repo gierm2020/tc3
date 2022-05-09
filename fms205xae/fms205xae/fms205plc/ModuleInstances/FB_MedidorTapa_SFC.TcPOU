@@ -2,6 +2,7 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_MedidorTapa_SFC" Id="{586537d7-6cab-450b-b2b9-fb1352203f2f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_MedidorTapa_SFC EXTENDS FB_Module_SFC
+// TODO CAMBIAR EL SITIO DE RECOGER LA MEDIDA, NO ESPERAR A QUE SUBA EL MEDIDOR PARA RECOGER EL NÚMERO SINO QUE HACERLO JUSTO CUANDO TERMINE DE BAJAR
 VAR_INPUT
 	(* Temporizadores específicos *)
 	TMED: TIME := T#1S;	

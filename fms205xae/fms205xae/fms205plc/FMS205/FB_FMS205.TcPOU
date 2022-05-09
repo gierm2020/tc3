@@ -4,7 +4,7 @@
     <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205
 VAR_INPUT
 	MaximoTiempoRespuesta: TIME := T#5S;
-	ManiobrasDeseadas: UINT;
+	ManiobrasDeseadas: UINT :=1; // POST15 AÑADIDO VALOR POR DEFECTO
 END_VAR
 
 VAR_OUTPUT
@@ -25,14 +25,14 @@ VAR
 	ctInp 					: S_ControllerInput;
 	
 	// módulos de la FMS205
-	mdAlimentador			: FB_Alimentador			(ID:=0, MRT:=MaximoTiempoRespuesta);
-	mdPickAndPlaceCarga 	: FB_PickAndPlace			(ID:=1, MRT:=MaximoTiempoRespuesta);
-	mdMedidorTapa			: FB_MedidorTapa			(ID:=3, MRT:=MaximoTiempoRespuesta);
-	mdCaptadorInductivo 	: FB_CaptadorInductivo		(ID:=4, MRT:=MaximoTiempoRespuesta);
-	mdDetectorFotoelectrico : FB_DetectorFotoelectrico	(ID:=5, MRT:=MaximoTiempoRespuesta);
-	mdEvacuador			 	: FB_Evacuador				(ID:=7, MRT:=MaximoTiempoRespuesta);
-	mdPickAndPlaceDescarga 	: FB_PickAndPlace			(ID:=8, MRT:=MaximoTiempoRespuesta);
-	mdPlatoDivisor			: FB_PlatoDivisor			(ID:=9, MRT:=MaximoTiempoRespuesta);
+	mdAlimentador			: FB_Alimentador			(ID:=0, MRT:=MaximoTiempoRespuesta, Name:='Alimentador');
+	mdPickAndPlaceCarga 	: FB_PickAndPlace			(ID:=1, MRT:=MaximoTiempoRespuesta, Name:='Carga');
+	mdMedidorTapa			: FB_MedidorTapa			(ID:=3, MRT:=MaximoTiempoRespuesta, Name:='Medidor');
+	mdCaptadorInductivo 	: FB_CaptadorInductivo		(ID:=4, MRT:=MaximoTiempoRespuesta, Name:='Inductivo');
+	mdDetectorFotoelectrico : FB_DetectorFotoelectrico	(ID:=5, MRT:=MaximoTiempoRespuesta, Name:='Fotoeléctrico');
+	mdEvacuador			 	: FB_Evacuador				(ID:=7, MRT:=MaximoTiempoRespuesta, Name:='Evacuador');
+	mdPickAndPlaceDescarga 	: FB_PickAndPlace			(ID:=8, MRT:=MaximoTiempoRespuesta, Name:='Descarga');
+	mdPlatoDivisor			: FB_PlatoDivisor			(ID:=9, MRT:=MaximoTiempoRespuesta, Name:='Plato');
 	
 	// controladores de la máquina, la función de producción y la guía GEMMA 
 	fbPanel					: FB_Panel;
@@ -50,13 +50,13 @@ END_VAR
 
 
 IC:=				(* La estación está en condiciones iniciales si cada módulo lo está *)
-	mdAlimentador.ctOut.IC AND
+	(mdAlimentador.ctOut.IC AND
 	mdPickAndPlaceCarga.ctOut.IC AND
 	mdMedidorTapa.ctOut.IC AND 
 	mdCaptadorInductivo.ctOut.IC AND
 	mdDetectorFotoelectrico.ctOut.IC AND
 	mdEvacuador.ctOut.IC AND
-	mdPickAndPlaceDescarga.ctOut.IC; 
+	mdPickAndPlaceDescarga.ctOut.IC) OR TRUE; // POST15 PARA FORZAR CONDICIONES INICIALES SIN HARDWARE 
 
 	
 Preparada := TRUE; // PENDIENTE SI LA ESTACIÓN NECESITA UNA SECUENCIA DE PREPARACIÓN 
@@ -74,12 +74,13 @@ FinCiclo := 		(* Todos los módulos han terminado su parte del ciclo *)
 
 IF FinCiclo THEN	
 	// Todos los módulos han terminado su secuencia de producir
+	// TODO SÓLO SE PUEDE CONTAR UNA TAPA HECHA SI NO SE HA RECHAZADO Y SI SE HA METIDO EN EL CARRO
 	ManiobrasRealizadas := ManiobrasRealizadas + 1;
-	ManiobrasPendientes := ManiobrasDeseadas - ManiobrasRealizadas;	
+	// POAST15  ManiobrasPendientes := ManiobrasDeseadas - ManiobrasRealizadas;	
 	// Añadir aquí LA LÓGICA DEL FINAL DE CICLO
 	// p. ej. actualización del plato con los resultados de sensores  	
 END_IF
-
+ManiobrasPendientes := ManiobrasDeseadas - ManiobrasRealizadas; // POST15 hay que calcular siempre las maniobras pendientes
 
 FinTarea := ManiobrasPendientes = 0; 	// Se finaliza la tarea si no quedan maniobras pendientes
 
@@ -124,6 +125,7 @@ ctInp.Execute :=  (* El coordinador indica que hay empezar *)
 	; // AND NOT IC;
 
 ctInp.Ack := FinCiclo; 					// Notificar a los módulos que ya pueden volver al inicio
+// TODO SI HAY FIN DE CICLO HAY QUE HACER UN MONTÓN DE COSAS, POR EJEMPLO, ACTUALIZAR EL PLATO CON EL SENSOR FOTOELÉCTRICO
 
 ctInp.Manual := (* Establece modo de funcionamiento manual *) 
 	(fbDirector.Modo = E_GEMMA.F4VerificacionSinOrden);
@@ -161,13 +163,14 @@ mdEvacuador.ctInp 				:= ctInp;
 mdPickAndPlaceDescarga.ctInp 	:= ctInp;
 mdPlatoDivisor.ctInp 			:= ctInp;
 
-mdEvacuador.Evacuar := TRUE; // PENDIENTE DECISIÓN DE EVACUAR O NO EN FUNCIÓN DEL TIPO DE TAPA
+mdEvacuador.Evacuar := TRUE; // TODO PENDIENTE DECISIÓN DE EVACUAR O NO EN FUNCIÓN DEL TIPO DE TAPA
 mdPickAndPlaceCarga.Mover := TRUE;
-mdPickAndPlaceDesscarga.Mover := TRUE;
+mdPickAndPlaceDescarga.Mover := TRUE;
 
 // TODO CARGA Y DESCARGA TENGAN UNA OPCION DE NO HACER NADA
 
 fbFMS205_Producir_SFC(
+	ctInp					:= ctInp, // POST15
 	mdAlimentador 			:= mdAlimentador,
 	mdPickAndPlaceCarga 	:= mdPickAndPlaceCarga,
 	mdMedidorTapa			:= mdMedidorTapa,
@@ -177,7 +180,14 @@ fbFMS205_Producir_SFC(
 	mdPickAndPlaceDescarga 	:= mdPickAndPlaceDescarga,
 	mdPlatoDivisor			:= mdPlatoDivisor);
 
-
+mdAlimentador.ModuleProcessCycle();
+mdPickAndPlaceCarga.ModuleProcessCycle();
+mdMedidorTapa.ModuleProcessCycle();
+mdCaptadorInductivo.ModuleProcessCycle();
+mdDetectorFotoelectrico.ModuleProcessCycle();
+mdEvacuador.ModuleProcessCycle();
+mdPickAndPlaceDescarga.ModuleProcessCycle();
+mdPlatoDivisor.ModuleProcessCycle();
 ]]></ST>
     </Implementation>
   </POU>
