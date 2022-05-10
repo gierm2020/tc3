@@ -3,14 +3,14 @@
   <POU Name="FB_Director" Id="{7ba3b411-03e2-4744-bc96-6b241362c795}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Director
 VAR_INPUT
-	fbPanel: FB_Panel; 	// estado del panel de control
-
-	IC: BOOL; 			// todos los módulos están en condiciones iniciales
-    Preparada: BOOL;	// la estación está preparada después de encender
-	FinCiclo: BOOL;		// una pieza se ha completado
-	FinTarea: BOOL;		// el lote se ha completado
-	Fallo: BOOL; 		// al menos un módulo ha fallado
-    Finalizada: BOOL;	// la estación está lista para apagarse    
+	fbPanel: REFERENCE TO FB_Panel; 			// estado del panel de control
+	
+	IC: BOOL; 					// todos los módulos están en condiciones iniciales
+    Preparada: BOOL;			// la estación está preparada después de encender
+	FinCiclo: BOOL;				// una pieza se ha completado
+	FinTarea: BOOL;				// el lote se ha completado
+	Fallo: BOOL; 				// al menos un módulo ha fallado
+    Finalizada: BOOL;			// la estación está lista para apagarse    
     
     // Marcha: BOOL; // se pulsa el botón de marcha, empezar a producir
     // Cancela: BOOL; (**)
@@ -56,6 +56,14 @@ IF fbPanel.Emergencia THEN
 	
 ELSIF fbPanel.Reinicia THEN
     Modo := E_GEMMA.A6Inicializando;
+
+ELSIF fbPanel.Probando AND Modo <> E_GEMMA.F6Probando THEN
+	Previo := Modo;					// guardamos el modo en que estaba la máquiina antes de entrar a modo pruebas
+    Modo := E_GEMMA.F6Probando;		// y pasamos al modo pruebas
+
+ELSIF Modo=E_GEMMA.F6Probando AND NOT fbPanel.Probando THEN
+    Modo := Previo;					// restauramos el modo en que estaba la máquina antes de pasar a modo pruebas
+	// Previo := E_GEMMA.F6Probando;		// y el modo previo queda a F6
 
 
 ELSE

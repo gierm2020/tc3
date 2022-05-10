@@ -32,9 +32,6 @@
     <Compile Include="FMS205\FB_FMS205.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FMS205\FB_FMS205_Producir_SFC.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="FMS205\FB_FMS205_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -100,13 +97,6 @@
     </Compile>
     <Compile Include="POUs\MAIN.TcPOU">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Pruebas\FB_FMS205_Test.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Pruebas\VS_FMS205_Test.TcVIS">
-      <SubType>Code</SubType>
-      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
     <Compile Include="Visualization Manager.TcVMO">
       <SubType>Code</SubType>

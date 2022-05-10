@@ -37,7 +37,7 @@ VAR
 	// controladores de la máquina, la función de producción y la guía GEMMA 
 	fbPanel					: FB_Panel;
 	//fbFMS205_SFC			: FB_FMS205_SFC;
-	fbFMS205_Producir_SFC	: FB_FMS205_Producir_SFC;
+	fbFMS205_Producir_SFC	: FB_FMS205_SFC;
 
 	// pendiente renombrar - variables en interfaz de usuario
 	Execute : BOOL;
@@ -50,13 +50,14 @@ END_VAR
 
 
 IC:=				(* La estación está en condiciones iniciales si cada módulo lo está *)
-	(mdAlimentador.ctOut.IC AND
-	mdPickAndPlaceCarga.ctOut.IC AND
-	mdMedidorTapa.ctOut.IC AND 
-	mdCaptadorInductivo.ctOut.IC AND
-	mdDetectorFotoelectrico.ctOut.IC AND
-	mdEvacuador.ctOut.IC AND
-	mdPickAndPlaceDescarga.ctOut.IC) OR TRUE; // POST15 PARA FORZAR CONDICIONES INICIALES SIN HARDWARE 
+	(mdAlimentador.InitialConditions() AND
+	mdPickAndPlaceCarga.InitialConditions() AND
+	mdMedidorTapa.InitialConditions() AND 
+	mdCaptadorInductivo.InitialConditions() AND
+	mdDetectorFotoelectrico.InitialConditions() AND
+	mdEvacuador.InitialConditions() AND
+	mdPickAndPlaceDescarga.InitialConditions()) 
+	OR (fbDirector.Modo=E_GEMMA.F6Probando); // POST15 PARA FORZAR CONDICIONES INICIALES SIN HARDWARE 
 
 	
 Preparada := TRUE; // PENDIENTE SI LA ESTACIÓN NECESITA UNA SECUENCIA DE PREPARACIÓN 
@@ -114,17 +115,24 @@ ctInp.ModeAct	:= fbDirector.Modo;
 ctInp.ModePre	:= fbDirector.Previo;
 
 ctInp.Execute :=  (* El coordinador indica que hay empezar *)
-		((fbDirector.Modo = E_GEMMA.A2ParaFinCiclo) OR 
-	 	(fbDirector.Modo = E_GEMMA.A3ParadaEstado) OR 
-	 	(fbDirector.Modo = E_GEMMA.F1ProduccionNormal) OR 
-	 	(fbDirector.Modo = E_GEMMA.F2SecuenciaPreparacion) OR 
-	 	(fbDirector.Modo = E_GEMMA.F3SecuenciaFinalizacion) OR 
-	 	(fbDirector.Modo = E_GEMMA.F5VerificacionOrdenada) OR 
-	 	(fbDirector.Modo = E_GEMMA.F6Probando) OR 
-	 	(fbDirector.Modo = E_GEMMA.D3ProducirConFallos))
-	; // AND NOT IC;
+	(fbDirector.Modo = E_GEMMA.F6Probando AND fbPanel.ProbarExecute) OR
+	(fbDirector.Modo <> E_GEMMA.F6Probando AND
+		(
+			(fbDirector.Modo = E_GEMMA.A2ParaFinCiclo) OR 
+	 		(fbDirector.Modo = E_GEMMA.A3ParadaEstado) OR 
+	 	 	(fbDirector.Modo = E_GEMMA.F1ProduccionNormal) OR 
+	 	 	(fbDirector.Modo = E_GEMMA.F2SecuenciaPreparacion) OR 
+	 	 	(fbDirector.Modo = E_GEMMA.F3SecuenciaFinalizacion) OR 
+	 	 	(fbDirector.Modo = E_GEMMA.F5VerificacionOrdenada) OR 
+	 	 	(fbDirector.Modo = E_GEMMA.F6Probando) OR 
+	 	 	(fbDirector.Modo = E_GEMMA.D3ProducirConFallos)
+		) 
+	);
+		
 
-ctInp.Ack := FinCiclo; 					// Notificar a los módulos que ya pueden volver al inicio
+ctInp.Ack := // Notificar a los módulos que ya pueden volver al inicio
+	(fbDirector.Modo = E_GEMMA.F6Probando AND fbPanel.ProbarAck) OR 
+	(fbDirector.Modo <> E_GEMMA.F6Probando AND FinCiclo);
 // TODO SI HAY FIN DE CICLO HAY QUE HACER UN MONTÓN DE COSAS, POR EJEMPLO, ACTUALIZAR EL PLATO CON EL SENSOR FOTOELÉCTRICO
 
 ctInp.Manual := (* Establece modo de funcionamiento manual *) 
@@ -169,25 +177,35 @@ mdPickAndPlaceDescarga.Mover := TRUE;
 
 // TODO CARGA Y DESCARGA TENGAN UNA OPCION DE NO HACER NADA
 
-fbFMS205_Producir_SFC(
-	ctInp					:= ctInp, // POST15
-	mdAlimentador 			:= mdAlimentador,
-	mdPickAndPlaceCarga 	:= mdPickAndPlaceCarga,
-	mdMedidorTapa			:= mdMedidorTapa,
-	mdCaptadorInductivo 	:= mdCaptadorInductivo,
-	mdDetectorFotoelectrico := mdDetectorFotoelectrico,
-	mdEvacuador			 	:= mdEvacuador,
-	mdPickAndPlaceDescarga 	:= mdPickAndPlaceDescarga,
-	mdPlatoDivisor			:= mdPlatoDivisor);
+IF fbDirector.Modo = E_GEMMA.F6Probando THEN
+	// en el modo pruebas el control de la fms205 lo hacemos desde la visualización de pruebas
+	//ctInp.Execute 	:= fbPanel.ProbarExecute;
+	//ctInp.Ack 		:= fbPanel.ProbarAck; 
+	IF fbPanel.ProbarAlimentador THEN
+		mdAlimentador.ModuleProcessCycle();	
+	END_IF
+	;
+ELSE
+	fbFMS205_Producir_SFC(
+		ctInp					:= ctInp, // POST15
+		mdAlimentador 			:= mdAlimentador,
+		mdPickAndPlaceCarga 	:= mdPickAndPlaceCarga,
+		mdMedidorTapa			:= mdMedidorTapa,
+		mdCaptadorInductivo 	:= mdCaptadorInductivo,
+		mdDetectorFotoelectrico := mdDetectorFotoelectrico,
+		mdEvacuador			 	:= mdEvacuador,
+		mdPickAndPlaceDescarga 	:= mdPickAndPlaceDescarga,
+		mdPlatoDivisor			:= mdPlatoDivisor);
+	mdAlimentador.ModuleProcessCycle();
+	mdPickAndPlaceCarga.ModuleProcessCycle();
+	mdMedidorTapa.ModuleProcessCycle();
+	mdCaptadorInductivo.ModuleProcessCycle();
+	mdDetectorFotoelectrico.ModuleProcessCycle();
+	mdEvacuador.ModuleProcessCycle();
+	mdPickAndPlaceDescarga.ModuleProcessCycle();
+	mdPlatoDivisor.ModuleProcessCycle();
+END_IF
 
-mdAlimentador.ModuleProcessCycle();
-mdPickAndPlaceCarga.ModuleProcessCycle();
-mdMedidorTapa.ModuleProcessCycle();
-mdCaptadorInductivo.ModuleProcessCycle();
-mdDetectorFotoelectrico.ModuleProcessCycle();
-mdEvacuador.ModuleProcessCycle();
-mdPickAndPlaceDescarga.ModuleProcessCycle();
-mdPlatoDivisor.ModuleProcessCycle();
 ]]></ST>
     </Implementation>
   </POU>

@@ -3,8 +3,7 @@
   <POU Name="MAIN" Id="{19798f55-9da0-48b7-a2d0-4bd977cab0f2}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
-	fbFMS205 : FB_FMS205;
-	fbFMS205_Test : FB_FMS205_TEST;
+	fbFMS205 : FB_FMS205;	
 END_VAR
 ]]></Declaration>
     <Implementation>
