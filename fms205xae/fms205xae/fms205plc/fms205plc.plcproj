@@ -26,6 +26,21 @@
     <Compile Include="DUTs\S_ControllerOutput.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FMS203 TC2\FB_Cinta_fms203.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FMS203 TC2\FB_Cinta_fms203_SFC.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FMS203 TC2\FB_Clock.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FMS203 TC2\FB_Director_fms203.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FMS203 TC2\FB_Panel_fms203.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FMS205\FB_Director.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -112,6 +127,7 @@
     <Folder Include="ModuleBase" />
     <Folder Include="ModuleInstances" />
     <Folder Include="FMS205" />
+    <Folder Include="FMS203 TC2" />
     <Folder Include="Pruebas" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />
