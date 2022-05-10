@@ -17,7 +17,7 @@ VAR_INPUT
 END_VAR
 
 VAR_OUTPUT
-	InduccionCaptada: BOOL;
+	LecturaFiable: BOOL := FALSE; 
 	TapaMetalica: BOOL;
 END_VAR
 
@@ -34,22 +34,14 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// el captador inductivo siempre está en condiciones iniciales
-ctOut.IC := TRUE; 
-
-// si no eestamos en modo manual, actualizar los actuadores con el estado del controlador
-IF NOT ctInp.Manual THEN
-	;
-END_IF
-
-IF ctOut.Done AND NOT InduccionCaptada THEN
+        <ST><![CDATA[IF ctOut.Done AND NOT LecturaFiable THEN
 	// si ha terminado de captar: guardar resultado
-	InduccionCaptada	:= TRUE;
+	LecturaFiable		:= TRUE;
 	TapaMetalica		:= ei;
 
 ELSIF ctInp.Ack THEN
-	// si el controlador usó los valores: inicializarlos para la siguiente medición
-	InduccionCaptada	:= FALSE;
+	// una vez que cambia el ciclo la lectura ya no es fiable
+	LecturaFiable		:= FALSE;
 END_IF
 
 

@@ -7,6 +7,7 @@ STRUCT
 	ModeAct: E_GEMMA;  (* Modo de GEMMA en que está la máquina actualmente *)
 	ModePre: E_GEMMA;  (* Modo de GEMMA antes del modo actual *)
 	
+	HwIC: 	BOOL; 	(* El hardware del módulo está en condiciones iniciales *)
 	Execute: BOOL; 	(* El coordinador indica que hay empezar *)
 	Ack: BOOL; 		(* El coordinador sabe que el brazo ha terminado *)
 	Manual: BOOL; 	(* Establece modo de funcionamiento manual *)

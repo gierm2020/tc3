@@ -23,7 +23,8 @@ por vacío
 *)
 
 VAR_INPUT
-	Evacuar		: BOOL; // Hay que evacuar la tapa en la posición del módulo	    
+	Evacuar		: BOOL; // Hay que evacuar la tapa en la posición del módulo
+	TSOL		: TIME := T#100MS; // tiempo después de soltar y antes de subir	    
 END_VAR
 
 VAR_OUTPUT
@@ -51,35 +52,44 @@ END_VAR
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[fbController(
-	// sin temporizadores
-	ctInp 	:= ctInp, 
-    Evacuar	:= Evacuar,
-	f0      := f0,
-    f1      := f1,
-    g0      := g0,
-    v1      := v1,
+        <ST><![CDATA[//----------------------------------- leer los sensores para determinar el estado del módulo
 
-	ctOut 	=> ctOut);
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="ModulePerformActions" Id="{bff6b0cc-aa53-4cb9-b32f-a444e3596ef9}">
-      <Declaration><![CDATA[METHOD ModulePerformActions : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[// el alimentador está en condiciones iniciales si k1 está desactivado
-ctOut.IC := f1 AND g0 AND NOT v1;
+HwIc := f1; // el evacuador está en condiciones iniciales cuando el sensor f1 está activado
+ 
 
-// si no eestamos en modo manual, actualizar los actuadores con el estado del controlador
-IF NOT ctInp.Manual THEN
+//----------------------------------- preparar los datos que necesita el controlador
+ctInp.HwIC := HwIC;
+
+
+
+//----------------------------------- ejecutar el controlador
+//fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
+fbController(
+	ctInp := ctInp,								// entrada estándar
+	TSOL := TSOL,								// temporizadores específicos
+    f0 := f0, f1 := f1, g0 := g0, v1 := v1,		// sensores específicos
+	Evacuar	:= Evacuar,							// otras entradas específicas
+	ctOut => ctOut);							// resultado del controlador
+
+	
+//----------------------------------- utilizar los resultados del controlador
+
+// Cambios en actuadores por el modo manual
+IF ctInp.Manual THEN
+	; // TODO AÑADIR AQUI EL MODO MANUAL DEL ALIMENTADOR
+
+// Cambios en actuadores por el resultado del controlador
+ELSE
+	// Actualizar actuadores hardware con lo que indique el controlador
     F_1       := fbController.F_1;
     F_0       := fbController.F_0;
     G_1       := fbController.G_1;
     V_1       := fbController.V_1;
 END_IF
+
+
+// Comprobar si después de actuar la máquina sigue en condiciones iniciales
+HwIc := f1; // el evacuador está en condiciones iniciales cuando el sensor f1 está activado
 
 ]]></ST>
       </Implementation>

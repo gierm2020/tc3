@@ -6,18 +6,12 @@
 
 ESTACIÓN MEDICIÓN TAPA - Manual de usuario #32/28
 
-El hecho de disponer de tapas con dos alturas 
-diferentes hace necesario disponer de un elemento 
-que realice una medición de las mismas. Debido a 
-la finalidad didáctica con la cual se ha realizado el
-diseño de esta célula, se han adoptado soluciones 
-variadas para llevar a cabo operaciones similares. 
-En otras estaciones, para operaciones de medición 
-se ha recurrido a componentes como cilindros 
-neumáticos con detectores de altura correcta, o 
-palpadores con salida analógica. En este caso se ha 
-considerado de interés utilizar un transductor digital 
-que proporciona una salida por pulsos, como es el 
+El hecho de disponer de tapas con dos alturas diferentes hace necesario disponer de un elemento 
+que realice una medición de las mismas. Debido a la finalidad didáctica con la cual se ha realizado el
+diseño de esta célula, se han adoptado soluciones variadas para llevar a cabo operaciones similares. 
+En otras estaciones, para operaciones de medición se ha recurrido a componentes como cilindros 
+neumáticos con detectores de altura correcta, o palpadores con salida analógica. En este caso se ha 
+considerado de interés utilizar un transductor digital que proporciona una salida por pulsos, como es el 
 encoder lineal.
 
 La imagen muestra el aspecto del componente utilizado, el cuál consta 
@@ -30,10 +24,8 @@ este dato es posible determinar de forma directa la altura de la tapa
 
 *)
 
-VAR_INPUT
-END_VAR
 VAR_OUTPUT
-	AlturaMedida	: BOOL;
+	LecturaFiable	: BOOL;
 	Altura_mm		: REAL;
 	Altura_Pulsos	: UINT;
 END_VAR
@@ -49,58 +41,69 @@ VAR
 
 	(* Actuadores específicos *)
 	L_1 AT %Q*: BOOL; (* Medidor de altura baja *)	
-END_VAR
-
-
-	
-	
-]]></Declaration>
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Method Name="ModuleControlFlow" Id="{d76d2d9a-68fd-4928-b9fd-2c031ae14f83}">
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
+
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[fbController(
-	TMED		:= TMED,	
+        <ST><![CDATA[//----------------------------------- leer los sensores para determinar el estado del módulo
 
-	ctInp 		:= ctInp, 
-	fv			:= fv,
-	
-	ctOut 		=> ctOut);
+HwIC := TRUE; // TODO: ESTABLECER LOS VALORES DE FV QUE INDICAN QUE EL MEDIDOR ESTÁ EN POSICIÓN INICIAL 
 
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="ModulePerformActions" Id="{b4054fc3-aaf4-4e13-a441-22d4b11db75a}">
-      <Declaration><![CDATA[METHOD ModulePerformActions : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[// el alimentador siempre está en condiciones iniciales
-ctOut.IC := TRUE; 
 
-// si no eestamos en modo manual, actualizar los actuadores con el estado del controlador
-IF NOT ctInp.Manual THEN
+
+//----------------------------------- preparar los datos que necesita el controlador
+ctInp.HwIC := HwIC;
+
+
+
+//----------------------------------- ejecutar el controlador
+//fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
+fbController(
+	ctInp := ctInp,								// entrada estándar
+	TMED := TMED,								// temporizadores específicos
+    fv := fv,									// sensores específicos
+	LecturaFiable	:= LecturaFiable,			// otras entradas específicas
+	ctOut => ctOut);							// resultado del controlador
+
+
+
+//----------------------------------- utilizar los resultados del controlador
+
+// Cambios en actuadores por el modo manual
+IF ctInp.Manual THEN
+	; // TODO AÑADIR AQUI EL MODO MANUAL DEL ALIMENTADOR
+
+// Cambios en actuadores por el resultado del controlador
+ELSE
+	// Actualizar actuadores hardware con lo que indique el controlador
 	L_1 := fbController.L_1;
 END_IF
 
-// TODO HAY QUE CAMBIAR ESTA CONDICION DE CTOUT.DONE
-IF ctOut.Done AND NOT AlturaMedida THEN
-	// si ha terminado de medir: guardar y convertir las medidas
-	AlturaMedida	:= TRUE;
+// Leer la altura cuando el lector está abajo
+IF fbController.Leyendo AND NOT LecturaFiable THEN
 	Altura_Pulsos	:= fv;
 	Altura_mm		:= -0.0257*fv + 52.532;				 // calcular la altura con la ecuación de regresión
 	Altura_mm 		:= SEL(Altura_mm < 0, Altura_mm, 0); // si la altura es negativa dejar cero
+	LecturaFiable 	:= TRUE;
 
-ELSIF ctInp.Ack THEN
-	// si el controlador usó los valores: inicializarlos para la siguiente medición
-	AlturaMedida	:= FALSE;
+ELSIF ctinp.Ack THEN
+	LecturaFiable 	:= FALSE; 	// Resetear la lectura para el siguiente ciclo
 	Altura_Pulsos	:= 0;
 	Altura_mm		:= 0;
-END_IF]]></ST>
+END_IF
+	 
+// Comprobar si después de actuar la máquina sigue en condiciones iniciales
+
+HwIC := TRUE; // TODO: ESTABLECER LOS VALORES DE FV QUE INDICAN QUE EL MEDIDOR ESTÁ EN POSICIÓN INICIAL 
+
+
+
+]]></ST>
       </Implementation>
     </Method>
   </POU>

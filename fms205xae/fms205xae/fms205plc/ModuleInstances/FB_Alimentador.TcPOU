@@ -33,32 +33,54 @@ END_VAR
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[fbController(
-	TK_1 	:= TK_1,
-	
-	ctInp 	:= ctInp, 
-	k1 		:= k1,
-	
-	ctOut 	=> ctOut);
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="ModulePerformActions" Id="{355ba2a1-3d02-4714-aad4-f747202fae09}">
-      <Declaration><![CDATA[METHOD ModulePerformActions : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[// el alimentador está en condiciones iniciales si k1 está desactivado
-ctOut.IC := NOT k1; 
+        <ST><![CDATA[//----------------------------------- leer los sensores para determinar el estado del módulo
 
-// si no eestamos en modo manual, actualizar los actuadores con el estado del controlador
-IF NOT ctInp.Manual THEN
+HwIC := NOT k1; // el alimentador está en estado inicial si k1 está apagado 
+
+
+//----------------------------------- preparar los datos que necesita el controlador
+ctInp.HwIC := HwIC;
+
+
+
+//----------------------------------- ejecutar el controlador
+//fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
+fbController(
+	ctInp := ctInp,								// entrada estándar
+	TK_1 := TK_1,								// temporizadores específicos
+    k1 := k1, 									// sensores específicos
+	//											// otras entradas específicas
+	ctOut => ctOut);							// resultado del controlador
+
+
+//----------------------------------- utilizar los resultados del controlador
+
+// Cambios en actuadores por el modo manual
+IF ctInp.Manual THEN
+	; // TODO AÑADIR AQUI EL MODO MANUAL DEL ALIMENTADOR
+
+// Cambios en actuadores por el resultado del controlador
+ELSE
+	// Actualizar actuadores hardware con lo que indique el controlador
 	K_1 := fbController.K_1;
 END_IF
 
-// el actuador de falta de material es independiente del modo manual
-FM := fbcontroller.FM;
+// Cambios en actuadores independientes del modo manual
+FM := fbcontroller.FM; // actuador de falta de material
+
+
+// Cambios en estado de condiciones iniciales después de actuar
+HwIC := NOT k1; // el alimentador está en estado inicial si k1 está apagado
+
+
+
+
+(* PENDIENTE BORRAR
+// el alimentador está en condiciones iniciales si k1 está desactivado
+ctOut.IC := NOT k1; 
+
+// si no eestamos en modo manual, actualizar los actuadores con el estado del controlador
+*)
 ]]></ST>
       </Implementation>
     </Method>

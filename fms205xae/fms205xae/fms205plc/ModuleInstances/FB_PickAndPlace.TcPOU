@@ -2,44 +2,29 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_PickAndPlace" Id="{0acadc22-7b10-494f-8323-7cb38d3e0455}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_PickAndPlace EXTENDS FB_Module
-(* 
-ESTACIÓN DE CARGA - Manual de usuario #31/27
-
+(* ESTACIÓN DE CARGA - Manual de usuario #31/27 
 La alimentación de material descrita en el punto anterior realiza el suministro 
 de tapas que posteriormente serán montadas en el conjunto preparado en 
 el palet. Sin embargo, tras esta fase resulta necesario realizar la carga de 
 la tapa sobre el plato divisor. 
-Para ello se ha dispuesto el manipulador 
-de la imagen, compuesto por un cilindro 
-rotolineal, encargado de realizar la elevación 
-y posterior giro de un brazo con una pinza 
-de dos dedos de apertura paralela. El giro 
-de 180º realizado por este elemento, sitúa 
-la pinza sobre el punto exacto de descarga 
-de la tapa en la primera estación del plato 
+
+Para ello se ha dispuesto el manipulador de la imagen, compuesto por un cilindro 
+rotolineal, encargado de realizar la elevación y posterior giro de un brazo con una pinza 
+de dos dedos de apertura paralela. El giro de 180º realizado por este elemento, sitúa 
+la pinza sobre el punto exacto de descarga de la tapa en la primera estación del plato 
 divisor.
 
 ESTACIÓN DE INSERCIÓN TAPA - Manual de usuario #33/29
+Al igual que sucedía en la estación de inserción de eje, la última de las estaciones está encargada 
+del montaje de la tapa sobre el conjunto retenido en la cinta transportadora.
 
-Al igual que sucedía en la estación de inserción 
-de eje, la última de las estaciones está encargada 
-del montaje de la tapa sobre el conjunto retenido 
-en la cinta transportadora.
+Como puede observarse en la imagen, el manipulador previsto para realizar esta tarea 
+presenta idénticas características que el utilizado para depositar la tapa sobre el plato divisor. 
+Dispone de una pinza de apertura paralela para sujetar la tapa, que es elevada y desplazada 
+realizando un giro hasta el punto de descarga mediante un actuador neumático rotolineal. *)
 
-Como puede observarse en la imagen, el 
-manipulador previsto para realizar esta tarea 
-presenta idénticas características que el utilizado 
-para depositar la tapa sobre el plato divisor. 
-Dispone de una pinza de apertura paralela para 
-sujetar la tapa, que es elevada y desplazada 
-realizando un giro hasta el punto de descarga 
-mediante un actuador neumático rotolineal.
-
-*)
 VAR_INPUT
 	Mover: BOOL := TRUE; // TODO HAY QUE CARGAR O DESCARGAR EN FUNCIÓN DEL RESTO DE LA MÁQUINA Y LAS CONSIGNAS DEL PANEL
-END_VAR
-VAR_OUTPUT
 END_VAR
 VAR
 	(* Controlador  específico *)
@@ -58,10 +43,7 @@ VAR
 	HOR AT %Q*: BOOL; (* Actuador de extension de brazo horizontal *)
 	VER AT %Q*: BOOL; (* Actuador de movimiento vertical de brazo*)
 	PIN AT %Q*: BOOL; (*Actuador de pinza de brazo*)
-END_VAR
-
-
-	]]></Declaration>
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>

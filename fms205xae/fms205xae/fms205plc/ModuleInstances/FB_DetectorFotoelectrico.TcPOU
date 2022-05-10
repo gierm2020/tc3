@@ -18,8 +18,7 @@ VAR_INPUT
     ef         AT %I*: BOOL; (* ef  (nombre=df  c=I32 B=J1 b=04 módulo=EL1008 T=7  C=7 etiqueta=-B20, input) Detector fotoeléctrico *)
 END_VAR
 VAR_OUTPUT
-	
-	FotoelectricoDetectado: BOOL;
+	LecturaFiable: BOOL := FALSE; 
 	TapaClara: BOOL;
 END_VAR
 
@@ -35,22 +34,14 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// el detector fotoeléctrico siempre está en condiciones iniciales
-ctOut.IC := TRUE; 
-
-// si no eestamos en modo manual, actualizar los actuadores con el estado del controlador
-IF NOT ctInp.Manual THEN
-	;
-END_IF
-
-IF ctOut.Done AND NOT FotoelectricoDetectado THEN
+        <ST><![CDATA[IF ctOut.Done AND NOT LecturaFiable THEN
 	// si ha terminado de captar: guardar resultado
-	FotoelectricoDetectado	:= TRUE;
-	TapaClara				:= ef;
+	LecturaFiable		:= TRUE;
+	TapaClara			:= ef;
 
 ELSIF ctInp.Ack THEN
-	// si el controlador usó los valores: inicializarlos para la siguiente medición
-	FotoelectricoDetectado	:= FALSE;
+	// una vez que cambia el ciclo la lectura ya no es fiable
+	LecturaFiable		:= FALSE;
 END_IF
 ]]></ST>
       </Implementation>

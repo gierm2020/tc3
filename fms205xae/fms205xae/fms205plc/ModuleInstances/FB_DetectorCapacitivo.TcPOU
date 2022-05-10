@@ -11,14 +11,6 @@ que a diferencia del anterior proporciona una señal al PLC cuando se sitúa
 en su rango de detección una pieza de cualquier material 
 
 *)
-VAR_INPUT
-END_VAR
-
-VAR_OUTPUT
-END_VAR
-
-VAR
-END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[// Falta el hardware de este módulo]]></ST>

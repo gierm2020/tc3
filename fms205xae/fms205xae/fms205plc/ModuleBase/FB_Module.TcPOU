@@ -18,6 +18,7 @@ VAR
 	_ModuleID: BYTE; // identificador de la unidad funcional (el módulo)
 	_ModuleMRT: TIME; // Maximo tiempo de respuesta de los dispositivos (Max Response Time)
 	_ModuleName: STRING;
+	HwIC: BOOL := TRUE; // El hardware del módulo está en condiciones iniciales 
 
 
 	// Variables que permanecen durante la ejecución del objeto
@@ -44,7 +45,8 @@ END_VAR
 _ModuleID := ID;
 _ModuleMRT := MRT;
 _ModuleName := Name;
-ctOut.IC := TRUE;
+
+// ctOut.IC := TRUE;
 ]]></ST>
       </Implementation>
     </Method>
@@ -52,7 +54,28 @@ ctOut.IC := TRUE;
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[fbModuleController(ctInp:=ctInp, ctOut=>ctOut);]]></ST>
+        <ST><![CDATA[//----------------------------------- leer los sensores para determinar el estado del módulo
+
+HwIC := TRUE; // por defecto el módulo cumple las condiciones iniciales 
+
+
+
+//----------------------------------- preparar los datos que necesita el controlador
+ctInp.HwIC := HwIC;
+
+
+
+//----------------------------------- ejecutar el controlador
+fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
+
+
+
+//----------------------------------- utilizar los resultados del controlador
+
+HwIC := TRUE; // las condiciones iniciales pueden haber cambiado después del controlador
+
+
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="ModuleManageErrors" Id="{8ade10c1-f39a-4934-8daa-f961efae09a8}">
@@ -99,8 +122,9 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// leer los sensores y guardar el resultados
-ctOut.IC := TRUE;]]></ST>
+        <ST><![CDATA[// leer los sensores y guardar el resultados que necesita el controlador
+
+]]></ST>
       </Implementation>
     </Method>
   </POU>
