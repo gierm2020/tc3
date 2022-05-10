@@ -5,11 +5,11 @@
 VAR_INPUT
 	ctInp		: S_ControllerInput;
 	Mover: BOOL;
-	TPIN: TIME := T#1S; (* Tiempo de cierre y apertura de la pinza de carga *)	
-	h0: BOOL; (* Final de carrera horizontal retraida *)
-	h1: BOOL; (* Final de carrera horizontal extendido *)
-	v1: BOOL; (*Final de carrera vertical abajo*)
-	v0: BOOL; (*Final de carrera vertical arriba*)
+	TPIN: TIME; (* Tiempo de cierre y apertura de la pinza de carga *)	
+	h0: BOOL; 	(* Final de carrera horizontal retraida *)
+	h1: BOOL; 	(* Final de carrera horizontal extendido *)
+	v1: BOOL; 	(*Final de carrera vertical abajo*)
+	v0: BOOL; 	(*Final de carrera vertical arriba*)
 END_VAR
 VAR_OUTPUT	
 	ctOut		: S_ControllerOutput; 

@@ -130,5 +130,16 @@ END_VAR
 ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="NegarSensores" Id="{25f09da9-7351-4c85-b6d1-aeccbc4704f1}">
+      <Declaration><![CDATA[METHOD NegarSensores : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// este método sirve para hacer pruebas
+// cada sensor se cambia de True a False o viceversa
+// de forma que al ejecutar el método el controlador salta al siguiente estaddo]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>

@@ -3,17 +3,13 @@
   <POU Name="FB_PlatoDivisor" Id="{c71a4a01-3eb1-443b-a07e-accb57d2980d}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_PlatoDivisor EXTENDS FB_Module
 VAR_INPUT
-END_VAR
-VAR_OUTPUT
-END_VAR
-VAR
-	(* Controlador  específico *)
-	fbController: FB_PlatoDivisor_SFC;
-	
-	(* Temporizadores específicos *)
 	TRET	   : TIME := T#500MS;	(* Tiempo de actuación del retenedor del plato *)
 	TEMP	   : TIME := T#2S   ;	(* Tiempo de recorrido del empujador del plato *)
+END_VAR
 
+VAR
+	fbController: FB_PlatoDivisor_SFC;  // controlador para ejecución normal
+	
 	(* Sensores específicos *)
 	d0         AT %I*: BOOL; (* b0  (nombre=d0  c=I21 B=J1 b=29 módulo=EL1008 T=6  C=6 etiqueta=-B9,  input) Empujador del plato detrás *)
     k1         AT %I*: BOOL; (* c1  (nombre=k1  c=I30 B=J1 b=15 módulo=EL1008 T=7  C=7 etiqueta=-B18, input) Empujador de tapa delante *)
@@ -27,37 +23,55 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="ModuleControlFlow" Id="{a7156aed-454d-425e-80f1-664f90d71526}">
-      <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[fbController(
-	ctInp	:= ctINp,
-	
-	TRET	:= TRET,
-	TEMP	:= TEMP,
-	k1		:= k1,
-	d0  	:= d0, 
-
-	ctOut 	=> ctOut);
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="ModulePerformActions" Id="{82fe9592-893f-4945-b82b-6f414cca883e}">
-      <Declaration><![CDATA[METHOD ModulePerformActions : BOOL
+    <Method Name="InitialConditions" Id="{6c6766f3-90b7-4c0e-9ccf-d7be04fb6a0f}">
+      <Declaration><![CDATA[METHOD InitialConditions : BOOL
 VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// el plato siempre está en condiciones iniciales
-ctOut.IC := TRUE;
+        <ST><![CDATA[InitialConditions := d0;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ModuleControlFlow" Id="{a7156aed-454d-425e-80f1-664f90d71526}">
+      <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//----------------------------------- leer los sensores para determinar el estado del módulo
 
-// si no eestamos en modo manual, actualizar los actuadores con el estado del controlador
-IF NOT ctInp.Manual THEN
+
+//----------------------------------- preparar los datos que necesita el controlador
+ctInp.HwIC := InitialConditions();
+
+//----------------------------------- ejecutar el controlador
+//fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
+fbController(
+	ctInp := ctInp,								// entrada estándar
+	TRET := TRET, TEMP := TEMP,					// temporizadores específicos
+    k1 := k1, d0 := d0, 						// sensores específicos
+	ctOut => ctOut);							// resultado del controlador
+
+	//----------------------------------- utilizar los resultados del controlador
+
+// Cambios en actuadores por el modo manual
+IF ctInp.Manual THEN
+	; // TODO AÑADIR AQUI EL MODO MANUAL DEL ALIMENTADOR
+
+// Cambios en actuadores por el resultado del controlador
+ELSE
     D_1	:= fbController.D_1;
 	E_1 := fbController.E_1;
 END_IF
 ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="NegarSensores" Id="{1e2fe3c4-2c6e-4621-b69e-961d6cd165a0}">
+      <Declaration><![CDATA[METHOD NegarSensores : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[d0 := NOT d0;
+k1 := NOT k1;]]></ST>
       </Implementation>
     </Method>
   </POU>

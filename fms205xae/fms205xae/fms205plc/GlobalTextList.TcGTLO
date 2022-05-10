@@ -71,6 +71,11 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"664"</v>
+              <v n="TextDefault">"NegarSensores"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"377"</v>
               <v n="TextDefault">"Panel de pruebas"</v>
               <l n="LanguageTexts" t="ArrayList" />

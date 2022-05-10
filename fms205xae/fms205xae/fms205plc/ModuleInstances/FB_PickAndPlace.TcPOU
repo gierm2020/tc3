@@ -47,8 +47,6 @@ END_VAR]]></Declaration>
     </Implementation>
     <Method Name="InitialConditions" Id="{1ab95016-3a1b-4dc8-b780-aecabdebcf40}">
       <Declaration><![CDATA[METHOD InitialConditions : BOOL
-VAR_INPUT
-END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[InitialConditions := v0 AND h0; // el brazo está en condiciones iniciales cuando está arriba y retraído]]></ST>
@@ -89,6 +87,18 @@ ELSE
 	PIN := fbController.PIN;
 END_IF
 	]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="NegarSensores" Id="{57e2d05f-3e87-44b9-804d-894bd8aedefe}">
+      <Declaration><![CDATA[METHOD NegarSensores : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[h0 := NOT h0;
+h1 := NOT h1;
+v0 := NOT v0;
+v1 := NOT v1;]]></ST>
       </Implementation>
     </Method>
   </POU>

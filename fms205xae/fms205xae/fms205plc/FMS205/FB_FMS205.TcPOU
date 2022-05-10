@@ -182,6 +182,9 @@ IF fbDirector.Modo = E_GEMMA.F6Probando THEN
 		mdAlimentador.ModuleProcessCycle();	
 	END_IF
 	IF fbPanel.ProbarCarga THEN
+		IF fbPanel.FlancoNegarSensores THEN
+			mdPickAndPlaceCarga.NegarSensores();
+		END_IF
 		mdPickAndPlaceCarga.ModuleProcessCycle();	
 	END_IF
 	IF fbPanel.ProbarMedidor THEN
@@ -196,10 +199,16 @@ IF fbDirector.Modo = E_GEMMA.F6Probando THEN
 	IF fbPanel.ProbarEvacuador THEN
 		mdEvacuador.ModuleProcessCycle();	
 	END_IF
-		IF fbPanel.ProbarDescarga THEN
+	IF fbPanel.ProbarDescarga THEN
+		IF fbPanel.FlancoNegarSensores THEN
+			mdPickAndPlaceDescarga.NegarSensores();
+		END_IF		
 		mdPickAndPlaceDescarga.ModuleProcessCycle();	
 	END_IF
 	IF fbPanel.ProbarPlato THEN
+		IF fbPanel.FlancoNegarSensores THEN
+			mdPlatoDivisor.NegarSensores();
+		END_IF
 		mdPlatoDivisor.ModuleProcessCycle();	
 	END_IF
 
