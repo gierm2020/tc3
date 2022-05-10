@@ -20,7 +20,8 @@ VAR_OUTPUT
 END_VAR
 
 VAR
-	// instrucciones de entrada a los controladores de los módulos
+	// controladores de la máquina, la función de producción y la guía GEMMA 
+	fbPanel					: FB_Panel;
 	fbDirector				: FB_Director;
 	ctInp 					: S_ControllerInput;
 	
@@ -34,14 +35,10 @@ VAR
 	mdPickAndPlaceDescarga 	: FB_PickAndPlace			(ID:=8, MRT:=MaximoTiempoRespuesta, Name:='Descarga');
 	mdPlatoDivisor			: FB_PlatoDivisor			(ID:=9, MRT:=MaximoTiempoRespuesta, Name:='Plato');
 	
-	// controladores de la máquina, la función de producción y la guía GEMMA 
-	fbPanel					: FB_Panel;
 	//fbFMS205_SFC			: FB_FMS205_SFC;
 	fbFMS205_Producir_SFC	: FB_FMS205_SFC;
 
-	// pendiente renombrar - variables en interfaz de usuario
-	Execute : BOOL;
-	Ack : BOOL;
+	
 
 END_VAR
 ]]></Declaration>
@@ -184,6 +181,29 @@ IF fbDirector.Modo = E_GEMMA.F6Probando THEN
 	IF fbPanel.ProbarAlimentador THEN
 		mdAlimentador.ModuleProcessCycle();	
 	END_IF
+	IF fbPanel.ProbarCarga THEN
+		mdPickAndPlaceCarga.ModuleProcessCycle();	
+	END_IF
+	IF fbPanel.ProbarMedidor THEN
+		mdMedidorTapa.ModuleProcessCycle();	
+	END_IF
+		IF fbPanel.ProbarFotoelectrico THEN
+		mdDetectorFotoelectrico.ModuleProcessCycle();	
+	END_IF
+	IF fbPanel.ProbarInductivo THEN
+		mdCaptadorInductivo.ModuleProcessCycle();	
+	END_IF
+	IF fbPanel.ProbarEvacuador THEN
+		mdEvacuador.ModuleProcessCycle();	
+	END_IF
+		IF fbPanel.ProbarDescarga THEN
+		mdPickAndPlaceDescarga.ModuleProcessCycle();	
+	END_IF
+	IF fbPanel.ProbarPlato THEN
+		mdPlatoDivisor.ModuleProcessCycle();	
+	END_IF
+
+
 	;
 ELSE
 	fbFMS205_Producir_SFC(

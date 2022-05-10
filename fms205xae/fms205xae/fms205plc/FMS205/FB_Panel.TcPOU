@@ -24,7 +24,17 @@ VAR_OUTPUT
 	Probando:	BOOL;	// DESDE LA VISU		Vamos a hacer pruebas
 	ProbarExecute: 	BOOL;
 	ProbarAck: BOOL;
+	
+	
 	ProbarAlimentador: BOOL;
+	ProbarCarga: BOOL;
+	ProbarMedidor: BOOL;
+	ProbarFotoelectrico: BOOL;
+	ProbarInductivo: BOOL;
+	ProbarEvacuador: BOOL;
+	ProbarDescarga: BOOL;
+	ProbarPlato: BOOL;
+	
 
 END_VAR
 VAR
