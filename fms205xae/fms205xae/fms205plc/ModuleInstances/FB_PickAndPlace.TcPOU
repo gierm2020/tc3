@@ -25,13 +25,11 @@ realizando un giro hasta el punto de descarga mediante un actuador neumático ro
 
 VAR_INPUT
 	Mover: BOOL := TRUE; // TODO HAY QUE CARGAR O DESCARGAR EN FUNCIÓN DEL RESTO DE LA MÁQUINA Y LAS CONSIGNAS DEL PANEL
+	TPIN: TIME := T#1S;  // Tiempo para que la pinza sujete la tapa	
 END_VAR
-VAR
-	(* Controlador  específico *)
-	fbController: FB_PickAndPlace_SFC;
 
-	(* Temporizadores específicos *)
-	TPIN: TIME := T#1S;	
+VAR
+	fbController: FB_PickAndPlace_SFC; // controlador para ejecución normal
 
 	(* Sensores específicos *)
 	h0 AT %I*: BOOL; (* Final de carrera horizontal retraida *)
@@ -53,44 +51,44 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[InitialConditions := h0 AND v0;]]></ST>
+        <ST><![CDATA[InitialConditions := v0 AND h0; // el brazo está en condiciones iniciales cuando está arriba y retraído]]></ST>
       </Implementation>
     </Method>
     <Method Name="ModuleControlFlow" Id="{ad50b7d3-ffb1-4d5e-9f1d-9c4b9b9b584c}">
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[fbController(
-	TPIN 	:= TPIN,
-	
-	ctInp 	:= ctInp, 
-	Mover	:= Mover,
-	h0 		:= h0,
-	h1 		:= h1,
-	v0 		:= v0,
-	v1 		:= v1,
-	
-	ctOut 	=> ctOut);
+        <ST><![CDATA[//----------------------------------- leer los sensores para determinar el estado del módulo
 
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="ModulePerformActions" Id="{e3820e39-c043-40cb-babf-d57ef6c637b0}">
-      <Declaration><![CDATA[METHOD ModulePerformActions : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[// el brazo está en condiciones iniciales h0 y v0
-ctOut.IC := InitialConditions(); 
 
-// si no eestamos en modo manual, actualizar los actuadores con el estado del controlador
-IF NOT ctInp.Manual THEN
+//----------------------------------- preparar los datos que necesita el controlador
+ctInp.HwIC := InitialConditions();
+
+//----------------------------------- ejecutar el controlador
+//fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
+fbController(
+	ctInp := ctInp,								// entrada estándar
+	TPIN := TPIN,								// temporizadores específicos
+    h0 := h0, h1 := h1, v0 := v0, v1 := v1,		// sensores específicos
+	Mover := Mover,							// otras entradas específicas
+	ctOut => ctOut);							// resultado del controlador
+
+
+
+//----------------------------------- utilizar los resultados del controlador
+
+// Cambios en actuadores por el modo manual
+IF ctInp.Manual THEN
+	; // TODO AÑADIR AQUI EL MODO MANUAL DEL ALIMENTADOR
+
+// Cambios en actuadores por el resultado del controlador
+ELSE
+	// Actualizar actuadores hardware con lo que indique el controlador
 	HOR := fbController.HOR;
 	VER := fbController.VER;
 	PIN := fbController.PIN;
 END_IF
-]]></ST>
+	]]></ST>
       </Implementation>
     </Method>
   </POU>
