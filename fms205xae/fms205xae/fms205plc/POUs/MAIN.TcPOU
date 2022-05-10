@@ -4,13 +4,11 @@
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
 	fbFMS205 : FB_FMS205;
+	fbFMS205_Test : FB_FMS205_TEST;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[fbFMS205();]]></ST>
     </Implementation>
-    <LineIds Name="MAIN">
-      <LineId Id="11" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

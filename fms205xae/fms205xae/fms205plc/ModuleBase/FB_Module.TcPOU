@@ -50,6 +50,15 @@ _ModuleName := Name;
 ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="InitialConditions" Id="{569290b0-7483-4183-aad6-de676bf056ec}">
+      <Declaration><![CDATA[METHOD InitialConditions : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[InitialConditions := TRUE;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ModuleControlFlow" Id="{9383c466-5ef4-45f2-bc56-c203e01f0aa7}">
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
 ]]></Declaration>
@@ -61,7 +70,7 @@ HwIC := TRUE; // por defecto el módulo cumple las condiciones iniciales
 
 
 //----------------------------------- preparar los datos que necesita el controlador
-ctInp.HwIC := HwIC;
+ctInp.HwIC := InitialConditions();
 
 
 
@@ -72,7 +81,6 @@ fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 
 //----------------------------------- utilizar los resultados del controlador
 
-HwIC := TRUE; // las condiciones iniciales pueden haber cambiado después del controlador
 
 
 ]]></ST>

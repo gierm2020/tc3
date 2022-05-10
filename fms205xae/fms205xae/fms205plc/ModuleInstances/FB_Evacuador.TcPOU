@@ -48,17 +48,24 @@ END_VAR
       <ST><![CDATA[
 ]]></ST>
     </Implementation>
+    <Method Name="InitialConditions" Id="{d5288280-f06a-44bb-9fd2-f9b3ed687057}">
+      <Declaration><![CDATA[METHOD InitialConditions : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[InitialConditions := f1; // el evacuador está en condiciones iniciales cuando el sensor f1 está activado]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ModuleControlFlow" Id="{088423ab-0767-49f6-96df-c713fe6fe249}">
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[//----------------------------------- leer los sensores para determinar el estado del módulo
 
-HwIc := f1; // el evacuador está en condiciones iniciales cuando el sensor f1 está activado
- 
 
 //----------------------------------- preparar los datos que necesita el controlador
-ctInp.HwIC := HwIC;
+ctInp.HwIC := InitialConditions();
 
 
 
@@ -88,8 +95,6 @@ ELSE
 END_IF
 
 
-// Comprobar si después de actuar la máquina sigue en condiciones iniciales
-HwIc := f1; // el evacuador está en condiciones iniciales cuando el sensor f1 está activado
 
 ]]></ST>
       </Implementation>

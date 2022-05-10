@@ -29,17 +29,24 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="InitialConditions" Id="{5b94622a-e072-4bf0-b660-11c842d8fb18}">
+      <Declaration><![CDATA[METHOD InitialConditions : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[InitialConditions := NOT k1; // el alimentador está en estado inicial si k1 está apagado]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ModuleControlFlow" Id="{d7358fc0-6ede-496b-926f-c7f1a8440317}">
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[//----------------------------------- leer los sensores para determinar el estado del módulo
 
-HwIC := NOT k1; // el alimentador está en estado inicial si k1 está apagado 
-
 
 //----------------------------------- preparar los datos que necesita el controlador
-ctInp.HwIC := HwIC;
+ctInp.HwIC := InitialConditions();
 
 
 
@@ -68,9 +75,6 @@ END_IF
 // Cambios en actuadores independientes del modo manual
 FM := fbcontroller.FM; // actuador de falta de material
 
-
-// Cambios en estado de condiciones iniciales después de actuar
-HwIC := NOT k1; // el alimentador está en estado inicial si k1 está apagado
 
 
 

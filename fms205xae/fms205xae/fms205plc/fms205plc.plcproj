@@ -101,6 +101,13 @@
     <Compile Include="POUs\MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Pruebas\FB_FMS205_Test.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Pruebas\VS_FMS205_Test.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
     <Compile Include="Visualization Manager.TcVMO">
       <SubType>Code</SubType>
     </Compile>
@@ -115,6 +122,7 @@
     <Folder Include="ModuleBase" />
     <Folder Include="ModuleInstances" />
     <Folder Include="FMS205" />
+    <Folder Include="Pruebas" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />
   </ItemGroup>

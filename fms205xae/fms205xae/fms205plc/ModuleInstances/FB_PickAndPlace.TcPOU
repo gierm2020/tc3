@@ -47,6 +47,15 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="InitialConditions" Id="{1ab95016-3a1b-4dc8-b780-aecabdebcf40}">
+      <Declaration><![CDATA[METHOD InitialConditions : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[InitialConditions := h0 AND v0;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ModuleControlFlow" Id="{ad50b7d3-ffb1-4d5e-9f1d-9c4b9b9b584c}">
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL
 ]]></Declaration>
@@ -73,7 +82,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[// el brazo está en condiciones iniciales h0 y v0
-ctOut.IC := h0 AND v0; 
+ctOut.IC := InitialConditions(); 
 
 // si no eestamos en modo manual, actualizar los actuadores con el estado del controlador
 IF NOT ctInp.Manual THEN

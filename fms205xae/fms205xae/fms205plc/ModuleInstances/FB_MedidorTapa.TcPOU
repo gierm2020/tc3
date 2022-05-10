@@ -45,6 +45,15 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="InitialConditions" Id="{b1752ba1-1b26-4acb-b292-e17eb0af0fb4}">
+      <Declaration><![CDATA[METHOD InitialConditions : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[InitialConditions:= TRUE; // TODO: ESTABLECER LOS VALORES DE FV QUE INDICAN QUE EL MEDIDOR ESTÁ EN POSICIÓN INICIAL]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ModuleControlFlow" Id="{d76d2d9a-68fd-4928-b9fd-2c031ae14f83}">
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
 
@@ -52,12 +61,9 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[//----------------------------------- leer los sensores para determinar el estado del módulo
 
-HwIC := TRUE; // TODO: ESTABLECER LOS VALORES DE FV QUE INDICAN QUE EL MEDIDOR ESTÁ EN POSICIÓN INICIAL 
-
-
 
 //----------------------------------- preparar los datos que necesita el controlador
-ctInp.HwIC := HwIC;
+ctInp.HwIC := InitialConditions();
 
 
 
@@ -97,9 +103,6 @@ ELSIF ctinp.Ack THEN
 	Altura_mm		:= 0;
 END_IF
 	 
-// Comprobar si después de actuar la máquina sigue en condiciones iniciales
-
-HwIC := TRUE; // TODO: ESTABLECER LOS VALORES DE FV QUE INDICAN QUE EL MEDIDOR ESTÁ EN POSICIÓN INICIAL 
 
 
 
