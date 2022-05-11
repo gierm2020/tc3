@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="S_Panel_Hardware" Id="{0efc0570-9e31-4f66-bae9-1b296d417684}">
+    <Declaration><![CDATA[TYPE S_Panel_Hardware :
+STRUCT
+	(* Botones y alarmas específicos de una estación *)
+ 
+	PE_Seta					AT %I*: BOOL;
+	POC_Selec01			 	AT %I*: BOOL; // DUDAS POC? (PO Conectada)
+	PM_PulsadorMarcha		AT %I*: BOOL; // PM - Pulsador de marcha (verde)
+	LM_LamparaMarcha		AT %Q*: BOOL; // LM - Lámpara marcha (verde)
+	PS_PulsadorStop			AT %I*: BOOL; // PS - Pulsador de parada (rojo)
+	LS_LamparaStop			AT %Q*: BOOL; // DUDAS - LA - Lámpara de alarma o lámpara de stop
+	SM_SelecAutoManual	 	AT %I*: BOOL; // SM - Selector modo auto/man
+	ResetBoton				: BOOL; // DUDAS - HAY QUE VINCULARLO?
+	ResetLuzAzul			: BOOL; // DUDAS - HAY QUE VINCULARLO?
+
+	AS_AvisadorSonoro		AT %Q*: BOOL; // AS - Avisador Sonoro
+	LA_LamparaAlarma		AT %Q*: BOOL; // DUDAS - Es lo mismo que falta de material?
+	
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

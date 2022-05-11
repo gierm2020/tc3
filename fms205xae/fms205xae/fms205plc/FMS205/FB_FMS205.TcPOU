@@ -24,7 +24,7 @@ VAR_OUTPUT
 END_VAR
 
 VAR
-	// controladores de la máquina, la función de producción y la guía GEMMA 
+	// controladores de la máquina, la función de producción y la guía GEMMA
 	fbPanel					: FB_Panel;
 	// fbDirector				: FB_Director;
 	ctInp 					: S_ControllerInput := (tm := tm);

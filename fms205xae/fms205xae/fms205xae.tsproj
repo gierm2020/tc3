@@ -16,6 +16,31 @@
 					<Vars VarGrpType="1">
 						<Name>PlcTask Inputs</Name>
 						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.PE_Seta</Name>
+							<Comment><![CDATA[ Botones y alarmas específicos de una estación ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.POC_Selec01</Name>
+							<Comment><![CDATA[ DUDAS POC? (PO Conectada)]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.PM_PulsadorMarcha</Name>
+							<Comment><![CDATA[ PM - Pulsador de marcha (verde)]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.PS_PulsadorStop</Name>
+							<Comment><![CDATA[ PS - Pulsador de parada (rojo)]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.SM_SelecAutoManual</Name>
+							<Comment><![CDATA[ SM - Selector modo auto/man]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.fbFMS205.mdAlime.k1</Name>
 							<Comment><![CDATA[ Se corresponde con empujador tapa delante c1 ]]></Comment>
 							<Type>BOOL</Type>
@@ -108,6 +133,26 @@
 					</Vars>
 					<Vars VarGrpType="2" AreaNo="1">
 						<Name>PlcTask Outputs</Name>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.LM_LamparaMarcha</Name>
+							<Comment><![CDATA[ LM - Lámpara marcha (verde)]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.LS_LamparaStop</Name>
+							<Comment><![CDATA[ DUDAS - LA - Lámpara de alarma o lámpara de stop]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.AS_AvisadorSonoro</Name>
+							<Comment><![CDATA[ AS - Avisador Sonoro]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.LA_LamparaAlarma</Name>
+							<Comment><![CDATA[ DUDAS - Es lo mismo que falta de material?]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdAlime.K_1</Name>
 							<Comment><![CDATA[ Se corresponde con el cTAP ]]></Comment>
@@ -241,6 +286,13 @@
 							</OwnerB>
 						</OwnerA>
 					</UnrestoredVarLinks>
+					<UnrestoredVarLinks ImportTime="2022-05-11T15:42:56">
+						<OwnerA Name="InputDst" Prefix="TIPC^fms205plc^fms205plc Instance" Type="1">
+							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 2 (EL1008)">
+								<Link VarA="MAIN.fbFMS205.fbPanel.hw.Seta" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 1^zpe" Size="1" RestoreInfo="ANotFound"/>
+							</OwnerB>
+						</OwnerA>
+					</UnrestoredVarLinks>
 					<Contexts>
 						<Context>
 							<Id NeedCalleeCall="true">0</Id>
@@ -262,4 +314,56 @@
 			<Device File="Dispositivo 1 (EtherCAT).xti" Id="1"/>
 		</Io>
 	</Project>
+	<Mappings>
+		<OwnerA Name="TIPC^fms205plc^fms205plc Instance">
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 2 (EL1008)">
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.fbPanel.hw.PE_Seta" VarB="Channel 1^zpe"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.fbPanel.hw.PM_PulsadorMarcha" VarB="Channel 3^zpm"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.fbPanel.hw.POC_Selec01" VarB="Channel 5^zpoc"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.fbPanel.hw.PS_PulsadorStop" VarB="Channel 4^zps"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.fbPanel.hw.SM_SelecAutoManual" VarB="Channel 2^zsm"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 4 (EL2008)">
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.fbPanel.hw.LA_LamparaAlarma" VarB="Channel 2^zLA"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.fbPanel.hw.LM_LamparaMarcha" VarB="Channel 3^zLM"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdAlime.FM" VarB="Channel 4^zFM"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 5 (EL2008)">
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.fbPanel.hw.AS_AvisadorSonoro" VarB="Channel 1^zAS"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 6 (EL1008)">
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdCarga.h0" VarB="Channel 1^dh0"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdCarga.h1" VarB="Channel 2^dh1"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdCarga.v0" VarB="Channel 3^dv0"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdCarga.v1" VarB="Channel 4^dv1"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdDesca.h0" VarB="Channel 6^gh0"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdDesca.h1" VarB="Channel 7^gh1"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdDesca.v1" VarB="Channel 8^gv1"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdPlato.d0" VarB="Channel 5^b0"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 7 (EL1008)">
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdDesca.v0" VarB="Channel 4^hv0"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdEvacu.v1" VarB="Channel 1^ge1"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdFotoe.ef" VarB="Channel 8^ef"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdInduc.ei" VarB="Channel 7^ei"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 8 (EL2008)">
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdCarga.HOR" VarB="Channel 1^dHOR"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdCarga.PIN" VarB="Channel 3^dPIN"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdCarga.VER" VarB="Channel 2^dVER"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdEvacu.F_0" VarB="Channel 7^gHRR"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdEvacu.F_1" VarB="Channel 6^gHRA"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdMedid.L_1" VarB="Channel 8^gVER"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdPlato.D_1" VarB="Channel 4^bEMP"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdPlato.E_1" VarB="Channel 5^bRET"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 9 (EL2008)">
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdAlime.K_1" VarB="Channel 5^cTAP"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdDesca.HOR" VarB="Channel 2^hHOR"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdDesca.PIN" VarB="Channel 4^hPIN"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdDesca.VER" VarB="Channel 3^hVER"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdEvacu.V_1" VarB="Channel 1^gEYE"/>
+			</OwnerB>
+		</OwnerA>
+	</Mappings>
 </TcSmProject>

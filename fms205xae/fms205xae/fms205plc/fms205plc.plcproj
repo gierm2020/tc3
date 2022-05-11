@@ -20,6 +20,9 @@
     <Compile Include="DUTs\E_GEMMA.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\S_Panel_Hardware.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\S_ControllerInput.TcDUT">
       <SubType>Code</SubType>
     </Compile>
