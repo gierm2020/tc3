@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="S_Timeouts" Id="{42785b2f-90f2-490e-a59e-b01c1e62e5aa}">
+    <Declaration><![CDATA[TYPE S_Timeouts :
+STRUCT
+	// Estructura para centralizar todos los timeouts específios de la estación y de cada módulo
+	// Estación FMS205
+	MaximoTiempoRespuesta: TIME := T#5S;
+	
+	
+	// Alimentador
+	K_1 : TIME := T#1S;				// Temporizador empujador tapa
+
+	// Cinta
+	// pendiente
+	
+	// Evacuador
+	SOL : TIME := T#100MS; 		// tiempo después de soltar y antes de subir
+	V_1	: TIME := T#5S;			// tiempo máximo succionando sin que se active el sensor v1
+	
+	// Medidor de tapa
+	L_1	: TIME := T#1S;			// tiempo máximo de bajada del medidor de tapas
+	
+	// Pick and place
+	PIN : TIME := T#1S;			// tiempo para pinzar una tapa antes de subir el brazo
+	
+	// Plato
+	E_1	: TIME := T#400MS;		// tiempo para que el retenedor bloquee el plato
+	D_1 : TIME := T#1.4S;		// tiempo para girar el plato a la siguiente posición
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

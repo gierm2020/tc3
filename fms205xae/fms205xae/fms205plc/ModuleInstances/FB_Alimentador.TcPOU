@@ -16,7 +16,7 @@ VAR
 	fbController: FB_Alimentador_SFC;
 
 	(* Temporizadores específicos *)
-	TK_1: TIME := T#1S;	
+	//TK_1: TIME := T#1S;	
 
 	(* Sensores específicos *)
 	k1 AT %I*: BOOL; (* Se corresponde con empujador tapa delante c1 *)
@@ -54,7 +54,7 @@ ctInp.HwIC := InitialConditions();
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 fbController(
 	ctInp := ctInp,								// entrada estándar
-	TK_1 := TK_1,								// temporizadores específicos
+	//TK_1 := TK_1,								// temporizadores específicos
     k1 := k1, 									// sensores específicos
 	//											// otras entradas específicas
 	ctOut => ctOut);							// resultado del controlador

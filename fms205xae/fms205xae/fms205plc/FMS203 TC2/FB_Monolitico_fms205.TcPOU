@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_Monolitico_fms205" Id="{061ab0ef-1255-4fd0-abce-2ed0c295cea8}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Monolitico_fms205
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+//VAR_GLOBAL
+
+(* Variables globales generadas a partir del fms505.csv ampliado con datos adicionales *)
+
+
+(* ---------------------------------------------------------------
+
+    Equipo: Patos Descartaos (g07)
+    Estación: fms205
+    Hito: m1demo
+
+  --------------------------------------------------------------- *)
+
+
+
+
+    (* Variables globales para módulos (aIni...zPanel) *)
+
+	aIni: BOOL; (* Módulo: Carro transportador *)
+    bIni: BOOL; (* Módulo: Plato giratorio *)
+    cIni: BOOL; (* Módulo: Alimentador de tapa *)
+    dIni: BOOL; (* Módulo: Cargador de tapas *)
+    eIni: BOOL; (* Módulo: Detector de material *)
+    fIni: BOOL; (* Módulo: Medidor de altura *)
+    gIni: BOOL; (* Módulo: Brazo de rechazo de tapas *)
+    hIni: BOOL; (* Módulo: Brazo de descarga de tapas *)
+    zIni: BOOL; (* Módulo: Panel de control para el operario *)
+
+
+    (* Variables globales para sensores *)
+
+    ap         AT %I*: BOOL; (* ap  (nombre=pp  c=I06 B=J1 b=27 módulo=EL1008 T=2  C=2 etiqueta=-B1,  input) Presencia de palé *)
+    ac0        AT %I*: BOOL; (* ac0 (nombre=cp0 c=I07 B=J2 b=24 módulo=EL1008 T=2  C=2 etiqueta=-B2,  input) Código de palé bit 0 *)
+    ac1        AT %I*: BOOL; (* ac1 (nombre=cp1 c=I08 B=J1 b=07 módulo=EL1008 T=2  C=2 etiqueta=-B3,  input) Código de palé bit 1 *)
+    ac2        AT %I*: BOOL; (* ac2 (nombre=cp2 c=I09 B=J2 b=33 módulo=EL1008 T=3  C=3 etiqueta=-B4,  input) Código de palé bit 2 *)
+    b0         AT %I*: BOOL; (* b0  (nombre=d0  c=I21 B=J1 b=29 módulo=EL1008 T=6  C=6 etiqueta=-B9,  input) Empujador del plato detrás *)
+    c1         AT %I*: BOOL; (* c1  (nombre=k1  c=I30 B=J1 b=15 módulo=EL1008 T=7  C=7 etiqueta=-B18, input) Empujador de tapa delante *)
+    dh0        AT %I*: BOOL; (* dh0 (nombre=a0  c=I17 B=J1 b=21 módulo=EL1008 T=6  C=6 etiqueta=-B5,  input) Pick and place de carga detrás *)
+    dh1        AT %I*: BOOL; (* dh1 (nombre=a1  c=I18 B=J1 b=28 módulo=EL1008 T=6  C=6 etiqueta=-B6,  input) Pick and place de carga delante *)
+    dv0        AT %I*: BOOL; (* dv0 (nombre=b0  c=I19 B=J1 b=36 módulo=EL1008 T=6  C=6 etiqueta=-B7,  input) Pick and place de carga arriba *)
+    dv1        AT %I*: BOOL; (* dv1 (nombre=b1  c=I20 B=J2 b=34 módulo=EL1008 T=6  C=6 etiqueta=-B8,  input) Pick and place de carga abajo *)
+    ei         AT %I*: BOOL; (* ei  (nombre=di  c=I31 B=J1 b=13 módulo=EL1008 T=7  C=7 etiqueta=-B19, input) Detector inductivo *)
+    ef         AT %I*: BOOL; (* ef  (nombre=df  c=I32 B=J1 b=04 módulo=EL1008 T=7  C=7 etiqueta=-B20, input) Detector fotoeléctrico *)
+    fv         AT %I*: UINT; (* fv  (nombre=dh  c= 	  B=   b=   módulo=KL5151 T=10 C=10 etiqueta=,    input) Detector de altura (valor) *)
+    gh0        AT %I*: BOOL; (* gh0 (nombre=f0  c=I22 B=J2 b=22 módulo=EL1008 T=6  C=6 etiqueta=-B10, input) Pick and place de rechazo detrás *)
+    gh1        AT %I*: BOOL; (* gh1 (nombre=f1  c=I23 B=J2 b=06 módulo=EL1008 T=6  C=6 etiqueta=-B11, input) Pick and place de rechazo delante *)
+    gv1        AT %I*: BOOL; (* gv1 (nombre=g0  c=I24 B=J2 b=31 módulo=EL1008 T=6  C=6 etiqueta=-B12, input) Pick and place de rechazo arriba *)
+    ge1        AT %I*: BOOL; (* ge1 (nombre=v1  c=I25 B=J1 b=25 módulo=EL1008 T=7  C=7 etiqueta=-B13, input) Pick and place de rechazo vacío *)
+    hh0        AT %I*: BOOL; (* hh0 (nombre=h0  c=I26 B=J1 b=33 módulo=EL1008 T=7  C=7 etiqueta=-B14, input) Pick and place de descarga detrás *)
+    hh1        AT %I*: BOOL; (* hh1 (nombre=h1  c=I27 B=J2 b=13 módulo=EL1008 T=7  C=7 etiqueta=-B15, input) Pick and place de descarga delante *)
+    hv0        AT %I*: BOOL; (* hv0 (nombre=i0  c=I28 B=J2 b=07 módulo=EL1008 T=7  C=7 etiqueta=-B16, input) Pick and place de descarga arriba *)
+    hv1        AT %I*: BOOL; (* hv1 (nombre=i1  c=I29 B=J2 b=01 módulo=EL1008 T=7  C=7 etiqueta=-B17, input) Pick and place de descarga abajo *)
+
+
+    (* Variables globales para actuadores *)
+
+    aRUN       AT %Q*: BOOL; (* aRUN (nombre=RUN c=Q05 B=KA1 b=A1 módulo=EL2008 T=4 C=4 etiqueta=-KA1, output) Motor de la cinta activa *)
+    aREV       AT %Q*: BOOL; (* aREV (nombre=REV c=Q06 B=KA2 b=A1 módulo=EL2008 T=4 C=4 etiqueta=-KA2, output) Motor de la cinta invierte *)
+    aRET       AT %Q*: BOOL; (* aRET (nombre=R+  c=Q07 B=J1  b=14 módulo=EL2008 T=4 C=4 etiqueta=-Y1,  output) Retenedor de palé baja *)
+    aSEP       AT %Q*: BOOL; (* aSEP (nombre=S+  c=Q08 B=J2  b=09 módulo=EL2008 T=4 C=4 etiqueta=-Y2,  output) Separador de palé sube *)
+    bEMP       AT %Q*: BOOL; (* bEMP (nombre=D+  c=Q20 B=J2  b=05 módulo=EL2008 T=8 C=8 etiqueta=-Y6,  output) Empujador del plato avanza *)
+    bRET       AT %Q*: BOOL; (* bRET (nombre=E+  c=Q21 B=J2  b=02 módulo=EL2008 T=8 C=8 etiqueta=-Y7,  output) Retenedor del plato retrocede *)
+    cTAP       AT %Q*: BOOL; (* cTAP (nombre=K+  c=Q29 B=J2  b=17 módulo=EL2008 T=9 C=9 etiqueta=-Y15, output) Empujador de tapa avanza *)
+    dHOR       AT %Q*: BOOL; (* dHOR (nombre=A+  c=Q17 B=J1  b=08 módulo=EL2008 T=8 C=8 etiqueta=-Y3,  output) Pick and place de carga avanza (adentro) *)
+    dVER       AT %Q*: BOOL; (* dVER (nombre=B+  c=Q18 B=J1  b=11 módulo=EL2008 T=8 C=8 etiqueta=-Y4,  output) Pick and place de carga baja *)
+    dPIN       AT %Q*: BOOL; (* dPIN (nombre=C+  c=Q19 B=J1  b=05 módulo=EL2008 T=8 C=8 etiqueta=-Y5,  output) Pick and place de carga cierra *)
+    fVER       AT %Q*: BOOL; (* fVER (nombre=L+  c=Q30 B=J2  b=14 módulo=EL2008 T=9 C=9 etiqueta=-Y16, output) Medidor de altura baja *)
+    gHRA       AT %Q*: BOOL; (* gHRA (nombre=F+  c=Q22 B=J2  b=35 módulo=EL2008 T=8 C=8 etiqueta=-Y8,  output) Pick and place de rechazo avanza (afuera) *)
+    gHRR       AT %Q*: BOOL; (* gHRR (nombre=F-  c=Q23 B=J2  b=32 módulo=EL2008 T=8 C=8 etiqueta=-Y9,  output) Pick and place de rechazo retrocede *)
+    gVER       AT %Q*: BOOL; (* gVER (nombre=G+  c=Q24 B=J2  b=11 módulo=EL2008 T=8 C=8 etiqueta=-Y10, output) Pick and place de rechazo baja *)
+    gEYE       AT %Q*: BOOL; (* gEYE (nombre=V+  c=Q25 B=J2  b=08 módulo=EL2008 T=9 C=9 etiqueta=-Y11, output) Pick and place de rechazo succiona *)
+    hHOR       AT %Q*: BOOL; (* hHOR (nombre=H+  c=Q26 B=J2  b=23 módulo=EL2008 T=9 C=9 etiqueta=-Y12, output) Pick and place de descarga avanza *)
+    hVER       AT %Q*: BOOL; (* hVER (nombre=I+  c=Q27 B=J2  b=26 módulo=EL2008 T=9 C=9 etiqueta=-Y13, output) Pick and place de descarga baja *)
+    hPIN       AT %Q*: BOOL; (* hPIN (nombre=J+  c=Q28 B=J2  b=20 módulo=EL2008 T=9 C=9 etiqueta=-Y14, output) Pick and place de descarga cierra *)
+
+
+    (* Variables globales para consignas *)
+
+    zpe        AT %I*: BOOL; (* zpe  (nombre=PE  c=I01 B=X4  b=1A módulo=EL1008 T=2 C=2 etiqueta=-S1,  input) Pulsador de parada de emergencia [NC] *)
+    zsm        AT %I*: BOOL; (* zsm  (nombre=SM  c=I02 B=X4  b=1C módulo=EL1008 T=2 C=2 etiqueta=-Q2,  input) Selector de modo AUT/MAN *)
+    zpm        AT %I*: BOOL; (* zpm  (nombre=PM  c=I03 B=X4  b=2A módulo=EL1008 T=2 C=2 etiqueta=-S2,  input) Pulsador de marcha *)
+    zps        AT %I*: BOOL; (* zps  (nombre=PS  c=I04 B=X4  b=2C módulo=EL1008 T=2 C=2 etiqueta=-S3,  input) Pulsador de parada [NC] *)
+    zpoc       AT %I*: BOOL; (* zpoc (nombre=POC c=I05 B=KP0 b=11 módulo=EL1008 T=2 C=2 etiqueta=-KP0, input) PO conectada *)
+
+
+    (* Variables globales para señales *)
+    zDPO       AT %Q*: BOOL; (* zDPO (nombre=DPO c=Q01 B=KP0 b=A1 módulo=EL2008 T=4 C=4 etiqueta=-KPS, output) Desconecta PO *)
+    zLA        AT %Q*: BOOL; (* zLA  (nombre=LA  c=Q02 B=X4  b=3A módulo=EL2008 T=4 C=4 etiqueta=-H1,  output) Lámpara de alarma *)
+    zLM        AT %Q*: BOOL; (* zLM  (nombre=LM  c=Q03 B=X4  b=3C módulo=EL2008 T=4 C=4 etiqueta=-H2,  output) Lámpara de marcha *)
+    zFM        AT %Q*: BOOL; (* zFM  (nombre=FM  c=Q04 B=J1  b=23 módulo=EL2008 T=4 C=4 etiqueta=-H3,  output) Lámpara de falta material *)
+    zAS        AT %Q*: BOOL; (* zAS  (nombre=AS  c=Q09 B=X4  b=4A módulo=EL2008 T=5 C=5 etiqueta=-H5,  output) Avisador sonoro *)
+
+
+    (* Variables para el código de animaciones *)
+    nAngulo : INT	:=0;
+    nBlink  : INT	:=0;
+    dBlink  : DWORD	:=0;
+
+    (* Variables para consignas sobre tapas *)
+    zBB: BOOL; (* Blanca Baja Rechazar *)
+    zBA: BOOL;
+    zAB: BOOL;
+    zAA: BOOL;
+    zNB: BOOL;
+    zNA: BOOL;
+	ypm : BOOL; (* Boton logico equivalente a puesta en marcha fisico *)
+
+	//Plato: ARRAY [1..8] OF TSector;
+    UmbralAltura: UINT; (* se compara con el sensor fv *)
+	UmbralMinimo: UINT;
+	ModoFuncional: BOOL; (*TRUE = Modo funcional; FALSE = Modo técnico*)
+	TextoModo: STRING;
+	PlatoVacio: BOOL;
+
+//END_VAR
+
+//TYPE TSector :
+//STRUCT
+	(*Campos que solo se actualizan desde el Grafcet*)
+	TapaMedida : INT; 	(* vIndefinido, vTapaMedidaSii, vTapaMedidaNo*)
+	TapaPresente : INT; 	(* vIndefinido, vTapaPresenteSi, vTapaPresenteNo*)
+	TapaClara : INT; 	(* vIndefinido, vTapaClaraSi, vTapaClaraNo *)
+	TapaMetalica : INT;	(* vIndefinido, vTapaMetalicaSi, vTapaMetalicaNo *)
+	AlturaTapa : UINT;	(* vIndefinido, Valor del sensor fv *)
+	Fin : BOOL; (* Modulo ha terminado de hacer su trabajo *)
+
+	(*Campos que solo se actualizan desde la funcion de giro*)
+	Alta : STRING;  (* .=Vacía, A de alta, B de baja, X=extra grande,  ?=si no sabemos *)
+	Claridad: STRING; (* C=Clara, O=Osucra, .=Indiefinida *)
+	Material: STRING; (* P=Plástico, M=Metal, .=indefinida *)
+	Tipo : STRING; 	(* B para blanca, N es Negra, A es aluminio, . si no sabemos *)
+
+	CargarTapa : BOOL;	 (* Dependiendo del sensor de altura y de rechazos o descargas previas *)
+	RechazarTapa :BOOL;	(* Dependiendo de lectura de sensores y consignas *)
+	DescargarTapa : BOOL;	 (* Dependiendo de lectura de sensores y consignas *)
+
+
+	(* Campos que resumen la información del sector *)
+	ColorUI : DWORD;	(* Color del borde interfaz de usuario, verde cuando la vamos a aceptar, roja cuando la vamos a rechazar, gris cuando no sabemos*)
+	TextoFuncionalUI : STRING; 	(* ?=indeterminado, ..=no hay tapa, xx=hay tapa, Ax=Alta, Bx= Baja, xB= Blanca, xN = Negra, xA = Aluminio *)
+	TextoTecnicoUI : STRING; (* ?=indeterminado, ...=no hay tapa, xxx=hay tapa, Axx=Alta, Bxx= Baja, xCx=Clara, xOx=Oscura, xxP=Plástico, xxM= Metálica *)
+	TextoTooltip : STRING; (* combinación de todo lo que sabemos sobre el sector, incluyendo la altura que se midió *)
+	TextoUI : STRING; (* ?=indeterminado, ...=no hay tapa, xxx=hay tapa, Axx=Alta, Bxx= Baja, xCx=Clara, xOx=Oscura, xxP=Plástico, xxM= Metálica *)
+
+//END_STRUCT
+//END_TYPE
+
+
+
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

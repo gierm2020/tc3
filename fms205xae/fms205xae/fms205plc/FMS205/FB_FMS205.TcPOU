@@ -3,12 +3,13 @@
   <POU Name="FB_FMS205" Id="{a261f573-1402-443e-9bab-e88e0bf02070}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205
 VAR_INPUT
-	MaximoTiempoRespuesta: TIME := T#5S;
 	ManiobrasDeseadas: UINT :=1; // POST15 AÑADIDO VALOR POR DEFECTO
 END_VAR
 
 VAR_OUTPUT
 	gm					: S_GEMMA; 		// Información sobre la familia y modo GEMMA en que se encuentra la estación
+	tm					: S_Timeouts; 	// Valores de temporizadores
+	
 	td					: S_TestData; 	// Consignas relacionadas con el modo de pruebas
 	
 	ManiobrasRealizadas: UINT := 0;
@@ -26,18 +27,18 @@ VAR
 	// controladores de la máquina, la función de producción y la guía GEMMA 
 	fbPanel					: FB_Panel;
 	// fbDirector				: FB_Director;
-	ctInp 					: S_ControllerInput;
+	ctInp 					: S_ControllerInput := (tm := tm);
 	
 	// módulos de la FMS205
-	mdAlimentador			: FB_Alimentador			(ID:=0, MRT:=MaximoTiempoRespuesta, Name:='Alimentador');
-	mdPickAndPlaceCarga 	: FB_PickAndPlace			(ID:=1, MRT:=MaximoTiempoRespuesta, Name:='Carga');
-	mdMedidorTapa			: FB_MedidorTapa			(ID:=3, MRT:=MaximoTiempoRespuesta, Name:='Medidor');
-	mdCaptadorInductivo 	: FB_CaptadorInductivo		(ID:=4, MRT:=MaximoTiempoRespuesta, Name:='Inductivo');
-	mdDetectorFotoelectrico : FB_DetectorFotoelectrico	(ID:=5, MRT:=MaximoTiempoRespuesta, Name:='Fotoeléctrico');
-	mdEvacuador			 	: FB_Evacuador				(ID:=7, MRT:=MaximoTiempoRespuesta, Name:='Evacuador');
-	mdPickAndPlaceDescarga 	: FB_PickAndPlace			(ID:=8, MRT:=MaximoTiempoRespuesta, Name:='Descarga');
-	mdPlatoDivisor			: FB_PlatoDivisor			(ID:=9, MRT:=MaximoTiempoRespuesta, Name:='Plato');
-	mdCinta					: FB_Cinta					(ID:=10,MRT:=MaximoTiempoRespuesta, Name:='Cinta');
+	mdAlimentador			: FB_Alimentador			(ID:=0, MRT:=tm.MaximoTiempoRespuesta, Name:='Alimentador');
+	mdPickAndPlaceCarga 	: FB_PickAndPlace			(ID:=1, MRT:=tm.MaximoTiempoRespuesta, Name:='Carga');
+	mdMedidorTapa			: FB_MedidorTapa			(ID:=3, MRT:=tm.MaximoTiempoRespuesta, Name:='Medidor');
+	mdCaptadorInductivo 	: FB_CaptadorInductivo		(ID:=4, MRT:=tm.MaximoTiempoRespuesta, Name:='Inductivo');
+	mdDetectorFotoelectrico : FB_DetectorFotoelectrico	(ID:=5, MRT:=tm.MaximoTiempoRespuesta, Name:='Fotoeléctrico');
+	mdEvacuador			 	: FB_Evacuador				(ID:=7, MRT:=tm.MaximoTiempoRespuesta, Name:='Evacuador');
+	mdPickAndPlaceDescarga 	: FB_PickAndPlace			(ID:=8, MRT:=tm.MaximoTiempoRespuesta, Name:='Descarga');
+	mdPlatoDivisor			: FB_PlatoDivisor			(ID:=9, MRT:=tm.MaximoTiempoRespuesta, Name:='Plato');
+	mdCinta					: FB_Cinta					(ID:=10,MRT:=tm.MaximoTiempoRespuesta, Name:='Cinta');
 	//fbFMS205_SFC			: FB_FMS205_SFC;
 	fbFMS205_Producir_SFC	: FB_FMS205_SFC;
 

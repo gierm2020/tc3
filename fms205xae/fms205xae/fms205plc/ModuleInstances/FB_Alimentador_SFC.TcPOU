@@ -4,7 +4,7 @@
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Alimentador_SFC // EXTENDS FB_Module_SFC
 VAR_INPUT
 	ctInp: S_ControllerInput;
-	TK_1: TIME;					// Temporizador empujador tapa
+	//TK_1: TIME;					// Temporizador empujador tapa
 	k1: BOOL; 					// Sensor de empujador tapa delante
 END_VAR
 VAR_OUTPUT
@@ -621,7 +621,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"F1Empujar.t&gt; TK_1"</v>
+                            <v n="Value">"F1Empujar.t&gt; ctInp.tm.K_1"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">130L</v>
@@ -804,7 +804,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"F1Soltar.t &gt; TK_1"</v>
+                            <v n="Value">"F1Soltar.t &gt; ctInp.tm.K_1"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">219L</v>

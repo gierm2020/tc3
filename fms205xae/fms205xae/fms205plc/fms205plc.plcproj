@@ -32,6 +32,9 @@
     <Compile Include="DUTs\S_TestData.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\S_Timeouts.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FMS203 TC2\FB_Cinta_fms203.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -44,10 +47,10 @@
     <Compile Include="FMS203 TC2\FB_Director_fms203.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FMS203 TC2\FB_Panel_fms203.TcPOU">
+    <Compile Include="FMS203 TC2\FB_Monolitico_fms205.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FMS205\FB_Director.TcPOU">
+    <Compile Include="FMS203 TC2\FB_Panel_fms203.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FMS205\FB_FMS205.TcPOU">
