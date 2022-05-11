@@ -54,7 +54,7 @@ IC:=				(* La estación está en condiciones iniciales si cada módulo lo está 
 	mdDetectorFotoelectrico.InitialConditions() AND
 	mdEvacuador.InitialConditions() AND
 	mdPickAndPlaceDescarga.InitialConditions()) 
-	OR (fbDirector.Modo=E_GEMMA.F6Probando); // POST15 PARA FORZAR CONDICIONES INICIALES SIN HARDWARE 
+	OR (fbDirector.Modo=E_GEMMA.F6Probando); // POST15 PARA FORZAR CONDICIONES INICIALES SIN HARDWARE !!! eliminar
 
 	
 Preparada := TRUE; // PENDIENTE SI LA ESTACIÓN NECESITA UNA SECUENCIA DE PREPARACIÓN 
