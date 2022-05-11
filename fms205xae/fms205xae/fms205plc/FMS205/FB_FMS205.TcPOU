@@ -8,6 +8,8 @@ VAR_INPUT
 END_VAR
 
 VAR_OUTPUT
+	td					: S_TestData; // Consignas relacionadas con el modo de pruebas
+	
 	ManiobrasRealizadas: UINT := 0;
 	ManiobrasPendientes: UINT;
 	
@@ -34,7 +36,7 @@ VAR
 	mdEvacuador			 	: FB_Evacuador				(ID:=7, MRT:=MaximoTiempoRespuesta, Name:='Evacuador');
 	mdPickAndPlaceDescarga 	: FB_PickAndPlace			(ID:=8, MRT:=MaximoTiempoRespuesta, Name:='Descarga');
 	mdPlatoDivisor			: FB_PlatoDivisor			(ID:=9, MRT:=MaximoTiempoRespuesta, Name:='Plato');
-	
+	mdCinta					: FB_Cinta					(ID:=10,MRT:=MaximoTiempoRespuesta, Name:='Cinta');
 	//fbFMS205_SFC			: FB_FMS205_SFC;
 	fbFMS205_Producir_SFC	: FB_FMS205_SFC;
 
@@ -112,7 +114,7 @@ ctInp.ModeAct	:= fbDirector.Modo;
 ctInp.ModePre	:= fbDirector.Previo;
 
 ctInp.Execute :=  (* El coordinador indica que hay empezar *)
-	(fbDirector.Modo = E_GEMMA.F6Probando AND fbPanel.ProbarExecute) OR
+	(fbDirector.Modo = E_GEMMA.F6Probando AND td.Execute) OR
 	(fbDirector.Modo <> E_GEMMA.F6Probando AND
 		(
 			(fbDirector.Modo = E_GEMMA.A2ParaFinCiclo) OR 
@@ -128,7 +130,7 @@ ctInp.Execute :=  (* El coordinador indica que hay empezar *)
 		
 
 ctInp.Ack := // Notificar a los módulos que ya pueden volver al inicio
-	(fbDirector.Modo = E_GEMMA.F6Probando AND fbPanel.ProbarAck) OR 
+	(fbDirector.Modo = E_GEMMA.F6Probando AND td.Ack) OR 
 	(fbDirector.Modo <> E_GEMMA.F6Probando AND FinCiclo);
 // TODO SI HAY FIN DE CICLO HAY QUE HACER UN MONTÓN DE COSAS, POR EJEMPLO, ACTUALIZAR EL PLATO CON EL SENSOR FOTOELÉCTRICO
 
@@ -175,45 +177,7 @@ mdPickAndPlaceDescarga.Mover := TRUE;
 // TODO CARGA Y DESCARGA TENGAN UNA OPCION DE NO HACER NADA
 
 IF fbDirector.Modo = E_GEMMA.F6Probando THEN
-	// en el modo pruebas el control de la fms205 lo hacemos desde la visualización de pruebas
-	//ctInp.Execute 	:= fbPanel.ProbarExecute;
-	//ctInp.Ack 		:= fbPanel.ProbarAck; 
-	IF fbPanel.ProbarAlimentador THEN
-		mdAlimentador.ModuleProcessCycle();	
-	END_IF
-	IF fbPanel.ProbarCarga THEN
-		IF fbPanel.FlancoNegarSensores THEN
-			mdPickAndPlaceCarga.NegarSensores();
-		END_IF
-		mdPickAndPlaceCarga.ModuleProcessCycle();	
-	END_IF
-	IF fbPanel.ProbarMedidor THEN
-		mdMedidorTapa.ModuleProcessCycle();	
-	END_IF
-		IF fbPanel.ProbarFotoelectrico THEN
-		mdDetectorFotoelectrico.ModuleProcessCycle();	
-	END_IF
-	IF fbPanel.ProbarInductivo THEN
-		mdCaptadorInductivo.ModuleProcessCycle();	
-	END_IF
-	IF fbPanel.ProbarEvacuador THEN
-		mdEvacuador.ModuleProcessCycle();	
-	END_IF
-	IF fbPanel.ProbarDescarga THEN
-		IF fbPanel.FlancoNegarSensores THEN
-			mdPickAndPlaceDescarga.NegarSensores();
-		END_IF		
-		mdPickAndPlaceDescarga.ModuleProcessCycle();	
-	END_IF
-	IF fbPanel.ProbarPlato THEN
-		IF fbPanel.FlancoNegarSensores THEN
-			mdPlatoDivisor.NegarSensores();
-		END_IF
-		mdPlatoDivisor.ModuleProcessCycle();	
-	END_IF
-
-
-	;
+	F6TestingMode();
 ELSE
 	fbFMS205_Producir_SFC(
 		ctInp					:= ctInp, // POST15
@@ -237,5 +201,68 @@ END_IF
 
 ]]></ST>
     </Implementation>
+    <Method Name="F6TestingMode" Id="{697643b6-2262-4b9f-9ecb-336a91083aa9}">
+      <Declaration><![CDATA[METHOD F6TestingMode : BOOL
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// en el modo pruebas el control de la fms205 lo hacemos desde la visualización de pruebas
+	//ctInp.Execute 	:= fbPanel.ProbarExecute;
+	//ctInp.Ack 		:= fbPanel.ProbarAck;
+
+// Cambiar el estado de los sensores cuando hay un flanco positivo del control de cambio de estado de sensores
+td.FlancoNegar(CLK := td.Negar);
+IF td.FlancoNegar.Q THEN
+	mdAlimentador.NegarSensores();
+	mdPickAndPlaceCarga.NegarSensores();
+	mdMedidorTapa.NegarSensores();
+	mdDetectorFotoelectrico.NegarSensores();
+	mdCaptadorInductivo.NegarSensores();
+	mdEvacuador.NegarSensores();
+	mdPickAndPlaceDescarga.NegarSensores();
+	mdCinta.NegarSensores();
+END_IF
+
+
+// Ejecutar los módulos que se pidan
+IF td.Alime THEN
+	mdAlimentador.ModuleProcessCycle();	
+END_IF
+IF td.Carga THEN
+	IF fbPanel.FlancoNegarSensores THEN
+		mdPickAndPlaceCarga.NegarSensores();
+	END_IF
+	mdPickAndPlaceCarga.ModuleProcessCycle();	
+END_IF
+IF td.Medid THEN
+	mdMedidorTapa.ModuleProcessCycle();	
+END_IF
+	IF fbPanel.ProbarFotoelectrico THEN
+	mdDetectorFotoelectrico.ModuleProcessCycle();	
+END_IF
+IF td.Induc THEN
+	mdCaptadorInductivo.ModuleProcessCycle();	
+END_IF
+IF td.Evacu THEN
+	mdEvacuador.ModuleProcessCycle();	
+END_IF
+IF td.Desca THEN
+	IF fbPanel.FlancoNegarSensores THEN
+		mdPickAndPlaceDescarga.NegarSensores();
+	END_IF		
+	mdPickAndPlaceDescarga.ModuleProcessCycle();	
+END_IF
+IF td.Plato THEN
+	IF fbPanel.FlancoNegarSensores THEN
+		mdPlatoDivisor.NegarSensores();
+	END_IF
+	mdPlatoDivisor.ModuleProcessCycle();	
+END_IF
+
+
+	;
+]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>

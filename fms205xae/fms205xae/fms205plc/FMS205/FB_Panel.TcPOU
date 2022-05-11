@@ -36,15 +36,14 @@ VAR_OUTPUT
 	ProbarPlato: BOOL;
 	ProbarNegarSensores: BOOL;
 	FlancoNegarSensores: BOOL;
-	fbNegar : R_TRIG;
+	
 END_VAR
 VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[// pendiente vincular y codificar
-fbNegar(CLK := ProbarNegarSensores);
-FlancoNegarSensores := fbNegar.Q;]]></ST>
+]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
