@@ -3,13 +3,19 @@
   <POU Name="FB_Panel" Id="{514e5db3-ac71-4add-977b-df9fa295436c}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Panel
 VAR_INPUT
-	Modo: E_GEMMA;
-	TR: TIME := T#3S; 	// Tiempo de reinicio
+	hw 						: S_Panel_Hardware; // estado de sensores y actuadores del panel físico
+	gm						: REFERENCE TO S_GEMMA;			//
+	tm						: REFERENCE TO S_Timeouts; 		//
+  
+	//TR: TIME := T#3S; 	// Tiempo de reinicio
 END_VAR
 
 VAR_OUTPUT
-	hw 						: S_Panel_Hardware;
-		
+	cn						: S_Panel_Consignas; //
+	TmpReinicio				: TON; 
+	FP_PM					: R_TRIG;
+
+	
     Emergencia: BOOL; 	// := PE 				Parada de emergencia (seta)
  
 						// POC - 				Conmutador PO Conectada  (negra)
@@ -28,23 +34,68 @@ VAR_OUTPUT
 	ProbarAck: BOOL;
 	
 	
-	ProbarAlimentador: BOOL;
-	ProbarCarga: BOOL;
-	ProbarMedidor: BOOL;
-	ProbarFotoelectrico: BOOL;
-	ProbarInductivo: BOOL;
-	ProbarEvacuador: BOOL;
-	ProbarDescarga: BOOL;
-	ProbarPlato: BOOL;
-	ProbarNegarSensores: BOOL;
-	FlancoNegarSensores: BOOL;
+//	ProbarAlimentador: BOOL;
+	//	ProbarCarga: BOOL;
+	//	ProbarMedidor: BOOL;
+	//	ProbarFotoelectrico: BOOL;
+	//	ProbarInductivo: BOOL;
+	//	ProbarEvacuador: BOOL;
+	//	ProbarDescarga: BOOL;
+	//	ProbarPlato: BOOL;
+	//	ProbarNegarSensores: BOOL;
+	//	FlancoNegarSensores: BOOL;
 	
 END_VAR
 VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// pendiente vincular y codificar
+      <ST><![CDATA[// invoca a temporizadores y flancos
+TmpReinicio(IN := hw.PM_PulsadorMarcha AND NOT hw.PS_PulsadorStop, PT:= tm.TiempoReinicio);
+FP_PM(CLk := hw.PM_PulsadorMarcha);
+
+// calcula el estado de las consignas
+// DUDAS - No habría que tener en cuenta el modo de GEMMA para informar Reinicia, Restaura, ...?
+
+// Consignas
+cn.Emergencia 		:= hw.PE_Seta; 					// TODO OR control de parada de emergencia en interfaz de usuario
+cn.Manual 			:= hw.SM_SelecAutoManual; 		// ídem
+cn.Reinicia			:= TmpReinicio.Q;
+cn.Restablece		:= hw.PM_PulsadorMarcha;
+cn.Restaura			:= hw.PM_PulsadorMarcha;
+cn.Marcha			:= FP_PM.Q;
+cn.Para				:= NOT hw.PS_PulsadorStop;
+
+
+// Señales
+hw.AS_AvisadorSonoro := 
+	gm.ModeActual = E_GEMMA.F3SecuenciaFinalizacion OR
+	(
+		(
+			gm.ModeActual = E_GEMMA.D1ParadaEmergencia OR
+			gm.ModeActual = E_GEMMA.D2TratamientoFallos OR 
+			gm.ModeActual = E_GEMMA.F2SecuenciaPreparacion 
+		) AND FALSE
+	); //  TODO - TERMINAR LA IMPLENTACIÓN CON EL RELOJ - CLK.Q;
+	
+hw.LA_LamparaAlarma := 
+	gm.ModeActual = E_GEMMA.A6Inicializando OR
+	(
+		(
+			gm.ModeActual = E_GEMMA.D1ParadaEmergencia OR
+			gm.ModeActual = E_GEMMA.D2TratamientoFallos
+		) 
+		AND TRUE
+	);  //  TODO - TERMINAR LA IMPLENTACIÓN CON EL RELOJ - CLK.Q;
+
+hw.LM_LamparaMarcha := 	
+	gm.ModeActual = E_GEMMA.A2ParaFinCiclo OR
+	gm.ModeActual = E_GEMMA.F1ProduccionNormal OR
+	gm.ModeActual = E_GEMMA.F2SecuenciaPreparacion OR
+	gm.ModeActual = E_GEMMA.F3SecuenciaFinalizacion OR
+	(
+		gm.ModeActual = E_GEMMA.A1ParadaInicial AND TRUE 
+	);  //  TODO - TERMINAR LA IMPLENTACIÓN CON EL RELOJ - CLK.Q; 
 ]]></ST>
     </Implementation>
   </POU>

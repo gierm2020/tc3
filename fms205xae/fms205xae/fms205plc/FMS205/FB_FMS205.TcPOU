@@ -380,39 +380,34 @@ END_IF
 IF td.Alime THEN
 	mdAlime.ModuleProcessCycle();	
 END_IF
+
 IF td.Carga THEN
-	IF fbPanel.FlancoNegarSensores THEN
-		mdCarga.NegarSensores();
-	END_IF
 	mdCarga.ModuleProcessCycle();	
 END_IF
+
 IF td.Medid THEN
 	mdMedid.ModuleProcessCycle();	
 END_IF
-	IF fbPanel.ProbarFotoelectrico THEN
+
+IF td.Fotoe THEN
 	mdFotoe.ModuleProcessCycle();	
 END_IF
+
 IF td.Induc THEN
 	mdInduc.ModuleProcessCycle();	
 END_IF
+
 IF td.Evacu THEN
 	mdEvacu.ModuleProcessCycle();	
 END_IF
+
 IF td.Desca THEN
-	IF fbPanel.FlancoNegarSensores THEN
-		mdDesca.NegarSensores();
-	END_IF		
 	mdDesca.ModuleProcessCycle();	
 END_IF
+
 IF td.Plato THEN
-	IF fbPanel.FlancoNegarSensores THEN
-		mdPlato.NegarSensores();
-	END_IF
 	mdPlato.ModuleProcessCycle();	
 END_IF
-
-
-	;
 ]]></ST>
       </Implementation>
     </Method>

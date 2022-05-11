@@ -6,6 +6,7 @@ STRUCT
 	// Estructura para centralizar todos los timeouts específios de la estación y de cada módulo
 	// Estación FMS205
 	MaximoTiempoRespuesta: TIME := T#5S;
+	TiempoReinicio: TIME := T#5S;
 	
 	
 	// Alimentador
