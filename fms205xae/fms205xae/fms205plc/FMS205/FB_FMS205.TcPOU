@@ -8,7 +8,8 @@ VAR_INPUT
 END_VAR
 
 VAR_OUTPUT
-	td					: S_TestData; // Consignas relacionadas con el modo de pruebas
+	gm					: S_GEMMA; 		// Información sobre la familia y modo GEMMA en que se encuentra la estación
+	td					: S_TestData; 	// Consignas relacionadas con el modo de pruebas
 	
 	ManiobrasRealizadas: UINT := 0;
 	ManiobrasPendientes: UINT;
@@ -24,7 +25,7 @@ END_VAR
 VAR
 	// controladores de la máquina, la función de producción y la guía GEMMA 
 	fbPanel					: FB_Panel;
-	fbDirector				: FB_Director;
+	// fbDirector				: FB_Director;
 	ctInp 					: S_ControllerInput;
 	
 	// módulos de la FMS205
@@ -87,6 +88,8 @@ Fallo:=									// La estaciónn está en fallo si al menos un módulo ha fallad
 	
 Finalizada := TRUE;	 // PENDIENTE SI LA ESTACIÓN NECESITA UNA SECUENCIA DE PREPARACIÓN 
 
+Director();
+(*
 fbDirector(
 	fbPanel 	:= fbPanel,
 	IC 			:= IC, 
@@ -95,54 +98,54 @@ fbDirector(
 	FinTarea	:= FinTarea,
 	Fallo		:= Fallo,
 	Finalizada	:= Finalizada);
- 
+*)
 
 // IF fbDirector.Modo = E_Gemma.A6Inicializando THEN
 
 
 // Informar la estructura ctInp que se copiará a todos y cada uno de los controladores
-ctInp.ModeAct	:= fbDirector.Modo;
-ctInp.ModePre	:= fbDirector.Previo;
+ctInp.ModeAct	:= gm.ModeActual;
+ctInp.ModePre	:= gm.ModePrev;
 
 ctInp.Execute :=  (* El coordinador indica que hay empezar *)
-	(fbDirector.Modo = E_GEMMA.F6Probando AND td.Execute) OR
-	(fbDirector.Modo <> E_GEMMA.F6Probando AND
+	(gm.ModeActual = E_GEMMA.F6Probando AND td.Execute) OR
+	(gm.ModeActual <> E_GEMMA.F6Probando AND
 		(
-			(fbDirector.Modo = E_GEMMA.A2ParaFinCiclo) OR 
-	 		(fbDirector.Modo = E_GEMMA.A3ParadaEstado) OR 
-	 	 	(fbDirector.Modo = E_GEMMA.F1ProduccionNormal) OR 
-	 	 	(fbDirector.Modo = E_GEMMA.F2SecuenciaPreparacion) OR 
-	 	 	(fbDirector.Modo = E_GEMMA.F3SecuenciaFinalizacion) OR 
-	 	 	(fbDirector.Modo = E_GEMMA.F5VerificacionOrdenada) OR 
-	 	 	(fbDirector.Modo = E_GEMMA.F6Probando) OR 
-	 	 	(fbDirector.Modo = E_GEMMA.D3ProducirConFallos)
+			(gm.ModeActual = E_GEMMA.A2ParaFinCiclo) OR 
+	 		(gm.ModeActual = E_GEMMA.A3ParadaEstado) OR 
+	 	 	(gm.ModeActual = E_GEMMA.F1ProduccionNormal) OR 
+	 	 	(gm.ModeActual = E_GEMMA.F2SecuenciaPreparacion) OR 
+	 	 	(gm.ModeActual = E_GEMMA.F3SecuenciaFinalizacion) OR 
+	 	 	(gm.ModeActual = E_GEMMA.F5VerificacionOrdenada) OR 
+	 	 	(gm.ModeActual = E_GEMMA.F6Probando) OR 
+	 	 	(gm.ModeActual = E_GEMMA.D3ProducirConFallos)
 		) 
 	);
 		
 
 ctInp.Ack := // Notificar a los módulos que ya pueden volver al inicio
-	(fbDirector.Modo = E_GEMMA.F6Probando AND td.Ack) OR 
-	(fbDirector.Modo <> E_GEMMA.F6Probando AND FinCiclo);
+	(gm.ModeActual = E_GEMMA.F6Probando AND td.Ack) OR 
+	(gm.ModeActual <> E_GEMMA.F6Probando AND FinCiclo);
 // TODO SI HAY FIN DE CICLO HAY QUE HACER UN MONTÓN DE COSAS, POR EJEMPLO, ACTUALIZAR EL PLATO CON EL SENSOR FOTOELÉCTRICO
 
 ctInp.Manual := (* Establece modo de funcionamiento manual *) 
-	(fbDirector.Modo = E_GEMMA.F4VerificacionSinOrden);
+	(gm.ModeActual = E_GEMMA.F4VerificacionSinOrden);
 	
 ctInp.Pause := (* Pausa la ejecucion de la funcionalidad  *)
-	(fbDirector.Modo = E_GEMMA.A3ParadaEstado) OR 
-	(fbDirector.Modo = E_GEMMA.A4ParadaObtenida) OR 
-	(fbDirector.Modo = E_GEMMA.A5PreparandoTrasFallo) OR 
-	(fbDirector.Modo = E_GEMMA.D1ParadaEmergencia) OR 
-	(fbDirector.Modo = E_GEMMA.D2TratamientoFallos);
+	(gm.ModeActual = E_GEMMA.A3ParadaEstado) OR 
+	(gm.ModeActual = E_GEMMA.A4ParadaObtenida) OR 
+	(gm.ModeActual = E_GEMMA.A5PreparandoTrasFallo) OR 
+	(gm.ModeActual = E_GEMMA.D1ParadaEmergencia) OR 
+	(gm.ModeActual = E_GEMMA.D2TratamientoFallos);
 
 ctInp.Reset := (* Restablece la condicion de fallo *)
-    (fbDirector.Modo = E_GEMMA.A5PreparandoTrasFallo);
+    (gm.ModeActual = E_GEMMA.A5PreparandoTrasFallo);
 
 ctInp.Restart := (* Reinicia el estado del controlador *)
-	(fbDirector.Modo = E_GEMMA.A6Inicializando);
+	(gm.ModeActual = E_GEMMA.A6Inicializando);
 
 ctInp.Restore := (* Restaura las condiciones iniciales (referencia) *)
-    (fbDirector.Modo=E_GEMMA.A6Inicializando); 
+    (gm.ModeActual=E_GEMMA.A6Inicializando); 
 
 ctInp.Resume := (* Continua la ejecucion de la funcionalidad en curso *)
 	(FALSE);
@@ -167,7 +170,7 @@ mdPickAndPlaceDescarga.Mover := TRUE;
 
 // TODO CARGA Y DESCARGA TENGAN UNA OPCION DE NO HACER NADA
 
-IF fbDirector.Modo = E_GEMMA.F6Probando THEN
+IF gm.ModeActual = E_GEMMA.F6Probando THEN
 	F6TestingMode();
 ELSE
 	fbFMS205_Producir_SFC(
@@ -192,6 +195,163 @@ END_IF
 
 ]]></ST>
     </Implementation>
+    <Method Name="Director" Id="{607386c6-63f2-4de2-a057-037fe1b8c79f}">
+      <Declaration><![CDATA[METHOD Director : BOOL
+// Actualiza el estado de la estación siguiendo el estándar definido la guía GEMMA]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(* FUNCION DE ESTADO *)
+
+
+IF fbPanel.Emergencia THEN
+    gm.ModeActual := E_GEMMA.D1ParadaEmergencia;
+	
+	
+ELSIF fbPanel.Reinicia THEN
+    gm.ModeActual := E_GEMMA.A6Inicializando;
+
+ELSIF fbPanel.Probando AND gm.ModeActual <> E_GEMMA.F6Probando THEN
+	gm.ModePrev := gm.ModeActual; 			// guardamos el modo en que estaba la máquiina antes de entrar a modo pruebas
+	gm.ModeActual := E_GEMMA.F6Probando; 	// y pasamos al modo pruebas 
+
+ELSIF gm.ModeActual = E_GEMMA.F6Probando AND NOT fbPanel.Probando THEN
+	gm.ModeActual := gm.ModePrev; 			// restauramos el modo en que estaba la máquina antes de pasar a modo pruebas
+    // Previo := E_GEMMA.F6Probando;		// y el modo previo queda a F6 DUDAS
+
+
+ELSE
+    CASE gm.ModeActual OF
+		
+	
+        (* ------------------------------------------------------------ Procedimientos de parada *)
+		
+        E_GEMMA.A1ParadaInicial: (* Parada en el estado inicial *)
+            IF NOT InitialConditions() THEN // IF NOT Restaurada THEN
+                gm.ModeActual := E_GEMMA.A6Inicializando;
+            ELSIF fbPanel.Manual THEN
+                gm.ModeActual := E_GEMMA.F4VerificacionSinOrden;
+            ELSIF fbPanel.Marcha AND IC THEN  // ELSIF Marcha THEN
+                gm.ModeActual := E_GEMMA.F2SecuenciaPreparacion;
+			ELSE
+				; // Esperar a que se pulse el bortón de marcha
+            END_IF
+			
+        E_GEMMA.A2ParaFinCiclo: (* Parada solicitada a final de ciclo *)
+            IF Fallo THEN
+                gm.ModePrev := E_GEMMA.A2ParaFinCiclo;
+                gm.ModeActual := E_GEMMA.D2TratamientoFallos;
+            ELSIF FinCiclo THEN
+                gm.ModeActual := E_GEMMA.A1ParadaInicial;
+            ELSE
+                // Seguir produciendo hasta final de ciclo
+                ;
+            END_IF
+			
+        E_GEMMA.A3ParadaEstado: (* Parada solicitada en un estado determinado *)
+            ; // estado no tratado en la FMS205 DUDAS
+			
+        E_GEMMA.A4ParadaObtenida: (* Parada obtenida *)
+            ; // estado no tratado en la FMS205 DUDAS
+        
+		E_GEMMA.A5PreparandoTrasFallo: (* Preparando de reanudacion tras el fallo *)
+            IF fbPanel.Marcha THEN // Continua
+                gm.ModeActual := gm.ModePrev;
+            ELSIF fbPanel.Para THEN // Cancela
+                gm.ModeActual := E_GEMMA.A6Inicializando;
+				gm.ModePrev := gm.ModeActual; // DUDAS
+            END_IF
+			
+        E_GEMMA.A6Inicializando: (* Situando la PO en el estado inicial *)
+            IF IC THEN // Restaurada
+                gm.ModeActual := E_GEMMA.A1ParadaInicial;
+            ELSIF fbPanel.Manual THEN
+                gm.ModeActual := E_GEMMA.F4VerificacionSinOrden;
+            END_IF
+			
+        E_GEMMA.A7SituandoEstado: (* Situando la PO en un estado determinado *)
+            ; // estado no tratado en la FMS205
+
+			
+			
+        (* ------------------------------------------------------------ Procedimientos de funcionamiento *)
+        
+		E_GEMMA.F1ProduccionNormal: (* Produccion normal *)
+            IF Fallo THEN
+                gm.ModePrev := E_GEMMA.F1ProduccionNormal; // DUDAS E_GEMMA.A2ParaFinCiclo; //!!! Creo que está mal, no debería ser F1?
+                gm.ModeActual := E_GEMMA.D2TratamientoFallos;
+            ELSIF FinTarea THEN
+                gm.ModeActual := E_GEMMA.F3SecuenciaFinalizacion;
+            ELSIF fbPanel.Para THEN
+                gm.ModeActual := E_GEMMA.A2ParaFinCiclo;
+            END_IF
+			
+        E_GEMMA.F2SecuenciaPreparacion: (* Secuencia de preparacion *)
+            IF Preparada THEN
+                gm.ModeActual := E_GEMMA.F1ProduccionNormal;
+            ELSE
+                // continuar con la secuencia de preparación hasta que esté preparada o haya un error
+                ;
+            END_IF
+			
+        E_GEMMA.F3SecuenciaFinalizacion: (* Secuencia de finalizacion *)
+            IF Finalizada THEN
+                gm.ModeActual := E_GEMMA.A1ParadaInicial;
+            ELSE
+                // continuar con la secuencia de finalización hasta que esté finalizada o haya un error
+                ;
+            END_IF
+			
+        E_GEMMA.F4VerificacionSinOrden: (* Verificacion sin orden *)
+            IF Fallo THEN
+                gm.ModePrev := E_GEMMA.F4VerificacionSinOrden; // DUDAS E_GEMMA.A2ParaFinCiclo; //!!! Creo que está mal, no debería ser F4?
+                gm.ModeActual := E_GEMMA.D2TratamientoFallos;
+            ELSIF NOT fbPanel.Manual THEN
+				gm.ModeActual := E_GEMMA.A6Inicializando; // después del modo manual, volver a inicializar
+            ELSE
+                // Seguir en modo manual hasta que halla un fallo o se vuelva al modo automático
+                ;
+            END_IF
+			
+        E_GEMMA.F5VerificacionOrdenada: (* Verificacion en orden *)
+            ; // estado no tratado en la FMS205
+			
+        E_GEMMA.F6Probando: (* Prueba *)
+            ; // estado no tratado en la FMS205
+
+			
+			
+        (* ------------------------------------------------------------ Procedimientos de defecto *)
+        E_GEMMA.D1ParadaEmergencia: (* Parada de emergencia *)
+            IF NOT fbPanel.Emergencia THEN
+                gm.ModeActual := E_GEMMA.A6Inicializando; // Al quitar la parada de emergencia hay que reinicializar la estación
+            ELSE
+                // Esperar a que se quite la parada de emergencia
+                ;
+            END_IF
+			
+        E_GEMMA.D2TratamientoFallos: (* Diagnostico/tratamiento de los fallos *)
+            IF NOT Fallo THEN
+                gm.ModeActual := E_GEMMA.A5PreparandoTrasFallo;
+            ELSE
+                // Esperar a que se resuelva el fallo
+                ;
+            END_IF
+
+        E_GEMMA.D3ProducirConFallos: (* Produccion a pesar de los fallos *)
+            ; // estado no tratado en la FMS205
+
+    END_CASE
+END_IF
+
+(* PARAMETROS DE SALIDA *)
+gm.FamiArret  := (gm.ModeActual >= E_GEMMA.A1ParadaInicial) AND 
+				 (gm.ModeActual <= E_GEMMA.A7SituandoEstado);
+gm.FamiFonct  := (gm.ModeActual >= E_GEMMA.F1ProduccionNormal) AND 
+				 (gm.ModeActual <= E_GEMMA.F6Probando);
+gm.FamiDefail := (gm.ModeActual >= E_GEMMA.D1ParadaEmergencia) AND 
+				 (gm.ModeActual <= E_GEMMA.D3ProducirConFallos);
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="F6TestingMode" Id="{697643b6-2262-4b9f-9ecb-336a91083aa9}">
       <Declaration><![CDATA[METHOD F6TestingMode : BOOL
 

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="S_Gemma" Id="{004d929f-7fa7-41dd-9a0e-b33cef5c77bb}">
+    <Declaration><![CDATA[TYPE S_Gemma :
+STRUCT
+	FamiArret	: BOOL; 			// Familia de parada
+	FamiFonct	: BOOL; 			// Familia de funcionamiento
+	FamiDefail	: BOOL; 			// Familia de salida de fallos
+	
+	ModeActual		: E_GEMMA; 		// Modo GEMMA actual
+	ModePrev		: E_GEMMA; 		// Modo GEMMA anterior al actual
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
