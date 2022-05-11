@@ -247,6 +247,8 @@
 				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdPickAndPlaceCarga.HOR" VarB="Channel 1^dHOR"/>
 				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdPickAndPlaceCarga.PIN" VarB="Channel 3^dPIN"/>
 				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdPickAndPlaceCarga.VER" VarB="Channel 2^dVER"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdPlatoDivisor.D_1" VarB="Channel 4^bEMP"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdPlatoDivisor.E_1" VarB="Channel 5^bRET"/>
 			</OwnerB>
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 9 (EL2008)">
 				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdAlimentador.K_1" VarB="Channel 5^cTAP"/>
