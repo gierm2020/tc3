@@ -3,8 +3,8 @@
   <POU Name="FB_PlatoDivisor" Id="{c71a4a01-3eb1-443b-a07e-accb57d2980d}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_PlatoDivisor EXTENDS FB_Module
 VAR_INPUT
-	TRET	   : TIME := T#500MS;	(* Tiempo de actuación del retenedor del plato *)
-	TEMP	   : TIME := T#2S   ;	(* Tiempo de recorrido del empujador del plato *)
+	//TRET	   : TIME := T#500MS;	(* Tiempo de actuación del retenedor del plato *)
+	//TEMP	   : TIME := T#2S   ;	(* Tiempo de recorrido del empujador del plato *)
 END_VAR
 
 VAR
@@ -46,7 +46,7 @@ ctInp.HwIC := InitialConditions();
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 fbController(
 	ctInp := ctInp,								// entrada estándar
-	TRET := TRET, TEMP := TEMP,					// temporizadores específicos
+	//TRET := TRET, TEMP := TEMP,					// temporizadores específicos
     k1 := k1, d0 := d0, 						// sensores específicos
 	ctOut => ctOut);							// resultado del controlador
 

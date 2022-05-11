@@ -34,7 +34,7 @@ VAR
 	fbController: FB_MedidorTapa_SFC;
 
 	(* Temporizadores específicos *)
-	TMED: TIME := T#1S;	
+	// TMED: TIME := T#1S;	
 	
 	(* Sensores específicos *)
 	fv  AT %I*: UINT; (*Detector valor altura *)
@@ -71,7 +71,7 @@ ctInp.HwIC := InitialConditions();
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 fbController(
 	ctInp := ctInp,								// entrada estándar
-	TMED := TMED,								// temporizadores específicos
+	//TMED := TMED,								// temporizadores específicos
     fv := fv,									// sensores específicos
 	LecturaFiable	:= LecturaFiable,			// otras entradas específicas
 	ctOut => ctOut);							// resultado del controlador

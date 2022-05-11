@@ -18,7 +18,7 @@ sobre los que se ha fijado como elemento terminal una placa con tres ventosas pa
 
 VAR_INPUT
 	Evacuar		: BOOL; // Hay que evacuar la tapa en la posición del módulo
-	TSOL		: TIME := T#100MS; // tiempo después de soltar y antes de subir	    
+	// TSOL		: TIME := T#100MS; // tiempo después de soltar y antes de subir	    
 END_VAR
 
 VAR
@@ -65,7 +65,7 @@ ctInp.HwIC := InitialConditions();
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 fbController(
 	ctInp := ctInp,								// entrada estándar
-	TSOL := TSOL,								// temporizadores específicos
+//	TSOL := TSOL,								// temporizadores específicos
     f0 := f0, f1 := f1, g0 := g0, v1 := v1,		// sensores específicos
 	Evacuar	:= Evacuar,							// otras entradas específicas
 	ctOut => ctOut);							// resultado del controlador

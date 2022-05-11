@@ -30,15 +30,15 @@ VAR
 	ctInp 					: S_ControllerInput := (tm := tm);
 	
 	// módulos de la FMS205
-	mdAlimentador			: FB_Alimentador			(ID:=0, MRT:=tm.MaximoTiempoRespuesta, Name:='Alimentador');
-	mdPickAndPlaceCarga 	: FB_PickAndPlace			(ID:=1, MRT:=tm.MaximoTiempoRespuesta, Name:='Carga');
-	mdMedidorTapa			: FB_MedidorTapa			(ID:=3, MRT:=tm.MaximoTiempoRespuesta, Name:='Medidor');
-	mdCaptadorInductivo 	: FB_CaptadorInductivo		(ID:=4, MRT:=tm.MaximoTiempoRespuesta, Name:='Inductivo');
-	mdDetectorFotoelectrico : FB_DetectorFotoelectrico	(ID:=5, MRT:=tm.MaximoTiempoRespuesta, Name:='Fotoeléctrico');
-	mdEvacuador			 	: FB_Evacuador				(ID:=7, MRT:=tm.MaximoTiempoRespuesta, Name:='Evacuador');
-	mdPickAndPlaceDescarga 	: FB_PickAndPlace			(ID:=8, MRT:=tm.MaximoTiempoRespuesta, Name:='Descarga');
-	mdPlatoDivisor			: FB_PlatoDivisor			(ID:=9, MRT:=tm.MaximoTiempoRespuesta, Name:='Plato');
-	mdCinta					: FB_Cinta					(ID:=10,MRT:=tm.MaximoTiempoRespuesta, Name:='Cinta');
+	mdAlimentador			: FB_Alimentador			(ID:=0, Name:='Alimentador'); // MRT:=tm.MaximoTiempoRespuesta,
+	mdPickAndPlaceCarga 	: FB_PickAndPlace			(ID:=1, Name:='Carga'); // MRT:=tm.MaximoTiempoRespuesta,
+	mdMedidorTapa			: FB_MedidorTapa			(ID:=3, Name:='Medidor'); // MRT:=tm.MaximoTiempoRespuesta,
+	mdCaptadorInductivo 	: FB_CaptadorInductivo		(ID:=4, Name:='Inductivo'); // MRT:=tm.MaximoTiempoRespuesta,
+	mdDetectorFotoelectrico : FB_DetectorFotoelectrico	(ID:=5, Name:='Fotoeléctrico'); // MRT:=tm.MaximoTiempoRespuesta,
+	mdEvacuador			 	: FB_Evacuador				(ID:=7, Name:='Evacuador'); // MRT:=tm.MaximoTiempoRespuesta,
+	mdPickAndPlaceDescarga 	: FB_PickAndPlace			(ID:=8, Name:='Descarga'); // MRT:=tm.MaximoTiempoRespuesta,
+	mdPlatoDivisor			: FB_PlatoDivisor			(ID:=9, Name:='Plato'); // MRT:=tm.MaximoTiempoRespuesta,
+	mdCinta					: FB_Cinta					(ID:=10, Name:='Cinta'); // MRT:=tm.MaximoTiempoRespuesta,
 	//fbFMS205_SFC			: FB_FMS205_SFC;
 	fbFMS205_Producir_SFC	: FB_FMS205_SFC;
 

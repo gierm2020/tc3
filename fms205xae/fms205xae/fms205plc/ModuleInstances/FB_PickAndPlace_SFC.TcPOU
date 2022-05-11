@@ -5,7 +5,7 @@
 VAR_INPUT
 	ctInp		: S_ControllerInput;
 	Mover: BOOL;
-	TPIN: TIME; (* Tiempo de cierre y apertura de la pinza de carga *)	
+	// TPIN: TIME; (* Tiempo de cierre y apertura de la pinza de carga *)	
 	h0: BOOL; 	(* Final de carrera horizontal retraida *)
 	h1: BOOL; 	(* Final de carrera horizontal extendido *)
 	v1: BOOL; 	(*Final de carrera vertical abajo*)
@@ -1285,7 +1285,7 @@ END_VAR]]></Declaration>
                                     <o>
                                       <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                       <o n="Value" t="StringValue">
-                                        <v n="Value">"F1Pinzar.t &gt;= TPIN"</v>
+                                        <v n="Value">"F1Pinzar.t &gt;= ctInp.tm.PIN"</v>
                                         <v n="DefaultValue">""</v>
                                       </o>
                                       <v n="Id">113L</v>
@@ -2445,7 +2445,7 @@ END_VAR]]></Declaration>
                                     <o>
                                       <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                       <o n="Value" t="StringValue">
-                                        <v n="Value">"F1Soltar.t &gt;= TPIN"</v>
+                                        <v n="Value">"F1Soltar.t &gt;= ctInp.tm.PIN"</v>
                                         <v n="DefaultValue">""</v>
                                       </o>
                                       <v n="Id">225L</v>

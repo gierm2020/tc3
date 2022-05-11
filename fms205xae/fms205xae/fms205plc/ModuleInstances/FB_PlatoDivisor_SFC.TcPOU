@@ -4,8 +4,8 @@
     <Declaration><![CDATA[FUNCTION_BLOCK FB_PlatoDivisor_SFC // EXTENDS FB_Module_SFC
 VAR_INPUT
 	ctInp		: S_ControllerInput;
-	TRET		: TIME;
-	TEMP		: TIME;	
+	//TRET		: TIME;
+	//TEMP		: TIME;	
 	k1			: BOOL;
 	d0  		: BOOL; 
 END_VAR
@@ -805,7 +805,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"F1Retener.t &gt; TRET"</v>
+                            <v n="Value">"F1Retener.t &gt; ctInp.tm.E_1"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">75L</v>
@@ -1095,7 +1095,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"F1Empujar.t &gt; TEMP"</v>
+                            <v n="Value">"F1Empujar.t &gt; ctInp.tm.D_1"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">119L</v>

@@ -25,7 +25,7 @@ realizando un giro hasta el punto de descarga mediante un actuador neumático ro
 
 VAR_INPUT
 	Mover: BOOL := TRUE; // TODO HAY QUE CARGAR O DESCARGAR EN FUNCIÓN DEL RESTO DE LA MÁQUINA Y LAS CONSIGNAS DEL PANEL
-	TPIN: TIME := T#1S;  // Tiempo para que la pinza sujete la tapa	
+	//TPIN: TIME := T#1S;  // Tiempo para que la pinza sujete la tapa	
 END_VAR
 
 VAR
@@ -66,7 +66,7 @@ ctInp.HwIC := InitialConditions();
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 fbController(
 	ctInp := ctInp,								// entrada estándar
-	TPIN := TPIN,								// temporizadores específicos
+	//TPIN := TPIN,								// temporizadores específicos
     h0 := h0, h1 := h1, v0 := v0, v1 := v1,		// sensores específicos
 	Mover := Mover,							// otras entradas específicas
 	ctOut => ctOut);							// resultado del controlador
