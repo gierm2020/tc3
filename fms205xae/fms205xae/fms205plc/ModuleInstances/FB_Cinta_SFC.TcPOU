@@ -12,6 +12,10 @@ VAR_OUTPUT
 	Failure: BOOL;
 	Done: BOOL;
 END_VAR
+VAR
+	tm: S_Timeouts
+END_VAR
+
 VAR_INPUT
 END_VAR
 VAR_OUTPUT

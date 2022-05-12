@@ -26,6 +26,10 @@ VAR_OUTPUT
     D_1 		: BOOL; 
     E_1 		: BOOL; 
 END_VAR
+
+VAR
+	tm: S_Timeouts;
+END_VAR
 ]]></Declaration>
     <Implementation>
       <SFC>
@@ -816,7 +820,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"F1Retener.t &gt; TRET"</v>
+                            <v n="Value">"F1Retener.t &gt; tm.E_1"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">75L</v>
@@ -1106,7 +1110,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"F1Empujar.t &gt; TEMP"</v>
+                            <v n="Value">"F1Empujar.t &gt; tm.E_1"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">119L</v>
