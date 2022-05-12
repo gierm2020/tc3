@@ -26,6 +26,9 @@
     <Compile Include="DUTs\S_ControllerOutput.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\S_TestData.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\S_Timeouts.TcDUT">
       <SubType>Code</SubType>
     </Compile>

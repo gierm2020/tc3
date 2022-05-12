@@ -31,6 +31,8 @@ END_VAR
 VAR
 	// controladores de la máquina, la función de producción y la guía GEMMA 
 	fbPanel					: FB_Panel;
+	td						: S_TestData;
+	tm						: S_Timeouts;
 	fbDirector				: FB_Director;
 	ctInp 					: S_ControllerInput;
 	
@@ -228,40 +230,35 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[// en el modo pruebas el control de la fms205 lo hacemos desde la visualización de pruebas
-//ctInp.Execute 	:= fbPanel.ProbarExecute;
-//ctInp.Ack 		:= fbPanel.ProbarAck;
-IF fbPanel.FlancoNegarSensores THEN
+
+// utilidad para negar sensores cuando no hay máquina fisica conectada
+td.FlancoNegar(CLK := td.Negar);
+IF td.FlancoNegar.Q THEN
 	mdPickAndPlaceCarga.NegarSensores();
 	mdEvacuador.NegarSensores();
 	mdPickAndPlaceDescarga.NegarSensores();
 	mdPlatoDivisor.NegarSensores();
-END_IF 
-
-mdAlimentador.Execute := Execute AND fbPanel.ProbarAlimentador;
-mdAlimentador.Ack := Ack AND fbPanel.ProbarAlimentador;
-
-mdPickAndPlaceCarga.Execute := Execute AND fbPanel.ProbarCarga;
-mdPickAndPlaceCarga.Ack := Ack AND fbPanel.ProbarCarga;
+END_IF
 
 
-mdMedidorTapa.Execute := Execute AND fbPanel.ProbarMedidor;
-mdMedidorTapa.Ack := Ack AND fbPanel.ProbarMedidor;
+mdAlimentador.Execute 			:= td.Alime AND td.Execute;
+mdPickAndPlaceCarga.Execute 	:= td.Carga AND td.Execute;
+mdMedidorTapa.Execute 			:= td.Medid AND td.Execute;
+mdDetectorFotoelectrico.Execute := td.Fotoe AND td.Execute;
+mdCaptadorInductivo.Execute 	:= td.Induc AND td.Execute;
+mdEvacuador.Execute				:= td.Evacu AND td.Execute;
+mdPickAndPlaceDescarga.Execute 	:= td.Desca AND td.Execute;
+mdPlatoDivisor.Execute			:= td.Plato	AND td.Execute;
 
+mdAlimentador.Ack 				:= td.Alime AND td.Ack;
+mdPickAndPlaceCarga.Ack		 	:= td.Carga AND td.Ack;
+mdMedidorTapa.Ack				:= td.Medid AND td.Ack;
+mdDetectorFotoelectrico.Ack		:= td.Fotoe AND td.Ack;
+mdCaptadorInductivo.Ack		 	:= td.Induc AND td.Ack;
+mdEvacuador.Ack					:= td.Evacu AND td.Ack;
+mdPickAndPlaceDescarga.Ack	 	:= td.Desca AND td.Ack;
+mdPlatoDivisor.Ack				:= td.Plato	and td.Ack;
 
-mdDetectorFotoelectrico.Execute := Execute AND fbPanel.ProbarFotoelectrico;
-mdDetectorFotoelectrico.Ack := Ack AND fbPanel.ProbarFotoelectrico;
-
-mdCaptadorInductivo.Execute := Execute AND fbPanel.ProbarInductivo;
-mdCaptadorInductivo.Ack := Ack AND fbPanel.ProbarInductivo;
-
-mdEvacuador.Execute := Execute AND fbPanel.ProbarEvacuador;
-mdEvacuador.Ack := Ack AND fbPanel.ProbarEvacuador;
-
-mdPickAndPlaceDescarga.Execute := Execute AND fbPanel.ProbarDescarga;
-mdPickAndPlaceDescarga.Ack := Ack AND fbPanel.ProbarDescarga;
-
-mdPlatoDivisor.Execute := Execute AND fbPanel.ProbarPlato;
-mdPlatoDivisor.Ack := Ack AND fbPanel.ProbarPlato;
 
 //mdAlimentador.ModuleProcessCycle();	
 //mdPickAndPlaceCarga.ModuleProcessCycle();	

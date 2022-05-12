@@ -26,7 +26,7 @@ VAR_OUTPUT
 	ProbarAck: BOOL;
 	
 	
-	ProbarAlimentador: BOOL;
+	(*ProbarAlimentador: BOOL;
 	ProbarCarga: BOOL;
 	ProbarMedidor: BOOL;
 	ProbarFotoelectrico: BOOL;
@@ -36,15 +36,15 @@ VAR_OUTPUT
 	ProbarPlato: BOOL;
 	ProbarNegarSensores: BOOL;
 	FlancoNegarSensores: BOOL;
-	fbNegar : R_TRIG;
+	fbNegar : R_TRIG; *)
 END_VAR
 VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[// pendiente vincular y codificar
-fbNegar(CLK := ProbarNegarSensores);
-FlancoNegarSensores := fbNegar.Q;]]></ST>
+//fbNegar(CLK := ProbarNegarSensores);
+//FlancoNegarSensores := fbNegar.Q;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
