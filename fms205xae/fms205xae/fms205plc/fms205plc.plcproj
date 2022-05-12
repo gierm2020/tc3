@@ -26,6 +26,9 @@
     <Compile Include="DUTs\S_ControllerOutput.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\S_Gemma.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\S_Panel_Consignas.TcDUT">
       <SubType>Code</SubType>
     </Compile>

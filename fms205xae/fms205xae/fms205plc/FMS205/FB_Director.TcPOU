@@ -2,6 +2,7 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Director" Id="{7ba3b411-03e2-4744-bc96-6b241362c795}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Director
+(*
 VAR_INPUT
 	fbPanel: REFERENCE TO FB_Panel; 			// estado del panel de control
 	
@@ -34,9 +35,13 @@ VAR_OUTPUT
 	
 	
 END_VAR
-]]></Declaration>
+*)]]></Declaration>
     <Implementation>
-      <ST><![CDATA[(* Este código debería estar después de los cambios de estado 	
+      <ST><![CDATA[(*
+
+(
+
+* Este código debería estar después de los cambios de estado 	
 
 Parada := (Modo >= E_GEMMA.A1ParadaInicial) AND (Modo <= E_GEMMA.A7SituandoEstado);
 Funcionamiento:= (Modo >= E_GEMMA.F1ProduccionNormal) AND (Modo <= E_GEMMA.F6Probando);
@@ -47,21 +52,20 @@ Produccion := (Modo = E_GEMMA.A2ParaFinCiclo) OR (Modo = E_GEMMA.A3ParadaEstado)
 Pausa := (Modo = E_GEMMA.A3ParadaEstado) OR (Modo = E_GEMMA.A4ParadaObtenida) OR (Modo = E_GEMMA.A5PreparandoTrasFallo)
     OR (Modo = E_GEMMA.D1ParadaEmergencia) OR (Modo = E_GEMMA.D2TratamientoFallos);
 	
-*)
 	
 (* FUNCION DE ESTADO *)
-IF fbPanel.Emergencia THEN
+IF fbPanel.cn.Emergencia THEN
     Modo := E_GEMMA.D1ParadaEmergencia;
 	
 	
-ELSIF fbPanel.Reinicia THEN
+ELSIF fbPanel.cn.Reinicia THEN
     Modo := E_GEMMA.A6Inicializando;
 
-ELSIF fbPanel.Probando AND Modo <> E_GEMMA.F6Probando THEN
+ELSIF fbPanel.cn.Pruebas AND Modo <> E_GEMMA.F6Probando THEN
 	Previo := Modo;					// guardamos el modo en que estaba la máquiina antes de entrar a modo pruebas
     Modo := E_GEMMA.F6Probando;		// y pasamos al modo pruebas
 
-ELSIF Modo=E_GEMMA.F6Probando AND NOT fbPanel.Probando THEN
+ELSIF Modo=E_GEMMA.F6Probando AND NOT fbPanel.cn.Pruebas THEN
     Modo := Previo;					// restauramos el modo en que estaba la máquina antes de pasar a modo pruebas
 	// Previo := E_GEMMA.F6Probando;		// y el modo previo queda a F6
 
@@ -75,9 +79,9 @@ ELSE
         E_GEMMA.A1ParadaInicial: (* Parada en el estado inicial *)
             IF NOT IC THEN // IF NOT Restaurada THEN
                 Modo := E_GEMMA.A6Inicializando;
-            ELSIF fbPanel.Manual THEN
+            ELSIF fbPanel.cn.Manual THEN
                 Modo := E_GEMMA.F4VerificacionSinOrden;
-            ELSIF fbPanel.Marcha AND IC THEN  // ELSIF Marcha THEN
+            ELSIF fbPanel.cn.Marcha AND IC THEN  // ELSIF Marcha THEN
                 Modo := E_GEMMA.F2SecuenciaPreparacion;
 			ELSE
 				; // Esperar a que se pulse el bortón de marcha
@@ -101,16 +105,16 @@ ELSE
             ; // estado no tratado en la FMS205
         
 		E_GEMMA.A5PreparandoTrasFallo: (* Preparando de reanudacion tras el fallo *)
-            IF fbPanel.Marcha THEN // Continua
-                Modo := Previo;
-            ELSIF fbPanel.Para THEN // Cancela
+            IF fbPanel.cn.Marcha THEN // Continua
+                Modo := cn.Previo;
+            ELSIF fbPanel.cn.Para THEN // Cancela
                 Modo := E_GEMMA.A6Inicializando;
             END_IF
 			
         E_GEMMA.A6Inicializando: (* Situando la PO en el estado inicial *)
             IF IC THEN // Restaurada
                 Modo := E_GEMMA.A1ParadaInicial;
-            ELSIF fbPanel.Manual THEN
+            ELSIF fbPanel.cn.Manual THEN
                 Modo := E_GEMMA.F4VerificacionSinOrden;
             END_IF
 			
@@ -127,7 +131,7 @@ ELSE
                 Modo := E_GEMMA.D2TratamientoFallos;
             ELSIF FinTarea THEN
                 Modo := E_GEMMA.F3SecuenciaFinalizacion;
-            ELSIF fbPanel.Para THEN
+            ELSIF fbPanel.cn.Para THEN
                 Modo := E_GEMMA.A2ParaFinCiclo;
             END_IF
 			
@@ -151,7 +155,7 @@ ELSE
             IF Fallo THEN
                 Previo := E_GEMMA.A2ParaFinCiclo; //!!! Creo que está mal, no debería ser F4?
                 Modo := E_GEMMA.D2TratamientoFallos;
-            ELSIF NOT fbPanel.Manual THEN
+            ELSIF NOT fbPanel.cn.Manual THEN
                 Modo := E_GEMMA.A6Inicializando; // después del modo manual, volver a inicializar
             ELSE
                 // Seguir en modo manual hasta que halla un fallo o se vuelva al modo automático
@@ -168,7 +172,7 @@ ELSE
 			
         (* ------------------------------------------------------------ Procedimientos de defecto *)
         E_GEMMA.D1ParadaEmergencia: (* Parada de emergencia *)
-            IF NOT fbPanel.Emergencia THEN
+            IF NOT fbPanel.cn.Emergencia THEN
                 Modo := E_GEMMA.A6Inicializando; // Al quitar la parada de emergencia hay que reinicializar la estación
             ELSE
                 // Esperar a que se quite la parada de emergencia
@@ -194,7 +198,7 @@ Parada := (Modo >= E_GEMMA.A1ParadaInicial) AND (Modo <= E_GEMMA.A7SituandoEstad
 Funcionamiento:= (Modo >= E_GEMMA.F1ProduccionNormal) AND (Modo <= E_GEMMA.F6Probando);
 Defecto := (Modo >= E_GEMMA.D1ParadaEmergencia) AND (Modo <= E_GEMMA.D3ProducirConFallos);
 
-	
+	*)
 ]]></ST>
     </Implementation>
   </POU>

@@ -11,9 +11,11 @@ VAR_OUTPUT
 	cn						: S_Panel_Consignas; //
 	TmpReinicio				: TON; 
 	FP_PM					: R_TRIG;
+	Probando:	BOOL;	// DESDE LA VISU		Vamos a hacer pruebas
 
 		
-    Emergencia: BOOL; 	// := PE 				Parada de emergencia (seta)
+    (*
+	Emergencia: BOOL; 	// := PE 				Parada de emergencia (seta)
  
 						// POC - 				Conmutador PO Conectada  (negra)
 	Marcha: BOOL; 		// :=FP_PM.Q 			Pulsador de marcha (verde)
@@ -26,9 +28,9 @@ VAR_OUTPUT
 						// Pulsador de reset (azul)												
 
 	// variables relacionadas con las pruebas de desarrollo
-	Probando:	BOOL;	// DESDE LA VISU		Vamos a hacer pruebas
 	ProbarExecute: 	BOOL;
 	ProbarAck: BOOL;
+	*)
 	
 END_VAR
 VAR
@@ -51,7 +53,7 @@ cn.Restablece		:= hw.PM_PulsadorMarcha;
 cn.Restaura			:= hw.PM_PulsadorMarcha;
 cn.Marcha			:= FP_PM.Q;
 cn.Para				:= NOT hw.PS_PulsadorStop;
-
+cn.Pruebas			:= Probando;
 
 // Señales
 (*

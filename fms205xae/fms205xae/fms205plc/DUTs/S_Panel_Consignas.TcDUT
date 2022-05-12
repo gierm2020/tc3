@@ -10,7 +10,8 @@ STRUCT
 	Restablece		: BOOL; // restablece la condición de fallo
 	Restaura		: BOOL; // DUDAS restaura condiciones iniciales
 	Marcha			: BOOL; // 
-	Para			: BOOL; // 
+	Para			: BOOL; //
+	Pruebas			: BOOL; //  
 END_STRUCT
 END_TYPE
 ]]></Declaration>
