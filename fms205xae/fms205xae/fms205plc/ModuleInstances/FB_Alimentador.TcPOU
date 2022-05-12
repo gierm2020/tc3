@@ -46,18 +46,19 @@ END_VAR
 
 
 //----------------------------------- preparar los datos que necesita el controlador
-ctInp.HwIC := InitialConditions();
+//ctInp.HwIC := InitialConditions();
+IC := InitialConditions();
 
 
 
 //----------------------------------- ejecutar el controlador
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 fbController(
-	ctInp := ctInp,								// entrada estándar
 	TK_1 := TK_1,								// temporizadores específicos
     k1 := k1, 									// sensores específicos
 	//											// otras entradas específicas
-	ctOut => ctOut);							// resultado del controlador
+	IC:=IC, Execute:=Execute, Ack:=Ack,
+	Ready=>Ready, Done=>Done, Failure=>Failure);
 
 
 //----------------------------------- utilizar los resultados del controlador

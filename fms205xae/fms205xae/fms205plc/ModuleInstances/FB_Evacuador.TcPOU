@@ -57,18 +57,19 @@ END_VAR
 
 
 //----------------------------------- preparar los datos que necesita el controlador
-ctInp.HwIC := InitialConditions();
+//ctInp.HwIC := InitialConditions();
+IC := InitialConditions();
 
 
 
 //----------------------------------- ejecutar el controlador
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 fbController(
-	ctInp := ctInp,								// entrada estándar
 	TSOL := TSOL,								// temporizadores específicos
     f0 := f0, f1 := f1, g0 := g0, v1 := v1,		// sensores específicos
 	Evacuar	:= Evacuar,							// otras entradas específicas
-	ctOut => ctOut);							// resultado del controlador
+	IC:=IC, Execute:=Execute, Ack:=Ack,
+	Ready=>Ready, Done=>Done, Failure=>Failure);
 
 	
 //----------------------------------- utilizar los resultados del controlador
@@ -89,6 +90,18 @@ END_IF
 
 
 ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="NegarSensores" Id="{02264919-8ad5-484f-b956-39cbf22e9013}">
+      <Declaration><![CDATA[METHOD NegarSensores : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[f0 := NOT f0;
+f1 := NOT f1; 
+g0 := NOT g0;
+v1 := not v1;]]></ST>
       </Implementation>
     </Method>
   </POU>

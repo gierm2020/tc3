@@ -3,6 +3,17 @@
   <POU Name="FB_Alimentador_SFC" Id="{25ad7b61-92b1-41db-8b65-16e3fd2054f3}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Alimentador_SFC // EXTENDS FB_Module_SFC
 VAR_INPUT
+	IC: BOOL;
+	Execute: BOOL;
+	Ack: BOOL;
+END_VAR
+VAR_OUTPUT
+	Ready: BOOL;
+	Failure: BOOL;
+	Done: BOOL;
+END_VAR
+
+VAR_INPUT
 	ctInp: S_ControllerInput;
 	TK_1: TIME;					// Temporizador empujador tapa
 	k1: BOOL; 					// Sensor de empujador tapa delante
@@ -147,7 +158,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"ctInp.HwIC"</v>
+                            <v n="Value">"IC"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">23L</v>
@@ -220,7 +231,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"ctOut.Ready"</v>
+                                  <v n="Value">"Ready"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">201L</v>
@@ -384,7 +395,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"ctInp.Execute"</v>
+                            <v n="Value">"Execute"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">194L</v>
@@ -877,7 +888,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"ctOut.Done"</v>
+                                  <v n="Value">"Done"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">162L</v>
@@ -1041,7 +1052,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"ctInp.Ack"</v>
+                            <v n="Value">"Ack"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">155L</v>
