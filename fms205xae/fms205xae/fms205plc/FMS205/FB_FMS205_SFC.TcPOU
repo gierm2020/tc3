@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_FMS205_SFC" Id="{a81c472c-1220-4b76-860b-f7f6b111694f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205_SFC
 VAR_INPUT
-	CI: BOOL;
+	IC: BOOL;
 	Execute: BOOL;
 	Ack: BOOL;
 END_VAR
@@ -469,7 +469,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdPickAndPlaceCarga.ctInp.Execute"</v>
+                                  <v n="Value">"mdPickAndPlaceCarga.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">87L</v>
@@ -633,7 +633,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdPickAndPlaceCarga.ctOut.Done"</v>
+                            <v n="Value">"mdPickAndPlaceCarga.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">68L</v>
@@ -706,7 +706,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdMedidorTapa.ctInp.Execute"</v>
+                                  <v n="Value">"mdMedidorTapa.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">138L</v>
@@ -870,7 +870,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdMedidorTapa.ctOut.Done"</v>
+                            <v n="Value">"mdMedidorTapa.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">131L</v>
@@ -1417,7 +1417,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdEvacuador.ctInp.Execute"</v>
+                                  <v n="Value">"mdEvacuador.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">233L</v>
@@ -1581,7 +1581,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdEvacuador.ctOut.Done"</v>
+                            <v n="Value">"mdEvacuador.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">226L</v>
@@ -1654,7 +1654,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdPickAndPlaceDescarga.ctInp.Execute"</v>
+                                  <v n="Value">"mdPickAndPlaceDescarga.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">258L</v>
@@ -1818,7 +1818,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdPickAndPlaceDescarga.ctOut.Done"</v>
+                            <v n="Value">"mdPickAndPlaceDescarga.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">251L</v>
@@ -1891,7 +1891,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdPlatoDivisor.ctInp.Execute"</v>
+                                  <v n="Value">"mdPlatoDivisor.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">283L</v>
@@ -2055,7 +2055,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdPlatoDivisor.ctOut.Done"</v>
+                            <v n="Value">"mdPlatoDivisor.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">276L</v>

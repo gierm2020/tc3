@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_Panel" Id="{514e5db3-ac71-4add-977b-df9fa295436c}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Panel
 VAR_INPUT
-	Modo: E_GEMMA;
+	gm: S_Gemma;
 	TR: TIME := T#3S; 	// Tiempo de reinicio
 END_VAR
 
@@ -56,7 +56,7 @@ cn.Para				:= NOT hw.PS_PulsadorStop;
 cn.Pruebas			:= Probando;
 
 // Señales
-(*
+
 hw.AS_AvisadorSonoro := 
 	gm.ModeActual = E_GEMMA.F3SecuenciaFinalizacion OR
 	(
@@ -85,8 +85,11 @@ hw.LM_LamparaMarcha :=
 	(
 		gm.ModeActual = E_GEMMA.A1ParadaInicial AND TRUE 
 	);  //  TODO - TERMINAR LA IMPLENTACIÓN CON EL RELOJ - CLK.Q; 
-*)
 ]]></ST>
     </Implementation>
+    <LineIds Name="FB_Panel">
+      <LineId Id="3" Count="46" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

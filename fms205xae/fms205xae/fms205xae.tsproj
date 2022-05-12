@@ -21,8 +21,8 @@
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.fbFMS205.fbPanel.hw.POC_Selec01</Name>
-							<Comment><![CDATA[ DUDAS POC? (PO Conectada)]]></Comment>
+							<Name>MAIN.fbFMS205.fbPanel.hw.POC_PulsadorReset</Name>
+							<Comment><![CDATA[ POC Botón azul está pulsado (PO Conectada)]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
@@ -236,6 +236,13 @@
 							</OwnerB>
 						</OwnerA>
 					</UnrestoredVarLinks>
+					<UnrestoredVarLinks ImportTime="2022-05-12T09:56:01">
+						<OwnerA Name="InputDst" Prefix="TIPC^fms205plc^fms205plc Instance" Type="1">
+							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 2 (EL1008)">
+								<Link VarA="MAIN.fbFMS205.fbPanel.hw.POC_Selec01" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 5^zpoc" Size="1" RestoreInfo="ANotFound"/>
+							</OwnerB>
+						</OwnerA>
+					</UnrestoredVarLinks>
 					<Contexts>
 						<Context>
 							<Id NeedCalleeCall="true">0</Id>
@@ -263,7 +270,16 @@
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 10 (EL5151)">
 				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdMedidorTapa.fv" VarB="ENC Inputs^Counter value"/>
 			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 2 (EL1008)">
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.fbPanel.hw.PE_Seta" VarB="Channel 1^zpe"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.fbPanel.hw.PM_PulsadorMarcha" VarB="Channel 3^zpm"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.fbPanel.hw.POC_PulsadorReset" VarB="Channel 5^zpoc"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.fbPanel.hw.PS_PulsadorStop" VarB="Channel 4^zps"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.fbPanel.hw.SM_SelecAutoManual" VarB="Channel 2^zsm"/>
+			</OwnerB>
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 4 (EL2008)">
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.fbPanel.hw.LA_LamparaAlarma" VarB="Channel 2^zLA"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.fbPanel.hw.LM_LamparaMarcha" VarB="Channel 3^zLM"/>
 				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdAlimentador.FM" VarB="Channel 4^zFM"/>
 			</OwnerB>
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 6 (EL1008)">

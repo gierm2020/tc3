@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_FMS205" Id="{a261f573-1402-443e-9bab-e88e0bf02070}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205
 VAR_INPUT
@@ -30,10 +30,10 @@ END_VAR
 
 VAR
 	// controladores de la máquina, la función de producción y la guía GEMMA 
-	fbPanel					: FB_Panel;
 	td						: S_TestData;
 	tm						: S_Timeouts;
 	gm						: S_Gemma := (ModeActual:= E_GEMMA.A6Inicializando, ModePrev := E_GEMMA.A6Inicializando);
+	fbPanel					: FB_Panel := (gm := gm);
 	
 	ctInp 					: S_ControllerInput;
 	
@@ -55,7 +55,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[fbPanel();
+      <ST><![CDATA[fbPanel(gm:=gm);
 
 
 IC:=InitialConditions();
@@ -65,14 +65,14 @@ Preparada := TRUE; // PENDIENTE SI LA ESTACIÓN NECESITA UNA SECUENCIA DE PREPAR
 
 
 FinCiclo := 		(* Todos los módulos han terminado su parte del ciclo *)
-	mdAlimentador.ctOut.Done AND
-	mdPickAndPlaceCarga.ctOut.Done AND
-	mdMedidorTapa.ctOut.Done AND
-	mdCaptadorInductivo.ctOut.Done AND
-	mdDetectorFotoelectrico.ctOut.Done AND
-	mdEvacuador.ctOut.Done AND
-	mdPickAndPlaceDescarga.ctOut.Done AND
-	mdPlatoDivisor.ctOut.Done;
+	mdAlimentador.Done AND
+	mdPickAndPlaceCarga.Done AND
+	mdMedidorTapa.Done AND
+	mdCaptadorInductivo.Done AND
+	mdDetectorFotoelectrico.Done AND
+	mdEvacuador.Done AND
+	mdPickAndPlaceDescarga.Done AND
+	mdPlatoDivisor.Done;
 
 IF FinCiclo THEN	
 	// Todos los módulos han terminado su secuencia de producir
@@ -87,13 +87,13 @@ ManiobrasPendientes := ManiobrasDeseadas - ManiobrasRealizadas; // POST15 hay qu
 FinTarea := ManiobrasPendientes = 0; 	// Se finaliza la tarea si no quedan maniobras pendientes
 
 Fallo:=									// La estaciónn está en fallo si al menos un módulo ha fallado
-	mdAlimentador.ctOut.Fail OR
-	mdPickAndPlaceCarga.ctOut.Fail OR
-	mdMedidorTapa.ctOut.Fail OR 
-	mdCaptadorInductivo.ctOut.Fail OR
-	mdDetectorFotoelectrico.ctOut.Fail OR
-	mdEvacuador.ctOut.Fail OR
-	mdPickAndPlaceDescarga.ctOut.Fail; 
+	mdAlimentador.Failure OR
+	mdPickAndPlaceCarga.Failure OR
+	mdMedidorTapa.Failure OR 
+	mdCaptadorInductivo.Failure OR
+	mdDetectorFotoelectrico.Failure OR
+	mdEvacuador.Failure OR
+	mdPickAndPlaceDescarga.Failure; 
 
 	
 Finalizada := TRUE;	 // PENDIENTE SI LA ESTACIÓN NECESITA UNA SECUENCIA DE PREPARACIÓN 
@@ -131,6 +131,7 @@ IF gm.ModeActual = E_GEMMA.F6Probando THEN
 	TestControl();
 ELSE
 	fbFMS205_Producir_SFC(
+		
 		mdAlimentador 			:= mdAlimentador,
 		mdPickAndPlaceCarga 	:= mdPickAndPlaceCarga,
 		mdMedidorTapa			:= mdMedidorTapa,
@@ -138,7 +139,10 @@ ELSE
 		mdDetectorFotoelectrico := mdDetectorFotoelectrico,
 		mdEvacuador			 	:= mdEvacuador,
 		mdPickAndPlaceDescarga 	:= mdPickAndPlaceDescarga,
-		mdPlatoDivisor			:= mdPlatoDivisor);
+		mdPlatoDivisor			:= mdPlatoDivisor,
+		IC:=IC, Execute:=Execute, Ack:=Ack,
+		Ready=>Ready, Done=>Done, Failure=>Failure);
+
 END_IF
 ModuleProcessCycle();
 
@@ -395,5 +399,29 @@ mdPlatoDivisor.Ack				:= td.Plato	and td.Ack;
 ]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_FMS205">
+      <LineId Id="3" Count="75" />
+      <LineId Id="142" Count="0" />
+      <LineId Id="79" Count="7" />
+      <LineId Id="144" Count="2" />
+      <LineId Id="87" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FMS205.Director">
+      <LineId Id="3" Count="150" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FMS205.InitialConditions">
+      <LineId Id="3" Count="12" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FMS205.ModuleProcessCycle">
+      <LineId Id="3" Count="7" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FMS205.TestControl">
+      <LineId Id="3" Count="42" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>
