@@ -57,15 +57,7 @@ END_VAR
       <ST><![CDATA[fbPanel();
 
 
-IC:=				(* La estación está en condiciones iniciales si cada módulo lo está *)
-	(mdAlimentador.InitialConditions() AND
-	mdPickAndPlaceCarga.InitialConditions() AND
-	mdMedidorTapa.InitialConditions() AND 
-	mdCaptadorInductivo.InitialConditions() AND
-	mdDetectorFotoelectrico.InitialConditions() AND
-	mdEvacuador.InitialConditions() AND
-	mdPickAndPlaceDescarga.InitialConditions()) 
-	OR (fbDirector.Modo=E_GEMMA.F6Probando); // POST15 PARA FORZAR CONDICIONES INICIALES SIN HARDWARE !!! eliminar
+IC:=InitialConditions();
 
 	
 Preparada := TRUE; // PENDIENTE SI LA ESTACIÓN NECESITA UNA SECUENCIA DE PREPARACIÓN 
@@ -206,6 +198,28 @@ ModuleProcessCycle();
 
 ]]></ST>
     </Implementation>
+    <Method Name="InitialConditions" Id="{6c17034c-aab7-41fb-b0b6-e85a6db67498}">
+      <Declaration><![CDATA[METHOD InitialConditions : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(* La estación está en condiciones iniciales si cada módulo lo está *)
+InitialConditions :=
+	(
+		mdAlimentador.InitialConditions() AND
+		mdPickAndPlaceCarga.InitialConditions() AND
+		mdMedidorTapa.InitialConditions() AND 
+		mdCaptadorInductivo.InitialConditions() AND
+		mdDetectorFotoelectrico.InitialConditions() AND
+		mdEvacuador.InitialConditions() AND
+		mdPickAndPlaceDescarga.InitialConditions() AND
+		mdPlatoDivisor.InitialConditions() // TODO AND CINTA.INITIAL...
+	); 
+	// OR (fbDirector.Modo=E_GEMMA.F6Probando); // POST15 PARA FORZAR CONDICIONES INICIALES SIN HARDWARE !!! eliminar
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ModuleProcessCycle" Id="{02e4c75f-69e3-444f-8a2e-ecad65532e26}">
       <Declaration><![CDATA[METHOD ModuleProcessCycle : BOOL
 VAR_INPUT
