@@ -56,9 +56,6 @@
     <Compile Include="FMS203 TC2\FB_Panel_fms203.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FMS205\FB_Director.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="FMS205\FB_FMS205.TcPOU">
       <SubType>Code</SubType>
     </Compile>

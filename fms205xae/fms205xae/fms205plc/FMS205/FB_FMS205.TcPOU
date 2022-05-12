@@ -35,7 +35,6 @@ VAR
 	tm						: S_Timeouts;
 	gm						: S_Gemma := (ModeActual:= E_GEMMA.A6Inicializando, ModePrev := E_GEMMA.A6Inicializando);
 	
-	fbDirector				: FB_Director;
 	ctInp 					: S_ControllerInput;
 	
 	// módulos de la FMS205
@@ -99,22 +98,6 @@ Fallo:=									// La estaciónn está en fallo si al menos un módulo ha fallad
 	
 Finalizada := TRUE;	 // PENDIENTE SI LA ESTACIÓN NECESITA UNA SECUENCIA DE PREPARACIÓN 
 Director();
-//fbDirector(
-//	fbPanel 	:= fbPanel,
-//	IC 			:= IC, 
-//	Preparada 	:= Preparada,
-//	FinCiclo	:= FinCiclo,
-//	FinTarea	:= FinTarea,
-//	Fallo		:= Fallo,
-//	Finalizada	:= Finalizada);
- 
-
-// IF fbDirector.Modo = E_Gemma.A6Inicializando THEN
-
-
-// Informar la estructura ctInp que se copiará a todos y cada uno de los controladores
-//ctInp.ModeAct	:= fbDirector.Modo;
-//ctInp.ModePre	:= fbDirector.Previo;
 
 Execute :=  (* El coordinador indica que hay empezar *)
 	(gm.ModeActual = E_GEMMA.F6Probando AND td.Execute) OR
@@ -131,52 +114,12 @@ Execute :=  (* El coordinador indica que hay empezar *)
 		) 
 	);
 		
-//ctInp.Execute := Execute;
 
 Ack := // Notificar a los módulos que ya pueden volver al inicio
 	(gm.ModeActual = E_GEMMA.F6Probando AND td.Ack) OR 
 	(gm.ModeActual <> E_GEMMA.F6Probando AND FinCiclo);
 // TODO SI HAY FIN DE CICLO HAY QUE HACER UN MONTÓN DE COSAS, POR EJEMPLO, ACTUALIZAR EL PLATO CON EL SENSOR FOTOELÉCTRICO
 
-(*
-ctInp.Ack := Ack;
-
-ctInp.Manual := (* Establece modo de funcionamiento manual *) 
-	(fbDirector.Modo = E_GEMMA.F4VerificacionSinOrden);
-	
-ctInp.Pause := (* Pausa la ejecucion de la funcionalidad  *)
-	(fbDirector.Modo = E_GEMMA.A3ParadaEstado) OR 
-	(fbDirector.Modo = E_GEMMA.A4ParadaObtenida) OR 
-	(fbDirector.Modo = E_GEMMA.A5PreparandoTrasFallo) OR 
-	(fbDirector.Modo = E_GEMMA.D1ParadaEmergencia) OR 
-	(fbDirector.Modo = E_GEMMA.D2TratamientoFallos);
-
-ctInp.Reset := (* Restablece la condicion de fallo *)
-    (fbDirector.Modo = E_GEMMA.A5PreparandoTrasFallo);
-
-ctInp.Restart := (* Reinicia el estado del controlador *)
-	(fbDirector.Modo = E_GEMMA.A6Inicializando);
-
-ctInp.Restore := (* Restaura las condiciones iniciales (referencia) *)
-    (fbDirector.Modo=E_GEMMA.A6Inicializando); 
-
-ctInp.Resume := (* Continua la ejecucion de la funcionalidad en curso *)
-	(FALSE);
-	
-ctInp.Safe := (* Condicion de seguridad para iniciar una funcionalidad *)
-	(TRUE);
-
-	
-// copiar la estructura ctInp en todos los módulos para distribuir la misma información de entrada
-mdAlimentador.ctInp 			:= ctInp;
-mdPickAndPlaceCarga.ctInp 		:= ctInp;
-mdMedidorTapa.ctInp 			:= ctInp;
-mdCaptadorInductivo.ctInp 		:= ctInp;
-mdDetectorFotoelectrico.ctInp 	:= ctInp;
-mdEvacuador.ctInp 				:= ctInp;
-mdPickAndPlaceDescarga.ctInp 	:= ctInp;
-mdPlatoDivisor.ctInp 			:= ctInp;
-*)
 
 mdEvacuador.Evacuar := TRUE; // TODO PENDIENTE DECISIÓN DE EVACUAR O NO EN FUNCIÓN DEL TIPO DE TAPA
 mdPickAndPlaceCarga.Mover := TRUE;
@@ -188,7 +131,6 @@ IF gm.ModeActual = E_GEMMA.F6Probando THEN
 	TestControl();
 ELSE
 	fbFMS205_Producir_SFC(
-		ctInp					:= ctInp, // POST15
 		mdAlimentador 			:= mdAlimentador,
 		mdPickAndPlaceCarga 	:= mdPickAndPlaceCarga,
 		mdMedidorTapa			:= mdMedidorTapa,
