@@ -46,24 +46,34 @@ END_VAR
 
 
 //----------------------------------- preparar los datos que necesita el controlador
-ctInp.HwIC := InitialConditions();
+//ctInp.HwIC := InitialConditions();
 
 
 
 //----------------------------------- ejecutar el controlador
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 fbController(
-	ctInp := ctInp,								// entrada estándar
+	//tm			:= tm,
+	IC 			:= InitialConditions(),	
+	Execute 	:= Execute,	
+	Ack 		:= Ack, 
+	
+	//ctInp := ctInp,								// entrada estándar
 	//TK_1 := TK_1,								// temporizadores específicos
     k1 := k1, 									// sensores específicos
 	//											// otras entradas específicas
-	ctOut => ctOut);							// resultado del controlador
+	//ctOut => ctOut);							// resultado del controlador
+	
+	Ready 		=> Ready, 
+	Failure		=> Failure,
+	Done 		=> Done);
 
 
 //----------------------------------- utilizar los resultados del controlador
 
 // Cambios en actuadores por el modo manual
-IF ctInp.Manual THEN
+//IF ctInp.Manual THEN
+IF gm.ModeActual=E_GEMMA.F4VerificacionSinOrden THEN
 	; // TODO AÑADIR AQUI EL MODO MANUAL DEL ALIMENTADOR
 
 // Cambios en actuadores por el resultado del controlador

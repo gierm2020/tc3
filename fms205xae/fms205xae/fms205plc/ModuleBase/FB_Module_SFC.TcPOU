@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Module_SFC" Id="{885e2d81-7b5e-4194-aca1-fe47d3a147b8}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_Module_SFC
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Module_SFC EXTENDS FB_Module_Base
 VAR_INPUT
-	ctInp: S_ControllerInput;
+	//ctInp: S_ControllerInput;
 END_VAR
 VAR_OUTPUT
-	ctOut: S_ControllerOutput;
+	//ctOut: S_ControllerOutput;
 END_VAR 
 ]]></Declaration>
     <Implementation>
@@ -141,7 +141,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"ctInp.HwIC"</v>
+                            <v n="Value">"IC"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">23L</v>
@@ -214,7 +214,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"ctOut.Ready"</v>
+                                  <v n="Value">"Ready"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">103L</v>
@@ -378,7 +378,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"ctInp.Execute"</v>
+                            <v n="Value">"Execute"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">96L</v>
@@ -634,7 +634,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"ctOut.Done"</v>
+                                  <v n="Value">"Done"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">61L</v>
@@ -798,7 +798,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"ctInp.Ack"</v>
+                            <v n="Value">"Ack"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">42L</v>

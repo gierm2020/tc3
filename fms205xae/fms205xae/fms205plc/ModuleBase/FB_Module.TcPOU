@@ -1,23 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Module" Id="{cba3fcf8-6c8d-4174-8dda-f766b8b369f3}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_Module
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Module EXTENDS FB_Module_Base
 
 // TODO AÑADIR UN METODO GEMMA QUE SE INVOQUE DESDE PROCESSCYCLE PARA TRATAMIENTO DE PARADA, PAUSA...
+
 VAR_INPUT
-	ctInp: S_ControllerInput;
+	gm				: S_Gemma;	
 END_VAR
 
 VAR_OUTPUT
-	ctOut: S_ControllerOutput;
-//	IC: BOOL;
-//	Done: BOOL;
 END_VAR
+
 VAR
 	// Parámetros que se establecen en el constructor
-	_ModuleID: BYTE; // identificador de la unidad funcional (el módulo)
-	//_ModuleMRT: TIME; // Maximo tiempo de respuesta de los dispositivos (Max Response Time)
-	_ModuleName: STRING;
+	ModuleID		: BYTE; // identificador de la unidad funcional (el módulo)
+	ModuleName		: STRING;
 
 	// Variables que permanecen durante la ejecución del objeto
 	fbModuleController: FB_Module_SFC;	
@@ -34,15 +32,13 @@ VAR_INPUT
 	
 	// Datos que se pasan al crear la variable y se guardan sólo una vez
 	ID: BYTE; 
-//	MRT: TIME;
 	Name: STRING;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[// guardar los paraámetros de entrada que se indican cuando se crea la variable
-_ModuleID := ID;
-//_ModuleMRT := MRT;
-_ModuleName := Name;
+ModuleID 		:= ID;
+ModuleName 		:= Name;
 
 // ctOut.IC := TRUE;
 ]]></ST>
@@ -65,12 +61,20 @@ END_VAR
 
 
 //----------------------------------- preparar los datos que necesita el controlador
-ctInp.HwIC := InitialConditions();
+//ctInp.HwIC := InitialConditions();
 
 
 
 //----------------------------------- ejecutar el controlador
-fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
+fbModuleController(
+	//tm		:= tm,
+	IC		:= InitialConditions(),
+	Execute	:= Execute, 
+	Ack		:= Ack, 
+	
+	Ready	=> Ready, 
+	Failure => Failure,
+	Done 	=> Done);
 
 
 

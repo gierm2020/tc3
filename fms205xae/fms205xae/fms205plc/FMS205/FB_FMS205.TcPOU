@@ -1,21 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_FMS205" Id="{a261f573-1402-443e-9bab-e88e0bf02070}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205 EXTENDS FB_Module_Base
 VAR_INPUT
 	ManiobrasDeseadas: UINT :=1; // POST15 AÑADIDO VALOR POR DEFECTO
 END_VAR
 
 VAR_OUTPUT
-	gm					: S_GEMMA; 		// Información sobre la familia y modo GEMMA en que se encuentra la estación
-	tm					: S_Timeouts; 	// Valores de temporizadores
-	
-	td					: S_TestData; 	// Consignas relacionadas con el modo de pruebas
 	
 	ManiobrasRealizadas: UINT := 0;
 	ManiobrasPendientes: UINT;
 	
-	IC: 		BOOL := FALSE; 	// todos los módulos están en condiciones iniciales
+	// IC: 		BOOL := FALSE; 	// todos los módulos están en condiciones iniciales
     Preparada : BOOL := TRUE;	// la estación está preparada después de encender
 	FinCiclo: 	BOOL := FALSE;	// una pieza se ha completado
 	FinTarea: 	BOOL := FALSE;	// el lote se ha completado
@@ -24,6 +20,9 @@ VAR_OUTPUT
 END_VAR
 
 VAR
+	gm					: S_GEMMA; 		// Información sobre la familia y modo GEMMA en que se encuentra la estación
+	td					: S_TestData; 	// Consignas relacionadas con el modo de pruebas
+
 	// controladores de la máquina, la función de producción y la guía GEMMA
 	fbPanel					: FB_Panel;
 	// fbDirector				: FB_Director;
@@ -31,14 +30,14 @@ VAR
 	
 	// módulos de la FMS205
 	mdAlime			: FB_Alimentador			(ID:=0, Name:='Alimentador'); // MRT:=tm.MaximoTiempoRespuesta,
-	mdCarga 	: FB_PickAndPlace			(ID:=1, Name:='Carga'); // MRT:=tm.MaximoTiempoRespuesta,
-	mdMedid			: FB_MedidorTapa			(ID:=3, Name:='Medidor'); // MRT:=tm.MaximoTiempoRespuesta,
-	mdInduc 	: FB_CaptadorInductivo		(ID:=4, Name:='Inductivo'); // MRT:=tm.MaximoTiempoRespuesta,
-	mdFotoe : FB_DetectorFotoelectrico	(ID:=5, Name:='Fotoeléctrico'); // MRT:=tm.MaximoTiempoRespuesta,
-	mdEvacu			 	: FB_Evacuador				(ID:=7, Name:='Evacuador'); // MRT:=tm.MaximoTiempoRespuesta,
-	mdDesca 	: FB_PickAndPlace			(ID:=8, Name:='Descarga'); // MRT:=tm.MaximoTiempoRespuesta,
-	mdPlato			: FB_PlatoDivisor			(ID:=9, Name:='Plato'); // MRT:=tm.MaximoTiempoRespuesta,
-	mdCinta					: FB_Cinta					(ID:=10, Name:='Cinta'); // MRT:=tm.MaximoTiempoRespuesta,
+	mdCarga 	: FB_Alimentador(ID:=0,Name:='Alimentador');//: FB_PickAndPlace			(ID:=1, Name:='Carga'); // MRT:=tm.MaximoTiempoRespuesta,
+	mdMedid		: FB_Alimentador(ID:=0,Name:='Alimentador');//	: FB_MedidorTapa			(ID:=3, Name:='Medidor'); // MRT:=tm.MaximoTiempoRespuesta,
+	mdInduc: FB_Alimentador(ID:=0,Name:='Alimentador');// 	: FB_CaptadorInductivo		(ID:=4, Name:='Inductivo'); // MRT:=tm.MaximoTiempoRespuesta,
+	mdFotoe: FB_Alimentador(ID:=0,Name:='Alimentador');// : FB_DetectorFotoelectrico	(ID:=5, Name:='Fotoeléctrico'); // MRT:=tm.MaximoTiempoRespuesta,
+	mdEvacu: FB_Alimentador(ID:=0,Name:='Alimentador');//			 	: FB_Evacuador				(ID:=7, Name:='Evacuador'); // MRT:=tm.MaximoTiempoRespuesta,
+	mdDesca: FB_Alimentador(ID:=0,Name:='Alimentador');// 	: FB_PickAndPlace			(ID:=8, Name:='Descarga'); // MRT:=tm.MaximoTiempoRespuesta,
+	mdPlato: FB_Alimentador(ID:=0,Name:='Alimentador');//			: FB_PlatoDivisor			(ID:=9, Name:='Plato'); // MRT:=tm.MaximoTiempoRespuesta,
+	mdCinta: FB_Alimentador(ID:=0,Name:='Alimentador');//					: FB_Cinta					(ID:=10, Name:='Cinta'); // MRT:=tm.MaximoTiempoRespuesta,
 	//fbFMS205_SFC			: FB_FMS205_SFC;
 	fbFMS205_Producir_SFC	: FB_FMS205_SFC;
 
@@ -56,14 +55,15 @@ Preparada := TRUE; // PENDIENTE SI LA ESTACIÓN NECESITA UNA SECUENCIA DE PREPAR
 
 
 FinCiclo := 		(* Todos los módulos han terminado su parte del ciclo *)
-	mdAlime.ctOut.Done AND
-	mdCarga.ctOut.Done AND
-	mdMedid.ctOut.Done AND
-	mdInduc.ctOut.Done AND
-	mdFotoe.ctOut.Done AND
-	mdEvacu.ctOut.Done AND
-	mdDesca.ctOut.Done AND
-	mdPlato.ctOut.Done;
+	mdAlime.Done AND
+	//mdCarga.ctOut.Done AND
+	//mdMedid.ctOut.Done AND
+	//mdInduc.ctOut.Done AND
+	//mdFotoe.ctOut.Done AND
+	//mdEvacu.ctOut.Done AND
+	//mdDesca.ctOut.Done AND
+	//mdPlato.ctOut.Done AND
+	mdCinta.Done;
 
 IF FinCiclo THEN	
 	// Todos los módulos han terminado su secuencia de producir
@@ -78,13 +78,14 @@ ManiobrasPendientes := ManiobrasDeseadas - ManiobrasRealizadas; // POST15 hay qu
 FinTarea := ManiobrasPendientes = 0; 	// Se finaliza la tarea si no quedan maniobras pendientes
 
 Fallo:=									// La estaciónn está en fallo si al menos un módulo ha fallado
-	mdAlime.ctOut.Fail OR
-	mdCarga.ctOut.Fail OR
-	mdMedid.ctOut.Fail OR 
-	mdInduc.ctOut.Fail OR
-	mdFotoe.ctOut.Fail OR
-	mdEvacu.ctOut.Fail OR
-	mdDesca.ctOut.Fail; 
+	mdAlime.Failure OR
+	//mdCarga.ctOut.Fail OR
+	//mdMedid.ctOut.Fail OR 
+	//mdInduc.ctOut.Fail OR
+	//mdFotoe.ctOut.Fail OR
+	//mdEvacu.ctOut.Fail OR
+	//mdDesca.ctOut.Fail OR
+	mdCinta.Failure; 
 
 	
 Finalizada := TRUE;	 // PENDIENTE SI LA ESTACIÓN NECESITA UNA SECUENCIA DE PREPARACIÓN 
@@ -156,18 +157,18 @@ ctInp.Safe := (* Condicion de seguridad para iniciar una funcionalidad *)
 
 	
 // copiar la estructura ctInp en todos los módulos para distribuir la misma información de entrada
-mdAlime.ctInp 			:= ctInp;
-mdCarga.ctInp 		:= ctInp;
-mdMedid.ctInp 			:= ctInp;
-mdInduc.ctInp 		:= ctInp;
-mdFotoe.ctInp 	:= ctInp;
-mdEvacu.ctInp 				:= ctInp;
-mdDesca.ctInp 	:= ctInp;
-mdPlato.ctInp 			:= ctInp;
+//mdAlime.ctInp 			:= ctInp;
+//mdCarga.ctInp 		:= ctInp;
+//mdMedid.ctInp 			:= ctInp;
+//mdInduc.ctInp 		:= ctInp;
+//mdFotoe.ctInp 	:= ctInp;
+//mdEvacu.ctInp 				:= ctInp;
+//mdDesca.ctInp 	:= ctInp;
+//mdPlato.ctInp 			:= ctInp;
 
-mdEvacu.Evacuar := TRUE; // TODO PENDIENTE DECISIÓN DE EVACUAR O NO EN FUNCIÓN DEL TIPO DE TAPA
-mdCarga.Mover := TRUE;
-mdDesca.Mover := TRUE;
+//mdEvacu.Evacuar := TRUE; // TODO PENDIENTE DECISIÓN DE EVACUAR O NO EN FUNCIÓN DEL TIPO DE TAPA
+//mdCarga.Mover := TRUE;
+//mdDesca.Mover := TRUE;
 
 // TODO CARGA Y DESCARGA TENGAN UNA OPCION DE NO HACER NADA
 
@@ -175,7 +176,7 @@ IF gm.ModeActual = E_GEMMA.F6Probando THEN
 	F6TestingMode();
 ELSE
 	fbFMS205_Producir_SFC(
-		ctInp					:= ctInp, // POST15
+	//	ctInp					:= ctInp, // POST15
 		mdAlime 			:= mdAlime,
 		mdCarga 	:= mdCarga,
 		mdMedid			:= mdMedid,
@@ -183,15 +184,16 @@ ELSE
 		mdFotoe := mdFotoe,
 		mdEvacu			 	:= mdEvacu,
 		mdDesca 	:= mdDesca,
-		mdPlato			:= mdPlato);
+		mdPlato			:= mdPlato
+	);
 	mdAlime.ModuleProcessCycle();
-	mdCarga.ModuleProcessCycle();
-	mdMedid.ModuleProcessCycle();
-	mdInduc.ModuleProcessCycle();
-	mdFotoe.ModuleProcessCycle();
-	mdEvacu.ModuleProcessCycle();
-	mdDesca.ModuleProcessCycle();
-	mdPlato.ModuleProcessCycle();
+	//mdCarga.ModuleProcessCycle();
+	//mdMedid.ModuleProcessCycle();
+	//mdInduc.ModuleProcessCycle();
+	//mdFotoe.ModuleProcessCycle();
+	//mdEvacu.ModuleProcessCycle();
+	//mdDesca.ModuleProcessCycle();
+	//mdPlato.ModuleProcessCycle();
 END_IF
 
 ]]></ST>
@@ -366,21 +368,22 @@ gm.FamiDefail := (gm.ModeActual >= E_GEMMA.D1ParadaEmergencia) AND
 td.FlancoNegar(CLK := td.Negar);
 IF td.FlancoNegar.Q THEN
 	mdAlime.NegarSensores();
-	mdCarga.NegarSensores();
-	mdMedid.NegarSensores();
-	mdFotoe.NegarSensores();
-	mdInduc.NegarSensores();
-	mdEvacu.NegarSensores();
-	mdDesca.NegarSensores();
+	//mdCarga.NegarSensores();
+	//mdMedid.NegarSensores();
+	//mdFotoe.NegarSensores();
+	//mdInduc.NegarSensores();
+	//mdEvacu.NegarSensores();
+	//mdDesca.NegarSensores();
 	mdCinta.NegarSensores();
 END_IF
 
+mdAlime.Execute := td.Execute AND td.Alime;
 
 // Ejecutar los módulos que se pidan
 IF td.Alime THEN
 	mdAlime.ModuleProcessCycle();	
 END_IF
-
+(*
 IF td.Carga THEN
 	mdCarga.ModuleProcessCycle();	
 END_IF
@@ -408,7 +411,7 @@ END_IF
 IF td.Plato THEN
 	mdPlato.ModuleProcessCycle();	
 END_IF
-]]></ST>
+*)]]></ST>
       </Implementation>
     </Method>
     <Method Name="InitialConditions" Id="{ced68a35-410b-4233-b292-485a89563ec3}">
@@ -420,12 +423,12 @@ END_VAR
         <ST><![CDATA[(* La estación está en condiciones iniciales si cada módulo lo está *)
 InitialConditions :=			
 	mdAlime.InitialConditions() AND
-	mdCarga.InitialConditions() AND
-	mdMedid.InitialConditions() AND 
-	mdInduc.InitialConditions() AND
-	mdFotoe.InitialConditions() AND
-	mdEvacu.InitialConditions() AND
-	mdDesca.InitialConditions() AND
+	//mdCarga.InitialConditions() AND
+	//mdMedid.InitialConditions() AND 
+	//mdInduc.InitialConditions() AND
+	//mdFotoe.InitialConditions() AND
+	//mdEvacu.InitialConditions() AND
+	//mdDesca.InitialConditions() AND
 	mdCinta.InitialConditions();
  
 	// OR (fbDirector.Modo=E_GEMMA.F6Probando); // POST15 PARA FORZAR CONDICIONES INICIALES SIN HARDWARE !!! eliminar

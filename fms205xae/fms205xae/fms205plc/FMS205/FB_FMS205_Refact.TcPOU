@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_FMS205_Refact" Id="{ddb20cb5-f065-43ce-9176-a10ac1d5d150}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205_Refact
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	gm				: S_Gemma;	
+	mdAlime			: FB_Alimentador			(ID:=0, Name:='Alimentador'); // MRT:=tm.MaximoTiempoRespuesta,
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[mdAlime.gm := gm;
+mdAlime.ModuleControlFlow();]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

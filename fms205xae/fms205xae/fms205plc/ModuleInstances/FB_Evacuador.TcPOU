@@ -64,7 +64,7 @@ ctInp.HwIC := InitialConditions();
 //----------------------------------- ejecutar el controlador
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 fbController(
-	ctInp := ctInp,								// entrada estándar
+	//ctInp := ctInp,								// entrada estándar
 //	TSOL := TSOL,								// temporizadores específicos
     f0 := f0, f1 := f1, g0 := g0, v1 := v1,		// sensores específicos
 	Evacuar	:= Evacuar,							// otras entradas específicas

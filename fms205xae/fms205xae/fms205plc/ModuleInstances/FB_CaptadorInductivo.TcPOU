@@ -34,12 +34,12 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF ctOut.Done AND NOT LecturaFiable THEN
+        <ST><![CDATA[IF Done AND NOT LecturaFiable THEN
 	// si ha terminado de captar: guardar resultado
 	LecturaFiable		:= TRUE;
 	TapaMetalica		:= ei;
 
-ELSIF ctInp.Ack THEN
+ELSIF Ack THEN
 	// una vez que cambia el ciclo la lectura ya no es fiable
 	LecturaFiable		:= FALSE;
 END_IF

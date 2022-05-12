@@ -1,22 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_FMS205_SFC" Id="{a81c472c-1220-4b76-860b-f7f6b111694f}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205_SFC
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205_SFC EXTENDS FB_Module_Base
 VAR_INPUT
-	ctInp: S_ControllerInput; // POST15 HayProducir: BOOL; // la fms205 está pidiendo que hay que producir
+	//ctInp: S_ControllerInput; // POST15 HayProducir: BOOL; // la fms205 está pidiendo que hay que producir
 END_VAR
 VAR_OUTPUT
 END_VAR
 
 VAR_IN_OUT
 	mdAlime			: FB_Alimentador;
-	mdCarga 	: FB_PickAndPlace;
-	mdMedid			: FB_MedidorTapa;
-	mdInduc 	: FB_CaptadorInductivo;
-	mdFotoe : FB_DetectorFotoelectrico;
-	mdEvacu			 	: FB_Evacuador;
-	mdDesca 	: FB_PickAndPlace;
-	mdPlato			: FB_PlatoDivisor;
+	mdCarga : FB_Alimentador;//	: FB_PickAndPlace;
+	mdMedid	: FB_Alimentador;//		: FB_MedidorTapa;
+	mdInduc : FB_Alimentador;//	: FB_CaptadorInductivo;
+	mdFotoe : FB_Alimentador;//: FB_DetectorFotoelectrico;
+	mdEvacu	: FB_Alimentador;//		 	: FB_Evacuador;
+	mdDesca : FB_Alimentador;//	: FB_PickAndPlace;
+	mdPlato	: FB_Alimentador;//		: FB_PlatoDivisor;
 END_VAR
 // TODO PENDIENTE TERMINAR EL RESTO DE MÓDULOS
 VAR
@@ -154,7 +154,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"ctInp.Execute"</v>
+                            <v n="Value">"Execute"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">23L</v>
@@ -227,7 +227,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdAlime.ctInp.Execute"</v>
+                                  <v n="Value">"mdAlime.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">55L</v>
@@ -391,7 +391,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdAlime.ctOut.Done"</v>
+                            <v n="Value">"mdAlime.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">36L</v>
@@ -464,7 +464,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdCarga.ctInp.Execute"</v>
+                                  <v n="Value">"mdCarga.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">87L</v>
@@ -628,7 +628,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdCarga.ctOut.Done"</v>
+                            <v n="Value">"mdCarga.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">68L</v>
@@ -701,7 +701,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdMedid.ctInp.Execute"</v>
+                                  <v n="Value">"mdMedid.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">138L</v>
@@ -865,7 +865,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdMedid.ctOut.Done"</v>
+                            <v n="Value">"mdMedid.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">131L</v>
@@ -938,7 +938,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdInduc.ctInp.Execute"</v>
+                                  <v n="Value">"mdInduc.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">163L</v>
@@ -1102,7 +1102,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdInduc.ctOut.Done"</v>
+                            <v n="Value">"mdInduc.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">156L</v>
@@ -1175,7 +1175,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdFotoe.ctInp.Execute"</v>
+                                  <v n="Value">"mdFotoe.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">188L</v>
@@ -1339,7 +1339,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdInduc.ctOut.Done"</v>
+                            <v n="Value">"mdInduc.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">181L</v>
@@ -1412,7 +1412,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdEvacu.ctInp.Execute"</v>
+                                  <v n="Value">"mdEvacu.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">233L</v>
@@ -1576,7 +1576,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdEvacu.ctOut.Done"</v>
+                            <v n="Value">"mdEvacu.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">226L</v>
@@ -1649,7 +1649,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdDesca.ctInp.Execute"</v>
+                                  <v n="Value">"mdDesca.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">258L</v>
@@ -1813,7 +1813,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdDesca.ctOut.Done"</v>
+                            <v n="Value">"mdDesca.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">251L</v>
@@ -1886,7 +1886,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdPlato.ctInp.Execute"</v>
+                                  <v n="Value">"mdPlato.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">283L</v>
@@ -2050,7 +2050,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdPlato.ctOut.Done"</v>
+                            <v n="Value">"mdPlato.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">276L</v>
@@ -2233,7 +2233,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"ctInp.Ack"</v>
+                            <v n="Value">"Ack"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">320L</v>

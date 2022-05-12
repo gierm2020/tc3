@@ -62,6 +62,9 @@
     <Compile Include="FMS205\FB_FMS205.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FMS205\FB_FMS205_Refact.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FMS205\FB_FMS205_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -72,6 +75,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ModuleBase\FB_Module.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ModuleBase\FB_Module_Base.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ModuleBase\FB_Module_SFC.TcPOU">

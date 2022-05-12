@@ -3,11 +3,17 @@
   <POU Name="MAIN" Id="{19798f55-9da0-48b7-a2d0-4bd977cab0f2}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
-	fbFMS205 : FB_FMS205;	
+	tm					: S_Timeouts; 	// Valores de temporizadores
+	
+	//fbFMS205 : FB_FMS205 := (tm:=tm);
+	mdFMS205	: FB_FMS205_Refact;
 END_VAR
-]]></Declaration>
+
+	]]></Declaration>
     <Implementation>
-      <ST><![CDATA[fbFMS205();]]></ST>
+      <ST><![CDATA[mdFMS205();
+//gm.ModeActual := E_GEMMA.A1ParadaInicial;
+//mdAlime.gm := gm;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

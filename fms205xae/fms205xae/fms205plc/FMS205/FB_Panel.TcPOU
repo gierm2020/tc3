@@ -51,8 +51,8 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[// invoca a temporizadores y flancos
-TmpReinicio(IN := hw.PM_PulsadorMarcha AND NOT hw.PS_PulsadorStop, PT:= tm.TiempoReinicio);
-FP_PM(CLk := hw.PM_PulsadorMarcha);
+//TmpReinicio(IN := hw.PM_PulsadorMarcha AND NOT hw.PS_PulsadorStop, PT:= tm.TiempoReinicio);
+//FP_PM(CLk := hw.PM_PulsadorMarcha);
 
 // calcula el estado de las consignas
 // DUDAS - No habría que tener en cuenta el modo de GEMMA para informar Reinicia, Restaura, ...?
@@ -68,6 +68,7 @@ cn.Para				:= NOT hw.PS_PulsadorStop;
 
 
 // Señales
+(*
 hw.AS_AvisadorSonoro := 
 	gm.ModeActual = E_GEMMA.F3SecuenciaFinalizacion OR
 	(
@@ -96,7 +97,7 @@ hw.LM_LamparaMarcha :=
 	(
 		gm.ModeActual = E_GEMMA.A1ParadaInicial AND TRUE 
 	);  //  TODO - TERMINAR LA IMPLENTACIÓN CON EL RELOJ - CLK.Q; 
-]]></ST>
+*)]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
