@@ -3,9 +3,14 @@
   <POU Name="FB_FMS205_SFC" Id="{a81c472c-1220-4b76-860b-f7f6b111694f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205_SFC
 VAR_INPUT
-	ctInp: S_ControllerInput; // POST15 HayProducir: BOOL; // la fms205 está pidiendo que hay que producir
+	CI: BOOL;
+	Execute: BOOL;
+	Ack: BOOL;
 END_VAR
 VAR_OUTPUT
+	Ready: BOOL;
+	Failure: BOOL;
+	Done: BOOL;
 END_VAR
 
 VAR_IN_OUT
@@ -154,7 +159,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"ctInp.Execute"</v>
+                            <v n="Value">"Execute"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">23L</v>
@@ -227,7 +232,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdAlimentador.ctInp.Execute"</v>
+                                  <v n="Value">"mdAlimentador.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">55L</v>
@@ -391,7 +396,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdAlimentador.ctOut.Done"</v>
+                            <v n="Value">"mdAlimentador.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">36L</v>
@@ -938,7 +943,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdCaptadorInductivo.ctInp.Execute"</v>
+                                  <v n="Value">"mdCaptadorInductivo.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">163L</v>
@@ -1102,7 +1107,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdCaptadorInductivo.ctOut.Done"</v>
+                            <v n="Value">"mdCaptadorInductivo.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">156L</v>
@@ -1175,7 +1180,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdDetectorFotoelectrico.ctInp.Execute"</v>
+                                  <v n="Value">"mdDetectorFotoelectrico.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">188L</v>
@@ -1339,7 +1344,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdCaptadorInductivo.ctOut.Done"</v>
+                            <v n="Value">"mdCaptadorInductivo.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">181L</v>
@@ -2233,7 +2238,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"ctInp.Ack"</v>
+                            <v n="Value">"Ack"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">320L</v>

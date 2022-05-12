@@ -200,7 +200,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.fbPanel.ProbarExecute"</v>
+                          <v n="Value">"MAIN.fbFMS205.td.Execute"</v>
                         </o>
                       </l>
                     </o>
@@ -380,7 +380,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.fbPanel.ProbarAck"</v>
+                          <v n="Value">"MAIN.fbFMS205.td.Ack"</v>
                         </o>
                       </l>
                     </o>
@@ -560,7 +560,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.fbPanel.ProbarAlimentador"</v>
+                          <v n="Value">"MAIN.fbFMS205.td.Alime"</v>
                         </o>
                       </l>
                     </o>
@@ -740,7 +740,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.fbPanel.ProbarCarga"</v>
+                          <v n="Value">"MAIN.fbFMS205.td.Carga"</v>
                         </o>
                       </l>
                     </o>
@@ -920,7 +920,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.fbPanel.ProbarMedidor"</v>
+                          <v n="Value">"MAIN.fbFMS205.td.Medid"</v>
                         </o>
                       </l>
                     </o>
@@ -1100,7 +1100,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.fbPanel.ProbarFotoelectrico"</v>
+                          <v n="Value">"MAIN.fbFMS205.td.Fotoe"</v>
                         </o>
                       </l>
                     </o>
@@ -1280,7 +1280,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.fbPanel.ProbarInductivo"</v>
+                          <v n="Value">"MAIN.fbFMS205.td.Induc"</v>
                         </o>
                       </l>
                     </o>
@@ -1460,7 +1460,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.fbPanel.ProbarEvacuador"</v>
+                          <v n="Value">"MAIN.fbFMS205.td.Evacu"</v>
                         </o>
                       </l>
                     </o>
@@ -1640,7 +1640,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.fbPanel.ProbarDescarga"</v>
+                          <v n="Value">"MAIN.fbFMS205.td.Desca"</v>
                         </o>
                       </l>
                     </o>
@@ -1820,7 +1820,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.fbPanel.ProbarPlato"</v>
+                          <v n="Value">"MAIN.fbFMS205.td.Plato"</v>
                         </o>
                       </l>
                     </o>
@@ -2000,7 +2000,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.fbPanel.ProbarNegarSensores"</v>
+                          <v n="Value">"MAIN.fbFMS205.td.Negar"</v>
                         </o>
                       </l>
                     </o>
@@ -2274,10 +2274,10 @@
               <d n="FbMethods" t="CaseInsensitiveHashtable" ckt="String" cvt="Guid">
                 <v>FB_Init</v>
                 <v>ca42dc51-d518-44cc-9625-a5f07d3eb604</v>
-                <v>FB_Reinit</v>
-                <v>51cb7810-ae8c-465f-a71c-cd3d6b3f77b0</v>
                 <v>FB_Exit</v>
                 <v>fdbd8fe0-c33c-473b-830d-c52f6f15a007</v>
+                <v>FB_Reinit</v>
+                <v>51cb7810-ae8c-465f-a71c-cd3d6b3f77b0</v>
               </d>
               <v n="FbName">"NotImportant"</v>
               <v n="FbGuid">{c2c99f41-b578-46c5-9efe-87f9fab7b584}</v>

@@ -3,6 +3,20 @@
   <POU Name="FB_Cinta_SFC" Id="{7a4e0e2e-bc1d-4eb2-80cf-952f4dd5e6da}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Cinta_SFC EXTENDS FB_Module_SFC
 VAR_INPUT
+	IC: BOOL;
+	Execute: BOOL
+	Ack: BOOL;
+END_VAR
+VAR_OUTPUT
+	Ready: BOOL;
+	Failure: BOOL;
+	Done: BOOL;
+END_VAR
+VAR
+	tm: S_Timeouts
+END_VAR
+
+VAR_INPUT
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -236,7 +250,35 @@ END_VAR
                     </o>
                   </l2>
                 </o>
-                <l2 n="Attributes" />
+                <l2 n="Attributes" cet="SFCAttribute">
+                  <o>
+                    <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
+                    <o n="Value" t="StringValue">
+                      <v n="Value">""</v>
+                      <v n="DefaultValue">""</v>
+                    </o>
+                    <v n="Id">33L</v>
+                    <v n="IdParent">9L</v>
+                  </o>
+                  <o>
+                    <v n="AttributeId">{7d894980-aeea-405c-a0f6-e2b26429c58f}</v>
+                    <o n="Value" t="StringValue">
+                      <v n="Value">""</v>
+                      <v n="DefaultValue">""</v>
+                    </o>
+                    <v n="Id">34L</v>
+                    <v n="IdParent">9L</v>
+                  </o>
+                  <o>
+                    <v n="AttributeId">{01580b27-6378-448b-8ecb-0e4b795b58d6}</v>
+                    <o n="Value" t="BoolValue">
+                      <v n="Value">"FALSE"</v>
+                      <v n="DefaultValue">"FALSE"</v>
+                    </o>
+                    <v n="Id">35L</v>
+                    <v n="IdParent">9L</v>
+                  </o>
+                </l2>
                 <v n="Id">9L</v>
                 <v n="IdParent">-1L</v>
               </o>

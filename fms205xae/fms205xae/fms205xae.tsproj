@@ -16,6 +16,31 @@
 					<Vars VarGrpType="1">
 						<Name>PlcTask Inputs</Name>
 						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.PE_Seta</Name>
+							<Comment><![CDATA[ Botones y alarmas específicos de una estación ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.POC_Selec01</Name>
+							<Comment><![CDATA[ DUDAS POC? (PO Conectada)]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.PM_PulsadorMarcha</Name>
+							<Comment><![CDATA[ PM - Pulsador de marcha (verde)]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.PS_PulsadorStop</Name>
+							<Comment><![CDATA[ PS - Pulsador de parada (rojo)]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.SM_SelecAutoManual</Name>
+							<Comment><![CDATA[ SM - Selector modo auto/man]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.fbFMS205.mdAlimentador.k1</Name>
 							<Comment><![CDATA[ Se corresponde con empujador tapa delante c1 ]]></Comment>
 							<Type>BOOL</Type>
@@ -108,6 +133,26 @@
 					</Vars>
 					<Vars VarGrpType="2" AreaNo="1">
 						<Name>PlcTask Outputs</Name>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.LM_LamparaMarcha</Name>
+							<Comment><![CDATA[ LM - Lámpara marcha (verde)]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.LS_LamparaStop</Name>
+							<Comment><![CDATA[ DUDAS - LA - Lámpara de alarma o lámpara de stop]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.AS_AvisadorSonoro</Name>
+							<Comment><![CDATA[ AS - Avisador Sonoro]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.LA_LamparaAlarma</Name>
+							<Comment><![CDATA[ DUDAS - Es lo mismo que falta de material?]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdAlimentador.K_1</Name>
 							<Comment><![CDATA[ Se corresponde con el cTAP ]]></Comment>
