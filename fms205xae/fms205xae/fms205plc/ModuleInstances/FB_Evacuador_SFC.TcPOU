@@ -1,17 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Evacuador_SFC" Id="{732a5d89-d610-4122-b553-0a1448cdc8d0}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_Evacuador_SFC //EXTENDS FB_Module_SFC
-VAR_INPUT
-	IC: BOOL;
-	Execute: BOOL;
-	Ack: BOOL;
-END_VAR
-VAR_OUTPUT
-	Ready: BOOL;
-	Failure: BOOL;
-	Done: BOOL;
-END_VAR
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Evacuador_SFC EXTENDS FB_Controller_SFC
+
 
 VAR_INPUT
 	Evacuar		: BOOL; // Hay que evacuar la tapa en la posición del módulo
@@ -26,9 +17,6 @@ VAR_OUTPUT
     F_0       	: BOOL; (* gHRR (nombre=F-  c=Q23 B=J2  b=32 módulo=EL2008 T=8 C=8 etiqueta=-Y9,  output) Pick and place de rechazo retrocede *)
     G_1       	: BOOL; (* gVER (nombre=G+  c=Q24 B=J2  b=11 módulo=EL2008 T=8 C=8 etiqueta=-Y10, output) Pick and place de rechazo baja *)
     V_1       	: BOOL; (* gEYE (nombre=V+  c=Q25 B=J2  b=08 módulo=EL2008 T=9 C=9 etiqueta=-Y11, output) Pick and place de rechazo succiona *)
-END_VAR
-VAR
-	tm: S_Timeouts;
 END_VAR
 ]]></Declaration>
     <Implementation>

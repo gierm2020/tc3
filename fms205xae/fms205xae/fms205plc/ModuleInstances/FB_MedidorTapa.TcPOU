@@ -73,7 +73,7 @@ fbController(
 	TMED := TMED,								// temporizadores específicos
     fv := fv,									// sensores específicos
 	LecturaFiable	:= LecturaFiable,			// otras entradas específicas
-	IC:=IC, Execute:=Execute, Ack:=Ack,
+	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack,
 	Ready=>Ready, Done=>Done, Failure=>Failure);
 
 

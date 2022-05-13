@@ -1,18 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Alimentador_SFC" Id="{25ad7b61-92b1-41db-8b65-16e3fd2054f3}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_Alimentador_SFC // EXTENDS FB_Module_SFC
-VAR_INPUT
-	IC: BOOL;
-	Execute: BOOL;
-	Ack: BOOL;
-END_VAR
-VAR_OUTPUT
-	Ready: BOOL;
-	Failure: BOOL;
-	Done: BOOL;
-END_VAR
-
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Alimentador_SFC EXTENDS FB_Controller_SFC
 VAR_INPUT
 	TK_1: TIME;					// Temporizador empujador tapa
 	k1: BOOL; 					// Sensor de empujador tapa delante
@@ -20,9 +9,6 @@ END_VAR
 VAR_OUTPUT
 	K_1: BOOL; (* Actuador de empujador tapa avanza *)
 	FM : BOOL; 
-END_VAR
-VAR
-	tm: S_Timeouts;
 END_VAR
 ]]></Declaration>
     <Implementation>

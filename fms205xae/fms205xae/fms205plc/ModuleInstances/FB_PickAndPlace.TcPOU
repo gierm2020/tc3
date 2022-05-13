@@ -69,7 +69,7 @@ fbController(
 	TPIN := TPIN,								// temporizadores específicos
     h0 := h0, h1 := h1, v0 := v0, v1 := v1,		// sensores específicos
 	Mover := Mover,							// otras entradas específicas
-	IC:=IC, Execute:=Execute, Ack:=Ack,
+	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack,
 	Ready=>Ready, Done=>Done, Failure=>Failure);
 
 

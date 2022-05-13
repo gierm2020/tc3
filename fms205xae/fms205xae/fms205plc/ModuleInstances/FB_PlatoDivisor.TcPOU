@@ -51,8 +51,8 @@ IC := InitialConditions();
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 fbController(
 	TRET := TRET, TEMP := TEMP,					// temporizadores específicos
-    tm := tm, k1 := k1, d0 := d0, 						// sensores específicos
-	IC:=IC, Execute:=Execute, Ack:=Ack,
+    k1 := k1, d0 := d0, 						// sensores específicos
+	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack,
 	Ready=>Ready, Done=>Done, Failure=>Failure);
 
 	//----------------------------------- utilizar los resultados del controlador

@@ -68,7 +68,7 @@ fbController(
 	TSOL := TSOL,								// temporizadores específicos
     f0 := f0, f1 := f1, g0 := g0, v1 := v1,		// sensores específicos
 	Evacuar	:= Evacuar,							// otras entradas específicas
-	IC:=IC, Execute:=Execute, Ack:=Ack,
+	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack,
 	Ready=>Ready, Done=>Done, Failure=>Failure);
 
 	

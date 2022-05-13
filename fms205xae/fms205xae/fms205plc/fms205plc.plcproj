@@ -65,6 +65,9 @@
     <Compile Include="GlobalTextList.TcGTLO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ModuleBase\FB_Controller_SFC.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ModuleBase\FB_Module.TcPOU">
       <SubType>Code</SubType>
     </Compile>

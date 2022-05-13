@@ -63,7 +63,7 @@ IC := InitialConditions();
 //----------------------------------- ejecutar el controlador
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 fbModuleController(
-	IC:=IC, Execute:=Execute, Ack:=Ack,
+	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack,
 	Ready=>Ready, Done=>Done, Failure=>Failure);
 
 
@@ -100,6 +100,7 @@ END_VAR
         <ST><![CDATA[ModuleProcessGemma();
 ModuleReadInputs();
 ModuleControlFlow();
+
 ModulePerformActions();
 ModuleManageErrors();]]></ST>
       </Implementation>

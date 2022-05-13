@@ -57,7 +57,7 @@ fbController(
 	TK_1 := TK_1,								// temporizadores específicos
     k1 := k1, 									// sensores específicos
 	//											// otras entradas específicas
-	IC:=IC, Execute:=Execute, Ack:=Ack,
+	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack,
 	Ready=>Ready, Done=>Done, Failure=>Failure);
 
 

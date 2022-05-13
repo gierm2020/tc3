@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Cinta_SFC" Id="{7a4e0e2e-bc1d-4eb2-80cf-952f4dd5e6da}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_Cinta_SFC EXTENDS FB_Module_SFC
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Cinta_SFC  EXTENDS FB_Controller_SFC
 VAR_INPUT
 	IC: BOOL;
 	Execute: BOOL

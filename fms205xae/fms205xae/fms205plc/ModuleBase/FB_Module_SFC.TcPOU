@@ -1,17 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Module_SFC" Id="{885e2d81-7b5e-4194-aca1-fe47d3a147b8}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_Module_SFC
-VAR_INPUT
-	IC: BOOL;
-	Execute: BOOL;
-	Ack: BOOL;
-END_VAR
-VAR_OUTPUT
-	Ready: BOOL;
-	Failure: BOOL;
-	Done: BOOL;
-END_VAR
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Module_SFC extends FB_Controller_SFC
 
 ]]></Declaration>
     <Implementation>
