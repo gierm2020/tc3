@@ -14,7 +14,6 @@ VAR_OUTPUT
 END_VAR
 
 VAR_INPUT
-	ctInp		: S_ControllerInput;
 	Evacuar		: BOOL; // Hay que evacuar la tapa en la posición del módulo
 	TSOL		: TIME; // Tiempo esperando después de soltar y antes de subir	
     f0        	: BOOL; (* gh0 (nombre=f0  c=I22 B=J2 b=22 módulo=EL1008 T=6  C=6 etiqueta=-B10, input) Pick and place de rechazo detrás *)
@@ -23,8 +22,7 @@ VAR_INPUT
     v1        	: BOOL; (* ge1 (nombre=v1  c=I25 B=J1 b=25 módulo=EL1008 T=7  C=7 etiqueta=-B13, input) Pick and place de rechazo vacío *)
 END_VAR
 VAR_OUTPUT
-	ctOut		: S_ControllerOutput;
-    F_1       	: BOOL; (* gHRA (nombre=F+  c=Q22 B=J2  b=35 módulo=EL2008 T=8 C=8 etiqueta=-Y8,  output) Pick and place de rechazo avanza (afuera) *)
+	F_1       	: BOOL; (* gHRA (nombre=F+  c=Q22 B=J2  b=35 módulo=EL2008 T=8 C=8 etiqueta=-Y8,  output) Pick and place de rechazo avanza (afuera) *)
     F_0       	: BOOL; (* gHRR (nombre=F-  c=Q23 B=J2  b=32 módulo=EL2008 T=8 C=8 etiqueta=-Y9,  output) Pick and place de rechazo retrocede *)
     G_1       	: BOOL; (* gVER (nombre=G+  c=Q24 B=J2  b=11 módulo=EL2008 T=8 C=8 etiqueta=-Y10, output) Pick and place de rechazo baja *)
     V_1       	: BOOL; (* gEYE (nombre=V+  c=Q25 B=J2  b=08 módulo=EL2008 T=9 C=9 etiqueta=-Y11, output) Pick and place de rechazo succiona *)

@@ -75,7 +75,7 @@ fbController(
 //----------------------------------- utilizar los resultados del controlador
 
 // Cambios en actuadores por el modo manual
-IF ctInp.Manual THEN
+IF gm.ModeActual=E_GEMMA.F4VerificacionSinOrden THEN
 	; // TODO AÑADIR AQUI EL MODO MANUAL DEL ALIMENTADOR
 
 // Cambios en actuadores por el resultado del controlador

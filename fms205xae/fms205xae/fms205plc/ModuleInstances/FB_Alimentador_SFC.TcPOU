@@ -14,12 +14,10 @@ VAR_OUTPUT
 END_VAR
 
 VAR_INPUT
-	ctInp: S_ControllerInput;
 	TK_1: TIME;					// Temporizador empujador tapa
 	k1: BOOL; 					// Sensor de empujador tapa delante
 END_VAR
 VAR_OUTPUT
-	ctOut: S_ControllerOutput;
 	K_1: BOOL; (* Actuador de empujador tapa avanza *)
 	FM : BOOL; 
 END_VAR

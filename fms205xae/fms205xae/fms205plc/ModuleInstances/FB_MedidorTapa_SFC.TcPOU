@@ -15,14 +15,12 @@ END_VAR
 
 // TODO CAMBIAR EL SITIO DE RECOGER LA MEDIDA, NO ESPERAR A QUE SUBA EL MEDIDOR PARA RECOGER EL NÚMERO SINO QUE HACERLO JUSTO CUANDO TERMINE DE BAJAR
 VAR_INPUT
-	ctInp: S_ControllerInput;
 	TMED: TIME := T#1S;			// Temporizador medición tapa
 	fv: UINT; 					// Detector valor altura 
 	LecturaFiable: BOOL;		// La lectura de la altura ha terminado 	
 END_VAR
 
 VAR_OUTPUT
-	ctOut: S_ControllerOutput;
 	L_1: BOOL; 					// Medidor de altura baja
 	Leyendo: BOOL;
 END_VAR

@@ -3,7 +3,7 @@
   <POU Name="FB_PlatoDivisor" Id="{c71a4a01-3eb1-443b-a07e-accb57d2980d}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_PlatoDivisor EXTENDS FB_Module
 VAR_INPUT
-	tm			: REFERENCE TO FB_Timelimits;
+	//tm			: REFERENCE TO FB_Timelimits;
 	//tm			: FB_Timelimits;
 	TRET		: TIME := T#500MS;	(* Tiempo de actuación del retenedor del plato *)
 	TEMP	   	: TIME := T#2S   ;	(* Tiempo de recorrido del empujador del plato *)
@@ -58,7 +58,7 @@ fbController(
 	//----------------------------------- utilizar los resultados del controlador
 
 // Cambios en actuadores por el modo manual
-IF ctInp.Manual THEN
+IF gm.ModeActual=E_GEMMA.F4VerificacionSinOrden THEN
 	; // TODO AÑADIR AQUI EL MODO MANUAL DEL ALIMENTADOR
 
 // Cambios en actuadores por el resultado del controlador

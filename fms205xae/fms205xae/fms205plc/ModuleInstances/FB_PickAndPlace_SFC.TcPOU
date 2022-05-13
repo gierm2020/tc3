@@ -13,7 +13,6 @@ VAR_OUTPUT
 	Done: BOOL;
 END_VAR
 VAR_INPUT
-	ctInp		: S_ControllerInput;
 	Mover: BOOL;
 	TPIN: TIME; (* Tiempo de cierre y apertura de la pinza de carga *)	
 	h0: BOOL; 	(* Final de carrera horizontal retraida *)
@@ -22,7 +21,6 @@ VAR_INPUT
 	v0: BOOL; 	(*Final de carrera vertical arriba*)
 END_VAR
 VAR_OUTPUT	
-	ctOut		: S_ControllerOutput; 
 	HOR			: BOOL; (* Actuador de extension de brazo horizontal *)
 	VER			: BOOL; (* Actuador de movimiento vertical de brazo*)
 	PIN			: BOOL; (*Actuador de pinza de brazo*)

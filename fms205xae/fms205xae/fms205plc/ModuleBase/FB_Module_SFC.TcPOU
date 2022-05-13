@@ -13,12 +13,6 @@ VAR_OUTPUT
 	Done: BOOL;
 END_VAR
 
-VAR_INPUT
-	ctInp: S_ControllerInput;
-END_VAR
-VAR_OUTPUT
-	ctOut: S_ControllerOutput;
-END_VAR 
 ]]></Declaration>
     <Implementation>
       <SFC>

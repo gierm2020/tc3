@@ -16,7 +16,6 @@ VAR_OUTPUT
 END_VAR
 
 VAR_INPUT
-	ctInp		: S_ControllerInput;
 	TRET		: TIME;
 	TEMP		: TIME;	
 	k1			: BOOL;
@@ -24,8 +23,7 @@ VAR_INPUT
 END_VAR
 
 VAR_OUTPUT	
-	ctOut		: S_ControllerOutput;
-    D_1 		: BOOL; 
+	D_1 		: BOOL; 
     E_1 		: BOOL; 
 END_VAR
 

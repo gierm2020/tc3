@@ -4,6 +4,11 @@
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Module
 
 VAR_INPUT
+	ID		: BYTE; // identificador de la unidad funcional (el módulo)
+	gm		: REFERENCE TO S_Gemma;
+	tm		: REFERENCE TO FB_Timelimits;
+	Name	: STRING;
+
 	IC: BOOL;
 	Execute: BOOL;
 	Ack: BOOL;
@@ -16,19 +21,15 @@ END_VAR
 
 // TODO AÑADIR UN METODO GEMMA QUE SE INVOQUE DESDE PROCESSCYCLE PARA TRATAMIENTO DE PARADA, PAUSA...
 VAR_INPUT
-	ctInp: S_ControllerInput;
 END_VAR
 
 VAR_OUTPUT
-	ctOut: S_ControllerOutput;
+	//ctOut: S_ControllerOutput;
 //	IC: BOOL;
 //	Done: BOOL;
 END_VAR
 VAR
 	// Parámetros que se establecen en el constructor
-	_ModuleID: BYTE; // identificador de la unidad funcional (el módulo)
-	_ModuleMRT: TIME; // Maximo tiempo de respuesta de los dispositivos (Max Response Time)
-	_ModuleName: STRING;
 
 	// Variables que permanecen durante la ejecución del objeto
 	fbModuleController: FB_Module_SFC;	
@@ -37,28 +38,6 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="FB_init" Id="{3a8a37b7-5b89-40d4-9fc1-d2a364173cd9}">
-      <Declaration><![CDATA[METHOD FB_init : BOOL
-VAR_INPUT
-	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
-	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	
-	// Datos que se pasan al crear la variable y se guardan sólo una vez
-	ID: BYTE; 
-	MRT: TIME;
-	Name: STRING;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[// guardar los paraámetros de entrada que se indican cuando se crea la variable
-_ModuleID := ID;
-_ModuleMRT := MRT;
-_ModuleName := Name;
-
-// ctOut.IC := TRUE;
-]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="InitialConditions" Id="{569290b0-7483-4183-aad6-de676bf056ec}">
       <Declaration><![CDATA[METHOD InitialConditions : BOOL
 VAR_INPUT

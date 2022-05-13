@@ -81,7 +81,7 @@ fbController(
 //----------------------------------- utilizar los resultados del controlador
 
 // Cambios en actuadores por el modo manual
-IF ctInp.Manual THEN
+IF gm.ModeActual=E_GEMMA.F4VerificacionSinOrden THEN
 	; // TODO AÑADIR AQUI EL MODO MANUAL DEL ALIMENTADOR
 
 // Cambios en actuadores por el resultado del controlador
@@ -97,7 +97,7 @@ IF fbController.Leyendo AND NOT LecturaFiable THEN
 	Altura_mm 		:= SEL(Altura_mm < 0, Altura_mm, 0); // si la altura es negativa dejar cero
 	LecturaFiable 	:= TRUE;
 
-ELSIF ctinp.Ack THEN
+ELSIF Ack THEN
 	LecturaFiable 	:= FALSE; 	// Resetear la lectura para el siguiente ciclo
 	Altura_Pulsos	:= 0;
 	Altura_mm		:= 0;

@@ -34,19 +34,20 @@ VAR
 	//tm					: S_Timeouts;
 	tm: FB_Timelimits 		;// := (Speed:=10.0); //S_Timeouts;
 	gm						: S_Gemma := (ModeActual:= E_GEMMA.A6Inicializando, ModePrev := E_GEMMA.A6Inicializando);
+	// módulos de la FMS205
+	mdAlimentador			: FB_Alimentador			:= (ID := 1, tm := tm, gm := gm, Name := 'Alimentador');
+	mdPickAndPlaceCarga 	: FB_PickAndPlace			:= (ID := 2, tm := tm, gm := gm, Name := 'Carga');
+	mdMedidorTapa			: FB_MedidorTapa			:= (ID := 3, tm := tm, gm := gm, Name := 'Medidor');
+	mdCaptadorInductivo 	: FB_CaptadorInductivo		:= (ID := 4, tm := tm, gm := gm, Name :=  'Inductivo');
+	mdDetectorFotoelectrico : FB_DetectorFotoelectrico	:= (ID := 5, tm := tm, gm := gm, Name :=  'Fotoeléctrico');
+	mdEvacuador			 	: FB_Evacuador				:= (ID := 6, tm := tm, gm := gm, Name :=  'Evacuador');
+	mdPickAndPlaceDescarga 	: FB_PickAndPlace			:= (ID := 7, tm := tm, gm := gm, Name :=  'Descarga');
+	mdPlatoDivisor			: FB_PlatoDivisor			:= (ID := 8, tm := tm, gm := gm, Name :=  'Plato');
+	
 	fbPanel					: FB_Panel := (gm := gm);
 	
-	ctInp 					: S_ControllerInput;
+	//ctInp 					: S_ControllerInput;
 	
-	// módulos de la FMS205
-	mdAlimentador			: FB_Alimentador			(ID:=0, MRT:=MaximoTiempoRespuesta, Name:='Alimentador');
-	mdPickAndPlaceCarga 	: FB_PickAndPlace			(ID:=1, MRT:=MaximoTiempoRespuesta, Name:='Carga');
-	mdMedidorTapa			: FB_MedidorTapa			(ID:=3, MRT:=MaximoTiempoRespuesta, Name:='Medidor');
-	mdCaptadorInductivo 	: FB_CaptadorInductivo		(ID:=4, MRT:=MaximoTiempoRespuesta, Name:='Inductivo');
-	mdDetectorFotoelectrico : FB_DetectorFotoelectrico	(ID:=5, MRT:=MaximoTiempoRespuesta, Name:='Fotoeléctrico');
-	mdEvacuador			 	: FB_Evacuador				(ID:=7, MRT:=MaximoTiempoRespuesta, Name:='Evacuador');
-	mdPickAndPlaceDescarga 	: FB_PickAndPlace			(ID:=8, MRT:=MaximoTiempoRespuesta, Name:='Descarga');
-	mdPlatoDivisor			: FB_PlatoDivisor			(ID:=9, MRT:=MaximoTiempoRespuesta, Name:='Plato');
 	
 	//fbFMS205_SFC			: FB_FMS205_SFC;
 	fbFMS205_Producir_SFC	: FB_FMS205_SFC;
