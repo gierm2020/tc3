@@ -12,6 +12,8 @@ STRUCT
 	Marcha			: BOOL; // 
 	Para			: BOOL; //
 	Pruebas			: BOOL; //  
+	
+	NewSpeed		: REAL := 100.0;
 END_STRUCT
 END_TYPE
 ]]></Declaration>

@@ -1,8 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_PlatoDivisor_SFC" Id="{780d8d1f-d39e-46b4-929b-6b9a28c712e1}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_PlatoDivisor_SFC // EXTENDS FB_Module_SFC
 VAR_INPUT
+	tm: REFERENCE TO FB_Timelimits; //S_Timeouts;
+	//tm: FB_Timelimits; //S_Timeouts;
 	IC: BOOL;
 	Execute: BOOL;
 	Ack: BOOL;
@@ -28,7 +30,6 @@ VAR_OUTPUT
 END_VAR
 
 VAR
-	tm: S_Timeouts;
 END_VAR
 ]]></Declaration>
     <Implementation>

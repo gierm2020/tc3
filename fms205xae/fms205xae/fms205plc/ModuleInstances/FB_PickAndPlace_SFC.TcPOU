@@ -28,7 +28,7 @@ VAR_OUTPUT
 	PIN			: BOOL; (*Actuador de pinza de brazo*)
 END_VAR
 VAR
-	tm: S_Timeouts;
+	tm: 		S_Timeouts; // FB_Timelimits; //
 END_VAR
 ]]></Declaration>
     <Implementation>

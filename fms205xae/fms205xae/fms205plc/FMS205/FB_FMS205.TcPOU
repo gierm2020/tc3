@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_FMS205" Id="{a261f573-1402-443e-9bab-e88e0bf02070}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205
 VAR_INPUT
@@ -31,7 +31,8 @@ END_VAR
 VAR
 	// controladores de la máquina, la función de producción y la guía GEMMA 
 	td						: S_TestData;
-	tm						: S_Timeouts;
+	//tm					: S_Timeouts;
+	tm: FB_Timelimits 		;// := (Speed:=10.0); //S_Timeouts;
 	gm						: S_Gemma := (ModeActual:= E_GEMMA.A6Inicializando, ModePrev := E_GEMMA.A6Inicializando);
 	fbPanel					: FB_Panel := (gm := gm);
 	
@@ -343,6 +344,11 @@ mdCaptadorInductivo.ModuleProcessCycle();
 mdDetectorFotoelectrico.ModuleProcessCycle();
 mdEvacuador.ModuleProcessCycle();
 mdPickAndPlaceDescarga.ModuleProcessCycle();
+
+tm.UpdateSpeed(NewSpeed:=fbPanel.cn.NewSpeed); 
+
+mdPlatoDivisor.tm REF=tm;
+//mdPlatoDivisor.tm :=tm;
 mdPlatoDivisor.ModuleProcessCycle();
 ]]></ST>
       </Implementation>
@@ -399,29 +405,5 @@ mdPlatoDivisor.Ack				:= td.Plato	and td.Ack;
 ]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_FMS205">
-      <LineId Id="3" Count="75" />
-      <LineId Id="142" Count="0" />
-      <LineId Id="79" Count="7" />
-      <LineId Id="144" Count="2" />
-      <LineId Id="87" Count="2" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_FMS205.Director">
-      <LineId Id="3" Count="150" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_FMS205.InitialConditions">
-      <LineId Id="3" Count="12" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_FMS205.ModuleProcessCycle">
-      <LineId Id="3" Count="7" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_FMS205.TestControl">
-      <LineId Id="3" Count="42" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>
