@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.12">
-	<Project ProjectGUID="{141AA9E7-3CEC-43A4-B806-48021F85A500}" TargetNetId="5.67.250.212.1.1" ShowHideConfigurations="#x3c7">
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.29">
+	<Project ProjectGUID="{141AA9E7-3CEC-43A4-B806-48021F85A500}" Target64Bit="true" ShowHideConfigurations="#x3c7">
 		<System>
 			<Tasks>
 				<Task Id="3" Priority="20" CycleTime="100000" AmsPort="350" AdtTasks="true">
@@ -236,13 +236,6 @@
 							</OwnerB>
 						</OwnerA>
 					</UnrestoredVarLinks>
-					<UnrestoredVarLinks ImportTime="2022-05-12T09:56:01">
-						<OwnerA Name="InputDst" Prefix="TIPC^fms205plc^fms205plc Instance" Type="1">
-							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 2 (EL1008)">
-								<Link VarA="MAIN.fbFMS205.fbPanel.hw.POC_Selec01" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 5^zpoc" Size="1" RestoreInfo="ANotFound"/>
-							</OwnerB>
-						</OwnerA>
-					</UnrestoredVarLinks>
 					<Contexts>
 						<Context>
 							<Id NeedCalleeCall="true">0</Id>
@@ -265,7 +258,6 @@
 		</Io>
 	</Project>
 	<Mappings>
-		<MappingInfo Identifier="{00000000-2001-0850-0020-500820000403}" Id="#x02030010"/>
 		<OwnerA Name="TIPC^fms205plc^fms205plc Instance">
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 10 (EL5151)">
 				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdMedidorTapa.fv" VarB="ENC Inputs^Counter value"/>
