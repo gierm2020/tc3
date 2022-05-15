@@ -51,8 +51,18 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"703"</v>
+              <v n="TextDefault">"F+"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"207"</v>
               <v n="TextDefault">"Fotoelectrico"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"257"</v>
+              <v n="TextDefault">"G+"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -98,6 +108,16 @@
             <o>
               <v n="TextID">"762"</v>
               <v n="TextDefault">"TK_1"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"70"</v>
+              <v n="TextDefault">"tooltip generada"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"738"</v>
+              <v n="TextDefault">"V+"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
           </l>
