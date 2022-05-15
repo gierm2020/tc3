@@ -18,7 +18,7 @@ sobre los que se ha fijado como elemento terminal una placa con tres ventosas pa
 
 VAR_INPUT
 	Evacuar		: BOOL; // Hay que evacuar la tapa en la posición del módulo
-	TSOL		: TIME := T#100MS; // tiempo después de soltar y antes de subir	    
+	//TSOL		: TIME := T#100MS; // tiempo después de soltar y antes de subir	    
 END_VAR
 
 VAR
@@ -37,10 +37,10 @@ VAR
     // F_0       AT %Q*: BOOL; (* gHRR (nombre=F-  c=Q23 B=J2  b=32 módulo=EL2008 T=8 C=8 etiqueta=-Y9,  output) Pick and place de rechazo retrocede *)
     //G_1       AT %Q*: BOOL; (* gVER (nombre=G+  c=Q24 B=J2  b=11 módulo=EL2008 T=8 C=8 etiqueta=-Y10, output) Pick and place de rechazo baja *)
     // V_1       AT %Q*: BOOL; (* gEYE (nombre=V+  c=Q25 B=J2  b=08 módulo=EL2008 T=9 C=9 etiqueta=-Y11, output) Pick and place de rechazo succiona *)
-	F_0		: dvActuator;
-	F_1		: dvActuator;
-	G_1		: dvActuator;
-	V_1		: dvActuator;
+	F_0		: dvActuator := (tm:=tm);
+	F_1		: dvActuator := (tm:=tm);
+	G_1		: dvActuator := (tm:=tm);
+	V_1		: dvActuator := (tm:=tm);
 END_VAR
 
 ]]></Declaration>
@@ -81,7 +81,8 @@ fbController(
     // f0 := f0, 
 	// f1 := f1, g0 := g0, v1 := v1,		// sensores específicos
 	Evacuar	:= Evacuar,							// otras entradas específicas
-	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack,
+	// tm := tm, 
+	IC:=IC, Execute:=Execute, Ack:=Ack,
 	Ready=>Ready, Done=>Done, Failure=>Failure);
 
 	

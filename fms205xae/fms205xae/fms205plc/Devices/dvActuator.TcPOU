@@ -12,6 +12,7 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
+	tm				: REFERENCE TO FB_Timelimits;
 	ModeActual		: E_GEMMA := E_GEMMA.A6Inicializando;
 	Name			: STRING; 				// Nombre del actuador, p.ej. K_1
 	prValue			: BOOL := FALSE;		// Valor previo para detectar cambios de estado	
