@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="dvSensor" Id="{c4029391-ebd0-4ae7-8ab5-3338cf1cc185}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK dvSensor
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	ModeActual		: E_GEMMA := E_GEMMA.A6Inicializando;
+	Name			: STRING; 				// Nombre del actuador, p.ej. K_1
+	prValue			: BOOL := FALSE;		// Valor previo para detectar cambios de estado	
+	hwValue AT %Q*	: BOOL;					// Vinculación al hardware de la estación
+	uiValue			: BOOL;					// Vinculación a la visualización
+	uiToolTip		: STRING;				// Tooltip en la visualización
+	uiEnabled		: BOOL := FALSE; 		// Deshabilitar el control cuando hay conexión con el hardware
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

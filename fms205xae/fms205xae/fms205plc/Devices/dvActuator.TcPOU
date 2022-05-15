@@ -37,7 +37,7 @@ END_VAR
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL
 VAR_INPUT
 	ModeActual	: E_GEMMA := E_GEMMA.A6Inicializando;
-	sfcInput 	: BOOL;		// estado del actuador devuelto por el Grafcet	
+	sfcValue 	: BOOL;		// estado del actuador devuelto por el Grafcet	
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -47,9 +47,10 @@ IF uiEnabled THEN
 	// Actualizar el hardware con la visualización
 	hwValue := uiValue;
 ELSE
-	hwValue := sfcInput;
-	uiValue := sfcInput;
+	hwValue := sfcValue;
+	uiValue := sfcValue;
 END_IF
+
 IF prValue <> hwValue THEN
 	prValue := hwValue; 
 	IF hwValue THEN // Acaban de activar
@@ -64,12 +65,14 @@ IF prValue <> hwValue THEN
 	END_IF
 END_IF
 IF hwValue THEN
-		uiUp 			:= SEL(uiUp+ 1 > 50, uiUp+1, 0);
-		UIDown			:= SEL(uiDown-1 < 0, uiDown-1, 50);
-		uiLeft			:= SEL(uiLeft-1 < 0, uiLeft-1, 50);
-		uiRight			:= SEL(uiRight+ 1 > 50, uiRight+1, 0);
-		uiClockwise		:= SEL(uiClockwise-1 < 0, uiClockwise-1, 360);
-		uiUnclockwise	:= SEL(uiUnclockwise-1 < 0, uiUnclockwise-1, 360);
+		uiUp 			:= SEL(uiUp 	= +50, uiUp+1, 0);
+		uiRight			:= SEL(uiRight	= +50, uiRight+1, 0);
+		
+		UIDown			:= SEL(uiDown	= -50, uiDown-1, 0);
+		uiLeft			:= SEL(uiLeft	= -50, uiLeft-1, 0);
+		
+		uiClockwise		:= SEL(uiClockwise   =-359, uiClockwise-1, 0);
+		uiUnclockwise	:= SEL(uiUnclockwise =+359, uiUnclockwise+1, 0);
 END_IF
 
 
