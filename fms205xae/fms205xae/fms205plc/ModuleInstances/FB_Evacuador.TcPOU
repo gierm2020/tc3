@@ -24,7 +24,8 @@ END_VAR
 VAR
 	fbController		: FB_Evacuador_SFC; 		// controlador para ejecución normal
 	
-    f0        AT %I*: BOOL; (* gh0 (nombre=f0  c=I22 B=J2 b=22 módulo=EL1008 T=6  C=6 etiqueta=-B10, input) Pick and place de rechazo detrás *)
+    //f0        AT %I*: BOOL; (* gh0 (nombre=f0  c=I22 B=J2 b=22 módulo=EL1008 T=6  C=6 etiqueta=-B10, input) Pick and place de rechazo detrás *)
+	f0 		: dvSensor;
     f1        AT %I*: BOOL; (* gh1 (nombre=f1  c=I23 B=J2 b=06 módulo=EL1008 T=6  C=6 etiqueta=-B11, input) Pick and place de rechazo delante *)
     g0        AT %I*: BOOL; (* gv1 (nombre=g0  c=I24 B=J2 b=31 módulo=EL1008 T=6  C=6 etiqueta=-B12, input) Pick and place de rechazo arriba *)
     v1        AT %I*: BOOL; (* ge1 (nombre=v1  c=I25 B=J1 b=25 módulo=EL1008 T=7  C=7 etiqueta=-B13, input) Pick and place de rechazo vacío *)
@@ -64,13 +65,14 @@ END_VAR
 //ctInp.HwIC := InitialConditions();
 IC := InitialConditions();
 
-
+f0.ProcessCycle(gm.ModeActual, sfcValue=>fbController.f0);
 
 //----------------------------------- ejecutar el controlador
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 fbController(
 	TSOL := TSOL,								// temporizadores específicos
-    f0 := f0, f1 := f1, g0 := g0, v1 := v1,		// sensores específicos
+    // f0 := f0, 
+	f1 := f1, g0 := g0, v1 := v1,		// sensores específicos
 	Evacuar	:= Evacuar,							// otras entradas específicas
 	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack,
 	Ready=>Ready, Done=>Done, Failure=>Failure);
@@ -105,7 +107,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[f0 := NOT f0;
+        <ST><![CDATA[//f0 := NOT f0;
 f1 := NOT f1; 
 g0 := NOT g0;
 v1 := not v1;]]></ST>
