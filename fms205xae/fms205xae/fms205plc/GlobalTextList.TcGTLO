@@ -66,6 +66,11 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"780"</v>
+              <v n="TextDefault">"f1"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"207"</v>
               <v n="TextDefault">"Fotoelectrico"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -73,6 +78,11 @@
             <o>
               <v n="TextID">"257"</v>
               <v n="TextDefault">"G+"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"19"</v>
+              <v n="TextDefault">"g0"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -128,6 +138,11 @@
             <o>
               <v n="TextID">"738"</v>
               <v n="TextDefault">"V+"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"790"</v>
+              <v n="TextDefault">"v1"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
           </l>

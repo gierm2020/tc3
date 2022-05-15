@@ -26,9 +26,12 @@ VAR
 	
     //f0        AT %I*: BOOL; (* gh0 (nombre=f0  c=I22 B=J2 b=22 módulo=EL1008 T=6  C=6 etiqueta=-B10, input) Pick and place de rechazo detrás *)
 	f0 		: dvSensor;
-    f1        AT %I*: BOOL; (* gh1 (nombre=f1  c=I23 B=J2 b=06 módulo=EL1008 T=6  C=6 etiqueta=-B11, input) Pick and place de rechazo delante *)
-    g0        AT %I*: BOOL; (* gv1 (nombre=g0  c=I24 B=J2 b=31 módulo=EL1008 T=6  C=6 etiqueta=-B12, input) Pick and place de rechazo arriba *)
-    v1        AT %I*: BOOL; (* ge1 (nombre=v1  c=I25 B=J1 b=25 módulo=EL1008 T=7  C=7 etiqueta=-B13, input) Pick and place de rechazo vacío *)
+	f1 		: dvSensor;
+	g0 		: dvSensor;
+	v1 		: dvSensor;
+    //f1        AT %I*: BOOL; (* gh1 (nombre=f1  c=I23 B=J2 b=06 módulo=EL1008 T=6  C=6 etiqueta=-B11, input) Pick and place de rechazo delante *)
+    //g0        AT %I*: BOOL; (* gv1 (nombre=g0  c=I24 B=J2 b=31 módulo=EL1008 T=6  C=6 etiqueta=-B12, input) Pick and place de rechazo arriba *)
+    //v1        AT %I*: BOOL; (* ge1 (nombre=v1  c=I25 B=J1 b=25 módulo=EL1008 T=7  C=7 etiqueta=-B13, input) Pick and place de rechazo vacío *)
 
     //F_1       AT %Q*: BOOL; (* gHRA (nombre=F+  c=Q22 B=J2  b=35 módulo=EL2008 T=8 C=8 etiqueta=-Y8,  output) Pick and place de rechazo avanza (afuera) *)
     // F_0       AT %Q*: BOOL; (* gHRR (nombre=F-  c=Q23 B=J2  b=32 módulo=EL2008 T=8 C=8 etiqueta=-Y9,  output) Pick and place de rechazo retrocede *)
@@ -51,7 +54,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[InitialConditions := f1; // el evacuador está en condiciones iniciales cuando el sensor f1 está activado]]></ST>
+        <ST><![CDATA[InitialConditions := f1.uiValue; // el evacuador está en condiciones iniciales cuando el sensor f1 está activado]]></ST>
       </Implementation>
     </Method>
     <Method Name="ModuleControlFlow" Id="{088423ab-0767-49f6-96df-c713fe6fe249}">
@@ -62,17 +65,21 @@ END_VAR
 
 
 //----------------------------------- preparar los datos que necesita el controlador
-//ctInp.HwIC := InitialConditions();
-IC := InitialConditions();
 
 f0.ProcessCycle(gm.ModeActual, sfcValue=>fbController.f0);
+f1.ProcessCycle(gm.ModeActual, sfcValue=>fbController.f1);
+g0.ProcessCycle(gm.ModeActual, sfcValue=>fbController.g0);
+v1.ProcessCycle(gm.ModeActual, sfcValue=>fbController.v1);
+
+//ctInp.HwIC := InitialConditions();
+IC := InitialConditions();
 
 //----------------------------------- ejecutar el controlador
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 fbController(
-	TSOL := TSOL,								// temporizadores específicos
+	//TSOL := TSOL,								// temporizadores específicos
     // f0 := f0, 
-	f1 := f1, g0 := g0, v1 := v1,		// sensores específicos
+	// f1 := f1, g0 := g0, v1 := v1,		// sensores específicos
 	Evacuar	:= Evacuar,							// otras entradas específicas
 	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack,
 	Ready=>Ready, Done=>Done, Failure=>Failure);
@@ -108,9 +115,9 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[//f0 := NOT f0;
-f1 := NOT f1; 
-g0 := NOT g0;
-v1 := not v1;]]></ST>
+//f1 := NOT f1; 
+//g0 := NOT g0;
+//v1 := not v1;]]></ST>
       </Implementation>
     </Method>
   </POU>

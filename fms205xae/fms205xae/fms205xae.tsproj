@@ -61,18 +61,18 @@
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.fbFMS205.mdEvacuador.f1</Name>
-							<Comment><![CDATA[ gh1 (nombre=f1  c=I23 B=J2 b=06 módulo=EL1008 T=6  C=6 etiqueta=-B11, input) Pick and place de rechazo delante ]]></Comment>
+							<Name>MAIN.fbFMS205.mdEvacuador.f1.hwValue</Name>
+							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.fbFMS205.mdEvacuador.g0</Name>
-							<Comment><![CDATA[ gv1 (nombre=g0  c=I24 B=J2 b=31 módulo=EL1008 T=6  C=6 etiqueta=-B12, input) Pick and place de rechazo arriba ]]></Comment>
+							<Name>MAIN.fbFMS205.mdEvacuador.g0.hwValue</Name>
+							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.fbFMS205.mdEvacuador.v1</Name>
-							<Comment><![CDATA[ ge1 (nombre=v1  c=I25 B=J1 b=25 módulo=EL1008 T=7  C=7 etiqueta=-B13, input) Pick and place de rechazo vacío ]]></Comment>
+							<Name>MAIN.fbFMS205.mdEvacuador.v1.hwValue</Name>
+							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
@@ -271,6 +271,17 @@
 							</OwnerB>
 						</OwnerA>
 					</UnrestoredVarLinks>
+					<UnrestoredVarLinks ImportTime="2022-05-15T14:25:46">
+						<OwnerA Name="InputDst" Prefix="TIPC^fms205plc^fms205plc Instance" Type="1">
+							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 6 (EL1008)">
+								<Link VarA="MAIN.fbFMS205.mdEvacuador.f1" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 7^gh1" Size="1" RestoreInfo="ANotFound"/>
+								<Link VarA="MAIN.fbFMS205.mdEvacuador.g0" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 8^gv1" Size="1" RestoreInfo="ANotFound"/>
+							</OwnerB>
+							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 7 (EL1008)">
+								<Link VarA="MAIN.fbFMS205.mdEvacuador.v1" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 1^ge1" Size="1" RestoreInfo="ANotFound"/>
+							</OwnerB>
+						</OwnerA>
+					</UnrestoredVarLinks>
 					<Contexts>
 						<Context>
 							<Id NeedCalleeCall="true">0</Id>
@@ -310,8 +321,9 @@
 				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdAlimentador.FM" VarB="Channel 4^zFM"/>
 			</OwnerB>
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 6 (EL1008)">
-				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdEvacuador.f1" VarB="Channel 7^gh1"/>
-				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdEvacuador.g0" VarB="Channel 8^gv1"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdEvacuador.f0.hwValue" VarB="Channel 6^gh0"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdEvacuador.f1.hwValue" VarB="Channel 7^gh1"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdEvacuador.v1.hwValue" VarB="Channel 8^gv1"/>
 				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdPickAndPlaceCarga.h0" VarB="Channel 1^dh0"/>
 				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdPickAndPlaceCarga.h1" VarB="Channel 2^dh1"/>
 				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdPickAndPlaceCarga.v0" VarB="Channel 3^dv0"/>
@@ -321,7 +333,7 @@
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 7 (EL1008)">
 				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdCaptadorInductivo.ei" VarB="Channel 7^ei"/>
 				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdDetectorFotoelectrico.ef" VarB="Channel 8^ef"/>
-				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdEvacuador.v1" VarB="Channel 1^ge1"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdEvacuador.g0.hwValue" VarB="Channel 1^ge1"/>
 				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdPickAndPlaceDescarga.h0" VarB="Channel 2^hh0"/>
 				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdPickAndPlaceDescarga.h1" VarB="Channel 3^hh1"/>
 				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdPickAndPlaceDescarga.v0" VarB="Channel 4^hv0"/>

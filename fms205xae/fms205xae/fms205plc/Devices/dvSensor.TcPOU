@@ -26,7 +26,7 @@ VAR_INPUT
 END_VAR
 
 VAR_OUTPUT
-	sfcValue 	: BOOL;		// estado del sensor que se entregará al Grafcet	
+	sfcValue 	: BOOL;		// estado del sensor que se entregará al Grafcet
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[uiEnabled := TRUE; // (ModeActual = E_GEMMA.F4VerificacionSinOrden); // Planta habilitado sólo en modo F4
@@ -38,7 +38,7 @@ ELSE
 	hwValue := sfcValue;
 	uiValue := sfcValue;
 END_IF
-sfcValue := hwValue;		// estado del sensor que se entregará al Grafcet	
+sfcValue := uiValue;		// estado del sensor que se entregará al Grafcet	
 
 
 ]]></ST>
