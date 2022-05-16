@@ -66,10 +66,10 @@ END_VAR
 
 //----------------------------------- preparar los datos que necesita el controlador
 
-f0.ProcessCycle(gm.ModeActual, sfcValue=>fbController.f0);
-f1.ProcessCycle(gm.ModeActual, sfcValue=>fbController.f1);
-g0.ProcessCycle(gm.ModeActual, sfcValue=>fbController.g0);
-v1.ProcessCycle(gm.ModeActual, sfcValue=>fbController.v1);
+//f0.ProcessCycle(gm.ModeActual, sfcValue=>fbController.f0);
+//f1.ProcessCycle(gm.ModeActual, sfcValue=>fbController.f1);
+//g0.ProcessCycle(gm.ModeActual, sfcValue=>fbController.g0);
+//v1.ProcessCycle(gm.ModeActual, sfcValue=>fbController.v1);
 
 //ctInp.HwIC := InitialConditions();
 IC := InitialConditions();
@@ -78,12 +78,14 @@ IC := InitialConditions();
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 fbController(
 	//TSOL := TSOL,								// temporizadores específicos
-    // f0 := f0, 
-	// f1 := f1, g0 := g0, v1 := v1,		// sensores específicos
+    f0 := f0.GetValue(), 
+	f1 := f1.GetValue(), 
+	g0 := g0.GetValue(), 
+	v1 := v1.GetValue(),		// sensores específicos
 	Evacuar	:= Evacuar,							// otras entradas específicas
-	// tm := tm, 
-	IC:=IC, Execute:=Execute, Ack:=Ack,
-	Ready=>Ready, Done=>Done, Failure=>Failure);
+	tm := tm, 
+	IC:=IC, Execute:=Execute, Ack:=Ack);
+//,	Ready=>Ready, Done=>Done, Failure=>Failure);
 
 	
 //----------------------------------- utilizar los resultados del controlador

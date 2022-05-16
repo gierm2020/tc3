@@ -19,6 +19,15 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="GetValue" Id="{d1361985-1af2-46a4-963a-3264c62bf0f2}">
+      <Declaration><![CDATA[METHOD GetValue : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetValue := hwValue;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ProcessCycle" Id="{71ee41d9-0d14-4d00-a8c7-99dc223f0a9d}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL
 VAR_INPUT
@@ -38,7 +47,7 @@ ELSE
 	hwValue := sfcValue;
 	uiValue := sfcValue;
 END_IF
-sfcValue := uiValue;		// estado del sensor que se entregará al Grafcet	
+//sfcValue := uiValue;		// estado del sensor que se entregará al Grafcet	
 
 
 ]]></ST>

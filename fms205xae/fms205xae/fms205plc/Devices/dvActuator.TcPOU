@@ -82,5 +82,15 @@ uiInvisible := NOT hwValue;
 ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="SetValue" Id="{10585dcd-ae75-4b8a-8c38-8c1273112952}">
+      <Declaration><![CDATA[METHOD SetValue : BOOL
+VAR_INPUT
+	newValue: BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[hwValue := newValue;]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>

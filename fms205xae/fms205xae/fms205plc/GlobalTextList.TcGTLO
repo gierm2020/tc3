@@ -6,6 +6,11 @@
         <o xml:space="preserve" t="GlobalTextListObject">
           <l n="TextList" t="ArrayList" cet="TextListRow">
             <o>
+              <v n="TextID">"440"</v>
+              <v n="TextDefault">" mm"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"209"</v>
               <v n="TextDefault">"%d"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -33,6 +38,21 @@
             <o>
               <v n="TextID">"856"</v>
               <v n="TextDefault">"ABIn"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"442"</v>
+              <v n="TextDefault">"Aceptar Aluminio"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"446"</v>
+              <v n="TextDefault">"Aceptar Blancas"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"449"</v>
+              <v n="TextDefault">"Aceptar Negras"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -271,6 +291,11 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"1269"</v>
+              <v n="TextDefault">"FMS205 - Estación de carga de tapas       -       Equipo G07 Patos Descartados"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"207"</v>
               <v n="TextDefault">"Fotoelectrico"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -456,6 +481,11 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"1279"</v>
+              <v n="TextDefault">"Número de Tapas"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"377"</v>
               <v n="TextDefault">"Panel de pruebas"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -623,6 +653,11 @@
             <o>
               <v n="TextID">"849"</v>
               <v n="TextDefault">"Umbral"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"436"</v>
+              <v n="TextDefault">"Umbral Alta/Baja"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
