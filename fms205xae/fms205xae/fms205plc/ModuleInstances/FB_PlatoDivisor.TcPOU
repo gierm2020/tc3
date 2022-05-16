@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_PlatoDivisor" Id="{c71a4a01-3eb1-443b-a07e-accb57d2980d}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_PlatoDivisor EXTENDS FB_Module
 VAR_INPUT
@@ -16,7 +16,7 @@ VAR
 	
 	(* Sensores específicos *)
 	d0         AT %I*: BOOL; (* b0  (nombre=d0  c=I21 B=J1 b=29 módulo=EL1008 T=6  C=6 etiqueta=-B9,  input) Empujador del plato detrás *)
-    k1         AT %I*: BOOL; (* c1  (nombre=k1  c=I30 B=J1 b=15 módulo=EL1008 T=7  C=7 etiqueta=-B18, input) Empujador de tapa delante *)
+//    k1         AT %I*: BOOL; (* c1  (nombre=k1  c=I30 B=J1 b=15 módulo=EL1008 T=7  C=7 etiqueta=-B18, input) Empujador de tapa delante *)
 
 	(* Actuadores específicos *)
     D_1       AT %Q*: BOOL; (* bEMP (nombre=D+  c=Q20 B=J2  b=05 módulo=EL2008 T=8 C=8 etiqueta=-Y6,  output) Empujador del plato avanza *)
@@ -51,7 +51,8 @@ IC := InitialConditions();
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 fbController(
 	TRET := TRET, TEMP := TEMP,					// temporizadores específicos
-    k1 := k1, d0 := d0, 						// sensores específicos
+ //   k1 := k1,
+	d0 := d0, 						// sensores específicos
 	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack,
 	Ready=>Ready, Done=>Done, Failure=>Failure);
 
@@ -76,8 +77,24 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[d0 := NOT d0;
-k1 := NOT k1;]]></ST>
+//k1 := NOT k1;]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_PlatoDivisor">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_PlatoDivisor.InitialConditions">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_PlatoDivisor.ModuleControlFlow">
+      <LineId Id="3" Count="11" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="15" Count="13" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_PlatoDivisor.NegarSensores">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>
