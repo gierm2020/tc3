@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_Cinta_fms203" Id="{44b1797f-0549-403a-a0a9-eddb05c90108}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Cinta_fms203
+VAR_INPUT
+    Ack: BOOL := TRUE; (* Reconocimiento de funcionalidad completada *)
+    Execute: BOOL; (* Inicia la ejecucion de la funcionaliad solicitada *)
+    ID: BYTE; (* Identificador de la unidad funcional *)
+    Manual: BOOL; (* Establece modo de funcionamiento manual *)
+    MRT: TIME; (* Maximo tiempo de respuesta de los dispositivos (Max Response Time) *)
+    Pause: BOOL; (* Pausa la ejecucion de la funcionalidad  *)
+    Reset: BOOL; (* Restablece la condicion de fallo *)
+    Restart: BOOL; (* Reinicia el estado del controlador *)
+    Restore: BOOL; (* Restaura las condiciones iniciales (referencia) *)
+    Resume: BOOL; (* Continua la ejecucion de la funcionalidad en curso *)
+    Safe: BOOL := TRUE; (* Condicion de seguridad para iniciar una funcionalidad *)
+END_VAR
+VAR_OUTPUT
+    Done: BOOL; (* Funcionalidad completada *)
+    Fail: BOOL; (* Unidad funcional en fallo *)
+    FailCode: WORD; (* Codigo de fallo *)
+    FailDevice: BYTE; (* Identificador del dispositivo que falla *)
+    Ready: BOOL; (* Unidad funcional preparada para funcionar *)
+    Restored: BOOL; (* Unidad funcional restaurada *)
+    IC: BOOL := TRUE; (* Unidad funcional en referencia *)
+END_VAR
+VAR
+END_VAR
+VAR_INPUT
+    (* Funcionalidades *)
+    Situa: BOOL;
+    Transfiere: BOOL;
+
+    (* Mandos directos*)
+    MD_CintaAvanza: BOOL;
+    MD_CintaRetrocede: BOOL;
+    MD_RetenedorBaja: BOOL;
+    MD_SeparadorSube: BOOL;
+
+    (* Parametros *)
+    TE: TIME := T#1s; (* Tiempo de entrada del pale *)
+    TR: TIME := T#1s; (* Tiempo del retenedor *)
+    TS: TIME := T#1s; (* Tiempo del separador *)
+    TT: TIME := T#1s; (* Tiempo de transferencia del pale *)
+    TX: TIME := T#1s; (* Tiempo de salida del pale *)
+END_VAR
+VAR_OUTPUT
+    (* Parametros *)
+    CP: UINT; (* Codigo de pale *)
+    Situado: BOOL;
+    Transferido: BOOL;
+END_VAR
+VAR
+    Controlador: FB_Cinta_SFC;
+
+    (* Temporizadores de fallo *)
+    TemporizadorRetenedor: TON;
+    TemporizadorSeparador: TON;
+
+    (* Entradas *)
+    pp AT %I*: BOOL; (* Presencia de pale *)
+    cp0 AT %I*: BOOL; (* Codigo de pale bit 0 *)
+    cp1 AT %I*: BOOL; (* Codigo de pale bit 1 *)
+    cp2 AT %I*: BOOL; (* Codigo de pale bit 2 *)
+
+    (* Salidas *)
+    RUN AT %Q*: BOOL; (* Motor de la cinta activa [KA1] *)
+    REV AT %Q*: BOOL; (* Motor de la cinta invierte [KA2] *)
+    R_1 AT %Q*: BOOL; (* Retenedor de pale baja [R+] *)
+    S_1 AT %Q*: BOOL; (* Separador de pale sube [S+] *)
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(* FUNCION DE SALIDA *)
+(* Salidas *)
+Done := Controlador.Done;
+Fail := (FailCode <> 0);
+Ready := Controlador.Ready;
+Restored := Controlador.Restored;
+IC := TRUE;
+
+IF Controlador.Situado THEN
+    CP.0 := cp0;
+    CP.1 := cp1;
+    CP.2 := cp2;
+END_IF
+Situado := Controlador.Situado;
+Transferido := Controlador.Transferido;
+
+(* BLOQUES FUNCIONALES *)
+Controlador(
+    (* SFC-Flags *)
+    SFCPause := Pause OR Fail,
+    SFCReset := Restart,
+
+    (* Indicadores de sincronizacion *)
+    Ack := Ack,
+    Execute := Safe AND (Situa OR Transfiere),
+    Restore := Restore,
+    Resume := FALSE,
+
+    (* Funcionalidades *)
+    Situar := Situa,
+    Transferir := Transfiere,
+
+    (* Parametros *)
+    TE := TE,
+    TR := TR,
+    TS := TS,
+    TT := TT,
+    TX := TX,
+
+    (* Entradas *)
+    pp:= pp,
+);
+
+(* ACCIONES *)
+RUN := (Manual AND (MD_CintaAvanza OR MD_CintaRetrocede)) OR (NOT Pause AND Controlador.RUN);
+REV := (Manual AND MD_CintaRetrocede) OR Controlador.REV;
+R_1 := (Manual AND MD_RetenedorBaja) OR Controlador.R_1;
+S_1 := (Manual AND MD_SeparadorSube) OR Controlador.S_1;
+
+(* FUNCION DE FALLO *)
+IF Reset THEN
+    FailCode := 0;
+    FailDevice := 0;
+END_IF
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

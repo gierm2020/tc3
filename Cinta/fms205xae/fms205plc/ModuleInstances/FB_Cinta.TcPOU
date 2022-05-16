@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_Cinta" Id="{f4de692b-96c6-493e-9b33-3a90e20acfad}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Cinta EXTENDS FB_Module
+VAR_INPUT
+	situar: BOOL;
+	transportar: BOOL;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	fbController: FB_Cinta_SFC;
+	(*Sensores*)
+	pp    : dvSensor;
+	(*Actuadores*)
+	R_1   : dvActuator := (tm:=tm);
+	S_1   : dvActuator := (tm:=tm);
+	RUN   : dvActuator := (tm:=tm);
+	REV   : dvActuator := (tm:=tm);
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="ModuleControlFlow" Id="{8ef223d1-a933-4fe3-87e8-40d9ed750433}">
+      <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbController(	
+	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack,
+	Ready=>Ready, Done=>Done, Failure=>Failure);
+]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_Cinta">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Cinta.ModuleControlFlow">
+      <LineId Id="3" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

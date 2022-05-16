@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_DetectorFotoelectrico" Id="{9c6b326b-8120-4a79-942a-3ee0b68cb66a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_DetectorFotoelectrico EXTENDS FB_Module
+(*
+
+ESTACIONES DE DETECCIÓN DE MATERIAL - Manual de usuario #32/28
+
+Con el fin de diferenciar finalmente las tapas de nylon blanco de las de
+color negro, se ha incluido un detector fotoeléctrico. Dicho componente 
+proporciona una señal de detección únicamente, de las tapas de color 
+blanco
+ 
+*)
+
+// TODO PENDIENTE VER QUÉ PASA MIENTRAS SE MUEVE EL PLATO. NO DEBERÍA CAMBIAR EL SENSOR PORQUE NO HA PASADO POR ACK
+VAR_INPUT
+    ef         AT %I*: BOOL; (* ef  (nombre=df  c=I32 B=J1 b=04 módulo=EL1008 T=7  C=7 etiqueta=-B20, input) Detector fotoeléctrico *)
+END_VAR
+VAR_OUTPUT
+	LecturaFiable: BOOL := FALSE; 
+	TapaClara: BOOL;
+END_VAR
+
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="ModulePerformActions" Id="{357ca19b-a2f2-4f95-9ae5-44e396b69f2c}">
+      <Declaration><![CDATA[METHOD ModulePerformActions : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Done AND NOT LecturaFiable THEN
+	// si ha terminado de captar: guardar resultado
+	LecturaFiable		:= TRUE;
+	TapaClara			:= ef;
+
+ELSIF Ack THEN
+	// una vez que cambia el ciclo la lectura ya no es fiable
+	LecturaFiable		:= FALSE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_DetectorFotoelectrico">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_DetectorFotoelectrico.ModulePerformActions">
+      <LineId Id="3" Count="8" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

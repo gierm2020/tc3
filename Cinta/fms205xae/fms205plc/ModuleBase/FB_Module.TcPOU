@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_Module" Id="{cba3fcf8-6c8d-4174-8dda-f766b8b369f3}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Module
+
+VAR_INPUT
+	ID		: BYTE; // identificador de la unidad funcional (el módulo)
+	gm		: REFERENCE TO S_Gemma;
+	tm		: REFERENCE TO FB_Timelimits;
+	Name	: STRING;
+
+	IC: BOOL;
+	Execute: BOOL;
+	Ack: BOOL;
+END_VAR
+VAR_OUTPUT
+	Ready: BOOL;
+	Failure: BOOL;
+	Done: BOOL;
+END_VAR
+
+// TODO AÑADIR UN METODO GEMMA QUE SE INVOQUE DESDE PROCESSCYCLE PARA TRATAMIENTO DE PARADA, PAUSA...
+VAR_INPUT
+END_VAR
+
+VAR_OUTPUT
+	//ctOut: S_ControllerOutput;
+//	IC: BOOL;
+//	Done: BOOL;
+END_VAR
+VAR
+	// Parámetros que se establecen en el constructor
+
+	// Variables que permanecen durante la ejecución del objeto
+	fbModuleController: FB_Module_SFC;	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="InitialConditions" Id="{569290b0-7483-4183-aad6-de676bf056ec}">
+      <Declaration><![CDATA[METHOD InitialConditions : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[InitialConditions := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ModuleControlFlow" Id="{9383c466-5ef4-45f2-bc56-c203e01f0aa7}">
+      <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//----------------------------------- leer los sensores para determinar el estado del módulo
+
+
+//----------------------------------- preparar los datos que necesita el controlador
+//ctInp.HwIC := InitialConditions();
+IC := InitialConditions();
+
+
+
+//----------------------------------- ejecutar el controlador
+//fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
+fbModuleController(
+	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack,
+	Ready=>Ready, Done=>Done, Failure=>Failure);
+
+
+
+//----------------------------------- utilizar los resultados del controlador
+
+
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ModuleManageErrors" Id="{8ade10c1-f39a-4934-8daa-f961efae09a8}">
+      <Declaration><![CDATA[METHOD ModuleManageErrors : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ModulePerformActions" Id="{17632846-53ea-4ba0-9b40-61e8d351137e}">
+      <Declaration><![CDATA[METHOD ModulePerformActions : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ModuleProcessCycle" Id="{f59c6a25-056d-46b7-b6cf-2d87510fdf05}">
+      <Declaration><![CDATA[METHOD ModuleProcessCycle : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ModuleProcessGemma();
+ModuleReadInputs();
+ModuleControlFlow();
+
+ModulePerformActions();
+ModuleManageErrors();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ModuleProcessGemma" Id="{c87b0fa3-9ed6-4dfb-b9a8-19a8413dd1b6}">
+      <Declaration><![CDATA[METHOD ModuleProcessGemma : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ModuleReadInputs" Id="{72cc98b4-db8c-4331-bea1-c85f00e58403}">
+      <Declaration><![CDATA[METHOD ModuleReadInputs : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// leer los sensores y guardar el resultados que necesita el controlador
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="NegarSensores" Id="{25f09da9-7351-4c85-b6d1-aeccbc4704f1}">
+      <Declaration><![CDATA[METHOD NegarSensores : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// este método sirve para hacer pruebas
+// cada sensor se cambia de True a False o viceversa
+// de forma que al ejecutar el método el controlador salta al siguiente estaddo]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

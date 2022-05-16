@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_Controller_SFC" Id="{b1eab9be-49a6-4397-bfc3-8676828bc4c5}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Controller_SFC
+VAR_INPUT
+	tm: REFERENCE TO FB_Timelimits; //S_Timeouts;
+	//tm: FB_Timelimits; //S_Timeouts;
+	IC: BOOL;
+	Execute: BOOL;
+	Ack: BOOL;
+END_VAR
+VAR_OUTPUT
+	Ready: BOOL;
+	Failure: BOOL;
+	Done: BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

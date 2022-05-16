@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_Evacuador" Id="{50116491-c91a-4b60-887b-578d95c086cb}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Evacuador EXTENDS FB_Module
+(* 
+ESTACIÓN DE EVACUACIÓN DE TAPA INCORRECTA - Manual de usuario #33/29
+
+En caso de que la tapa que llegue a la penúltima de las estaciones del plato divisor, tras haber pasado por 
+los diferentes sensores encargados de determinar su material y su altura, no coincida con lo indicado por el 
+controlador central encargado de planificar la producción, ha de ser rechazada. Para ello se ha dispuesto en esta 
+estación un manipulador de dos ejes que en caso de recibir la orden correspondiente, recoge la tapa del plato 
+divisor y la deposita sobre una rampa de evacuación.
+
+Los componentes que forman parte de este manipulador son dos cilindros neumáticos de vástagos paralelos a modo de ejes, 
+sobre los que se ha fijado como elemento terminal una placa con tres ventosas para sujeción por vacío
+
+*)
+
+VAR_INPUT
+	Evacuar		: BOOL; // Hay que evacuar la tapa en la posición del módulo
+	//TSOL		: TIME := T#100MS; // tiempo después de soltar y antes de subir	    
+END_VAR
+
+VAR
+	fbController		: FB_Evacuador_SFC; 		// controlador para ejecución normal
+	
+    //f0        AT %I*: BOOL; (* gh0 (nombre=f0  c=I22 B=J2 b=22 módulo=EL1008 T=6  C=6 etiqueta=-B10, input) Pick and place de rechazo detrás *)
+	f0 		: dvSensor;
+	f1 		: dvSensor;
+	g0 		: dvSensor;
+	v1 		: dvSensor;
+    //f1        AT %I*: BOOL; (* gh1 (nombre=f1  c=I23 B=J2 b=06 módulo=EL1008 T=6  C=6 etiqueta=-B11, input) Pick and place de rechazo delante *)
+    //g0        AT %I*: BOOL; (* gv1 (nombre=g0  c=I24 B=J2 b=31 módulo=EL1008 T=6  C=6 etiqueta=-B12, input) Pick and place de rechazo arriba *)
+    //v1        AT %I*: BOOL; (* ge1 (nombre=v1  c=I25 B=J1 b=25 módulo=EL1008 T=7  C=7 etiqueta=-B13, input) Pick and place de rechazo vacío *)
+
+    //F_1       AT %Q*: BOOL; (* gHRA (nombre=F+  c=Q22 B=J2  b=35 módulo=EL2008 T=8 C=8 etiqueta=-Y8,  output) Pick and place de rechazo avanza (afuera) *)
+    // F_0       AT %Q*: BOOL; (* gHRR (nombre=F-  c=Q23 B=J2  b=32 módulo=EL2008 T=8 C=8 etiqueta=-Y9,  output) Pick and place de rechazo retrocede *)
+    //G_1       AT %Q*: BOOL; (* gVER (nombre=G+  c=Q24 B=J2  b=11 módulo=EL2008 T=8 C=8 etiqueta=-Y10, output) Pick and place de rechazo baja *)
+    // V_1       AT %Q*: BOOL; (* gEYE (nombre=V+  c=Q25 B=J2  b=08 módulo=EL2008 T=9 C=9 etiqueta=-Y11, output) Pick and place de rechazo succiona *)
+	F_0		: dvActuator := (tm:=tm);
+	F_1		: dvActuator := (tm:=tm);
+	G_1		: dvActuator := (tm:=tm);
+	V_1		: dvActuator := (tm:=tm);
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+]]></ST>
+    </Implementation>
+    <Method Name="InitialConditions" Id="{d5288280-f06a-44bb-9fd2-f9b3ed687057}">
+      <Declaration><![CDATA[METHOD InitialConditions : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[InitialConditions := f1.uiValue; // el evacuador está en condiciones iniciales cuando el sensor f1 está activado]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ModuleControlFlow" Id="{088423ab-0767-49f6-96df-c713fe6fe249}">
+      <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//----------------------------------- leer los sensores para determinar el estado del módulo
+
+
+//----------------------------------- preparar los datos que necesita el controlador
+
+f0.ProcessCycle(gm.ModeActual, sfcValue=>fbController.f0);
+f1.ProcessCycle(gm.ModeActual, sfcValue=>fbController.f1);
+g0.ProcessCycle(gm.ModeActual, sfcValue=>fbController.g0);
+v1.ProcessCycle(gm.ModeActual, sfcValue=>fbController.v1);
+
+//ctInp.HwIC := InitialConditions();
+IC := InitialConditions();
+
+//----------------------------------- ejecutar el controlador
+//fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
+fbController(
+	//TSOL := TSOL,								// temporizadores específicos
+    // f0 := f0, 
+	// f1 := f1, g0 := g0, v1 := v1,		// sensores específicos
+	Evacuar	:= Evacuar,							// otras entradas específicas
+	// tm := tm, 
+	IC:=IC, Execute:=Execute, Ack:=Ack,
+	Ready=>Ready, Done=>Done, Failure=>Failure);
+
+	
+//----------------------------------- utilizar los resultados del controlador
+
+// Cambios en actuadores por el modo manual
+//IF gm.ModeActual=E_GEMMA.F4VerificacionSinOrden THEN
+	; // TODO AÑADIR AQUI EL MODO MANUAL DEL ALIMENTADOR
+
+// Cambios en actuadores por el resultado del controlador
+//ELSE
+	// Actualizar actuadores hardware con lo que indique el controlador
+    //F_1       := fbController.F_1;
+    //F_0       := fbController.F_0;
+    // G_1       := fbController.G_1;
+    //V_1       := fbController.V_1;
+//END_IF
+F_0.ProcessCycle(gm.ModeActual, sfcValue:=fbController.F_0);
+F_1.ProcessCycle(gm.ModeActual, sfcValue:=fbController.F_1);
+G_1.ProcessCycle(gm.ModeActual, sfcValue:=fbController.G_1);
+V_1.ProcessCycle(gm.ModeActual, sfcValue:=fbController.V_1);
+
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="NegarSensores" Id="{02264919-8ad5-484f-b956-39cbf22e9013}">
+      <Declaration><![CDATA[METHOD NegarSensores : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//f0 := NOT f0;
+//f1 := NOT f1; 
+//g0 := NOT g0;
+//v1 := not v1;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

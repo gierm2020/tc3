@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_PickAndPlace" Id="{0acadc22-7b10-494f-8323-7cb38d3e0455}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_PickAndPlace EXTENDS FB_Module
+(* ESTACIÓN DE CARGA - Manual de usuario #31/27 
+La alimentación de material descrita en el punto anterior realiza el suministro 
+de tapas que posteriormente serán montadas en el conjunto preparado en 
+el palet. Sin embargo, tras esta fase resulta necesario realizar la carga de 
+la tapa sobre el plato divisor. 
+
+Para ello se ha dispuesto el manipulador de la imagen, compuesto por un cilindro 
+rotolineal, encargado de realizar la elevación y posterior giro de un brazo con una pinza 
+de dos dedos de apertura paralela. El giro de 180º realizado por este elemento, sitúa 
+la pinza sobre el punto exacto de descarga de la tapa en la primera estación del plato 
+divisor.
+
+ESTACIÓN DE INSERCIÓN TAPA - Manual de usuario #33/29
+Al igual que sucedía en la estación de inserción de eje, la última de las estaciones está encargada 
+del montaje de la tapa sobre el conjunto retenido en la cinta transportadora.
+
+Como puede observarse en la imagen, el manipulador previsto para realizar esta tarea 
+presenta idénticas características que el utilizado para depositar la tapa sobre el plato divisor. 
+Dispone de una pinza de apertura paralela para sujetar la tapa, que es elevada y desplazada 
+realizando un giro hasta el punto de descarga mediante un actuador neumático rotolineal. *)
+
+VAR_INPUT
+	Mover: BOOL := TRUE; // TODO HAY QUE CARGAR O DESCARGAR EN FUNCIÓN DEL RESTO DE LA MÁQUINA Y LAS CONSIGNAS DEL PANEL
+	TPIN: TIME := T#1S;  // Tiempo para que la pinza sujete la tapa	
+END_VAR
+
+VAR
+	fbController: FB_PickAndPlace_SFC; // controlador para ejecución normal
+
+	(* Sensores específicos *)
+	h0 AT %I*: BOOL; (* Final de carrera horizontal retraida *)
+	h1 AT %I*: BOOL; (* Final de carrera horizontal extendido *)
+	v1 AT %I*: BOOL; (*Final de carrera vertical abajo*)
+	v0 AT %I*: BOOL; (*Final de carrera vertical arriba*)
+
+	(* Actuadores específicos *)
+	HOR AT %Q*: BOOL; (* Actuador de extension de brazo horizontal *)
+	VER AT %Q*: BOOL; (* Actuador de movimiento vertical de brazo*)
+	PIN AT %Q*: BOOL; (*Actuador de pinza de brazo*)
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="InitialConditions" Id="{1ab95016-3a1b-4dc8-b780-aecabdebcf40}">
+      <Declaration><![CDATA[METHOD InitialConditions : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[InitialConditions := v0 AND h0; // el brazo está en condiciones iniciales cuando está arriba y retraído]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ModuleControlFlow" Id="{ad50b7d3-ffb1-4d5e-9f1d-9c4b9b9b584c}">
+      <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//----------------------------------- leer los sensores para determinar el estado del módulo
+
+
+//----------------------------------- preparar los datos que necesita el controlador
+IC := InitialConditions();
+
+//----------------------------------- ejecutar el controlador
+//fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
+fbController(
+	//ctInp := ctInp,								// entrada estándar
+	TPIN := TPIN,								// temporizadores específicos
+    h0 := h0, h1 := h1, v0 := v0, v1 := v1,		// sensores específicos
+	Mover := Mover,							// otras entradas específicas
+	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack,
+	Ready=>Ready, Done=>Done, Failure=>Failure);
+
+
+
+//----------------------------------- utilizar los resultados del controlador
+
+// Cambios en actuadores por el modo manual
+IF gm.ModeActual=E_GEMMA.F4VerificacionSinOrden THEN
+	; // TODO AÑADIR AQUI EL MODO MANUAL DEL ALIMENTADOR
+
+// Cambios en actuadores por el resultado del controlador
+ELSE
+	// Actualizar actuadores hardware con lo que indique el controlador
+	HOR := fbController.HOR;
+	VER := fbController.VER;
+	PIN := fbController.PIN;
+END_IF
+	]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="NegarSensores" Id="{57e2d05f-3e87-44b9-804d-894bd8aedefe}">
+      <Declaration><![CDATA[METHOD NegarSensores : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[h0 := NOT h0;
+h1 := NOT h1;
+v0 := NOT v0;
+v1 := NOT v1;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

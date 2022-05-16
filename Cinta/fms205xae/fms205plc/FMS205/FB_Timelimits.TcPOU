@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_Timelimits" Id="{ef045ad9-6a93-41a2-9abb-2c49cd7652eb}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Timelimits
+VAR_INPUT
+	// Velocidad variable de los controladores
+	Speed						: REAL := 100.0;
+	
+	
+	// dt_ Defalut Times
+	
+	// Tiempos generales
+	dt_MaximoTiempoRespuesta	: TIME := T#5S;
+	dt_TiempoReinicio			: TIME := T#5S;
+	
+	// Alimentador
+	dt_K_1 						: TIME := T#1S;				// Temporizador empujador tapa
+
+	// Cinta
+	dt_RUN_R					: TIME := T#400MS;
+	dt_RUN						: TIME := T#200MS;
+	dt_RUN_D					: TIME := T#1.2S;
+	
+	// Evacuador
+	dt_SOL 						: TIME := T#100MS; 		// tiempo después de soltar y antes de subir
+	dt_V_1						: TIME := T#5S;			// tiempo máximo succionando sin que se active el sensor v1
+	
+	// Medidor de tapa
+	dt_L_1						: TIME := T#1S;			// tiempo máximo de bajada del medidor de tapas
+	
+	// Pick and place
+	dt_PIN 						: TIME := T#1S;			// tiempo para pinzar una tapa antes de subir el brazo
+	
+	// Plato
+	dt_E_1						: TIME := T#400MS;		// tiempo para que el retenedor bloquee el plato
+	dt_D_1 						: TIME := T#1.4S;		// tiempo para girar el plato a la siguiente posición
+END_VAR
+
+
+VAR_OUTPUT
+	MaximoTiempoRespuesta		: TIME := dt_MaximoTiempoRespuesta;
+	TiempoReinicio				: TIME := dt_TiempoReinicio;
+	
+	
+	// Alimentador
+	K_1 						: TIME := dt_K_1;			// Temporizador empujador tapa
+
+	// Cinta
+	RUN_R					: TIME := dt_RUN_R;
+	RUN						: TIME := dt_RUN;
+	RUN_D					: TIME := dt_RUN_D;
+	
+	// Evacuador
+	SOL 						: TIME := dt_SOL; 		// tiempo después de soltar y antes de subir
+	V_1							: TIME := dt_V_1;		// tiempo máximo succionando sin que se active el sensor v1
+	
+	// Medidor de tapa
+	L_1	 						: TIME := dt_L_1;		// tiempo máximo de bajada del medidor de tapas
+	
+	// Pick and place
+	PIN 						: TIME := dt_PIN;		// tiempo para pinzar una tapa antes de subir el brazo
+	
+	// Plato
+	E_1							: TIME := dt_E_1;		// tiempo para que el retenedor bloquee el plato
+	D_1 						: TIME := dt_D_1;		// tiempo para girar el plato a la siguiente posición
+END_VAR
+
+VAR
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="UpdateSpeed" Id="{9bad9aae-19c1-4507-83ae-eae1b70a27de}">
+      <Declaration><![CDATA[METHOD UpdateSpeed : BOOL
+
+// Multiplica todos los límites de tiempo por un factor
+// 		> 1 para aumentar la velocidad y reducir los tiempos 
+//		< 1 para disminuir la velocidad y aumentar los tiempos  
+
+VAR_INPUT
+	NewSpeed : REAL := 100.0;
+END_VAR
+VAR
+	factor : REAL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[	IF NewSpeed <= 0 THEN
+		Speed := 1;
+	ELSE
+		Speed := NewSpeed;
+	END_IF
+	
+	factor := 100.0/Speed;
+ 
+	MaximoTiempoRespuesta	:= TO_TIME(TO_REAL(dt_MaximoTiempoRespuesta) * factor);
+	TiempoReinicio			:= TO_TIME(TO_REAL(dt_TiempoReinicio) * factor);
+ 	K_1						:= TO_TIME(TO_REAL(dt_K_1) * factor);
+	SOL						:= TO_TIME(TO_REAL(dt_SOL) * factor);
+	V_1						:= TO_TIME(TO_REAL(dt_V_1) * factor);
+	L_1						:= TO_TIME(TO_REAL(dt_L_1) * factor);
+	PIN						:= TO_TIME(TO_REAL(dt_PIN) * factor);
+	E_1						:= TO_TIME(TO_REAL(dt_E_1) * factor);
+	D_1						:= TO_TIME(TO_REAL(dt_D_1) * factor);
+]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_Timelimits">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Timelimits.UpdateSpeed">
+      <LineId Id="3" Count="16" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

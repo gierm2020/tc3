@@ -1,0 +1,361 @@
+<?xml version="1.0"?>
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.29">
+	<Project ProjectGUID="{141AA9E7-3CEC-43A4-B806-48021F85A500}" Target64Bit="true" ShowHideConfigurations="#x3c7">
+		<System>
+			<Tasks>
+				<Task Id="3" Priority="20" CycleTime="100000" AmsPort="350" AdtTasks="true">
+					<Name>PlcTask</Name>
+				</Task>
+			</Tasks>
+		</System>
+		<Plc>
+			<Project GUID="{0A234007-C338-4077-8376-84139EF10F94}" Name="fms205plc" PrjFilePath="fms205plc\fms205plc.plcproj" TmcFilePath="fms205plc\fms205plc.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="fms205plc\fms205plc.tmc">
+					<Name>fms205plc Instance</Name>
+					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
+					<Vars VarGrpType="1">
+						<Name>PlcTask Inputs</Name>
+						<Var>
+							<Name>MAIN.fbFMS205.mdAlimentador.k1</Name>
+							<Comment><![CDATA[ Se corresponde con empujador tapa delante c1 ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdPickAndPlaceCarga.h0</Name>
+							<Comment><![CDATA[ Final de carrera horizontal retraida ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdPickAndPlaceCarga.h1</Name>
+							<Comment><![CDATA[ Final de carrera horizontal extendido ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdPickAndPlaceCarga.v1</Name>
+							<Comment><![CDATA[Final de carrera vertical abajo]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdPickAndPlaceCarga.v0</Name>
+							<Comment><![CDATA[Final de carrera vertical arriba]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdMedidorTapa.fv</Name>
+							<Comment><![CDATA[Detector valor altura ]]></Comment>
+							<Type>UINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdCaptadorInductivo.ei</Name>
+							<Comment><![CDATA[ ei (nombre=di c=I31 B=J1 b=13 módulo=EL1008 T=7 C=7 etiqueta=-B19, input) Detector inductivo ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdDetectorFotoelectrico.ef</Name>
+							<Comment><![CDATA[ ef  (nombre=df  c=I32 B=J1 b=04 módulo=EL1008 T=7  C=7 etiqueta=-B20, input) Detector fotoeléctrico ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdEvacuador.f0.hwValue</Name>
+							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdEvacuador.f1.hwValue</Name>
+							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdEvacuador.g0.hwValue</Name>
+							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdEvacuador.v1.hwValue</Name>
+							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdPickAndPlaceDescarga.h0</Name>
+							<Comment><![CDATA[ Final de carrera horizontal retraida ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdPickAndPlaceDescarga.h1</Name>
+							<Comment><![CDATA[ Final de carrera horizontal extendido ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdPickAndPlaceDescarga.v1</Name>
+							<Comment><![CDATA[Final de carrera vertical abajo]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdPickAndPlaceDescarga.v0</Name>
+							<Comment><![CDATA[Final de carrera vertical arriba]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdPlatoDivisor.d0</Name>
+							<Comment><![CDATA[ b0  (nombre=d0  c=I21 B=J1 b=29 módulo=EL1008 T=6  C=6 etiqueta=-B9,  input) Empujador del plato detrás ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdPlatoDivisor.k1</Name>
+							<Comment><![CDATA[ c1  (nombre=k1  c=I30 B=J1 b=15 módulo=EL1008 T=7  C=7 etiqueta=-B18, input) Empujador de tapa delante ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.PE_Seta</Name>
+							<Comment><![CDATA[ Botones y alarmas específicos de una estación ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.POC_PulsadorReset</Name>
+							<Comment><![CDATA[ POC Botón azul está pulsado (PO Conectada)]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.PM_PulsadorMarcha</Name>
+							<Comment><![CDATA[ PM - Pulsador de marcha (verde)]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.PS_PulsadorStop</Name>
+							<Comment><![CDATA[ PS - Pulsador de parada (rojo)]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.SM_SelecAutoManual</Name>
+							<Comment><![CDATA[ SM - Selector modo auto/man]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+					</Vars>
+					<Vars VarGrpType="2" AreaNo="1">
+						<Name>PlcTask Outputs</Name>
+						<Var>
+							<Name>MAIN.fbFMS205.mdAlimentador.K_1</Name>
+							<Comment><![CDATA[ Se corresponde con el cTAP ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdAlimentador.FM</Name>
+							<Comment><![CDATA[ Se corresponde con el zFM ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdPickAndPlaceCarga.HOR</Name>
+							<Comment><![CDATA[ Actuador de extension de brazo horizontal ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdPickAndPlaceCarga.VER</Name>
+							<Comment><![CDATA[ Actuador de movimiento vertical de brazo]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdPickAndPlaceCarga.PIN</Name>
+							<Comment><![CDATA[Actuador de pinza de brazo]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdMedidorTapa.L_1</Name>
+							<Comment><![CDATA[ Medidor de altura baja ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdEvacuador.F_0.hwValue</Name>
+							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdEvacuador.F_1.hwValue</Name>
+							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdEvacuador.G_1.hwValue</Name>
+							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdEvacuador.V_1.hwValue</Name>
+							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdPickAndPlaceDescarga.HOR</Name>
+							<Comment><![CDATA[ Actuador de extension de brazo horizontal ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdPickAndPlaceDescarga.VER</Name>
+							<Comment><![CDATA[ Actuador de movimiento vertical de brazo]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdPickAndPlaceDescarga.PIN</Name>
+							<Comment><![CDATA[Actuador de pinza de brazo]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdPlatoDivisor.D_1</Name>
+							<Comment><![CDATA[ bEMP (nombre=D+  c=Q20 B=J2  b=05 módulo=EL2008 T=8 C=8 etiqueta=-Y6,  output) Empujador del plato avanza ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdPlatoDivisor.E_1</Name>
+							<Comment><![CDATA[ bRET (nombre=E+  c=Q21 B=J2  b=02 módulo=EL2008 T=8 C=8 etiqueta=-Y7,  output) Retenedor del plato retrocede ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.LM_LamparaMarcha</Name>
+							<Comment><![CDATA[ LM - Lámpara marcha (verde)]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.LS_LamparaStop</Name>
+							<Comment><![CDATA[ DUDAS - LA - Lámpara de alarma o lámpara de stop]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.AS_AvisadorSonoro</Name>
+							<Comment><![CDATA[ AS - Avisador Sonoro]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.LA_LamparaAlarma</Name>
+							<Comment><![CDATA[ DUDAS - Es lo mismo que falta de material?]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+					</Vars>
+					<UnrestoredVarLinks ImportTime="2022-05-09T00:25:06">
+						<OwnerA Name="InputDst" Prefix="TIPC^fms205plc^fms205plc Instance" Type="1">
+							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 7 (EL1008)">
+								<Link VarA="MAIN.fbFMS205.mdCaptadorInductivo.di" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 7^ei" Size="1" RestoreInfo="ANotFound"/>
+							</OwnerB>
+						</OwnerA>
+					</UnrestoredVarLinks>
+					<UnrestoredVarLinks ImportTime="2022-05-15T09:32:59">
+						<OwnerA Name="OutputSrc" Prefix="TIPC^fms205plc^fms205plc Instance" Type="2">
+							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 8 (EL2008)">
+								<Link VarA="MAIN.fbFMS205.mdEvacuador.G_1" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 8^gVER" Size="1" RestoreInfo="ANotFound"/>
+							</OwnerB>
+						</OwnerA>
+					</UnrestoredVarLinks>
+					<UnrestoredVarLinks ImportTime="2022-05-15T11:11:03">
+						<OwnerA Name="OutputSrc" Prefix="TIPC^fms205plc^fms205plc Instance" Type="2">
+							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 9 (EL2008)">
+								<Link VarA="MAIN.fbFMS205.mdEvacuador.V_1" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 1^gEYE" Size="1" RestoreInfo="ANotFound"/>
+							</OwnerB>
+						</OwnerA>
+					</UnrestoredVarLinks>
+					<UnrestoredVarLinks ImportTime="2022-05-15T11:19:00">
+						<OwnerA Name="OutputSrc" Prefix="TIPC^fms205plc^fms205plc Instance" Type="2">
+							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 8 (EL2008)">
+								<Link VarA="MAIN.fbFMS205.mdEvacuador.F_0" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 7^gHRR" Size="1" RestoreInfo="ANotFound"/>
+							</OwnerB>
+						</OwnerA>
+					</UnrestoredVarLinks>
+					<UnrestoredVarLinks ImportTime="2022-05-15T11:37:30">
+						<OwnerA Name="OutputSrc" Prefix="TIPC^fms205plc^fms205plc Instance" Type="2">
+							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 8 (EL2008)">
+								<Link VarA="MAIN.fbFMS205.mdEvacuador.F_1" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 6^gHRA" Size="1" RestoreInfo="ANotFound"/>
+							</OwnerB>
+						</OwnerA>
+					</UnrestoredVarLinks>
+					<UnrestoredVarLinks ImportTime="2022-05-15T14:12:56">
+						<OwnerA Name="InputDst" Prefix="TIPC^fms205plc^fms205plc Instance" Type="1">
+							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 6 (EL1008)">
+								<Link VarA="MAIN.fbFMS205.mdEvacuador.f0" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 6^gh0" Size="1" RestoreInfo="ANotFound"/>
+							</OwnerB>
+						</OwnerA>
+					</UnrestoredVarLinks>
+					<UnrestoredVarLinks ImportTime="2022-05-15T14:25:46">
+						<OwnerA Name="InputDst" Prefix="TIPC^fms205plc^fms205plc Instance" Type="1">
+							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 6 (EL1008)">
+								<Link VarA="MAIN.fbFMS205.mdEvacuador.f1" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 7^gh1" Size="1" RestoreInfo="ANotFound"/>
+								<Link VarA="MAIN.fbFMS205.mdEvacuador.g0" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 8^gv1" Size="1" RestoreInfo="ANotFound"/>
+							</OwnerB>
+							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 7 (EL1008)">
+								<Link VarA="MAIN.fbFMS205.mdEvacuador.v1" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 1^ge1" Size="1" RestoreInfo="ANotFound"/>
+							</OwnerB>
+						</OwnerA>
+					</UnrestoredVarLinks>
+					<Contexts>
+						<Context>
+							<Id NeedCalleeCall="true">0</Id>
+							<Name>PlcTask</Name>
+							<ManualConfig>
+								<OTCID>#x02010030</OTCID>
+							</ManualConfig>
+							<Priority>20</Priority>
+							<CycleTime>10000000</CycleTime>
+						</Context>
+					</Contexts>
+					<TaskPouOids>
+						<TaskPouOid Prio="20" OTCID="#x08502001"/>
+					</TaskPouOids>
+				</Instance>
+			</Project>
+		</Plc>
+		<Io>
+			<Device File="Dispositivo 1 (EtherCAT).xti" Id="1"/>
+		</Io>
+	</Project>
+	<Mappings>
+		<OwnerA Name="TIPC^fms205plc^fms205plc Instance">
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 10 (EL5151)">
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdMedidorTapa.fv" VarB="ENC Inputs^Counter value"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 2 (EL1008)">
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.fbPanel.hw.PE_Seta" VarB="Channel 1^zpe"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.fbPanel.hw.PM_PulsadorMarcha" VarB="Channel 3^zpm"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.fbPanel.hw.POC_PulsadorReset" VarB="Channel 5^zpoc"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.fbPanel.hw.PS_PulsadorStop" VarB="Channel 4^zps"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.fbPanel.hw.SM_SelecAutoManual" VarB="Channel 2^zsm"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 4 (EL2008)">
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.fbPanel.hw.LA_LamparaAlarma" VarB="Channel 2^zLA"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.fbPanel.hw.LM_LamparaMarcha" VarB="Channel 3^zLM"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdAlimentador.FM" VarB="Channel 4^zFM"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 6 (EL1008)">
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdEvacuador.f0.hwValue" VarB="Channel 6^gh0"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdEvacuador.f1.hwValue" VarB="Channel 7^gh1"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdEvacuador.v1.hwValue" VarB="Channel 8^gv1"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdPickAndPlaceCarga.h0" VarB="Channel 1^dh0"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdPickAndPlaceCarga.h1" VarB="Channel 2^dh1"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdPickAndPlaceCarga.v0" VarB="Channel 3^dv0"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdPickAndPlaceCarga.v1" VarB="Channel 4^dv1"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdPlatoDivisor.d0" VarB="Channel 5^b0"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 7 (EL1008)">
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdCaptadorInductivo.ei" VarB="Channel 7^ei"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdDetectorFotoelectrico.ef" VarB="Channel 8^ef"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdEvacuador.g0.hwValue" VarB="Channel 1^ge1"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdPickAndPlaceDescarga.h0" VarB="Channel 2^hh0"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdPickAndPlaceDescarga.h1" VarB="Channel 3^hh1"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdPickAndPlaceDescarga.v0" VarB="Channel 4^hv0"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdPickAndPlaceDescarga.v1" VarB="Channel 5^hv1"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdPlatoDivisor.k1" VarB="Channel 6^c1"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 8 (EL2008)">
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdEvacuador.F_0.hwValue" VarB="Channel 7^gHRR"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdPickAndPlaceCarga.HOR" VarB="Channel 1^dHOR"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdPickAndPlaceCarga.PIN" VarB="Channel 3^dPIN"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdPickAndPlaceCarga.VER" VarB="Channel 2^dVER"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdPlatoDivisor.D_1" VarB="Channel 4^bEMP"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdPlatoDivisor.E_1" VarB="Channel 5^bRET"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 9 (EL2008)">
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdAlimentador.K_1" VarB="Channel 5^cTAP"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdEvacuador.V_1.hwValue" VarB="Channel 1^gEYE"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdMedidorTapa.L_1" VarB="Channel 6^fVER"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdPickAndPlaceDescarga.HOR" VarB="Channel 2^hHOR"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdPickAndPlaceDescarga.PIN" VarB="Channel 4^hPIN"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdPickAndPlaceDescarga.VER" VarB="Channel 3^hVER"/>
+			</OwnerB>
+		</OwnerA>
+	</Mappings>
+</TcSmProject>
