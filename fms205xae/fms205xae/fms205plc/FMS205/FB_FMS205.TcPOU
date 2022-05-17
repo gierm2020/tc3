@@ -34,6 +34,8 @@ VAR
 	//tm					: S_Timeouts;
 	tm: FB_Timelimits 		;// := (Speed:=10.0); //S_Timeouts;
 	gm						: S_Gemma := (ModeActual:= E_GEMMA.A6Inicializando, ModePrev := E_GEMMA.A6Inicializando);
+	dr						: FB_Director;
+	
 	// módulos de la FMS205
 	mdAlimentador			: FB_Alimentador			:= (ID := 1, tm := tm, gm := gm, Name := 'Alimentador');
 	mdPickAndPlaceCarga 	: FB_PickAndPlace			:= (ID := 2, tm := tm, gm := gm, Name := 'Carga');
@@ -57,96 +59,106 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[fbPanel(gm:=gm);
+      <ST><![CDATA[dr.ProcessCycle(
+	IC := TRUE, // InitialConditions()
+	Fallo := FALSE,
+	FinCiclo := FALSE,
+	FinTarea := FALSE,
+	Preparada  := TRUE,
+	Finalizada := TRUE);
 
-
-IC:=InitialConditions();
-
-	
-Preparada := TRUE; // PENDIENTE SI LA ESTACIÓN NECESITA UNA SECUENCIA DE PREPARACIÓN 
-
-
-FinCiclo := 		(* Todos los módulos han terminado su parte del ciclo *)
-	mdAlimentador.Done AND
-	mdPickAndPlaceCarga.Done AND
-	mdMedidorTapa.Done AND
-	mdCaptadorInductivo.Done AND
-	mdDetectorFotoelectrico.Done AND
-	mdEvacuador.Done AND
-	mdPickAndPlaceDescarga.Done AND
-	mdPlatoDivisor.Done;
-
-IF FinCiclo THEN	
-	// Todos los módulos han terminado su secuencia de producir
-	// TODO SÓLO SE PUEDE CONTAR UNA TAPA HECHA SI NO SE HA RECHAZADO Y SI SE HA METIDO EN EL CARRO
-	ManiobrasRealizadas := ManiobrasRealizadas + 1;
-	// POAST15  ManiobrasPendientes := ManiobrasDeseadas - ManiobrasRealizadas;	
-	// Añadir aquí LA LÓGICA DEL FINAL DE CICLO
-	// p. ej. actualización del plato con los resultados de sensores  	
-END_IF
-ManiobrasPendientes := ManiobrasDeseadas - ManiobrasRealizadas; // POST15 hay que calcular siempre las maniobras pendientes
-
-FinTarea := ManiobrasPendientes = 0; 	// Se finaliza la tarea si no quedan maniobras pendientes
-
-Fallo:=									// La estaciónn está en fallo si al menos un módulo ha fallado
-	mdAlimentador.Failure OR
-	mdPickAndPlaceCarga.Failure OR
-	mdMedidorTapa.Failure OR 
-	mdCaptadorInductivo.Failure OR
-	mdDetectorFotoelectrico.Failure OR
-	mdEvacuador.Failure OR
-	mdPickAndPlaceDescarga.Failure; 
-
-	
-Finalizada := TRUE;	 // PENDIENTE SI LA ESTACIÓN NECESITA UNA SECUENCIA DE PREPARACIÓN 
-Director();
-
-Execute :=  (* El coordinador indica que hay empezar *)
-	(gm.ModeActual = E_GEMMA.F6Probando AND td.Execute) OR
-	(gm.ModeActual <> E_GEMMA.F6Probando AND
-		(
-			(gm.ModeActual = E_GEMMA.A2ParaFinCiclo) OR 
-	 		(gm.ModeActual = E_GEMMA.A3ParadaEstado) OR 
-	 	 	(gm.ModeActual = E_GEMMA.F1ProduccionNormal) OR 
-	 	 	(gm.ModeActual = E_GEMMA.F2SecuenciaPreparacion) OR 
-	 	 	(gm.ModeActual = E_GEMMA.F3SecuenciaFinalizacion) OR 
-	 	 	(gm.ModeActual = E_GEMMA.F5VerificacionOrdenada) OR 
-	 	 	(gm.ModeActual = E_GEMMA.F6Probando) OR 
-	 	 	(gm.ModeActual = E_GEMMA.D3ProducirConFallos)
-		) 
-	);
-		
-
-Ack := // Notificar a los módulos que ya pueden volver al inicio
-	(gm.ModeActual = E_GEMMA.F6Probando AND td.Ack) OR 
-	(gm.ModeActual <> E_GEMMA.F6Probando AND FinCiclo);
-// TODO SI HAY FIN DE CICLO HAY QUE HACER UN MONTÓN DE COSAS, POR EJEMPLO, ACTUALIZAR EL PLATO CON EL SENSOR FOTOELÉCTRICO
-
-
-mdEvacuador.Evacuar := TRUE; // TODO PENDIENTE DECISIÓN DE EVACUAR O NO EN FUNCIÓN DEL TIPO DE TAPA
-mdPickAndPlaceCarga.Mover := TRUE;
-mdPickAndPlaceDescarga.Mover := TRUE;
-
-// TODO CARGA Y DESCARGA TENGAN UNA OPCION DE NO HACER NADA
-
-IF gm.ModeActual = E_GEMMA.F6Probando THEN
-	TestControl();
+IF dr.bot_Funcion THEN
+	F5VerificacionOrdenada();
+ELSIF dr.bot_Empezar THEN
+	F1ProduccionNormal();
 ELSE
-	fbFMS205_Producir_SFC(
+	fbPanel(gm:=gm);
+	IC:=InitialConditions();
+	Preparada := TRUE; // PENDIENTE SI LA ESTACIÓN NECESITA UNA SECUENCIA DE PREPARACIÓN 
+	
+	
+	FinCiclo := 		(* Todos los módulos han terminado su parte del ciclo *)
+		mdAlimentador.Done AND
+		mdPickAndPlaceCarga.Done AND
+		mdMedidorTapa.Done AND
+		mdCaptadorInductivo.Done AND
+		mdDetectorFotoelectrico.Done AND
+		mdEvacuador.Done AND
+		mdPickAndPlaceDescarga.Done AND
+		mdPlatoDivisor.Done;
+	
+	IF FinCiclo THEN	
+		// Todos los módulos han terminado su secuencia de producir
+		// TODO SÓLO SE PUEDE CONTAR UNA TAPA HECHA SI NO SE HA RECHAZADO Y SI SE HA METIDO EN EL CARRO
+		ManiobrasRealizadas := ManiobrasRealizadas + 1;
+		// POAST15  ManiobrasPendientes := ManiobrasDeseadas - ManiobrasRealizadas;	
+		// Añadir aquí LA LÓGICA DEL FINAL DE CICLO
+		// p. ej. actualización del plato con los resultados de sensores  	
+	END_IF
+	ManiobrasPendientes := ManiobrasDeseadas - ManiobrasRealizadas; // POST15 hay que calcular siempre las maniobras pendientes
+	
+	FinTarea := ManiobrasPendientes = 0; 	// Se finaliza la tarea si no quedan maniobras pendientes
+	
+	Fallo:=									// La estaciónn está en fallo si al menos un módulo ha fallado
+		mdAlimentador.Failure OR
+		mdPickAndPlaceCarga.Failure OR
+		mdMedidorTapa.Failure OR 
+		mdCaptadorInductivo.Failure OR
+		mdDetectorFotoelectrico.Failure OR
+		mdEvacuador.Failure OR
+		mdPickAndPlaceDescarga.Failure; 
+	
 		
-		mdAlimentador 			:= mdAlimentador,
-		mdPickAndPlaceCarga 	:= mdPickAndPlaceCarga,
-		mdMedidorTapa			:= mdMedidorTapa,
-		mdCaptadorInductivo 	:= mdCaptadorInductivo,
-		mdDetectorFotoelectrico := mdDetectorFotoelectrico,
-		mdEvacuador			 	:= mdEvacuador,
-		mdPickAndPlaceDescarga 	:= mdPickAndPlaceDescarga,
-		mdPlatoDivisor			:= mdPlatoDivisor,
-		IC:=IC, Execute:=Execute, Ack:=Ack,
-		Ready=>Ready, Done=>Done, Failure=>Failure);
-
+	Finalizada := TRUE;	 // PENDIENTE SI LA ESTACIÓN NECESITA UNA SECUENCIA DE PREPARACIÓN 
+	Director();
+	
+	Execute :=  (* El coordinador indica que hay empezar *)
+		(gm.ModeActual = E_GEMMA.F6Probando AND dr.bot_Ejecutar) OR // td.Execute) OR
+		(gm.ModeActual <> E_GEMMA.F6Probando AND
+			(
+				(gm.ModeActual = E_GEMMA.A2ParaFinCiclo) OR 
+				(gm.ModeActual = E_GEMMA.A3ParadaEstado) OR 
+				(gm.ModeActual = E_GEMMA.F1ProduccionNormal) OR 
+				(gm.ModeActual = E_GEMMA.F2SecuenciaPreparacion) OR 
+				(gm.ModeActual = E_GEMMA.F3SecuenciaFinalizacion) OR 
+				(gm.ModeActual = E_GEMMA.F5VerificacionOrdenada) OR 
+				(gm.ModeActual = E_GEMMA.F6Probando) OR 
+				(gm.ModeActual = E_GEMMA.D3ProducirConFallos)
+			) 
+		);
+			
+	
+	Ack := // Notificar a los módulos que ya pueden volver al inicio
+		(gm.ModeActual = E_GEMMA.F6Probando AND dr.bot_Continuar) OR 
+		(gm.ModeActual <> E_GEMMA.F6Probando AND FinCiclo);
+	// TODO SI HAY FIN DE CICLO HAY QUE HACER UN MONTÓN DE COSAS, POR EJEMPLO, ACTUALIZAR EL PLATO CON EL SENSOR FOTOELÉCTRICO
+	
+	
+	mdEvacuador.Evacuar := TRUE; // TODO PENDIENTE DECISIÓN DE EVACUAR O NO EN FUNCIÓN DEL TIPO DE TAPA
+	mdPickAndPlaceCarga.Mover := TRUE;
+	mdPickAndPlaceDescarga.Mover := TRUE;
+	
+	// TODO CARGA Y DESCARGA TENGAN UNA OPCION DE NO HACER NADA
+	
+	IF dr.ModeActual = E_GEMMA.F5VerificacionOrdenada THEN //IF gm.ModeActual = E_GEMMA.F6Probando THEN
+		TestControl();
+	ELSE
+		fbFMS205_Producir_SFC(		
+			mdAlimentador 			:= mdAlimentador,
+			mdPickAndPlaceCarga 	:= mdPickAndPlaceCarga,
+			mdMedidorTapa			:= mdMedidorTapa,
+			mdCaptadorInductivo 	:= mdCaptadorInductivo,
+			mdDetectorFotoelectrico := mdDetectorFotoelectrico,
+			mdEvacuador			 	:= mdEvacuador,
+			mdPickAndPlaceDescarga 	:= mdPickAndPlaceDescarga,
+			mdPlatoDivisor			:= mdPlatoDivisor,
+			IC:=IC, Execute:=Execute, Ack:=Ack,
+			Ready=>Ready, Done=>Done, Failure=>Failure);
+	
+	END_IF
+	
 END_IF
-ModuleProcessCycle();
+ProcessCycle();
 
 ]]></ST>
     </Implementation>
@@ -310,6 +322,52 @@ gm.FamiDefail := (gm.ModeActual >= E_GEMMA.D1ParadaEmergencia) AND
 ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="F1ProduccionNormal" Id="{7ca323ea-768d-4b20-9a60-81cfe805fdbf}">
+      <Declaration><![CDATA[METHOD F1ProduccionNormal : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbFMS205_Producir_SFC(		
+	mdAlimentador 			:= mdAlimentador,
+	mdPickAndPlaceCarga 	:= mdPickAndPlaceCarga,
+	mdMedidorTapa			:= mdMedidorTapa,
+	mdCaptadorInductivo 	:= mdCaptadorInductivo,
+	mdDetectorFotoelectrico := mdDetectorFotoelectrico,
+	mdEvacuador			 	:= mdEvacuador,
+	mdPickAndPlaceDescarga 	:= mdPickAndPlaceDescarga,
+	mdPlatoDivisor			:= mdPlatoDivisor,
+	IC:=IC, Execute:=Execute, Ack:=Ack,
+	Ready=>Ready, Done=>Done, Failure=>Failure);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="F5VerificacionOrdenada" Id="{cc903692-dfc3-4295-9550-eca76703506f}">
+      <Declaration><![CDATA[METHOD F5VerificacionOrdenada : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[mdAlimentador.Execute           := dr.bot_Ejecutar AND dr.fun_Alimentar;
+mdPickAndPlaceCarga.Execute     := dr.bot_Ejecutar AND dr.fun_Cargar;
+mdMedidorTapa.Execute           := dr.bot_Ejecutar AND dr.fun_Altura;
+mdDetectorFotoelectrico.Execute := dr.bot_Ejecutar AND dr.fun_Color;
+mdCaptadorInductivo.Execute     := dr.bot_Ejecutar AND dr.fun_Material;
+mdEvacuador.Execute             := dr.bot_Ejecutar AND dr.fun_Rechazar;
+mdPickAndPlaceDescarga.Execute  := dr.bot_Ejecutar AND dr.fun_Descargar;
+mdPlatoDivisor.Execute          := dr.bot_Ejecutar AND dr.fun_Girar;
+
+mdAlimentador.Ack               := dr.bot_Continuar AND dr.fun_Alimentar;
+mdPickAndPlaceCarga.Ack         := dr.bot_Continuar AND dr.fun_Cargar;
+mdMedidorTapa.Ack               := dr.bot_Continuar AND dr.fun_Altura;
+mdDetectorFotoelectrico.Ack     := dr.bot_Continuar AND dr.fun_Color;
+mdCaptadorInductivo.Ack         := dr.bot_Continuar AND dr.fun_Material;
+mdEvacuador.Ack                 := dr.bot_Continuar AND dr.fun_Rechazar;
+mdPickAndPlaceDescarga.Ack      := dr.bot_Continuar AND dr.fun_Descargar;
+mdPlatoDivisor.Ack              := dr.bot_Continuar AND dr.fun_Girar;
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="InitialConditions" Id="{6c17034c-aab7-41fb-b0b6-e85a6db67498}">
       <Declaration><![CDATA[METHOD InitialConditions : BOOL
 VAR_INPUT
@@ -332,8 +390,8 @@ InitialConditions :=
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ModuleProcessCycle" Id="{02e4c75f-69e3-444f-8a2e-ecad65532e26}">
-      <Declaration><![CDATA[METHOD ModuleProcessCycle : BOOL
+    <Method Name="ProcessCycle" Id="{02e4c75f-69e3-444f-8a2e-ecad65532e26}">
+      <Declaration><![CDATA[METHOD ProcessCycle : BOOL
 VAR_INPUT
 END_VAR
 ]]></Declaration>
@@ -346,7 +404,7 @@ mdDetectorFotoelectrico.ModuleProcessCycle();
 mdEvacuador.ModuleProcessCycle();
 mdPickAndPlaceDescarga.ModuleProcessCycle();
 
-tm.UpdateSpeed(NewSpeed:=fbPanel.cn.NewSpeed); 
+tm.UpdateSpeed(NewSpeed:=100);// fbPanel.cn.NewSpeed); 
 
 mdPlatoDivisor.tm REF=tm;
 //mdPlatoDivisor.tm :=tm;
@@ -372,23 +430,6 @@ IF td.FlancoNegar.Q THEN
 END_IF
 
 
-mdAlimentador.Execute 			:= td.Alime AND td.Execute;
-mdPickAndPlaceCarga.Execute 	:= td.Carga AND td.Execute;
-mdMedidorTapa.Execute 			:= td.Medid AND td.Execute;
-mdDetectorFotoelectrico.Execute := td.Fotoe AND td.Execute;
-mdCaptadorInductivo.Execute 	:= td.Induc AND td.Execute;
-mdEvacuador.Execute				:= td.Evacu AND td.Execute;
-mdPickAndPlaceDescarga.Execute 	:= td.Desca AND td.Execute;
-mdPlatoDivisor.Execute			:= td.Plato	AND td.Execute;
-
-mdAlimentador.Ack 				:= td.Alime AND td.Ack;
-mdPickAndPlaceCarga.Ack		 	:= td.Carga AND td.Ack;
-mdMedidorTapa.Ack				:= td.Medid AND td.Ack;
-mdDetectorFotoelectrico.Ack		:= td.Fotoe AND td.Ack;
-mdCaptadorInductivo.Ack		 	:= td.Induc AND td.Ack;
-mdEvacuador.Ack					:= td.Evacu AND td.Ack;
-mdPickAndPlaceDescarga.Ack	 	:= td.Desca AND td.Ack;
-mdPlatoDivisor.Ack				:= td.Plato	and td.Ack;
 
 
 //mdAlimentador.ModuleProcessCycle();	

@@ -5,9 +5,9 @@
 
 // TODO CAMBIAR EL SITIO DE RECOGER LA MEDIDA, NO ESPERAR A QUE SUBA EL MEDIDOR PARA RECOGER EL NÚMERO SINO QUE HACERLO JUSTO CUANDO TERMINE DE BAJAR
 VAR_INPUT
-	TMED: TIME := T#1S;			// Temporizador medición tapa
-	fv: UINT; 					// Detector valor altura 
-	LecturaFiable: BOOL;		// La lectura de la altura ha terminado 	
+	//TMED: TIME := T#1S;			// Temporizador medición tapa
+	dh: UINT; 					// Detector valor altura 
+	LecturaRegistrada: BOOL;		// La lectura de la altura ha terminado 	
 END_VAR
 
 VAR_OUTPUT
@@ -859,7 +859,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"LecturaFiable"</v>
+                            <v n="Value">"LecturaRegistrada"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">240L</v>

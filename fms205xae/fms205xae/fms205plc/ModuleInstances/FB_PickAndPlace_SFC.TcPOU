@@ -4,7 +4,7 @@
     <Declaration><![CDATA[FUNCTION_BLOCK FB_PickAndPlace_SFC EXTENDS FB_Controller_SFC
 VAR_INPUT
 	Mover: BOOL;
-	TPIN: TIME; (* Tiempo de cierre y apertura de la pinza de carga *)	
+	//TPIN: TIME; (* Tiempo de cierre y apertura de la pinza de carga *)	
 	h0: BOOL; 	(* Final de carrera horizontal retraida *)
 	h1: BOOL; 	(* Final de carrera horizontal extendido *)
 	v1: BOOL; 	(*Final de carrera vertical abajo*)

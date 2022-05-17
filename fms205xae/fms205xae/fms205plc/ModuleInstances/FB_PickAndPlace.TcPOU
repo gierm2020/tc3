@@ -32,15 +32,15 @@ VAR
 	fbController: FB_PickAndPlace_SFC; // controlador para ejecución normal
 
 	(* Sensores específicos *)
-	h0 AT %I*: BOOL; (* Final de carrera horizontal retraida *)
-	h1 AT %I*: BOOL; (* Final de carrera horizontal extendido *)
-	v1 AT %I*: BOOL; (*Final de carrera vertical abajo*)
-	v0 AT %I*: BOOL; (*Final de carrera vertical arriba*)
+	h0 : dvSensor; //AT %I*: BOOL; (* Final de carrera horizontal retraida *)
+	h1 : dvSensor; //AT %I*: BOOL; (* Final de carrera horizontal extendido *)
+	v1 : dvSensor; //AT %I*: BOOL; (*Final de carrera vertical abajo*)
+	v0 : dvSensor; //AT %I*: BOOL; (*Final de carrera vertical arriba*)
 
 	(* Actuadores específicos *)
-	HOR AT %Q*: BOOL; (* Actuador de extension de brazo horizontal *)
-	VER AT %Q*: BOOL; (* Actuador de movimiento vertical de brazo*)
-	PIN AT %Q*: BOOL; (*Actuador de pinza de brazo*)
+	HOR : dvActuator; // AT %Q*: BOOL; (* Actuador de extension de brazo horizontal *)
+	VER : dvActuator; //AT %Q*: BOOL; (* Actuador de movimiento vertical de brazo*)
+	PIN : dvActuator; //AT %Q*: BOOL; (*Actuador de pinza de brazo*)
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -49,14 +49,17 @@ END_VAR]]></Declaration>
       <Declaration><![CDATA[METHOD InitialConditions : BOOL
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[InitialConditions := v0 AND h0; // el brazo está en condiciones iniciales cuando está arriba y retraído]]></ST>
+        <ST><![CDATA[InitialConditions := TRUE; // InitialConditions := v0 AND h0; // el brazo está en condiciones iniciales cuando está arriba y retraído]]></ST>
       </Implementation>
     </Method>
     <Method Name="ModuleControlFlow" Id="{ad50b7d3-ffb1-4d5e-9f1d-9c4b9b9b584c}">
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[//----------------------------------- leer los sensores para determinar el estado del módulo
+        <ST><![CDATA[h0.ProcessCycle(gm.ModeActual, sfcValue=>fbController.h0);
+h1.ProcessCycle(gm.ModeActual, sfcValue=>fbController.h1);
+v0.ProcessCycle(gm.ModeActual, sfcValue=>fbController.v0);
+v1.ProcessCycle(gm.ModeActual, sfcValue=>fbController.v1);
 
 
 //----------------------------------- preparar los datos que necesita el controlador
@@ -66,14 +69,17 @@ IC := InitialConditions();
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 fbController(
 	//ctInp := ctInp,								// entrada estándar
-	TPIN := TPIN,								// temporizadores específicos
-    h0 := h0, h1 := h1, v0 := v0, v1 := v1,		// sensores específicos
+	//TPIN := TPIN,								// temporizadores específicos
+    //h0 := h0, h1 := h1, v0 := v0, v1 := v1,		// sensores específicos
 	Mover := Mover,							// otras entradas específicas
-	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack,
-	Ready=>Ready, Done=>Done, Failure=>Failure);
+	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack);
 
 
+HOR.ProcessCycle(gm.ModeActual, sfcValue:=fbController.HOR);
+VER.ProcessCycle(gm.ModeActual, sfcValue:=fbController.VER);
+PIN.ProcessCycle(gm.ModeActual, sfcValue:=fbController.PIN);
 
+(*
 //----------------------------------- utilizar los resultados del controlador
 
 // Cambios en actuadores por el modo manual
@@ -87,19 +93,7 @@ ELSE
 	VER := fbController.VER;
 	PIN := fbController.PIN;
 END_IF
-	]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="NegarSensores" Id="{57e2d05f-3e87-44b9-804d-894bd8aedefe}">
-      <Declaration><![CDATA[METHOD NegarSensores : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[h0 := NOT h0;
-h1 := NOT h1;
-v0 := NOT v0;
-v1 := NOT v1;]]></ST>
+	*)]]></ST>
       </Implementation>
     </Method>
   </POU>

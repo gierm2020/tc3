@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_CaptadorInductivo" Id="{2358bbd4-4505-47c4-8c5f-b848f9a2a136}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_CaptadorInductivo EXTENDS FB_Module
 (*
@@ -13,12 +13,13 @@ plato sitúa frente a él cada vez que realiza un giro, sea de aluminio.
 
 *)
 VAR_INPUT
-    ei         AT %I*: BOOL; (* ei (nombre=di c=I31 B=J1 b=13 módulo=EL1008 T=7 C=7 etiqueta=-B19, input) Detector inductivo *)
+    di         : dvSensor; // AT %I*: BOOL; (* ei (nombre=di c=I31 B=J1 b=13 módulo=EL1008 T=7 C=7 etiqueta=-B19, input) Detector inductivo *)
 END_VAR
 
 VAR_OUTPUT
 	LecturaFiable: BOOL := FALSE; 
 	TapaMetalica: BOOL;
+	strUi	: STRING := '?';
 END_VAR
 
 VAR
@@ -37,11 +38,13 @@ END_VAR
         <ST><![CDATA[IF Done AND NOT LecturaFiable THEN
 	// si ha terminado de captar: guardar resultado
 	LecturaFiable		:= TRUE;
-	TapaMetalica		:= ei;
+	TapaMetalica		:= di.GetValue();
+	strUi := SEL(TapaMetalica, 'Plástico','Metálica');
 
 ELSIF Ack THEN
 	// una vez que cambia el ciclo la lectura ya no es fiable
 	LecturaFiable		:= FALSE;
+	strUi := '?';
 END_IF
 
 
@@ -53,12 +56,5 @@ Plato[4].Fin := (Plato[4].TapaMedida <> vIndefinido);
 ]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_CaptadorInductivo">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_CaptadorInductivo.ModulePerformActions">
-      <LineId Id="3" Count="15" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

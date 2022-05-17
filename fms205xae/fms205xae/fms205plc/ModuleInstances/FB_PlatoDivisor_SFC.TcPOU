@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_PlatoDivisor_SFC" Id="{780d8d1f-d39e-46b4-929b-6b9a28c712e1}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_PlatoDivisor_SFC EXTENDS FB_Controller_SFC
 
 VAR_INPUT
-	TRET		: TIME;
-	TEMP		: TIME;	
+	//TRET		: TIME;
+	//TEMP		: TIME;	
 //	k1			: BOOL;
 	d0  		: BOOL; 
 END_VAR

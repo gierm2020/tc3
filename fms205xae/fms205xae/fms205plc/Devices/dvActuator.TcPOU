@@ -42,12 +42,13 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[uiEnabled :=  (ModeActual = E_GEMMA.F4VerificacionSinOrden); // Planta habilitado sólo en modo F4
+        <ST><![CDATA[uiEnabled :=  FALSE; // (ModeActual = E_GEMMA.F4VerificacionSinOrden); // Planta habilitado sólo en modo F4
  
 IF uiEnabled THEN
-	// Actualizar el hardware con la visualización
+	// Actualizar el hardware con la entrada desde la visualización
 	hwValue := uiValue;
 ELSE
+	// Actualizar el hardware y la visualicación con la entrada desde el Grafcet
 	hwValue := sfcValue;
 	uiValue := sfcValue;
 END_IF

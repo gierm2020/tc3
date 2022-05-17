@@ -53,6 +53,9 @@
     <Compile Include="FMS203 TC2\FB_Panel_fms203.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FMS205\FB_Director.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FMS205\FB_FMS205.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -92,9 +95,6 @@
     <Compile Include="ModuleInstances\FB_Cinta_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ModuleInstances\FB_DetectorCapacitivo.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ModuleInstances\FB_DetectorFotoelectrico.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -129,6 +129,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Visualization Manager.TcVMO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VISUs\FB_FMS205_UI.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="VISUs\FMS205Testing.TcVIS">

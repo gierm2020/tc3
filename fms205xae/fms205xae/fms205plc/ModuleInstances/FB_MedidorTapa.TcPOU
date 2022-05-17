@@ -25,22 +25,24 @@ este dato es posible determinar de forma directa la altura de la tapa
 *)
 
 VAR_OUTPUT
-	LecturaFiable	: BOOL;
+	LecturaRegistrada	: BOOL;
 	Altura_mm		: REAL;
 	Altura_Pulsos	: UINT;
+	strUi : STRING := '?';
+
 END_VAR
 VAR
 	(* Controlador  específico *)
 	fbController: FB_MedidorTapa_SFC;
 
 	(* Temporizadores específicos *)
-	TMED: TIME := T#1S;	
+	//TMED: TIME := T#1S;	
 	
 	(* Sensores específicos *)
-	fv  AT %I*: UINT; (*Detector valor altura *)
+	dh AT %I*: UINT; (*Detector valor altura *)
 
 	(* Actuadores específicos *)
-	L_1 AT %Q*: BOOL; (* Medidor de altura baja *)	
+	L_1 : dvActuator; // AT %Q*: BOOL; (* Medidor de altura baja *)	
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -61,7 +63,6 @@ END_VAR
       <Implementation>
         <ST><![CDATA[//----------------------------------- leer los sensores para determinar el estado del módulo
 
-
 //----------------------------------- preparar los datos que necesita el controlador
 IC := InitialConditions();
 
@@ -70,15 +71,13 @@ IC := InitialConditions();
 //----------------------------------- ejecutar el controlador
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 fbController(
-	TMED := TMED,								// temporizadores específicos
-    fv := fv,									// sensores específicos
-	LecturaFiable	:= LecturaFiable,			// otras entradas específicas
-	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack,
-	Ready=>Ready, Done=>Done, Failure=>Failure);
+	// TMED := TMED,								// temporizadores específicos
+    dh := dh,									// sensores específicos
+	LecturaRegistrada	:= LecturaRegistrada,			// otras entradas específicas
+	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack);
+L_1.ProcessCycle(gm.ModeActual, sfcValue:=fbController.L_1);
 
-
-
-//----------------------------------- utilizar los resultados del controlador
+(*//----------------------------------- utilizar los resultados del controlador
 
 // Cambios en actuadores por el modo manual
 IF gm.ModeActual=E_GEMMA.F4VerificacionSinOrden THEN
@@ -89,18 +88,21 @@ ELSE
 	// Actualizar actuadores hardware con lo que indique el controlador
 	L_1 := fbController.L_1;
 END_IF
+*)
 
 // Leer la altura cuando el lector está abajo
-IF fbController.Leyendo AND NOT LecturaFiable THEN
-	Altura_Pulsos	:= fv;
-	Altura_mm		:= -0.0257*fv + 52.532;				 // calcular la altura con la ecuación de regresión
+IF fbController.Leyendo AND NOT LecturaRegistrada THEN
+	Altura_Pulsos	:= dh;
+	Altura_mm		:= -0.0257*dh + 52.532;				 // calcular la altura con la ecuación de regresión
 	Altura_mm 		:= SEL(Altura_mm < 0, Altura_mm, 0); // si la altura es negativa dejar cero
-	LecturaFiable 	:= TRUE;
-
+	LecturaRegistrada 	:= TRUE;
+	strUi := TO_STRING(Altura_mm);
+	strUi := concat(strUi, ' mm');
 ELSIF Ack THEN
-	LecturaFiable 	:= FALSE; 	// Resetear la lectura para el siguiente ciclo
+	LecturaRegistrada 	:= FALSE; 	// Resetear la lectura para el siguiente ciclo
 	Altura_Pulsos	:= 0;
 	Altura_mm		:= 0;
+	strUi := '?';
 END_IF
 	 
 

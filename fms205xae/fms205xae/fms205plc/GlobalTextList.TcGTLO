@@ -21,6 +21,46 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"50"</v>
+              <v n="TextDefault">"0º"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"53"</v>
+              <v n="TextDefault">"135º"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"54"</v>
+              <v n="TextDefault">"180º"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"55"</v>
+              <v n="TextDefault">"225º"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"56"</v>
+              <v n="TextDefault">"270º"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"57"</v>
+              <v n="TextDefault">"315º"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"51"</v>
+              <v n="TextDefault">"45º"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"52"</v>
+              <v n="TextDefault">"90º"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"208"</v>
               <v n="TextDefault">"a0"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -46,8 +86,18 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"907"</v>
+              <v n="TextDefault">"Aceptar aluminio"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"446"</v>
               <v n="TextDefault">"Aceptar Blancas"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"932"</v>
+              <v n="TextDefault">"Aceptar blancas"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -83,6 +133,16 @@
             <o>
               <v n="TextID">"562"</v>
               <v n="TextDefault">"AlturaOut"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"920"</v>
+              <v n="TextDefault">"Alu. Alta"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"913"</v>
+              <v n="TextDefault">"Alu. Baja"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -128,6 +188,16 @@
             <o>
               <v n="TextID">"860"</v>
               <v n="TextDefault">"Blanco"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"945"</v>
+              <v n="TextDefault">"Bln. Alta"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"939"</v>
+              <v n="TextDefault">"Bln. Baja"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -196,6 +266,21 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"49"</v>
+              <v n="TextDefault">"Descripción modo"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"746"</v>
+              <v n="TextDefault">"Det. Fotoeléctrico"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"750"</v>
+              <v n="TextDefault">"Det. Inductivo"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"565"</v>
               <v n="TextDefault">"DetColor"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -241,8 +326,18 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"731"</v>
+              <v n="TextDefault">"Emergencia (D1)"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"214"</v>
               <v n="TextDefault">"Empezar"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"717"</v>
+              <v n="TextDefault">"Empezar (F1)"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -291,6 +386,11 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"386"</v>
+              <v n="TextDefault">"FMS205 - Estación de carga de tapas"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"1269"</v>
               <v n="TextDefault">"FMS205 - Estación de carga de tapas       -       Equipo G07 Patos Descartados"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -303,6 +403,16 @@
             <o>
               <v n="TextID">"223"</v>
               <v n="TextDefault">"Funcion"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"755"</v>
+              <v n="TextDefault">"Función (F5)"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"48"</v>
+              <v n="TextDefault">"Fx"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -396,6 +506,11 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"722"</v>
+              <v n="TextDefault">"Llenar (F2)"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"864"</v>
               <v n="TextDefault">"LM"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -418,6 +533,11 @@
             <o>
               <v n="TextID">"775"</v>
               <v n="TextDefault">"Medidor"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"1334"</v>
+              <v n="TextDefault">"Medir Altura"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -471,6 +591,16 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"712"</v>
+              <v n="TextDefault">"Ngr. Alta"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"708"</v>
+              <v n="TextDefault">"Ngr. Baja"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"11"</v>
               <v n="TextDefault">"NoTapas"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -486,8 +616,18 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"900"</v>
+              <v n="TextDefault">"Número de tapas"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"377"</v>
               <v n="TextDefault">"Panel de pruebas"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"894"</v>
+              <v n="TextDefault">"Panel Físico"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -503,6 +643,11 @@
             <o>
               <v n="TextID">"219"</v>
               <v n="TextDefault">"Pausar"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"736"</v>
+              <v n="TextDefault">"Pausar (A3-&gt;4)"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -523,6 +668,11 @@
             <o>
               <v n="TextID">"870"</v>
               <v n="TextDefault">"Planta"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"926"</v>
+              <v n="TextDefault">"Planta (F4)"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -576,13 +726,28 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"389"</v>
+              <v n="TextDefault">"Requisitos de producción"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"220"</v>
               <v n="TextDefault">"Reset"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"741"</v>
+              <v n="TextDefault">"Reset (A6-&gt;1)"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"8"</v>
               <v n="TextDefault">"Resultados"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"47"</v>
+              <v n="TextDefault">"Retroc."</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -686,6 +851,11 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"727"</v>
+              <v n="TextDefault">"Vaciar (F3)"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"10"</v>
               <v n="TextDefault">"Velocidad"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -693,6 +863,11 @@
             <o>
               <v n="TextID">"564"</v>
               <v n="TextDefault">"V_1"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"383"</v>
+              <v n="TextDefault">"xx"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
           </l>

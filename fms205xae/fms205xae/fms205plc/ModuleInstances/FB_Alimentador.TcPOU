@@ -14,16 +14,9 @@ neumático que realiza la extracción
 VAR
 	(* Controlador  específico *)
 	fbController: FB_Alimentador_SFC;
-
-	(* Temporizadores específicos *)
-	TK_1: TIME := T#1S;	
-
-	(* Sensores específicos *)
-	k1 AT %I*: BOOL; (* Se corresponde con empujador tapa delante c1 *)
-
-	(* Actuadores específicos *)
-	K_1 AT %Q*: BOOL; (* Se corresponde con el cTAP *)
-	FM AT %Q*: BOOL;  (* Se corresponde con el zFM *)
+	k1 : dvSensor; //AT %I*: BOOL; (* Se corresponde con empujador tapa delante c1 *)
+	K_1 : dvActuator := (tm:=tm); //AT %Q*: BOOL; (* Se corresponde con el cTAP *)
+	FM : dvActuator := (tm:=tm); //AT %Q*: BOOL;  (* Se corresponde con el zFM *)
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -35,14 +28,24 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[InitialConditions := NOT k1; // el alimentador está en estado inicial si k1 está apagado]]></ST>
+        <ST><![CDATA[InitialConditions := TRUE; // NOT k1.hwValue; // el alimentador está en estado inicial si k1 está apagado]]></ST>
       </Implementation>
     </Method>
     <Method Name="ModuleControlFlow" Id="{d7358fc0-6ede-496b-926f-c7f1a8440317}">
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[//----------------------------------- leer los sensores para determinar el estado del módulo
+        <ST><![CDATA[k1.ProcessCycle(gm.ModeActual, sfcValue=>fbController.k1);
+IC := InitialConditions();
+fbController(
+	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack);
+K_1.ProcessCycle(gm.ModeActual, sfcValue:=fbController.K_1);
+FM.ProcessCycle(gm.ModeActual, sfcValue:=fbController.FM);
+
+(*    
+//----------------------------------- utilizar los resultados del controlador
+
+//----------------------------------- leer los sensores para determinar el estado del módulo
 
 
 //----------------------------------- preparar los datos que necesita el controlador
@@ -76,7 +79,7 @@ END_IF
 // Cambios en actuadores independientes del modo manual
 FM := fbcontroller.FM; // actuador de falta de material
 
-
+*)
 
 
 

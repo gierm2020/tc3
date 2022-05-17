@@ -1,0 +1,264 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_Director" Id="{1485be2f-2009-4092-b7e4-7ed9a9ca4fab}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Director
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+	FamiArret	: BOOL; 			// Familia de parada
+	FamiFonct	: BOOL; 			// Familia de funcionamiento
+	FamiDefail	: BOOL; 			// Familia de salida de fallos	
+	ModeActual		: E_GEMMA; 		// Modo GEMMA actual
+	ModePrev		: E_GEMMA; 		// Modo GEMMA anterior al actual
+	stMode			: STRING := 'Fx'; 
+END_VAR	
+
+VAR_OUTPUT
+    fun_ABIn		: BOOL;
+    fun_AAIn		: BOOL;
+    fun_BBIn		: BOOL;
+    fun_BAIn		: BOOL;
+    fun_NBIn		: BOOL;
+    fun_NAIn		: BOOL;
+    fun_Llenar		: BOOL;
+    fun_Vaciar		: BOOL;
+    fun_Alimentar		: BOOL;
+    fun_Girar		: BOOL;
+    fun_Situar		: BOOL;
+    fun_Altura		: BOOL;
+    fun_Color		: BOOL;
+    fun_Material		: BOOL;
+    fun_Cargar		: BOOL;
+    fun_Rechazar		: BOOL;
+    fun_Descargar		: BOOL;
+    fun_Transferir		: BOOL;
+    bot_Planta		: BOOL;
+    bot_Empezar		: BOOL;
+    bot_Emerg		: BOOL;
+    bot_Pausar		: BOOL;
+    bot_Reset		: BOOL;
+    bot_Funcion		: BOOL;
+    bot_Ejecutar		: BOOL;
+    bot_Continuar		: BOOL;
+END_VAR
+VAR
+    act_K_1		: BOOL;
+    act_FM		: BOOL;
+    act_AS		: BOOL;
+    act_LM		: BOOL;
+    act_DPO		: BOOL;
+    act_LA		: BOOL;
+    act_A_1		: BOOL;
+    act_B_1		: BOOL;
+    act_C_1		: BOOL;
+    act_L_1		: BOOL;
+    act_F_0		: BOOL;
+    act_F_1		: BOOL;
+    act_G_1		: BOOL;
+    act_V_1		: BOOL;
+    act_H_1		: BOOL;
+    act_I_1		: BOOL;
+    act_J_1		: BOOL;
+    act_D_1		: BOOL;
+    act_E_1		: BOOL;
+    act_RUN		: BOOL;
+    act_Avanza		: BOOL;
+    act_REV		: BOOL;
+    act_Retroc		: BOOL;
+    act_R_1		: BOOL;
+    act_S_1		: BOOL;
+    sen_PE		: BOOL;
+    sen_POC		: BOOL;
+    sen_PM		: BOOL;
+    sen_SM		: BOOL;
+    sen_k1		: BOOL;
+    sen_a0		: BOOL;
+    sen_a1		: BOOL;
+    sen_b0		: BOOL;
+    sen_b1		: BOOL;
+    sen_dh		: BOOL;
+    sen_df		: BOOL;
+    sen_di		: BOOL;
+    sen_f0		: BOOL;
+    sen_f1		: BOOL;
+    sen_g0		: BOOL;
+    sen_v1		: BOOL;
+    sen_h0		: BOOL;
+    sen_h1		: BOOL;
+    sen_i0		: BOOL;
+    sen_i1		: BOOL;
+    sen_d0		: BOOL;
+    sen_pp		: BOOL;
+    sen_cp0		: BOOL;
+    sen_cp1		: BOOL;
+    sen_cp2		: BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="ProcessCycle" Id="{9978d0af-5f0b-4b42-9ddf-3fb2a96798f7}">
+      <Declaration><![CDATA[METHOD ProcessCycle : BOOL
+VAR_INPUT
+	IC 				: BOOL := TRUE; // InitialConditions()
+	Fallo 			: BOOL := FALSE;
+	FinCiclo 		: BOOL := FALSE;
+	FinTarea 		: BOOL := FALSE;
+	Preparada 		: BOOL := TRUE;
+	Finalizada 		: BOOL := TRUE;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bot_Emerg THEN
+    ModeActual := E_GEMMA.D1ParadaEmergencia;
+	stMode := 'D1';
+	
+	
+ELSIF bot_Reset THEN //  fbPanel.cn.Reinicia THEN
+    ModeActual := E_GEMMA.A6Inicializando;
+
+ELSIF bot_Funcion AND ModeActual <> E_GEMMA.F5VerificacionOrdenada THEN //  fbPanel.cn.Pruebas AND gm.ModeActual <> E_GEMMA.F6Probando THEN
+	ModePrev := ModeActual; 			// guardamos el modo en que estaba la máquiina antes de entrar a modo pruebas
+	ModeActual := E_GEMMA.F5VerificacionOrdenada; 	// y pasamos al modo pruebas 
+
+ELSIF ModeActual = E_GEMMA.F5VerificacionOrdenada AND NOT bot_Funcion THEN //  fbPanel.cn.Pruebas THEN
+	ModeActual := ModePrev; 			// restauramos el modo en que estaba la máquina antes de pasar a modo pruebas
+    // Previo := E_GEMMA.F6Probando;		// y el modo previo queda a F6 DUDAS
+
+
+ELSE
+    CASE ModeActual OF
+		
+	
+        (* ------------------------------------------------------------ Procedimientos de parada *)
+		
+        E_GEMMA.A1ParadaInicial: (* Parada en el estado inicial *)
+            IF NOT IC THEN // IF NOT Restaurada THEN
+                ModeActual := E_GEMMA.A6Inicializando;
+            ELSIF bot_Planta THEN //  fbPanel.cn.Manual THEN
+                ModeActual := E_GEMMA.F4VerificacionSinOrden;
+            ELSIF bot_Empezar AND IC THEN //  fbPanel.cn.Marcha AND IC THEN  // ELSIF Marcha THEN
+                ModeActual := E_GEMMA.F2SecuenciaPreparacion;
+			ELSE
+				; // Esperar a que se pulse el bortón de marcha
+            END_IF
+			
+        E_GEMMA.A2ParaFinCiclo: (* Parada solicitada a final de ciclo *)
+            IF Fallo THEN
+                ModePrev := E_GEMMA.A2ParaFinCiclo;
+                ModeActual := E_GEMMA.D2TratamientoFallos;
+            ELSIF FinCiclo THEN
+                ModeActual := E_GEMMA.A1ParadaInicial;
+            ELSE
+                // Seguir produciendo hasta final de ciclo
+                ;
+            END_IF
+			
+        E_GEMMA.A3ParadaEstado: (* Parada solicitada en un estado determinado *)
+            ; // estado no tratado en la FMS205 DUDAS
+			
+        E_GEMMA.A4ParadaObtenida: (* Parada obtenida *)
+            ; // estado no tratado en la FMS205 DUDAS
+        
+		E_GEMMA.A5PreparandoTrasFallo: (* Preparando de reanudacion tras el fallo *)
+            IF bot_Empezar THEN //  fbPanel.cn.Marcha THEN // Continua
+                ModeActual := ModePrev;
+            ELSIF bot_Pausar THEN //  fbPanel.cn.Para THEN // Cancela
+                ModeActual := E_GEMMA.A6Inicializando;
+				ModePrev := ModeActual; // DUDAS
+            END_IF
+			
+        E_GEMMA.A6Inicializando: (* Situando la PO en el estado inicial *)
+            IF IC THEN // Restaurada
+                ModeActual := E_GEMMA.A1ParadaInicial;
+            ELSIF bot_Planta THEN //  fbPanel.cn.Manual THEN
+                ModeActual := E_GEMMA.F4VerificacionSinOrden;
+            END_IF
+			
+        E_GEMMA.A7SituandoEstado: (* Situando la PO en un estado determinado *)
+            ; // estado no tratado en la FMS205
+
+			
+			
+        (* ------------------------------------------------------------ Procedimientos de funcionamiento *)
+        
+		E_GEMMA.F1ProduccionNormal: (* Produccion normal *)
+            IF Fallo THEN
+                ModePrev := E_GEMMA.F1ProduccionNormal; // DUDAS E_GEMMA.A2ParaFinCiclo; //!!! Creo que está mal, no debería ser F1?
+                ModeActual := E_GEMMA.D2TratamientoFallos;
+            ELSIF FinTarea THEN
+                ModeActual := E_GEMMA.F3SecuenciaFinalizacion;
+            ELSIF bot_Pausar THEN //  fbPanel.cn.Para THEN
+                ModeActual := E_GEMMA.A2ParaFinCiclo;
+            END_IF
+			
+        E_GEMMA.F2SecuenciaPreparacion: (* Secuencia de preparacion *)
+            IF Preparada THEN
+                ModeActual := E_GEMMA.F1ProduccionNormal;
+            ELSE
+                // continuar con la secuencia de preparación hasta que esté preparada o haya un error
+                ;
+            END_IF
+			
+        E_GEMMA.F3SecuenciaFinalizacion: (* Secuencia de finalizacion *)
+            IF Finalizada THEN
+                ModeActual := E_GEMMA.A1ParadaInicial;
+            ELSE
+                // continuar con la secuencia de finalización hasta que esté finalizada o haya un error
+                ;
+            END_IF
+			
+        E_GEMMA.F4VerificacionSinOrden: (* Verificacion sin orden *)
+            IF Fallo THEN
+                ModePrev := E_GEMMA.F4VerificacionSinOrden; // DUDAS E_GEMMA.A2ParaFinCiclo; //!!! Creo que está mal, no debería ser F4?
+                ModeActual := E_GEMMA.D2TratamientoFallos;
+            ELSIF NOT bot_Planta THEN //  fbPanel.cn.Manual THEN
+				ModeActual := E_GEMMA.A6Inicializando; // después del modo manual, volver a inicializar
+            ELSE
+                // Seguir en modo manual hasta que halla un fallo o se vuelva al modo automático
+                ;
+            END_IF
+			
+        E_GEMMA.F5VerificacionOrdenada: (* Verificacion en orden *)
+            ; // estado no tratado en la FMS205
+			
+        E_GEMMA.F6Probando: (* Prueba *)
+            ; // estado no tratado en la FMS205
+
+			
+			
+        (* ------------------------------------------------------------ Procedimientos de defecto *)
+        E_GEMMA.D1ParadaEmergencia: (* Parada de emergencia *)
+            IF NOT bot_Emerg THEN //  fbPanel.cn.Emergencia THEN
+                ModeActual := E_GEMMA.A6Inicializando; // Al quitar la parada de emergencia hay que reinicializar la estación
+            ELSE
+                // Esperar a que se quite la parada de emergencia
+                ;
+            END_IF
+			
+        E_GEMMA.D2TratamientoFallos: (* Diagnostico/tratamiento de los fallos *)
+            IF NOT Fallo THEN
+                ModeActual := E_GEMMA.A5PreparandoTrasFallo;
+            ELSE
+                // Esperar a que se resuelva el fallo
+                ;
+            END_IF
+
+        E_GEMMA.D3ProducirConFallos: (* Produccion a pesar de los fallos *)
+            ; // estado no tratado en la FMS205
+
+    END_CASE
+END_IF
+
+(* PARAMETROS DE SALIDA *)
+FamiArret  := (ModeActual >= E_GEMMA.A1ParadaInicial) AND 
+				 (ModeActual <= E_GEMMA.A7SituandoEstado);
+FamiFonct  := (ModeActual >= E_GEMMA.F1ProduccionNormal) AND 
+				 (ModeActual <= E_GEMMA.F6Probando);
+FamiDefail := (ModeActual >= E_GEMMA.D1ParadaEmergencia) AND 
+				 (ModeActual <= E_GEMMA.D3ProducirConFallos);
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
