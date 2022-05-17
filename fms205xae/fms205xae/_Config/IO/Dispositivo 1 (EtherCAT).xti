@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<TcSmItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.29" ClassName="CDevEtherCATDef" SubType="111">
+<TcSmItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.12" ClassName="CDevEtherCATDef" SubType="111">
 	<DataTypes>
 		<DataType>
 			<Name GUID="{18071995-0000-0000-0000-002000000004}" IecBaseType="true" BitType="true" AutoDeleteType="true" HideSubItems="true">ARRAY [0..3] OF BIT</Name>
@@ -35,7 +35,7 @@
 		<ImageData Id="1002">424dd6020000000000003600000028000000100000000e0000000100180000000000a0020000c40e0000c40e00000000000000000000000000ff00ffff00ffff00ff000000ff00ff808080808080808080808080808080ff00ffff00ffff00ffff00ffff00ff000000ff00ffff00ffff00ff000000ff00ffc0c0c0000000c0c0c0000000808080ff00ffff00ffff00ffff00ffff00ff000000ff00ffff00ffff00ff000000ff00ffc0c0c000ffffc0c0c000ffff808080ff00ffff00ffff00ffff00ffff00ff000000ff00ff000000ff00ff000000ff00ffc0c0c0c0c0c0c0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffff00ff000000000000ff00ff000000000000ff00ffc0c0c0000000c0c0c0000000808080ff00ffff00ffff00ffff00ffff00ff000000ff00ffff00ffff00ff000000ff00ffc0c0c0ff0000c0c0c0ff0000808080ff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffc0c0c0c0c0c0c0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffff00ff007fff007fff007fff007fff007fff007fffc0c0c0000000c0c0c0000000808080ff00ffff00ffff00ffff00ffff00ff007fff007fff007fff007fff007fff007fffc0c0c00000ffc0c0c00000ff808080ff00ffff00ffff00ffff00ffff00ff007fff007fff007fff007fff007fff007fffc0c0c0c0c0c0c0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffff00ff007fff007fff007fff007fff007fff007fffc0c0c0000000c0c0c0000000808080ff00ffff00ffff00ffff00ffff00ff007fff007fff007fff007fff007fff007fffc0c0c0c0c0c0c0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffff00ff007fff007fff007fff007fff007fff007fffc0c0c0008000c0c0c0008000808080ff00ffff00ffff00ffff00ffff00ff007fff007fff007fff007fff007fff007fffc0c0c0c0c0c0c0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffff00ff</ImageData>
 		<ImageData Id="1003">424dd6020000000000003600000028000000100000000e0000000100180000000000a0020000c40e0000c40e00000000000000000000ff00ffff00ffff00ffff00ffff00ffff00ff808080808080808080ff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffc0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffc0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffc0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffc0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffc0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffc0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffff00ffff00ffff00ff007fff007fff007fff007fff007fff007fffc0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffff00ffff00ffff00ff007fff007fff007fff007fff007fff007fffc0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffff00ffff00ffff00ff007fff007fff007fff007fff007fff007fffc0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffff00ffff00ffff00ff007fff007fff007fff007fff007fff007fffc0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffff00ffff00ffff00ff007fff007fff007fff007fff007fff007fffc0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffff00ffff00ffff00ff007fff007fff007fff007fff007fff007fffc0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffff00ffff00ffff00ff007fff007fff007fff007fff007fff007fffc0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffff00ffff00ffff00ff</ImageData>
 	</ImageDatas>
-	<Device Id="1" Disabled="true" DevType="111" DevFlags="#x0003" AmsPort="28673" AmsNetId="192.168.1.58.2.1" RemoteName="Dispositivo 1 (EtherCAT)" InfoImageId="1">
+	<Device Id="1" DevType="111" DevFlags="#x0003" AmsPort="28673" AmsNetId="192.168.1.58.2.1" RemoteName="Dispositivo 1 (EtherCAT)">
 		<Name>__FILENAME__</Name>
 		<AddressInfo>
 			<Ccat>
@@ -61,56 +61,56 @@
 					<SyncMan>001001000000010004000000000000000100001000010000</SyncMan>
 					<Fmmu>0000000000000000001000010100000002000000000000000000000000000000</Fmmu>
 					<Pdo Name="Channel 1" Index="#x1a00" Flags="#x0011" SyncMan="0">
-						<Entry Name="zpe" Index="#x6000" Sub="#x01">
+						<Entry Name="PE" Index="#x6000" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pulsador de parada de emergencia [NC]
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 2" Index="#x1a01" Flags="#x0011" SyncMan="0">
-						<Entry Name="zsm" Index="#x6010" Sub="#x01">
+						<Entry Name="SM" Index="#x6010" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Selector de modo AUT/MAN
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 3" Index="#x1a02" Flags="#x0011" SyncMan="0">
-						<Entry Name="zpm" Index="#x6020" Sub="#x01">
+						<Entry Name="PM" Index="#x6020" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pulsador de marcha
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 4" Index="#x1a03" Flags="#x0011" SyncMan="0">
-						<Entry Name="zps" Index="#x6030" Sub="#x01">
+						<Entry Name="PS" Index="#x6030" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pulsador de parada [NC]
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 5" Index="#x1a04" Flags="#x0011" SyncMan="0">
-						<Entry Name="zpoc" Index="#x6040" Sub="#x01">
+						<Entry Name="POC" Index="#x6040" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[PO conectada
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 6" Index="#x1a05" Flags="#x0011" SyncMan="0">
-						<Entry Name="ap" Index="#x6050" Sub="#x01">
+						<Entry Name="pp" Index="#x6050" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Presencia de palé
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 7" Index="#x1a06" Flags="#x0011" SyncMan="0">
-						<Entry Name="ac0" Index="#x6060" Sub="#x01">
+						<Entry Name="cp0" Index="#x6060" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Código de palé bit 0
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 8" Index="#x1a07" Flags="#x0011" SyncMan="0">
-						<Entry Name="ac1" Index="#x6070" Sub="#x01">
+						<Entry Name="cp1" Index="#x6070" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Código de palé bit 1
 ]]></Comment>
@@ -125,7 +125,7 @@
 					<SyncMan>001001000000010004000000000000000100001000010000</SyncMan>
 					<Fmmu>0000000000000000001000010100000002000000000000000000000000000000</Fmmu>
 					<Pdo Name="Channel 1" Index="#x1a00" Flags="#x0011" SyncMan="0">
-						<Entry Name="ac2" Index="#x6000" Sub="#x01">
+						<Entry Name="cp2" Index="#x6000" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Código de palé bit 2
 ]]></Comment>
@@ -175,55 +175,55 @@
 					<SyncMan>000f01004400010003000000000000000000000f44090000</SyncMan>
 					<Fmmu>0000000000000000000f00020100000001000000000000000000000000000000</Fmmu>
 					<Pdo Name="Channel 1" Index="#x1600" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="zDPO" Index="#x7000" Sub="#x01">
+						<Entry Name="DPO" Index="#x7000" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Desconecta PO
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 2" Index="#x1601" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="zLA" Index="#x7010" Sub="#x01">
+						<Entry Name="LA" Index="#x7010" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Lámpara de alarma
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 3" Index="#x1602" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="zLM" Index="#x7020" Sub="#x01">
+						<Entry Name="LM" Index="#x7020" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Lámpara de marcha
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 4" Index="#x1603" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="zFM" Index="#x7030" Sub="#x01">
+						<Entry Name="FM" Index="#x7030" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[zFM]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 5" Index="#x1604" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="aRUN" Index="#x7040" Sub="#x01">
+						<Entry Name="RUN" Index="#x7040" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Motor de la cinta activa
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 6" Index="#x1605" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="aREV" Index="#x7050" Sub="#x01">
+						<Entry Name="REV" Index="#x7050" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Motor de la cinta invierte
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 7" Index="#x1606" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="aRET" Index="#x7060" Sub="#x01">
+						<Entry Name="R+" Index="#x7060" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Retenedor de palé baja
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 8" Index="#x1607" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="aSEP" Index="#x7070" Sub="#x01">
+						<Entry Name="S+" Index="#x7070" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Separador de palé sube
 ]]></Comment>
@@ -238,7 +238,7 @@
 					<SyncMan>000f01004400010003000000000000000000000f44090000</SyncMan>
 					<Fmmu>0000000000000000000f00020100000001000000000000000000000000000000</Fmmu>
 					<Pdo Name="Channel 1" Index="#x1600" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="zAS" Index="#x7000" Sub="#x01">
+						<Entry Name="AS" Index="#x7000" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Avisador sonoro
 ]]></Comment>
@@ -288,56 +288,56 @@
 					<SyncMan>001001000000010004000000000000000100001000010000</SyncMan>
 					<Fmmu>0000000000000000001000010100000002000000000000000000000000000000</Fmmu>
 					<Pdo Name="Channel 1" Index="#x1a00" Flags="#x0011" SyncMan="0">
-						<Entry Name="dh0" Index="#x6000" Sub="#x01">
+						<Entry Name="a0" Index="#x6000" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de carga detrás
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 2" Index="#x1a01" Flags="#x0011" SyncMan="0">
-						<Entry Name="dh1" Index="#x6010" Sub="#x01">
+						<Entry Name="a1" Index="#x6010" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de carga delante
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 3" Index="#x1a02" Flags="#x0011" SyncMan="0">
-						<Entry Name="dv0" Index="#x6020" Sub="#x01">
+						<Entry Name="b0" Index="#x6020" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de carga arriba
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 4" Index="#x1a03" Flags="#x0011" SyncMan="0">
-						<Entry Name="dv1" Index="#x6030" Sub="#x01">
+						<Entry Name="b1" Index="#x6030" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de carga abajo
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 5" Index="#x1a04" Flags="#x0011" SyncMan="0">
-						<Entry Name="b0" Index="#x6040" Sub="#x01">
+						<Entry Name="d0" Index="#x6040" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Empujador del plato detrás
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 6" Index="#x1a05" Flags="#x0011" SyncMan="0">
-						<Entry Name="gh0" Index="#x6050" Sub="#x01">
+						<Entry Name="f0" Index="#x6050" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de rechazo detrás
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 7" Index="#x1a06" Flags="#x0011" SyncMan="0">
-						<Entry Name="gh1" Index="#x6060" Sub="#x01">
+						<Entry Name="f1" Index="#x6060" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de rechazo delante
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 8" Index="#x1a07" Flags="#x0011" SyncMan="0">
-						<Entry Name="gv1" Index="#x6070" Sub="#x01">
+						<Entry Name="g0" Index="#x6070" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de rechazo arriba
 ]]></Comment>
@@ -352,7 +352,7 @@
 					<SyncMan>001001000000010004000000000000000100001000010000</SyncMan>
 					<Fmmu>0000000000000000001000010100000002000000000000000000000000000000</Fmmu>
 					<Pdo Name="Channel 1" Index="#x1a00" Flags="#x0011" SyncMan="0">
-						<Entry Name="ge1" Index="#x6000" Sub="#x01">
+						<Entry Name="v1" Index="#x6000" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de rechazo vacío
 
@@ -360,14 +360,14 @@
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 2" Index="#x1a01" Flags="#x0011" SyncMan="0">
-						<Entry Name="hh0" Index="#x6010" Sub="#x01">
+						<Entry Name="h0" Index="#x6010" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de descarga detrás
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 3" Index="#x1a02" Flags="#x0011" SyncMan="0">
-						<Entry Name="hh1" Index="#x6020" Sub="#x01">
+						<Entry Name="h1" Index="#x6020" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de descarga delante
 
@@ -375,7 +375,7 @@
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 4" Index="#x1a03" Flags="#x0011" SyncMan="0">
-						<Entry Name="hv0" Index="#x6030" Sub="#x01">
+						<Entry Name="i0" Index="#x6030" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de descarga arriba
 
@@ -383,7 +383,7 @@
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 5" Index="#x1a04" Flags="#x0011" SyncMan="0">
-						<Entry Name="hv1" Index="#x6040" Sub="#x01">
+						<Entry Name="i1" Index="#x6040" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de descarga abajo
 
@@ -391,7 +391,7 @@
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 6" Index="#x1a05" Flags="#x0011" SyncMan="0">
-						<Entry Name="c1" Index="#x6050" Sub="#x01">
+						<Entry Name="k1" Index="#x6050" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Empujador de tapa delante
 
@@ -399,14 +399,14 @@
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 7" Index="#x1a06" Flags="#x0011" SyncMan="0">
-						<Entry Name="ei" Index="#x6060" Sub="#x01">
+						<Entry Name="di" Index="#x6060" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Detector inductivo
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 8" Index="#x1a07" Flags="#x0011" SyncMan="0">
-						<Entry Name="ef" Index="#x6070" Sub="#x01">
+						<Entry Name="df" Index="#x6070" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Detector fotoeléctrico
 ]]></Comment>
@@ -421,56 +421,56 @@
 					<SyncMan>000f01004400010003000000000000000000000f44090000</SyncMan>
 					<Fmmu>0000000000000000000f00020100000001000000000000000000000000000000</Fmmu>
 					<Pdo Name="Channel 1" Index="#x1600" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="dHOR" Index="#x7000" Sub="#x01">
+						<Entry Name="A+" Index="#x7000" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de carga avanza (adentro)
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 2" Index="#x1601" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="dVER" Index="#x7010" Sub="#x01">
+						<Entry Name="B+" Index="#x7010" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de carga baja
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 3" Index="#x1602" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="dPIN" Index="#x7020" Sub="#x01">
+						<Entry Name="C+" Index="#x7020" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de carga cierra
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 4" Index="#x1603" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="bEMP" Index="#x7030" Sub="#x01">
+						<Entry Name="D+" Index="#x7030" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Empujador del plato avanza
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 5" Index="#x1604" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="bRET" Index="#x7040" Sub="#x01">
+						<Entry Name="E+" Index="#x7040" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Retenedor del plato retrocede
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 6" Index="#x1605" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="gHRA" Index="#x7050" Sub="#x01">
+						<Entry Name="F+" Index="#x7050" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de rechazo avanza (afuera)
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 7" Index="#x1606" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="gHRR" Index="#x7060" Sub="#x01">
+						<Entry Name="F-" Index="#x7060" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de rechazo retrocede
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 8" Index="#x1607" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="gVER" Index="#x7070" Sub="#x01">
+						<Entry Name="G+" Index="#x7070" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de rechazo baja
 ]]></Comment>
@@ -485,14 +485,14 @@
 					<SyncMan>000f01004400010003000000000000000000000f44090000</SyncMan>
 					<Fmmu>0000000000000000000f00020100000001000000000000000000000000000000</Fmmu>
 					<Pdo Name="Channel 1" Index="#x1600" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="gEYE" Index="#x7000" Sub="#x01">
+						<Entry Name="V+" Index="#x7000" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de rechazo succiona
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 2" Index="#x1601" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="hHOR" Index="#x7010" Sub="#x01">
+						<Entry Name="H+" Index="#x7010" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de descarga avanza
 
@@ -500,7 +500,7 @@
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 3" Index="#x1602" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="hVER" Index="#x7020" Sub="#x01">
+						<Entry Name="I+" Index="#x7020" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de descarga baja
 
@@ -508,7 +508,7 @@
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 4" Index="#x1603" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="hPIN" Index="#x7030" Sub="#x01">
+						<Entry Name="J+" Index="#x7030" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Pick and place de descarga cierra
 
@@ -516,14 +516,14 @@
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 5" Index="#x1604" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="cTAP" Index="#x7040" Sub="#x01">
+						<Entry Name="K+" Index="#x7040" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Empujador de tapa avanza
 ]]></Comment>
 						</Entry>
 					</Pdo>
 					<Pdo Name="Channel 6" Index="#x1605" InOut="1" Flags="#x0011" SyncMan="0">
-						<Entry Name="fVER" Index="#x7050" Sub="#x01">
+						<Entry Name="L+" Index="#x7050" Sub="#x01">
 							<Type>BIT</Type>
 							<Comment><![CDATA[Medidor de altura baja
 ]]></Comment>
@@ -645,7 +645,7 @@
 						<Entry Name="Status__TxPDO Toggle" Index="#x6000" Sub="#x10" Flags="#x00000020">
 							<Type>BIT</Type>
 						</Entry>
-						<Entry Name="Counter value" Index="#x6000" Sub="#x11">
+						<Entry Name="dh" Index="#x6000" Sub="#x11">
 							<Type>UINT</Type>
 						</Entry>
 						<Entry Name="Latch value" Index="#x6000" Sub="#x12">
