@@ -436,7 +436,7 @@ IF mdPlatoDivisor.Done AND NOT girado THEN
 	
 END_IF
 
-IF mdAlimentador.Ready THEN
+IF mdPlatoDivisor.Ready THEN
 	girado := FALSE;
 END_IF
 ]]></ST>
