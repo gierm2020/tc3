@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_Cinta" Id="{f4de692b-96c6-493e-9b33-3a90e20acfad}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Cinta EXTENDS FB_Module
 VAR_INPUT
@@ -17,11 +17,23 @@ END_VAR
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[fbController(	
+        <ST><![CDATA[fbController.SFCPause := Pausar;
+fbController.SFCReset := Reset;
+
+fbController(	
 	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack,
 	Ready=>Ready, Done=>Done, Failure=>Failure);
 ]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_Cinta">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Cinta.ModuleControlFlow">
+      <LineId Id="9" Count="0" />
+      <LineId Id="7" Count="1" />
+      <LineId Id="3" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

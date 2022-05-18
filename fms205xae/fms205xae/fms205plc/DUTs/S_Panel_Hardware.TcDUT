@@ -17,6 +17,7 @@ STRUCT
 
 	AS_AvisadorSonoro		AT %Q*: BOOL; // AS - Avisador Sonoro
 	LA_LamparaAlarma		AT %Q*: BOOL; // DUDAS - Es lo mismo que falta de material?
+	DPO_DesconectaPO		AT %Q*: BOOL; // DPO - Desconecta PO
 END_STRUCT
 END_TYPE
 ]]></Declaration>

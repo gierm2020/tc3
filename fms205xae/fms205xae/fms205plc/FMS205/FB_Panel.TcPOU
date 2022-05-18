@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_Panel" Id="{514e5db3-ac71-4add-977b-df9fa295436c}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Panel
 VAR_INPUT
@@ -38,7 +38,8 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// invoca a temporizadores y flancos
+      <ST><![CDATA[// hw.DPO_DesconectaPO := TRUE;
+// invoca a temporizadores y flancos
 //TmpReinicio(IN := hw.PM_PulsadorMarcha AND NOT hw.PS_PulsadorStop, PT:= tm.TiempoReinicio);
 FP_PM(CLk := hw.PM_PulsadorMarcha);
 
@@ -87,5 +88,10 @@ hw.LM_LamparaMarcha :=
 	);  //  TODO - TERMINAR LA IMPLENTACIÓN CON EL RELOJ - CLK.Q; 
 ]]></ST>
     </Implementation>
+    <LineIds Name="FB_Panel">
+      <LineId Id="85" Count="0" />
+      <LineId Id="3" Count="46" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

@@ -223,6 +223,11 @@
 							<Comment><![CDATA[ DUDAS - Es lo mismo que falta de material?]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hw.DPO_DesconectaPO</Name>
+							<Comment><![CDATA[ DPO - Desconecta PO]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
 					</Vars>
 					<UnrestoredVarLinks ImportTime="2022-05-09T00:25:06">
 						<OwnerA Name="InputDst" Prefix="TIPC^fms205plc^fms205plc Instance" Type="1">
@@ -372,6 +377,7 @@
 				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.fbPanel.hw.SM_SelecAutoManual" VarB="Channel 2^SM"/>
 			</OwnerB>
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 4 (EL2008)">
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.fbPanel.hw.DPO_DesconectaPO" VarB="Channel 1^DPO"/>
 				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.fbPanel.hw.LA_LamparaAlarma" VarB="Channel 2^LA"/>
 				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.fbPanel.hw.LM_LamparaMarcha" VarB="Channel 3^LM"/>
 				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdAlimentador.FM.hwValue" VarB="Channel 4^FM"/>

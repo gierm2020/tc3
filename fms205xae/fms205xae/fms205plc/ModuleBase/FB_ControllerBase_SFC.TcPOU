@@ -1,28 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
-  <POU Name="FB_Cinta_SFC" Id="{7a4e0e2e-bc1d-4eb2-80cf-952f4dd5e6da}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_Cinta_SFC  EXTENDS FB_ControllerBase_SFC
+  <POU Name="FB_ControllerBase_SFC" Id="{b4a568e5-b860-4b97-ba61-d1f48d9d8c8d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ControllerBase_SFC
 VAR_INPUT
+	tm: REFERENCE TO FB_Timelimits; //S_Timeouts;
+	//tm: FB_Timelimits; //S_Timeouts;
 	IC: BOOL;
-	Execute: BOOL
+	Execute: BOOL;
 	Ack: BOOL;
+	
+	// SFC_Flags
+	SFCPause: BOOL;
+	SFCReset: BOOL;
 END_VAR
 VAR_OUTPUT
 	Ready: BOOL;
 	Failure: BOOL;
 	Done: BOOL;
 END_VAR
-VAR
-	tm: S_Timeouts
-END_VAR
 
-VAR_INPUT
-END_VAR
-VAR_OUTPUT
-END_VAR
-VAR
-
-END_VAR
 ]]></Declaration>
     <Implementation>
       <SFC>
@@ -250,35 +246,7 @@ END_VAR
                     </o>
                   </l2>
                 </o>
-                <l2 n="Attributes" cet="SFCAttribute">
-                  <o>
-                    <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
-                    <o n="Value" t="StringValue">
-                      <v n="Value">""</v>
-                      <v n="DefaultValue">""</v>
-                    </o>
-                    <v n="Id">33L</v>
-                    <v n="IdParent">9L</v>
-                  </o>
-                  <o>
-                    <v n="AttributeId">{7d894980-aeea-405c-a0f6-e2b26429c58f}</v>
-                    <o n="Value" t="StringValue">
-                      <v n="Value">""</v>
-                      <v n="DefaultValue">""</v>
-                    </o>
-                    <v n="Id">34L</v>
-                    <v n="IdParent">9L</v>
-                  </o>
-                  <o>
-                    <v n="AttributeId">{01580b27-6378-448b-8ecb-0e4b795b58d6}</v>
-                    <o n="Value" t="BoolValue">
-                      <v n="Value">"FALSE"</v>
-                      <v n="DefaultValue">"FALSE"</v>
-                    </o>
-                    <v n="Id">35L</v>
-                    <v n="IdParent">9L</v>
-                  </o>
-                </l2>
+                <l2 n="Attributes" />
                 <v n="Id">9L</v>
                 <v n="IdParent">-1L</v>
               </o>

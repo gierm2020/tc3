@@ -15,6 +15,7 @@
     <Implicit_KindOfTask>{78a20a08-a03d-493b-b6ab-34fd8c92bdb7}</Implicit_KindOfTask>
     <Implicit_Jitter_Distribution>{4ceabe8f-c6cc-4198-93f2-1525528ed040}</Implicit_Jitter_Distribution>
     <LibraryReferences>{6e5a461b-2f01-4787-83d9-6df6717e0be3}</LibraryReferences>
+    <Released>false</Released>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Devices\dvActuator.TcPOU">
@@ -72,6 +73,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GlobalTextList.TcGTLO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ModuleBase\FB_ControllerBase_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ModuleBase\FB_Controller_SFC.TcPOU">
@@ -234,8 +238,8 @@
   <ProjectExtensions>
     <PlcProjectOptions>
       <XmlArchive>
-        <Data>
-          <o xml:space="preserve" t="OptionKey">
+  <Data>
+    <o xml:space="preserve" t="OptionKey">
       <v n="Name">"&lt;ProjectRoot&gt;"</v>
       <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
         <v>{8F99A816-E488-41E4-9FA3-846536012284}</v>
@@ -276,7 +280,12 @@
         <o>
           <v n="Name">"{F66C7017-BDD8-4114-926C-81D6D687E35F}"</v>
           <d n="SubKeys" t="Hashtable" />
-          <d n="Values" t="Hashtable" />
+          <d n="Values" t="Hashtable" ckt="String" cvt="Boolean">
+            <v>FlagUsePause</v>
+            <v>True</v>
+            <v>FlagUseReset</v>
+            <v>True</v>
+          </d>
         </o>
         <v>{246001F4-279D-43AC-B241-948EB31120E1}</v>
         <o>
@@ -290,14 +299,14 @@
       </d>
       <d n="Values" t="Hashtable" />
     </o>
-        </Data>
-        <TypeList>
-          <Type n="Boolean">System.Boolean</Type>
-          <Type n="Hashtable">System.Collections.Hashtable</Type>
-          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
-          <Type n="String">System.String</Type>
-        </TypeList>
-      </XmlArchive>
+  </Data>
+  <TypeList>
+    <Type n="Boolean">System.Boolean</Type>
+    <Type n="Hashtable">System.Collections.Hashtable</Type>
+    <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+    <Type n="String">System.String</Type>
+  </TypeList>
+</XmlArchive>
     </PlcProjectOptions>
   </ProjectExtensions>
 </Project>

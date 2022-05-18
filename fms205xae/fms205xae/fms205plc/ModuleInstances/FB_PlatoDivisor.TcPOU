@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_PlatoDivisor" Id="{c71a4a01-3eb1-443b-a07e-accb57d2980d}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_PlatoDivisor EXTENDS FB_Module
 VAR_INPUT
@@ -41,7 +41,10 @@ END_VAR
 
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[//tm.UpdateSpeed(NewSpeed:= 0.01);
+        <ST><![CDATA[fbController.SFCPause := Pausar;
+fbController.SFCReset := Reset;
+
+//tm.UpdateSpeed(NewSpeed:= 0.01);
 d0.ProcessCycle(gm.ModeActual, sfcValue=>fbController.d0);
 IC := InitialConditions();
 fbController(
@@ -51,5 +54,17 @@ E_1.ProcessCycle(gm.ModeActual, sfcValue:=fbController.E_1);
 ]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_PlatoDivisor">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_PlatoDivisor.InitialConditions">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_PlatoDivisor.ModuleControlFlow">
+      <LineId Id="14" Count="0" />
+      <LineId Id="12" Count="1" />
+      <LineId Id="3" Count="6" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

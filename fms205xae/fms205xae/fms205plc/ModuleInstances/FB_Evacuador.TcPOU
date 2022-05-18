@@ -55,6 +55,8 @@ END_VAR
 
 
 //----------------------------------- preparar los datos que necesita el controlador
+fbController.SFCPause := Pausar;
+fbController.SFCReset := Reset;
 
 f0.ProcessCycle(gm.ModeActual, sfcValue=>fbController.f0);
 f1.ProcessCycle(gm.ModeActual, sfcValue=>fbController.f1);
@@ -102,7 +104,10 @@ V_1.ProcessCycle(gm.ModeActual, sfcValue:=fbController.V_1);
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_Evacuador.ModuleControlFlow">
-      <LineId Id="3" Count="39" />
+      <LineId Id="3" Count="3" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="7" Count="35" />
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>

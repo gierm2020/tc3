@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_Alimentador" Id="{c5b5144c-73a3-412e-b858-b842aecaf92f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Alimentador EXTENDS FB_Module
 (*
@@ -35,7 +35,10 @@ END_VAR
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[k1.ProcessCycle(gm.ModeActual, sfcValue=>fbController.k1);
+        <ST><![CDATA[fbController.SFCPause := Pausar;
+fbController.SFCReset := Reset;
+
+k1.ProcessCycle(gm.ModeActual, sfcValue=>fbController.k1);
 IC := InitialConditions();
 fbController(
 tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
@@ -92,5 +95,17 @@ ctOut.IC := NOT k1;
 ]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_Alimentador">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Alimentador.InitialConditions">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Alimentador.ModuleControlFlow">
+      <LineId Id="60" Count="0" />
+      <LineId Id="58" Count="1" />
+      <LineId Id="3" Count="53" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_Controller_SFC" Id="{b1eab9be-49a6-4397-bfc3-8676828bc4c5}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Controller_SFC
 VAR_INPUT
@@ -18,5 +18,8 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <LineIds Name="FB_Controller_SFC">
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

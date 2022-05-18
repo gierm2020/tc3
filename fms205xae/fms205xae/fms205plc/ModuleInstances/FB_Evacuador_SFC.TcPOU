@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_Evacuador_SFC" Id="{732a5d89-d610-4122-b553-0a1448cdc8d0}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_Evacuador_SFC EXTENDS FB_Controller_SFC
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Evacuador_SFC EXTENDS FB_ControllerBase_SFC
 
 
 VAR_INPUT
@@ -3690,8 +3690,8 @@ END_VAR
               </o>
               <v>Pause</v>
               <o>
-                <v n="Use">false</v>
-                <v n="Declare">true</v>
+                <v n="Use">true</v>
+                <v n="Declare">false</v>
               </o>
               <v>QuitError</v>
               <o>
@@ -3700,8 +3700,8 @@ END_VAR
               </o>
               <v>Reset</v>
               <o>
-                <v n="Use">false</v>
-                <v n="Declare">true</v>
+                <v n="Use">true</v>
+                <v n="Declare">false</v>
               </o>
               <v>Tip</v>
               <o>
@@ -3730,7 +3730,7 @@ END_VAR
               </o>
             </d2>
             <v n="CalcActiveTransOnly">false</v>
-            <v n="UseDefaults">true</v>
+            <v n="UseDefaults">false</v>
           </o>
         </Data>
         <TypeList>

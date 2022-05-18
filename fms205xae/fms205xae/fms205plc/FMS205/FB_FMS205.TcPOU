@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_FMS205" Id="{a261f573-1402-443e-9bab-e88e0bf02070}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205
 VAR_INPUT
@@ -70,6 +70,24 @@ END_VAR
 	FinTarea := FALSE,
 	Preparada  := TRUE,
 	Finalizada := TRUE);
+	
+mdPickAndPlaceCarga.Pausar := dr.bot_Pausar;
+mdPickAndPlaceCarga.Reset := dr.bot_Reset;
+
+mdAlimentador.Pausar := dr.bot_Pausar;
+mdAlimentador.Reset := dr.bot_Reset;
+
+mdMedidorTapa.Pausar := dr.bot_Pausar;
+mdMedidorTapa.Reset := dr.bot_Reset;
+
+mdEvacuador.Pausar := dr.bot_Pausar;
+mdEvacuador.Reset := dr.bot_Reset;
+
+mdPickAndPlaceDescarga.Pausar := dr.bot_Pausar;
+mdPickAndPlaceDescarga.Reset := dr.bot_Reset;
+
+mdPlatoDivisor.Pausar := dr.bot_Pausar;
+mdPlatoDivisor.Reset := dr.bot_Reset;
 
 IF dr.bot_Funcion THEN
 	F5VerificacionOrdenada();
@@ -477,5 +495,49 @@ END_IF
 ]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_FMS205">
+      <LineId Id="3" Count="6" />
+      <LineId Id="170" Count="0" />
+      <LineId Id="169" Count="0" />
+      <LineId Id="172" Count="0" />
+      <LineId Id="174" Count="1" />
+      <LineId Id="173" Count="0" />
+      <LineId Id="177" Count="1" />
+      <LineId Id="176" Count="0" />
+      <LineId Id="180" Count="1" />
+      <LineId Id="179" Count="0" />
+      <LineId Id="183" Count="1" />
+      <LineId Id="182" Count="0" />
+      <LineId Id="186" Count="1" />
+      <LineId Id="185" Count="0" />
+      <LineId Id="171" Count="0" />
+      <LineId Id="167" Count="0" />
+      <LineId Id="12" Count="91" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FMS205.Director">
+      <LineId Id="3" Count="150" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FMS205.F1ProduccionNormal">
+      <LineId Id="3" Count="10" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FMS205.F5VerificacionOrdenada">
+      <LineId Id="3" Count="16" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FMS205.InitialConditions">
+      <LineId Id="3" Count="12" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FMS205.ProcessCycle">
+      <LineId Id="3" Count="35" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FMS205.TestControl">
+      <LineId Id="3" Count="25" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>
