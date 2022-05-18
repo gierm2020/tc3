@@ -3114,21 +3114,17 @@
                     </o>
                     <o>
                       <v n="Id">2341735680L</v>
-                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
-                        <o>
-                          <v n="Color">-2830136</v>
-                          <v n="CanonicalName">"Element-Frame-Color"</v>
-                        </o>
-                      </l>
+                      <o n="Value" t="NamedStyleColor">
+                        <v n="Color">-1851446742</v>
+                        <v n="CanonicalName">"Brown"</v>
+                      </o>
                     </o>
                     <o>
                       <v n="Id">438423234L</v>
-                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
-                        <o>
-                          <v n="Color">-65536</v>
-                          <v n="CanonicalName">"Element-Alarm-Frame-Color"</v>
-                        </o>
-                      </l>
+                      <o n="Value" t="NamedStyleColor">
+                        <v n="Color">-1962999808</v>
+                        <v n="CanonicalName">"Element-Alarm-Frame-Color"</v>
+                      </o>
                     </o>
                     <o>
                       <v n="Id">2678395525L</v>
@@ -3264,6 +3260,19 @@
                     <o>
                       <v n="Id">2773130477L</v>
                       <v n="Value">"MAIN.fbFMS205.mdEvacuador.G_1.UIDown"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2338788730L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-256</v>
+                          <v n="CanonicalName">"Yellow"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2175578022L</v>
+                      <v n="Value">"16#00ff00ff"</v>
                     </o>
                   </l>
                 </o>
@@ -7054,10 +7063,10 @@
               <d n="FbMethods" t="CaseInsensitiveHashtable" ckt="String" cvt="Guid">
                 <v>FB_Init</v>
                 <v>ca42dc51-d518-44cc-9625-a5f07d3eb604</v>
-                <v>FB_Reinit</v>
-                <v>51cb7810-ae8c-465f-a71c-cd3d6b3f77b0</v>
                 <v>FB_Exit</v>
                 <v>fdbd8fe0-c33c-473b-830d-c52f6f15a007</v>
+                <v>FB_Reinit</v>
+                <v>51cb7810-ae8c-465f-a71c-cd3d6b3f77b0</v>
               </d>
               <v n="FbName">"NotImportant"</v>
               <v n="FbGuid">{c2c99f41-b578-46c5-9efe-87f9fab7b584}</v>

@@ -141,17 +141,6 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="FB_init" Id="{cdcc51a0-3c7d-409d-87aa-c5173e8d4e2a}">
-      <Declaration><![CDATA[METHOD FB_init : BOOL
-VAR_INPUT
-	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
-	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="ProcessCycle" Id="{9978d0af-5f0b-4b42-9ddf-3fb2a96798f7}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL
 VAR_INPUT

@@ -13,8 +13,9 @@ VAR_OUTPUT
 	Altura_Mm 		: REAL := 0;
 	Tapa_Alta		: BOOL := FALSE;
 	
-	ClaridadMedida	: BOOL := FALSE;
-	TapaClara 		: BOOL := FALSE;
+	Claridad_Medida	: BOOL := FALSE;
+	Tapa_Clara 		: BOOL := FALSE;
+	
 	MateralMedido	: BOOL := FALSE;	
 	TapaMetalica 	: BOOL := FALSE;
 	
@@ -41,8 +42,8 @@ TapaCargada		:= TRUE;
 Altura_Medida	:= FALSE;
 Altura_Pulsos	:= 0;
 Altura_Mm 		:= 0;
-ClaridadMedida	:= FALSE;
-TapaClara 		:= FALSE;
+Claridad_Medida	:= FALSE;
+Tapa_Clara 		:= FALSE;
 MateralMedido	:= FALSE;	
 TapaMetalica 	:= FALSE;
 
@@ -53,6 +54,18 @@ UpdateUi();
 
 	
 	]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Claridad" Id="{28e58372-3814-4775-9d11-afec4f690ea6}">
+      <Declaration><![CDATA[METHOD Claridad : BOOL
+VAR_INPUT
+	mdFotoe 	: REFERENCE TO FB_DetectorFotoelectrico;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Claridad_Medida	:= mdFotoe.LecturaFiable;
+Tapa_Clara		:= mdFotoe.TapaClara;
+UpdateUi();]]></ST>
       </Implementation>
     </Method>
     <Method Name="Medir" Id="{66a04e8f-29f9-43b6-8d46-b22e85e170fd}">
@@ -86,7 +99,7 @@ ELSIF NOT TapaCargada THEN
 	strUi := '___';
 ELSE
 	strUi := SEL(Altura_Medida,'?', SEL(Tapa_Alta, 'B','A'));
-	strUi := CONCAT(strUi, SEL(ClaridadMedida, '?',SEL(TapaClara,'O','C')));
+	strUi := CONCAT(strUi, SEL(Claridad_Medida, '?',SEL(Tapa_Clara,'O','C')));
 	strUi := CONCAT(strUi, sel(MateralMedido, '?', sel(TapaMetalica, 'P','M')));
 		
 END_IF]]></ST>

@@ -438,22 +438,30 @@ END_VAR]]></Declaration>
         <ST><![CDATA[tm.UpdateSpeed(NewSpeed:=100);// fbPanel.cn.NewSpeed); 
 
 mdAlimentador.ModuleProcessCycle();
-IF mdAlimentador.Done THEN
-	NumSector := (NumGiros + 0) MOD 8;
+
+mdPickAndPlaceCarga.ModuleProcessCycle();
+IF mdPickAndPlaceCarga.Done THEN
+	NumSector := (NumGiros+0) MOD 8;
 	sectores[NumSector].Cargar();
-	mdAlimentador.Ack := TRUE;
+//	mdAlimentador.Ack := TRUE;
 END_IF
 
 mdMedidorTapa.ModuleProcessCycle();	// Revisar es medidor
 IF mdMedidorTapa.Done THEN
-	NumSector := (NumGiros + 2) MOD 8;
+	NumSector := (NumGiros+6) MOD 8;
 	sectores[NumSector].Medir(mdMedid:=mdMedidorTapa, Umbral_mm:=30000); // pendiente poner el umbral
-	mdMedidorTapa.Ack := TRUE;
+//	mdMedidorTapa.Ack := TRUE;
 END_IF
 
-mdMedidorTapa.ModuleProcessCycle();
-mdCaptadorInductivo.ModuleProcessCycle();
 mdDetectorFotoelectrico.ModuleProcessCycle();
+IF mdDetectorFotoelectrico.Done THEN
+	NumSector := (NumGiros+5) MOD 8;
+	sectores[NumSector].Claridad(mdFotoe:=mdDetectorFotoelectrico); // pendiente poner el umbral
+END_IF
+
+//mdMedidorTapa.ModuleProcessCycle();
+mdCaptadorInductivo.ModuleProcessCycle();
+
 mdEvacuador.ModuleProcessCycle();
 mdPickAndPlaceDescarga.ModuleProcessCycle();
 mdPickAndPlaceCarga.ModuleProcessCycle();

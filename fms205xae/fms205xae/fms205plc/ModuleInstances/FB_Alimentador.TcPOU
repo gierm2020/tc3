@@ -37,8 +37,8 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Pause y reset
-fbController.SFCPause := Pausar;
-fbController.SFCReset := Reset;
+fbController.SFCPause := dr.ModeActual=E_GEMMA.A3ParadaEstado; //  Pausar;
+fbController.SFCReset := dr.ModeActual=E_GEMMA.A6Inicializando; //  Reset;
 
 // Sensores y condiciones iniciales
 k1.ProcessCycle(gm.ModeActual, sfcValue=>fbController.k1);
@@ -46,7 +46,7 @@ IC := InitialConditions();
 
 // Controlador
 fbController(
-dr:=dr, // tm := tm, 
+dr:=dr, tm := tm, 
 IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 
 // Actuadores

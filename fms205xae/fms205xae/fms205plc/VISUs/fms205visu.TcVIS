@@ -15707,11 +15707,11 @@
                     </o>
                     <o>
                       <v n="Id">1649127785L</v>
-                      <v n="Value" t="Int16">28</v>
+                      <v n="Value" t="Int16">18</v>
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">21</v>
+                      <v n="Value" t="Int16">13</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -15723,11 +15723,11 @@
                     </o>
                     <o>
                       <v n="Id">550940142L</v>
-                      <v n="Value" t="Int16">133</v>
+                      <v n="Value" t="Int16">123</v>
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">121</v>
+                      <v n="Value" t="Int16">113</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -15827,11 +15827,11 @@
                     </o>
                     <o>
                       <v n="Id">1649127785L</v>
-                      <v n="Value" t="Int16">178</v>
+                      <v n="Value" t="Int16">168</v>
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">101</v>
+                      <v n="Value" t="Int16">93</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -15843,11 +15843,11 @@
                     </o>
                     <o>
                       <v n="Id">550940142L</v>
-                      <v n="Value" t="Int16">128</v>
+                      <v n="Value" t="Int16">118</v>
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">121</v>
+                      <v n="Value" t="Int16">113</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -15925,7 +15925,7 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[1].strUi"</v>
+                      <v n="Value">"MAIN.fbFMS205.sectores[7].strUi"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -15959,11 +15959,11 @@
                     </o>
                     <o>
                       <v n="Id">1649127785L</v>
-                      <v n="Value" t="Int16">157</v>
+                      <v n="Value" t="Int16">147</v>
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">150</v>
+                      <v n="Value" t="Int16">142</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -15975,11 +15975,11 @@
                     </o>
                     <o>
                       <v n="Id">550940142L</v>
-                      <v n="Value" t="Int16">128</v>
+                      <v n="Value" t="Int16">118</v>
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">121</v>
+                      <v n="Value" t="Int16">113</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -16091,11 +16091,11 @@
                     </o>
                     <o>
                       <v n="Id">1649127785L</v>
-                      <v n="Value" t="Int16">108</v>
+                      <v n="Value" t="Int16">98</v>
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">171</v>
+                      <v n="Value" t="Int16">163</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -16107,11 +16107,11 @@
                     </o>
                     <o>
                       <v n="Id">550940142L</v>
-                      <v n="Value" t="Int16">128</v>
+                      <v n="Value" t="Int16">118</v>
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">121</v>
+                      <v n="Value" t="Int16">113</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -16189,7 +16189,7 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[7].strUi"</v>
+                      <v n="Value">"MAIN.fbFMS205.sectores[1].strUi"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -16223,11 +16223,11 @@
                     </o>
                     <o>
                       <v n="Id">1649127785L</v>
-                      <v n="Value" t="Int16">59</v>
+                      <v n="Value" t="Int16">49</v>
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">150</v>
+                      <v n="Value" t="Int16">142</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -16239,11 +16239,11 @@
                     </o>
                     <o>
                       <v n="Id">550940142L</v>
-                      <v n="Value" t="Int16">128</v>
+                      <v n="Value" t="Int16">118</v>
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">121</v>
+                      <v n="Value" t="Int16">113</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -16321,7 +16321,7 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[6].strUi"</v>
+                      <v n="Value">"MAIN.fbFMS205.sectores[2].strUi"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -16355,11 +16355,11 @@
                     </o>
                     <o>
                       <v n="Id">1649127785L</v>
-                      <v n="Value" t="Int16">38</v>
+                      <v n="Value" t="Int16">28</v>
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">101</v>
+                      <v n="Value" t="Int16">93</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -16371,11 +16371,11 @@
                     </o>
                     <o>
                       <v n="Id">550940142L</v>
-                      <v n="Value" t="Int16">128</v>
+                      <v n="Value" t="Int16">118</v>
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">121</v>
+                      <v n="Value" t="Int16">113</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -16453,7 +16453,7 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[5].strUi"</v>
+                      <v n="Value">"MAIN.fbFMS205.sectores[3].strUi"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -16487,11 +16487,11 @@
                     </o>
                     <o>
                       <v n="Id">1649127785L</v>
-                      <v n="Value" t="Int16">59</v>
+                      <v n="Value" t="Int16">49</v>
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">52</v>
+                      <v n="Value" t="Int16">44</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -16503,11 +16503,11 @@
                     </o>
                     <o>
                       <v n="Id">550940142L</v>
-                      <v n="Value" t="Int16">128</v>
+                      <v n="Value" t="Int16">118</v>
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">121</v>
+                      <v n="Value" t="Int16">113</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -16619,11 +16619,11 @@
                     </o>
                     <o>
                       <v n="Id">1649127785L</v>
-                      <v n="Value" t="Int16">108</v>
+                      <v n="Value" t="Int16">98</v>
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">31</v>
+                      <v n="Value" t="Int16">23</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -16635,11 +16635,11 @@
                     </o>
                     <o>
                       <v n="Id">550940142L</v>
-                      <v n="Value" t="Int16">128</v>
+                      <v n="Value" t="Int16">118</v>
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">121</v>
+                      <v n="Value" t="Int16">113</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -16717,7 +16717,7 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[3].strUi"</v>
+                      <v n="Value">"MAIN.fbFMS205.sectores[5].strUi"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -16751,11 +16751,11 @@
                     </o>
                     <o>
                       <v n="Id">1649127785L</v>
-                      <v n="Value" t="Int16">157</v>
+                      <v n="Value" t="Int16">147</v>
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">52</v>
+                      <v n="Value" t="Int16">44</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -16767,11 +16767,11 @@
                     </o>
                     <o>
                       <v n="Id">550940142L</v>
-                      <v n="Value" t="Int16">128</v>
+                      <v n="Value" t="Int16">118</v>
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">121</v>
+                      <v n="Value" t="Int16">113</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -16849,7 +16849,7 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[2].strUi"</v>
+                      <v n="Value">"MAIN.fbFMS205.sectores[6].strUi"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -17519,6 +17519,177 @@
                 <v n="VisualElementId">128</v>
                 <l n="UserManagementAccessRights" t="ArrayList" />
               </o>
+              <o>
+                <a n="ConfiguredComplexInputs" et="ComplexInput" />
+                <l n="Elements" t="ArrayList" />
+                <n n="VisualElementDescription" />
+                <o n="VisualElemMemberList" t="VisualElemMemberList">
+                  <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
+                    <o>
+                      <v n="Id">571893170L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">2341735680L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-2830136</v>
+                          <v n="CanonicalName">"Element-Frame-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">438423234L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-65536</v>
+                          <v n="CanonicalName">"Element-Alarm-Frame-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2678395525L</v>
+                      <v n="Value" t="Int16">1</v>
+                    </o>
+                    <o>
+                      <v n="Id">2340015797L</v>
+                      <v n="Value">"HCENTER"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2565699834L</v>
+                      <v n="Value">"VCENTER"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4134387352L</v>
+                      <v n="Value">"NONE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1603690730L</v>
+                      <v n="Value">"Arial"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4253639993L</v>
+                      <v n="Value" t="Int16">12</v>
+                    </o>
+                    <o>
+                      <v n="Id">2729990903L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1213979116L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">3488306084L</v>
+                      <v n="Value">4278190080U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1999528970L</v>
+                      <v n="Value">"&lt;toggle/tap variable&gt;"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2812299069L</v>
+                      <v n="Value">4294967295U</v>
+                    </o>
+                    <o>
+                      <v n="Id">494569607L</v>
+                      <v n="Value">4278190080U</v>
+                    </o>
+                    <o>
+                      <v n="Id">3719097617L</v>
+                      <v n="Value">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">1649127785L</v>
+                      <v n="Value">107</v>
+                    </o>
+                    <o>
+                      <v n="Id">357335551L</v>
+                      <v n="Value">102</v>
+                    </o>
+                    <o>
+                      <v n="Id">2422045748L</v>
+                      <v n="Value">29</v>
+                    </o>
+                    <o>
+                      <v n="Id">2134141914L</v>
+                      <v n="Value">30</v>
+                    </o>
+                    <o>
+                      <v n="Id">1651471674L</v>
+                      <v n="Value">false</v>
+                    </o>
+                    <o>
+                      <v n="Id">3549563837L</v>
+                      <v n="Value">"ANISOTROPIC"</v>
+                    </o>
+                    <o>
+                      <v n="Id">3729828405L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleFont">
+                        <o>
+                          <v n="FontStyle">0</v>
+                          <v n="AdditionalFontStyle" t="UInt16">0</v>
+                          <v n="ExplicitColor">-16777216</v>
+                          <v n="CanonicalName">"Font-Standard"</v>
+                          <v n="FontName">"Arial"</v>
+                          <v n="FontSize">12</v>
+                          <v n="ScriptIdentification">0</v>
+                          <v n="DoubleFontSize" t="Double">0</v>
+                          <o n="NamedColor" t="NamedStyleColor">
+                            <v n="Color">-16777216</v>
+                            <v n="CanonicalName">"Font-Default-Color"</v>
+                          </o>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">550940142L</v>
+                      <v n="Value">121</v>
+                    </o>
+                    <o>
+                      <v n="Id">1473355128L</v>
+                      <v n="Value">117</v>
+                    </o>
+                    <o>
+                      <v n="Id">493260384L</v>
+                      <v n="Value">4294967295U</v>
+                    </o>
+                    <o>
+                      <v n="Id">135947015L</v>
+                      <v n="Value">4278190080U</v>
+                    </o>
+                    <o>
+                      <v n="Id">3332245745L</v>
+                      <v n="Value">"VisuSymbols.Symbols.ArrowHalfLeftUp"</v>
+                    </o>
+                    <o>
+                      <v n="Id">390574330L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">2597686782L</v>
+                      <v n="Value">false</v>
+                    </o>
+                    <o>
+                      <v n="Id">2880254039L</v>
+                      <v n="Value">"Not (MAIN.fbFMS205.mdPlatoDivisor.D_1.hwValue or MAIN.fbFMS205.mdPlatoDivisor.E_1.hwValue)"</v>
+                    </o>
+                  </l>
+                </o>
+                <v n="VisualElementName">"Image"</v>
+                <v n="VisualElementTypeName">"VisuFbElemImage"</v>
+                <v n="VisualElementIsRectangle">true</v>
+                <v n="VisualElementIdentifier">"GenElemInst_132"</v>
+                <n n="VisualElementOfflinePaintCommands" />
+                <n n="VisualElementFrameInformation" />
+                <d n="VisualElementInputActions" t="Hashtable" />
+                <v n="VisualElementIdentification">{8ba700ad-cbeb-428c-b0dd-337aa8121747}</v>
+                <v n="VisualElementOwningObjectGuid">{024cfbd6-56e0-4061-82c5-347b4091fefa}</v>
+                <a n="LMGuids" et="Guid" />
+                <d n="SubElements" t="Hashtable" />
+                <v n="VisualElementId">131</v>
+                <l n="UserManagementAccessRights" t="ArrayList" />
+              </o>
             </l>
             <v n="BackgroundBitmapId">""</v>
             <v n="BackgroundColor">16777215</v>
@@ -17609,10 +17780,10 @@
               <d n="FbMethods" t="CaseInsensitiveHashtable" ckt="String" cvt="Guid">
                 <v>FB_Init</v>
                 <v>c7fbd946-cab7-4d95-87d7-16305e188b7a</v>
-                <v>FB_Reinit</v>
-                <v>20c92b2e-dcf5-4036-b9fe-1da038b4a7c2</v>
                 <v>FB_Exit</v>
                 <v>6b90a740-e979-4a59-8d7c-462350827e98</v>
+                <v>FB_Reinit</v>
+                <v>20c92b2e-dcf5-4036-b9fe-1da038b4a7c2</v>
               </d>
               <v n="FbName">"NotImportant"</v>
               <v n="FbGuid">{8ea61716-5341-4327-a182-a3054ff68765}</v>
@@ -17656,7 +17827,7 @@
             </o>
             <v n="DialogDut">{52d302b5-e143-4592-b749-4175be9a90cb}</v>
           </o>
-          <v n="LastUsedIdForIdentifier">130</v>
+          <v n="LastUsedIdForIdentifier">132</v>
           <o n="TextDocument" t="TextDocument">
             <a n="TextLines" cet="TextLine">
               <o>

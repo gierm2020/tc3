@@ -24,6 +24,7 @@ VAR_OUTPUT
 END_VAR
 
 VAR
+   	fbController: FB_Simple;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -35,12 +36,13 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF Done AND NOT LecturaFiable THEN
+        <ST><![CDATA[
+IF Done AND NOT LecturaFiable THEN
 	// si ha terminado de captar: guardar resultado
 	LecturaFiable		:= TRUE;
 	TapaClara			:= df.GetValue();
 	strUi := SEL(TapaClara, 'Oscura','Clara');
-ELSIF Ack THEN
+ELSIF Ready THEN
 	// una vez que cambia el ciclo la lectura ya no es fiable
 	LecturaFiable		:= FALSE;
 	strUi := '?';
