@@ -388,6 +388,9 @@ mdCaptadorInductivo.Execute     := dr.bot_Ejecutar AND dr.fun_Material;
 mdEvacuador.Execute             := dr.bot_Ejecutar AND dr.fun_Rechazar;
 mdPickAndPlaceDescarga.Execute  := dr.bot_Ejecutar AND dr.fun_Descargar;
 mdPlatoDivisor.Execute          := dr.bot_Ejecutar AND dr.fun_Girar;
+mdCinta.Execute					:= dr.bot_Ejecutar AND (dr.fun_Situar OR dr.fun_Transferir);
+mdCinta.Situar					:= dr.fun_Situar;
+mdCinta.Transferir				:= dr.fun_Transferir;
 
 mdAlimentador.Ack               := dr.bot_Continuar AND dr.fun_Alimentar;
 mdPickAndPlaceCarga.Ack         := dr.bot_Continuar AND dr.fun_Cargar;
@@ -397,7 +400,7 @@ mdCaptadorInductivo.Ack         := dr.bot_Continuar AND dr.fun_Material;
 mdEvacuador.Ack                 := dr.bot_Continuar AND dr.fun_Rechazar;
 mdPickAndPlaceDescarga.Ack      := dr.bot_Continuar AND dr.fun_Descargar;
 mdPlatoDivisor.Ack              := dr.bot_Continuar AND dr.fun_Girar;
-]]></ST>
+mdCinta.Ack						:= dr.bot_Continuar AND (dr.fun_Situar OR dr.fun_Transferir);]]></ST>
       </Implementation>
     </Method>
     <Method Name="InitialConditions" Id="{6c17034c-aab7-41fb-b0b6-e85a6db67498}">
@@ -440,7 +443,7 @@ IF mdAlimentador.Done THEN
 	mdAlimentador.Ack := TRUE;
 END_IF
 
-mdPickAndPlaceCarga.ModuleProcessCycle();	// Revisar es medidor
+mdMedidorTapa.ModuleProcessCycle();	// Revisar es medidor
 IF mdMedidorTapa.Done THEN
 	NumSector := (NumGiros + 2) MOD 8;
 	sectores[NumSector].Medir(mdMedid:=mdMedidorTapa, Umbral_mm:=30000); // pendiente poner el umbral
