@@ -74,7 +74,8 @@ fbController(
 	// TMED := TMED,								// temporizadores específicos
     dh := dh,									// sensores específicos
 	LecturaRegistrada	:= LecturaRegistrada,			// otras entradas específicas
-	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack);
+	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+	
 L_1.ProcessCycle(gm.ModeActual, sfcValue:=fbController.L_1);
 
 (*//----------------------------------- utilizar los resultados del controlador

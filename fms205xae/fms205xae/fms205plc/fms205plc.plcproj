@@ -65,6 +65,9 @@
     <Compile Include="FMS205\FB_Panel.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FMS205\FB_Sector.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FMS205\FB_Timelimits.TcPOU">
       <SubType>Code</SubType>
     </Compile>

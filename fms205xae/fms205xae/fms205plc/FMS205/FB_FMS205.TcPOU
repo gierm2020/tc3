@@ -35,6 +35,10 @@ VAR
 	tm: FB_Timelimits 		;// := (Speed:=10.0); //S_Timeouts;
 	gm						: S_Gemma := (ModeActual:= E_GEMMA.A6Inicializando, ModePrev := E_GEMMA.A6Inicializando);
 	dr						: FB_Director;
+	numGiros : DINT := 0;
+	angulo	 : REAL := 0.0;
+	girado	: BOOL := FALSE;
+	sectores : ARRAY [0..7] OF FB_Sector;
 	
 	// módulos de la FMS205
 	mdAlimentador			: FB_Alimentador			:= (ID := 1, tm := tm, gm := gm, Name := 'Alimentador');
@@ -394,21 +398,47 @@ InitialConditions :=
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL
 VAR_INPUT
 END_VAR
-]]></Declaration>
+
+VAR
+	NumSector : DINT;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[mdAlimentador.ModuleProcessCycle();
+        <ST><![CDATA[tm.UpdateSpeed(NewSpeed:=100);// fbPanel.cn.NewSpeed); 
+
+mdAlimentador.ModuleProcessCycle();
+IF mdAlimentador.Done THEN
+	NumSector := (NumGiros + 0) MOD 8;
+	sectores[NumSector].Cargar();
+	mdAlimentador.Ack := TRUE;
+END_IF
+
 mdPickAndPlaceCarga.ModuleProcessCycle();
+IF mdPickAndPlaceCarga.Done THEN
+	NumSector := (NumGiros + 2) MOD 8;
+	sectores[NumSector].Medir(mdMedid:=mdMedidorTapa, Umbral_mm:=30000); // pendiente poner el umbral
+	mdPickAndPlaceCarga.Ack := TRUE;
+END_IF
+
 mdMedidorTapa.ModuleProcessCycle();
 mdCaptadorInductivo.ModuleProcessCycle();
 mdDetectorFotoelectrico.ModuleProcessCycle();
 mdEvacuador.ModuleProcessCycle();
 mdPickAndPlaceDescarga.ModuleProcessCycle();
 
-tm.UpdateSpeed(NewSpeed:=100);// fbPanel.cn.NewSpeed); 
 
 mdPlatoDivisor.tm REF=tm;
 //mdPlatoDivisor.tm :=tm;
 mdPlatoDivisor.ModuleProcessCycle();
+IF mdPlatoDivisor.Done AND NOT girado THEN
+	numGiros := numGiros + 1;
+	girado := TRUE;
+	angulo := SEL(angulo =0, angulo-45.0, 315.0); // , angulo+45.0, 0);
+	
+END_IF
+
+IF mdAlimentador.Ready THEN
+	girado := FALSE;
+END_IF
 ]]></ST>
       </Implementation>
     </Method>

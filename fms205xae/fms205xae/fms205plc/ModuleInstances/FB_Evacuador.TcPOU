@@ -68,8 +68,7 @@ IC := InitialConditions();
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 fbController(
 	Evacuar	:= Evacuar,							// otras entradas específicas
-	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack);
-//,	Ready=>Ready, Done=>Done, Failure=>Failure);
+	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 
 	
 //----------------------------------- utilizar los resultados del controlador
