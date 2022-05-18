@@ -17,7 +17,12 @@ VAR_INPUT
 	dt_K_1 						: TIME := T#1S;				// Temporizador empujador tapa
 
 	// Cinta
-	// pendiente
+	dt_R_1						: TIME := T#0.5S;			// Temporizador retenedor de la cinta
+	dt_S_1						: TIME := T#0.5S;			// Temporizador separador de la cinta
+	
+	dt_EP						: TIME := T#0.5S;				// Tiempo de entrada del pale
+	dt_TP						: TIME := T#1S;				// Tiempo de transferencia del pale
+	dt_XP						: TIME := T#1S;				// Tiempo de salida del pale
 	
 	// Evacuador
 	dt_SOL 						: TIME := T#100MS; 		// tiempo después de soltar y antes de subir
@@ -44,7 +49,11 @@ VAR_OUTPUT
 	K_1 						: TIME := dt_K_1;			// Temporizador empujador tapa
 
 	// Cinta
-	// pendiente
+	R_1							: TIME := dt_R_1;			// Temporizador retenedor de la cinta
+	S_1							: TIME := dt_S_1;			// Temporizador separador de la cinta
+//	TE							: TIME := dt_E;				// Tiempo de entrada del pale
+//	TT							: TIME := dt_T;				// Tiempo de transferencia del pale
+//	TX							: TIME := dt_X;				// Tiempo de salida del pale
 	
 	// Evacuador
 	SOL 						: TIME := dt_SOL; 		// tiempo después de soltar y antes de subir

@@ -1,39 +1,63 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Cinta" Id="{f4de692b-96c6-493e-9b33-3a90e20acfad}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Cinta EXTENDS FB_Module
 VAR_INPUT
-END_VAR
-VAR_OUTPUT
+	Situar: BOOL;
+	Transferir: BOOL;
+	
+	TE: TIME := T#0.5S;
+	TR: TIME := T#0.5S;
+	TS: TIME := T#0.5S;
+	TT: TIME := T#1S;
+	TX: TIME := T#1S;
 END_VAR
 VAR
 	fbController: FB_Cinta_SFC;
+
+	(* Sensores especificos *)
+	pp: dvSensor; // presencia de pale
+
+	(* Actuadores especificos *)
+	RUN: dvActuator; // activa motor
+	REV: dvActuator; // invierte motor
+	R_1: dvActuator; // retenedor baja
+	S_1: dvActuator; // separador sube
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="InitialConditions" Id="{6207c809-4e5c-471b-9748-498f300af54e}">
+      <Declaration><![CDATA[METHOD InitialConditions : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[InitialConditions:= TRUE;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ModuleControlFlow" Id="{8ef223d1-a933-4fe3-87e8-40d9ed750433}">
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[fbController.SFCPause := Pausar;
+        <ST><![CDATA[IC := InitialConditions();
+
+fbController.SFCPause := Pausar;
 fbController.SFCReset := Reset;
+
+pp.ProcessCycle(gm.ModeActual, sfcValue=>fbController.pp);
 
 fbController(	
 	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack,
+	Situar := Situar, Transferir := Transferir,
 	Ready=>Ready, Done=>Done, Failure=>Failure);
-]]></ST>
+
+RUN.ProcessCycle(gm.ModeActual, sfcValue:=fbController.RUN);
+REV.ProcessCycle(gm.ModeActual, sfcValue:=fbController.REV);
+R_1.ProcessCycle(gm.ModeActual, sfcValue:=fbController.R_1);
+S_1.ProcessCycle(gm.ModeActual, sfcValue:=fbController.S_1);]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_Cinta">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Cinta.ModuleControlFlow">
-      <LineId Id="9" Count="0" />
-      <LineId Id="7" Count="1" />
-      <LineId Id="3" Count="2" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

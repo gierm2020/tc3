@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.12">
-	<Project ProjectGUID="{141AA9E7-3CEC-43A4-B806-48021F85A500}" TargetNetId="5.67.250.212.1.1" ShowHideConfigurations="#x3c7">
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.29">
+	<Project ProjectGUID="{141AA9E7-3CEC-43A4-B806-48021F85A500}" TargetNetId="5.67.250.212.1.1" Target64Bit="true" ShowHideConfigurations="#x3c7">
 		<System>
 			<Tasks>
 				<Task Id="3" Priority="20" CycleTime="100000" AmsPort="350" AdtTasks="true">
@@ -97,6 +97,11 @@
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdPlatoDivisor.d0.hwValue</Name>
+							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdCinta.pp.hwValue</Name>
 							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
@@ -204,6 +209,26 @@
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.fbFMS205.mdCinta.RUN.hwValue</Name>
+							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdCinta.REV.hwValue</Name>
+							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdCinta.R_1.hwValue</Name>
+							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdCinta.S_1.hwValue</Name>
+							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.fbFMS205.fbPanel.hw.LM_LamparaMarcha</Name>
 							<Comment><![CDATA[ LM - Lámpara marcha (verde)]]></Comment>
 							<Type>BOOL</Type>
@@ -232,44 +257,36 @@
 					<UnrestoredVarLinks ImportTime="2022-05-09T00:25:06">
 						<OwnerA Name="InputDst" Prefix="TIPC^fms205plc^fms205plc Instance" Type="1">
 							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 7 (EL1008)">
-								<Link VarA="MAIN.fbFMS205.mdCaptadorInductivo.di" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 7^ei" Size="1" RestoreInfo="ANotFound"/>
+								<Link VarA="MAIN.fbFMS205.mdCaptadorInductivo.di" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 7^ei" Size="1" RestoreInfo="BNotFound"/>
 							</OwnerB>
 						</OwnerA>
 					</UnrestoredVarLinks>
 					<UnrestoredVarLinks ImportTime="2022-05-16T15:10:04">
 						<OwnerA Name="InputDst" Prefix="TIPC^fms205plc^fms205plc Instance" Type="1">
 							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 6 (EL1008)">
-								<Link VarA="MAIN.fbFMS205.mdEvacuador.f0" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 6^gh0" Size="1" RestoreInfo="ANotFound"/>
-								<Link VarA="MAIN.fbFMS205.mdEvacuador.f1" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 7^gh1" Size="1" RestoreInfo="ANotFound"/>
-								<Link VarA="MAIN.fbFMS205.mdEvacuador.g0" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 8^gv1" Size="1" RestoreInfo="ANotFound"/>
+								<Link VarA="MAIN.fbFMS205.mdEvacuador.f0" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 6^gh0" Size="1" RestoreInfo="BNotFound"/>
+								<Link VarA="MAIN.fbFMS205.mdEvacuador.f1" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 7^gh1" Size="1" RestoreInfo="BNotFound"/>
+								<Link VarA="MAIN.fbFMS205.mdEvacuador.g0" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 8^gv1" Size="1" RestoreInfo="BNotFound"/>
 							</OwnerB>
 							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 7 (EL1008)">
-								<Link VarA="MAIN.fbFMS205.mdEvacuador.v1" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 1^ge1" Size="1" RestoreInfo="ANotFound"/>
+								<Link VarA="MAIN.fbFMS205.mdEvacuador.v1" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 1^ge1" Size="1" RestoreInfo="BNotFound"/>
 							</OwnerB>
 						</OwnerA>
 						<OwnerA Name="OutputSrc" Prefix="TIPC^fms205plc^fms205plc Instance" Type="2">
 							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 8 (EL2008)">
-								<Link VarA="MAIN.fbFMS205.mdEvacuador.F_0" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 7^gHRR" Size="1" RestoreInfo="ANotFound"/>
-								<Link VarA="MAIN.fbFMS205.mdEvacuador.F_1" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 6^gHRA" Size="1" RestoreInfo="ANotFound"/>
-								<Link VarA="MAIN.fbFMS205.mdEvacuador.G_1" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 8^gVER" Size="1" RestoreInfo="ANotFound"/>
+								<Link VarA="MAIN.fbFMS205.mdEvacuador.F_0" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 7^gHRR" Size="1" RestoreInfo="BNotFound"/>
+								<Link VarA="MAIN.fbFMS205.mdEvacuador.F_1" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 6^gHRA" Size="1" RestoreInfo="BNotFound"/>
+								<Link VarA="MAIN.fbFMS205.mdEvacuador.G_1" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 8^gVER" Size="1" RestoreInfo="BNotFound"/>
 							</OwnerB>
 							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 9 (EL2008)">
-								<Link VarA="MAIN.fbFMS205.mdEvacuador.V_1" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 1^gEYE" Size="1" RestoreInfo="ANotFound"/>
+								<Link VarA="MAIN.fbFMS205.mdEvacuador.V_1" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 1^gEYE" Size="1" RestoreInfo="BNotFound"/>
 							</OwnerB>
 						</OwnerA>
 					</UnrestoredVarLinks>
 					<UnrestoredVarLinks ImportTime="2022-05-17T21:58:55">
-						<OwnerA Name="InputDst" Prefix="TIPC^fms205plc^fms205plc Instance" Type="1">
-							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 7 (EL1008)">
-								<Link VarA="MAIN.fbFMS205.mdAlimentador.k1" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 6^k1" Size="1" RestoreInfo="ANotFound"/>
-							</OwnerB>
-						</OwnerA>
 						<OwnerA Name="OutputSrc" Prefix="TIPC^fms205plc^fms205plc Instance" Type="2">
 							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 4 (EL2008)">
 								<Link VarA="MAIN.fbFMS205.mdAlimentador.FM" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 4^FM" Size="1" RestoreInfo="ANotFound"/>
-							</OwnerB>
-							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 9 (EL2008)">
-								<Link VarA="MAIN.fbFMS205.mdAlimentador.K_1" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 5^K+" Size="1" RestoreInfo="ANotFound"/>
 							</OwnerB>
 						</OwnerA>
 					</UnrestoredVarLinks>
@@ -342,6 +359,18 @@
 							</OwnerB>
 						</OwnerA>
 					</UnrestoredVarLinks>
+					<UnrestoredVarLinks ImportTime="2022-05-18T15:54:35">
+						<OwnerA Name="InputDst" Prefix="TIPC^fms205plc^fms205plc Instance" Type="1">
+							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 7 (EL1008)">
+								<Link VarA="MAIN.fbFMS205.mdAlimentador.k1" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 6^k1" Size="1" RestoreInfo="ANotFound"/>
+							</OwnerB>
+						</OwnerA>
+						<OwnerA Name="OutputSrc" Prefix="TIPC^fms205plc^fms205plc Instance" Type="2">
+							<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 9 (EL2008)">
+								<Link VarA="MAIN.fbFMS205.mdAlimentador.K_1" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 5^K+" Size="1" RestoreInfo="ANotFound"/>
+							</OwnerB>
+						</OwnerA>
+					</UnrestoredVarLinks>
 					<Contexts>
 						<Context>
 							<Id NeedCalleeCall="true">0</Id>
@@ -375,12 +404,17 @@
 				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.fbPanel.hw.POC_PulsadorReset" VarB="Channel 5^POC"/>
 				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.fbPanel.hw.PS_PulsadorStop" VarB="Channel 4^PS"/>
 				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.fbPanel.hw.SM_SelecAutoManual" VarB="Channel 2^SM"/>
+				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdCinta.pp.hwValue" VarB="Channel 6^pp"/>
 			</OwnerB>
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 4 (EL2008)">
 				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.fbPanel.hw.DPO_DesconectaPO" VarB="Channel 1^DPO"/>
 				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.fbPanel.hw.LA_LamparaAlarma" VarB="Channel 2^LA"/>
 				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.fbPanel.hw.LM_LamparaMarcha" VarB="Channel 3^LM"/>
 				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdAlimentador.FM.hwValue" VarB="Channel 4^FM"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdCinta.REV.hwValue" VarB="Channel 6^REV"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdCinta.RUN.hwValue" VarB="Channel 5^RUN"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdCinta.R_1.hwValue" VarB="Channel 7^R+"/>
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdCinta.S_1.hwValue" VarB="Channel 8^S+"/>
 			</OwnerB>
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 5 (EL2008)">
 				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.fbPanel.hw.AS_AvisadorSonoro" VarB="Channel 1^AS"/>
