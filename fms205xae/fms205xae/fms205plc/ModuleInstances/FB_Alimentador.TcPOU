@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Alimentador" Id="{c5b5144c-73a3-412e-b858-b842aecaf92f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Alimentador EXTENDS FB_Module
 (*
@@ -13,7 +13,8 @@ neumático que realiza la extracción
 
 VAR
 	(* Controlador  específico *)
-	fbController: FB_Alimentador_SFC;
+	fbController: FB_Alimentador_SFC:=(dr:=dr);
+	
 	k1 : dvSensor; //AT %I*: BOOL; (* Se corresponde con empujador tapa delante c1 *)
 	K_1 : dvActuator := (tm:=tm); //AT %Q*: BOOL; (* Se corresponde con el cTAP *)
 	FM : dvActuator := (tm:=tm); //AT %Q*: BOOL;  (* Se corresponde con el zFM *)
@@ -28,84 +29,32 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[InitialConditions := TRUE; // NOT k1.hwValue; // el alimentador está en estado inicial si k1 está apagado]]></ST>
+        <ST><![CDATA[InitialConditions :=NOT k1.GetValue();//  k1.hwValue; // el alimentador está en estado inicial si k1 está apagado]]></ST>
       </Implementation>
     </Method>
     <Method Name="ModuleControlFlow" Id="{d7358fc0-6ede-496b-926f-c7f1a8440317}">
       <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[fbController.SFCPause := Pausar;
+        <ST><![CDATA[// Pause y reset
+fbController.SFCPause := Pausar;
 fbController.SFCReset := Reset;
 
+// Sensores y condiciones iniciales
 k1.ProcessCycle(gm.ModeActual, sfcValue=>fbController.k1);
 IC := InitialConditions();
+
+// Controlador
 fbController(
-tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+dr:=dr, // tm := tm, 
+IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+
+// Actuadores
 K_1.ProcessCycle(gm.ModeActual, sfcValue:=fbController.K_1);
 FM.ProcessCycle(gm.ModeActual, sfcValue:=fbController.FM);
 
-(*    
-//----------------------------------- utilizar los resultados del controlador
-
-//----------------------------------- leer los sensores para determinar el estado del módulo
-
-
-//----------------------------------- preparar los datos que necesita el controlador
-//ctInp.HwIC := InitialConditions();
-IC := InitialConditions();
-
-
-
-//----------------------------------- ejecutar el controlador
-//fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
-fbController(
-	TK_1 := TK_1,								// temporizadores específicos
-    k1 := k1, 									// sensores específicos
-	//											// otras entradas específicas
-	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack,
-	Ready=>Ready, Done=>Done, Failure=>Failure);
-
-
-//----------------------------------- utilizar los resultados del controlador
-
-// Cambios en actuadores por el modo manual
-IF gm.ModeActual=E_GEMMA.F4VerificacionSinOrden THEN
-	; // TODO AÑADIR AQUI EL MODO MANUAL DEL ALIMENTADOR
-
-// Cambios en actuadores por el resultado del controlador
-ELSE
-	// Actualizar actuadores hardware con lo que indique el controlador
-	K_1 := fbController.K_1;
-END_IF
-
-// Cambios en actuadores independientes del modo manual
-FM := fbcontroller.FM; // actuador de falta de material
-
-*)
-
-
-
-(* PENDIENTE BORRAR
-// el alimentador está en condiciones iniciales si k1 está desactivado
-ctOut.IC := NOT k1; 
-
-// si no eestamos en modo manual, actualizar los actuadores con el estado del controlador
-*)
 ]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_Alimentador">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Alimentador.InitialConditions">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Alimentador.ModuleControlFlow">
-      <LineId Id="60" Count="0" />
-      <LineId Id="58" Count="1" />
-      <LineId Id="3" Count="53" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

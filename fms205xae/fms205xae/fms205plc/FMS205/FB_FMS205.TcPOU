@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_FMS205" Id="{a261f573-1402-443e-9bab-e88e0bf02070}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205
 VAR_INPUT
@@ -41,15 +41,15 @@ VAR
 	sectores : ARRAY [0..7] OF FB_Sector;
 	
 	// módulos de la FMS205
-	mdAlimentador			: FB_Alimentador			:= (ID := 1, tm := tm, gm := gm, Name := 'Alimentador');
-	mdPickAndPlaceCarga 	: FB_PickAndPlace			:= (ID := 2, tm := tm, gm := gm, Name := 'Carga');
-	mdMedidorTapa			: FB_MedidorTapa			:= (ID := 3, tm := tm, gm := gm, Name := 'Medidor');
-	mdCaptadorInductivo 	: FB_CaptadorInductivo		:= (ID := 4, tm := tm, gm := gm, Name :=  'Inductivo');
-	mdDetectorFotoelectrico : FB_DetectorFotoelectrico	:= (ID := 5, tm := tm, gm := gm, Name :=  'Fotoeléctrico');
-	mdEvacuador			 	: FB_Evacuador				:= (ID := 6, tm := tm, gm := gm, Name :=  'Evacuador');
-	mdPickAndPlaceDescarga 	: FB_PickAndPlace			:= (ID := 7, tm := tm, gm := gm, Name :=  'Descarga');
-	mdPlatoDivisor			: FB_PlatoDivisor			:= (ID := 8, tm := tm, gm := gm, Name :=  'Plato');
-	mdCinta					: FB_Cinta					:= (ID := 9, tm := tm, gm := gm, Name :=  'Cinta');
+	mdAlimentador			: FB_Alimentador			:= (dr:=dr, ID := 1, tm := tm, gm := gm, Name := 'Alimentador');
+	mdPickAndPlaceCarga 	: FB_PickAndPlace			:= (dr:=dr, ID := 2, tm := tm, gm := gm, Name := 'Carga');
+	mdMedidorTapa			: FB_MedidorTapa			:= (dr:=dr, ID := 3, tm := tm, gm := gm, Name := 'Medidor');
+	mdCaptadorInductivo 	: FB_CaptadorInductivo		:= (dr:=dr, ID := 4, tm := tm, gm := gm, Name :=  'Inductivo');
+	mdDetectorFotoelectrico : FB_DetectorFotoelectrico	:= (dr:=dr, ID := 5, tm := tm, gm := gm, Name :=  'Fotoeléctrico');
+	mdEvacuador			 	: FB_Evacuador				:= (dr:=dr, ID := 6, tm := tm, gm := gm, Name :=  'Evacuador');
+	mdPickAndPlaceDescarga 	: FB_PickAndPlace			:= (dr:=dr, ID := 7, tm := tm, gm := gm, Name :=  'Descarga');
+	mdPlatoDivisor			: FB_PlatoDivisor			:= (dr:=dr, ID := 8, tm := tm, gm := gm, Name :=  'Plato');
+	mdCinta					: FB_Cinta					:= (dr:=dr, ID := 9, tm := tm, gm := gm, Name :=  'Cinta');
 	
 	fbPanel					: FB_Panel := (gm := gm);
 	
@@ -512,43 +512,5 @@ END_IF
 ]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_FMS205">
-      <LineId Id="3" Count="47" />
-      <LineId Id="192" Count="0" />
-      <LineId Id="51" Count="52" />
-      <LineId Id="106" Count="23" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_FMS205.Director">
-      <LineId Id="3" Count="150" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_FMS205.F1ProduccionNormal">
-      <LineId Id="3" Count="11" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_FMS205.F5VerificacionOrdenada">
-      <LineId Id="3" Count="19" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_FMS205.InitialConditions">
-      <LineId Id="3" Count="10" />
-      <LineId Id="20" Count="0" />
-      <LineId Id="19" Count="0" />
-      <LineId Id="14" Count="1" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_FMS205.ProcessCycle">
-      <LineId Id="3" Count="20" />
-      <LineId Id="47" Count="0" />
-      <LineId Id="46" Count="0" />
-      <LineId Id="45" Count="0" />
-      <LineId Id="24" Count="14" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_FMS205.TestControl">
-      <LineId Id="3" Count="25" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

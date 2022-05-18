@@ -111,6 +111,9 @@
     <Compile Include="ModuleInstances\FB_MedidorTapa_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ModuleInstances\FB_Simple.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ModuleInstances\FB_PickAndPlace.TcPOU">
       <SubType>Code</SubType>
     </Compile>

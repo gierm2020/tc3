@@ -23,19 +23,22 @@ VAR_OUTPUT
 END_VAR
 
 VAR
-    
+   	fbController: FB_Simple;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="ModulePerformActions" Id="{92b62e2d-235a-4064-b6db-fd2bfc42a191}">
-      <Declaration><![CDATA[METHOD ModulePerformActions : BOOL
+    <Method Name="ModuleControlFlow" Id="{92b62e2d-235a-4064-b6db-fd2bfc42a191}">
+      <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL
 VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF Done AND NOT LecturaFiable THEN
+        <ST><![CDATA[fbController(
+	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+
+IF Done AND NOT LecturaFiable THEN
 	// si ha terminado de captar: guardar resultado
 	LecturaFiable		:= TRUE;
 	TapaMetalica		:= di.GetValue();
