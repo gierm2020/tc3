@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_Evacuador" Id="{50116491-c91a-4b60-887b-578d95c086cb}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Evacuador EXTENDS FB_Module
 (* 
@@ -44,7 +44,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[InitialConditions := TRUE; // InitialConditions := f1.hwValue; // el evacuador está en condiciones iniciales cuando el sensor f1 está activado]]></ST>
+        <ST><![CDATA[InitialConditions := f1.hwValue; // el evacuador está en condiciones iniciales cuando el sensor f1 está activado]]></ST>
       </Implementation>
     </Method>
     <Method Name="ModuleControlFlow" Id="{088423ab-0767-49f6-96df-c713fe6fe249}">
@@ -94,5 +94,16 @@ V_1.ProcessCycle(gm.ModeActual, sfcValue:=fbController.V_1);
 ]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_Evacuador">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Evacuador.InitialConditions">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Evacuador.ModuleControlFlow">
+      <LineId Id="3" Count="39" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

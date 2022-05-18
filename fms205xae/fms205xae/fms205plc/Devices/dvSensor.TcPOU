@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="dvSensor" Id="{c4029391-ebd0-4ae7-8ab5-3338cf1cc185}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK dvSensor
 VAR_INPUT
@@ -50,7 +50,7 @@ VAR_OUTPUT
 	sfcValue 	: BOOL;		// estado del sensor que se entregará al Grafcet
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[uiEnabled := TRUE; // (ModeActual = E_GEMMA.F4VerificacionSinOrden); // Planta habilitado sólo en modo F4
+        <ST><![CDATA[uiEnabled := FALSE; // (ModeActual = E_GEMMA.F4VerificacionSinOrden); // Planta habilitado sólo en modo F4
  
 IF uiEnabled THEN
 	// Si está ejecutando en local, simular que el hardware a recibido el valor de la visualización
@@ -65,5 +65,16 @@ sfcValue := hwValue;		// estado del sensor que se entregará al Grafcet
 ]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="dvSensor">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="dvSensor.GetValue">
+      <LineId Id="3" Count="10" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="dvSensor.ProcessCycle">
+      <LineId Id="3" Count="11" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>
