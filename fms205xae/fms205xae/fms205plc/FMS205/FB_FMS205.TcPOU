@@ -430,11 +430,11 @@ IF mdAlimentador.Done THEN
 	mdAlimentador.Ack := TRUE;
 END_IF
 
-mdPickAndPlaceCarga.ModuleProcessCycle();
-IF mdPickAndPlaceCarga.Done THEN
+mdPickAndPlaceCarga.ModuleProcessCycle();	// Revisar es medidor
+IF mdMedidorTapa.Done THEN
 	NumSector := (NumGiros + 2) MOD 8;
 	sectores[NumSector].Medir(mdMedid:=mdMedidorTapa, Umbral_mm:=30000); // pendiente poner el umbral
-	mdPickAndPlaceCarga.Ack := TRUE;
+	mdMedidorTapa.Ack := TRUE;
 END_IF
 
 mdMedidorTapa.ModuleProcessCycle();
