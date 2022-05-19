@@ -46,7 +46,9 @@ END_VAR
     </Method>
     <Method Name="ProcessCycle" Id="{9383c466-5ef4-45f2-bc56-c203e01f0aa7}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL 
-]]></Declaration>
+VAR_INPUT
+	dr	: REFERENCE TO FB_Director;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IsActive := FALSE;]]></ST>
       </Implementation>

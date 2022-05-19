@@ -2,14 +2,8 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_PlatoDivisor" Id="{c71a4a01-3eb1-443b-a07e-accb57d2980d}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_PlatoDivisor EXTENDS FB_Module
-VAR_INPUT
-	//tm			: REFERENCE TO FB_Timelimits;
-	//tm			: FB_Timelimits;
-	//TRET		: TIME := T#500MS;	(* Tiempo de actuación del retenedor del plato *)
-	//TEMP	   	: TIME := T#2S   ;	(* Tiempo de recorrido del empujador del plato *)
-END_VAR
-
 VAR
+	
 	// Controlador
 	fbController: FB_PlatoDivisor_SFC:=(dr:=dr);  // controlador para ejecución normal
 
@@ -36,6 +30,9 @@ END_VAR
     <Method Name="ProcessCycle" Id="{a7156aed-454d-425e-80f1-664f90d71526}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL 
 
+VAR_INPUT
+	dr	: REFERENCE TO FB_Director;
+END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[fbController.SFCPause := Pausar;

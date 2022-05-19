@@ -37,7 +37,9 @@ END_VAR
     </Method>
     <Method Name="ProcessCycle" Id="{d7358fc0-6ede-496b-926f-c7f1a8440317}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL 
-]]></Declaration>
+VAR_INPUT
+	dr	: REFERENCE TO FB_Director;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Pause y reset
 fbController.SFCPause := dr.gmModeActual=E_GEMMA.A3ParadaEstado; //  Pausar;

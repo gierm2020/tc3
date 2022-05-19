@@ -12,10 +12,11 @@ VAR_OUTPUT
 	Failure: BOOL;
 	Done: BOOL;	
 END_VAR	
-VAR_INPUT
-	MaximoTiempoRespuesta: TIME := T#5S;
-	ManiobrasDeseadas: UINT :=1; // POST15 AÑADIDO VALOR POR DEFECTO
-END_VAR
+
+//VAR_INPUT
+//	MaximoTiempoRespuesta: TIME := T#5S;
+//	ManiobrasDeseadas: UINT :=1; // POST15 AÑADIDO VALOR POR DEFECTO
+//END_VAR
 
 VAR_OUTPUT
 	ManiobrasRealizadas: UINT := 0;
@@ -30,8 +31,6 @@ END_VAR
 
 VAR
 	// controladores de la máquina, la función de producción y la guía GEMMA 
-	td						: S_TestData;
-	//tm					: S_Timeouts;
 	dr						: FB_Director;
 	numGiros : DINT := 0;
 	angulo	 : REAL := 0.0;
@@ -49,12 +48,7 @@ VAR
 	mdPlatoDivisor			: FB_PlatoDivisor			:= (dr:=dr, ID := 8, Name :=  'Plato');
 	mdCinta					: FB_Cinta					:= (dr:=dr, ID := 9, Name :=  'Cinta');
 	
-	fbPanel					: FB_Panel := (dr := dr);
-	
-	//ctInp 					: S_ControllerInput;
-	
-	
-	//fbFMS205_SFC			: FB_FMS205_SFC;
+	fbPanel					: FB_Panel := (dr := dr);	
 	fbFMS205_Producir_SFC	: FB_FMS205_SFC;
 
 	
@@ -275,49 +269,46 @@ VAR
 	NumSector : DINT;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[mdAlimentador.ProcessCycle();
+        <ST><![CDATA[mdAlimentador.ProcessCycle(dr:=dr);
 
-mdPickAndPlaceCarga.ProcessCycle();
+mdPickAndPlaceCarga.ProcessCycle(dr:=dr);
 IF mdPickAndPlaceCarga.Done THEN
 	NumSector := (NumGiros+0) MOD 8;
 	sectores[NumSector].Cargar();
-//	mdAlimentador.Ack := TRUE;
 END_IF
 
-mdMedidorTapa.ProcessCycle();	// Revisar es medidor
+mdMedidorTapa.ProcessCycle(dr:=dr);	// Revisar es medidor
 IF mdMedidorTapa.Done THEN
 	NumSector := (NumGiros+6) MOD 8;
 	sectores[NumSector].Medir(mdMedid:=mdMedidorTapa, Umbral_mm:=30000); // pendiente poner el umbral
-//	mdMedidorTapa.Ack := TRUE;
 END_IF
 
-mdDetectorFotoelectrico.ProcessCycle();
+mdDetectorFotoelectrico.ProcessCycle(dr:=dr);
 IF mdDetectorFotoelectrico.Done THEN
 	NumSector := (NumGiros+5) MOD 8;
 	sectores[NumSector].Claridad(mdFotoe:=mdDetectorFotoelectrico); // pendiente poner el umbral
 END_IF
 
-//mdMedidorTapa.ModuleProcessCycle();
-mdCaptadorInductivo.ProcessCycle();
-
-mdEvacuador.ProcessCycle();
-mdPickAndPlaceDescarga.ProcessCycle();
-mdPickAndPlaceCarga.ProcessCycle();
-mdCinta.ProcessCycle();
+mdCaptadorInductivo.ProcessCycle(dr:=dr);
 
 
+mdEvacuador.ProcessCycle(dr:=dr);
 
-mdPlatoDivisor.ProcessCycle();
+mdPickAndPlaceDescarga.ProcessCycle(dr:=dr);
+
+
+
+mdPlatoDivisor.ProcessCycle(dr:=dr);
 IF mdPlatoDivisor.Done AND NOT girado THEN
 	numGiros := numGiros + 1;
 	girado := TRUE;
-	angulo := SEL(angulo =0, angulo-45.0, 315.0); // , angulo+45.0, 0);
-	
+	angulo := SEL(angulo =0, angulo-45.0, 315.0); // , angulo+45.0, 0);	
 END_IF
-
 IF mdPlatoDivisor.Ready THEN
 	girado := FALSE;
 END_IF
+
+mdCinta.ProcessCycle(dr:=dr);
 ]]></ST>
       </Implementation>
     </Method>

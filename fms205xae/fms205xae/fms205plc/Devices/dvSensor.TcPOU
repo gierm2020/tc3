@@ -31,9 +31,7 @@ VAR_OUTPUT
 	sfcValue 	: BOOL;		// estado del sensor que se entregará al Grafcet
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[uiEnabled := TRUE; // (dr.gmModeActual = E_GEMMA.F4VerificacionSinOrden); // Planta habilitado sólo en modo F4
- 
-IF dr.gmLocalHost THEN
+        <ST><![CDATA[IF dr.gmLocalHost THEN
 	// permite simular el hardware ejecutando en local haciendo que el valor hwValue dependa de la interfaz
 	hwValue := uiValue;
 ELSE

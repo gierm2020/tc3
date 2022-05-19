@@ -36,8 +36,8 @@ END_VAR
     <Method Name="ProcessCycle" Id="{357ca19b-a2f2-4f95-9ae5-44e396b69f2c}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL
 VAR_INPUT
-END_VAR
-]]></Declaration>
+	dr	: REFERENCE TO FB_Director;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[df.ProcessCycle(dr:=dr);
 IC := InitialConditions();

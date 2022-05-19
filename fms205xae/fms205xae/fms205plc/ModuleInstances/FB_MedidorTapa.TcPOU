@@ -55,7 +55,9 @@ END_VAR
     </Method>
     <Method Name="ProcessCycle" Id="{d76d2d9a-68fd-4928-b9fd-2c031ae14f83}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL 
-
+VAR_INPUT
+	dr	: REFERENCE TO FB_Director;
+END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[//----------------------------------- leer los sensores para determinar el estado del módulo

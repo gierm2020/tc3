@@ -36,9 +36,6 @@
     <Compile Include="DUTs\S_Panel_Hardware.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\S_TestData.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="FMS203 TC2\FB_Clock.TcPOU">
       <SubType>Code</SubType>
     </Compile>
