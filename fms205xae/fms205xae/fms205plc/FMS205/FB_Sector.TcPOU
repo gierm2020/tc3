@@ -2,11 +2,19 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Sector" Id="{affbe839-a357-41ce-9773-53e7de0978aa}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Sector
-VAR_INPUT
+VAR CONSTANT
+	ColSecVacio		: DWORD := 16#80808080; // gris oscuro
+	ColSecDescargar	: DWORD := 16#80008000; // verde
+	ColSecEvacuar	: DWORD := 16#80800000; // rojo
+	ColSecPendiente : DWORD := 16#80000080; // azul
+	ColSecIndeterm	: DWORD := 16#80101010; // gris claro
 END_VAR
+
 VAR_OUTPUT
-	Inicializado 	: BOOL := FALSE;
-	TapaCargada 	: BOOL := FALSE;
+	Inicializando 	: BOOL := TRUE;
+	
+	Cargar_Tapa		: BOOL := FALSE;
+	Tapa_Cargada 	: BOOL := FALSE;
 	
 	Altura_Medida	: BOOL := FALSE;
 	Altura_Pulsos 	: DWORD := 0;
@@ -16,41 +24,44 @@ VAR_OUTPUT
 	Claridad_Medida	: BOOL := FALSE;
 	Tapa_Clara 		: BOOL := FALSE;
 	
-	MateralMedido	: BOOL := FALSE;	
-	TapaMetalica 	: BOOL := FALSE;
+	Materal_Medido	: BOOL := FALSE;	
+	Tapa_Metalica 	: BOOL := FALSE;
 	
-	CargarTapa		: BOOL := FALSE;
-	EvacuarTapa		: BOOL := FALSE;
-	DescargarTapa	: BOOL := FALSE;	
-	
+	Evacuar_Tapa	: BOOL := FALSE;
+	Descargar_Tapa	: BOOL := FALSE;
+		
 	strUi 			: STRING;
-END_VAR
-VAR
-END_VAR
-]]></Declaration>
+	ColorSector		: DWORD := ColSecVacio;
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Method Name="Cargar" Id="{1122ff55-ef8e-49b1-95fa-5fba0ac744f8}">
       <Declaration><![CDATA[METHOD Cargar : BOOL
 VAR_INPUT
+	dr		: REFERENCE TO FB_Director;
+	mdCarga : REFERENCE TO FB_PickAndPlace;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Inicializado	:= FALSE;
-TapaCargada		:= TRUE;
+        <ST><![CDATA[Inicializando	:= FALSE;
+Tapa_Cargada	:= TRUE;
+
 Altura_Medida	:= FALSE;
 Altura_Pulsos	:= 0;
 Altura_Mm 		:= 0;
+
 Claridad_Medida	:= FALSE;
 Tapa_Clara 		:= FALSE;
-MateralMedido	:= FALSE;	
-TapaMetalica 	:= FALSE;
 
-CargarTapa		:= FALSE;
-EvacuarTapa		:= FALSE;
-DescargarTapa	:= FALSE;	
-UpdateUi();
+Materal_Medido	:= FALSE;	
+Tapa_Metalica 	:= FALSE;
+
+Cargar_Tapa		:= FALSE;
+Evacuar_Tapa	:= FALSE;
+Descargar_Tapa	:= FALSE;	
+
+UpdateUi(dr:=dr);
 
 	
 	]]></ST>
@@ -59,49 +70,94 @@ UpdateUi();
     <Method Name="Claridad" Id="{28e58372-3814-4775-9d11-afec4f690ea6}">
       <Declaration><![CDATA[METHOD Claridad : BOOL
 VAR_INPUT
-	mdFotoe 	: REFERENCE TO FB_DetectorFotoelectrico;
+	dr		: REFERENCE TO FB_Director;
+	mdFotoe : REFERENCE TO FB_DetectorFotoelectrico;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[Claridad_Medida	:= mdFotoe.Lectura_Registrada;
 Tapa_Clara		:= mdFotoe.Tapa_Clara;
-UpdateUi();]]></ST>
+UpdateUi(dr:=dr);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Material" Id="{38b5d5a4-2ae8-4309-b195-28ed8d569eac}">
+      <Declaration><![CDATA[METHOD Material : BOOL
+VAR_INPUT
+	dr		: REFERENCE TO FB_Director;
+	mdInduc : REFERENCE TO FB_CaptadorInductivo;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Materal_Medido	:= mdInduc.Lectura_Registrada;
+Tapa_Metalica	:= mdInduc.Tapa_Metalica;
+UpdateUi(dr:=dr);]]></ST>
       </Implementation>
     </Method>
     <Method Name="Medir" Id="{66a04e8f-29f9-43b6-8d46-b22e85e170fd}">
       <Declaration><![CDATA[METHOD Medir : BOOL
 VAR_INPUT
-	mdMedid 	: REFERENCE TO FB_MedidorTapa;
-	Umbral_mm 	: REAL;
+	dr		: REFERENCE TO FB_Director;
+	mdMedid : REFERENCE TO FB_MedidorTapa;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Inicializado	:= FALSE;
+        <ST><![CDATA[Inicializando	:= FALSE;
 
 // TapaCargada		:= FALSE; pendiente asignar en función de la altura
 Altura_Medida	:= mdMedid.Lectura_Registrada;
 Altura_Pulsos	:= mdMedid.Altura_Pulsos;
 Altura_Mm 		:= mdMedid.Altura_mm;
-Tapa_Alta 		:= Altura_Mm > Umbral_Mm;
+Tapa_Alta 		:= Altura_Mm > dr.ProdUmbralAlta;
 
-UpdateUi();]]></ST>
+UpdateUi(dr:=dr);]]></ST>
       </Implementation>
     </Method>
     <Method Name="UpdateUi" Id="{24b09535-03e7-4e6b-a89d-d68bed8c6d34}">
       <Declaration><![CDATA[METHOD UpdateUi : BOOL
 VAR_INPUT
+	dr: 	reference to FB_Director;
 END_VAR
+
+
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF Inicializado THEN
-	strUi := '???';
-ELSIF NOT TapaCargada THEN
-	strUi := '___';
+        <ST><![CDATA[IF Inicializando THEN
+	Cargar_Tapa		:= FALSE;
+	ColorSector 	:= ColSecIndeterm;
+	Evacuar_Tapa	:= FALSE;
+	Descargar_Tapa	:= FALSE;
+	strUi 			:= '???';
+	
+ELSIF NOT Tapa_Cargada THEN
+	Cargar_Tapa 	:= TRUE;
+	ColorSector 	:= ColSecVacio;
+	Evacuar_Tapa	:= FALSE;
+	Descargar_Tapa	:= FALSE;
+	strUi 			:= '___';
+	
 ELSE
+	Cargar_Tapa := FALSE;
+	IF Altura_Medida AND Claridad_Medida AND Materal_Medido THEN
+		Descargar_Tapa := (
+			(dr.ProdAluAlta AND Tapa_Metalica AND Tapa_Alta) OR
+			(dr.ProdAluBaja AND Tapa_Metalica AND NOT Tapa_Alta) OR
+			(dr.ProdBlaAlta AND NOT Tapa_Metalica AND Tapa_Clara  AND Tapa_Alta) OR
+			(dr.ProdBlaBaja AND NOT Tapa_Metalica AND Tapa_Clara  AND NOT Tapa_Alta) OR
+			(dr.ProdNegAlta AND NOT Tapa_Metalica AND NOT Tapa_Clara  AND Tapa_Alta) OR
+			(dr.ProdNegBaja AND NOT Tapa_Metalica AND NOT Tapa_Clara  AND NOT Tapa_Alta));
+		Evacuar_Tapa := NOT Descargar_Tapa;
+		ColorSector := SEL(Descargar_Tapa, ColSecEvacuar, ColSecDescargar);
+	ELSE
+		Descargar_Tapa	:= FALSE;
+		Evacuar_Tapa	:= FALSE;
+		ColorSector := ColSecPendiente; 	
+	END_IF
+	
+	
 	strUi := SEL(Altura_Medida,'?', SEL(Tapa_Alta, 'B','A'));
 	strUi := CONCAT(strUi, SEL(Claridad_Medida, '?',SEL(Tapa_Clara,'O','C')));
-	strUi := CONCAT(strUi, sel(MateralMedido, '?', sel(TapaMetalica, 'P','M')));
-		
+	strUi := CONCAT(strUi, SEL(Materal_Medido, '?', SEL(Tapa_Metalica, 'P','M')));
+ 		
 END_IF]]></ST>
       </Implementation>
     </Method>

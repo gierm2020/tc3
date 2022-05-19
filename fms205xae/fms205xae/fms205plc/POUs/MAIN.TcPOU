@@ -4,7 +4,6 @@
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
 	fbFMS205 : FB_FMS205;	
-		ui	: FB_FMS205_UI;
 END_VAR
 ]]></Declaration>
     <Implementation>

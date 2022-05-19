@@ -27,9 +27,6 @@
     <Compile Include="DUTs\E_GEMMA.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\S_Gemma.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="DUTs\S_Panel_Consignas.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -121,9 +118,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Visualization Manager.TcVMO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="VISUs\FB_FMS205_UI.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="VISUs\fms205visu.TcVIS">

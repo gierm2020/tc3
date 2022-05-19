@@ -17,13 +17,6 @@ VAR
 	ProdRealizada	: UINT := 0;
 	ProdPendiente	: UINT := 2;
 	ProdRechazada	: UINT := 0;
-	ProdUmbralAlta	: REAL := 18.5;
-	ProdAluBaja		: BOOL := TRUE;
-	ProdAluAlta		: BOOL := TRUE;
-	ProdBlaBaja		: BOOL := TRUE;
-	ProdBlaAlta		: BOOL := TRUE;
-	ProdNegAlta		: BOOL := TRUE;
-	ProdNegBaja		: BOOL := FALSE;	
 	
 	
 END_VAR
@@ -40,7 +33,13 @@ VAR_OUTPUT
 	gmModeName		: STRING := 'Mode A6';
 	gmModeDescr		: STRING := 'Inicializando';
 	
-	gmstMode		: STRING := 'Fx'; 
+	ProdUmbralAlta	: REAL := 18.5;
+	ProdAluBaja		: BOOL := TRUE;
+	ProdAluAlta		: BOOL := TRUE;
+	ProdBlaBaja		: BOOL := TRUE;
+	ProdBlaAlta		: BOOL := TRUE;
+	ProdNegAlta		: BOOL := TRUE;
+	ProdNegBaja		: BOOL := FALSE;	
 	
 END_VAR	
 
@@ -73,6 +72,9 @@ VAR_OUTPUT
     bot_Continuar	: BOOL;
 END_VAR
 VAR
+	act_Avanza	: BOOL;
+	act_Retroc	: BOOL;
+	(*
     act_K_1		: BOOL;
     act_FM		: BOOL;
     act_AS		: BOOL;
@@ -122,7 +124,8 @@ VAR
     sen_pp		: BOOL;
     sen_cp0		: BOOL;
     sen_cp1		: BOOL;
-    sen_cp2		: BOOL;
+    sen_cp2		: BOOL;*)
+	
 END_VAR
 
 

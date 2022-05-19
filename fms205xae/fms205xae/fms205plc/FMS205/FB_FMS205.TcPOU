@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_FMS205" Id="{a261f573-1402-443e-9bab-e88e0bf02070}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205
 VAR_INPUT
@@ -259,29 +259,34 @@ END_VAR
 
 VAR
 	NumSector : DINT;
+	i: INT;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[mdAlimentador.ProcessCycle(dr:=dr);
 
 mdPickAndPlaceCarga.ProcessCycle(dr:=dr);
-IF mdPickAndPlaceCarga.Done THEN
+IF mdPickAndPlaceCarga.Done AND NOT girado THEN
 	NumSector := (NumGiros+0) MOD 8;
-	sectores[NumSector].Cargar();
+	sectores[NumSector].Cargar(dr:=dr, mdCarga:=mdPickAndPlaceCarga);
 END_IF
 
 mdMedidorTapa.ProcessCycle(dr:=dr);	// Revisar es medidor
-IF mdMedidorTapa.Done THEN
+IF mdMedidorTapa.Done AND NOT girado THEN
 	NumSector := (NumGiros+6) MOD 8;
-	sectores[NumSector].Medir(mdMedid:=mdMedidorTapa, Umbral_mm:=30000); // pendiente poner el umbral
+	sectores[NumSector].Medir(dr:= dr, mdMedid:=mdMedidorTapa); 
 END_IF
 
 mdDetectorFotoelectrico.ProcessCycle(dr:=dr);
-IF mdDetectorFotoelectrico.Done THEN
+IF mdDetectorFotoelectrico.Done AND NOT girado THEN
 	NumSector := (NumGiros+5) MOD 8;
-	sectores[NumSector].Claridad(mdFotoe:=mdDetectorFotoelectrico); // pendiente poner el umbral
+	sectores[NumSector].Claridad(dr:=dr, mdFotoe:=mdDetectorFotoelectrico); 
 END_IF
 
 mdCaptadorInductivo.ProcessCycle(dr:=dr);
+IF mdCaptadorInductivo.Done AND NOT girado THEN
+	NumSector := (NumGiros+4) MOD 8;
+	sectores[NumSector].Material(dr:=dr, mdInduc:=mdCaptadorInductivo); 
+END_IF
 
 
 mdEvacuador.ProcessCycle(dr:=dr);
@@ -301,55 +306,11 @@ IF mdPlatoDivisor.Ready THEN
 END_IF
 
 mdCinta.ProcessCycle(dr:=dr);
-]]></ST>
+
+FOR i := 0 TO 8 do
+	sectores[i].UpdateUi(dr:=dr);
+END_FOR]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_FMS205">
-      <LineId Id="3" Count="6" />
-      <LineId Id="31" Count="3" />
-      <LineId Id="185" Count="0" />
-      <LineId Id="36" Count="94" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_FMS205.F1ProduccionNormal">
-      <LineId Id="3" Count="0" />
-      <LineId Id="18" Count="0" />
-      <LineId Id="4" Count="10" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_FMS205.F5VerificacionOrdenada">
-      <LineId Id="3" Count="0" />
-      <LineId Id="30" Count="0" />
-      <LineId Id="29" Count="0" />
-      <LineId Id="4" Count="0" />
-      <LineId Id="31" Count="0" />
-      <LineId Id="5" Count="0" />
-      <LineId Id="32" Count="0" />
-      <LineId Id="6" Count="0" />
-      <LineId Id="33" Count="0" />
-      <LineId Id="7" Count="0" />
-      <LineId Id="34" Count="0" />
-      <LineId Id="26" Count="0" />
-      <LineId Id="8" Count="0" />
-      <LineId Id="37" Count="0" />
-      <LineId Id="35" Count="0" />
-      <LineId Id="9" Count="0" />
-      <LineId Id="36" Count="0" />
-      <LineId Id="10" Count="0" />
-      <LineId Id="38" Count="0" />
-      <LineId Id="28" Count="0" />
-      <LineId Id="27" Count="0" />
-      <LineId Id="11" Count="0" />
-      <LineId Id="13" Count="9" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_FMS205.InitialConditions">
-      <LineId Id="3" Count="14" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_FMS205.ProcessCycle">
-      <LineId Id="3" Count="39" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

@@ -2375,7 +2375,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.fun_ABIn"</v>
+                          <v n="Value">"MAIN.fbFMS205.dr.ProdAluBaja"</v>
                         </o>
                       </l>
                     </o>
@@ -2492,7 +2492,7 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.dr.ProdAluBaja"</v>
+                      <v n="Value">""</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -2522,7 +2522,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.fun_AAIn"</v>
+                          <v n="Value">"MAIN.fbFMS205.dr.ProdAluAlta"</v>
                         </o>
                       </l>
                     </o>
@@ -2639,7 +2639,7 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.dr.ProdAluAlta"</v>
+                      <v n="Value">""</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -3188,7 +3188,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.fun_BBIn"</v>
+                          <v n="Value">"MAIN.fbFMS205.dr.ProdBlaBaja"</v>
                         </o>
                       </l>
                     </o>
@@ -3305,7 +3305,7 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.dr.ProdBlaBaja"</v>
+                      <v n="Value">""</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -3335,7 +3335,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.fun_BAIn"</v>
+                          <v n="Value">"MAIN.fbFMS205.dr.ProdBlaAlta"</v>
                         </o>
                       </l>
                     </o>
@@ -3452,7 +3452,7 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.dr.ProdBlaAlta"</v>
+                      <v n="Value">""</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -4345,7 +4345,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.fbPanel.hw.DPO_DesconectaPO"</v>
+                          <v n="Value">"MAIN.fbFMS205.mdMedidorTapa.L_1.uiValue"</v>
                         </o>
                       </l>
                     </o>
@@ -4492,7 +4492,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.ui.act_LA"</v>
+                          <v n="Value">"MAIN.fbFMS205.fbPanel.hw.LA_LamparaAlarma"</v>
                         </o>
                       </l>
                     </o>
@@ -4763,7 +4763,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.fun_NBIn"</v>
+                          <v n="Value">"MAIN.fbFMS205.dr.ProdNegBaja"</v>
                         </o>
                       </l>
                     </o>
@@ -4880,7 +4880,7 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.dr.ProdNegBaja"</v>
+                      <v n="Value">""</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -4910,7 +4910,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.fun_NAIn"</v>
+                          <v n="Value">"MAIN.fbFMS205.dr.ProdNegAlta"</v>
                         </o>
                       </l>
                     </o>
@@ -5027,7 +5027,7 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.dr.ProdNegAlta"</v>
+                      <v n="Value">""</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -6473,7 +6473,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.ui.fun_Vaciar"</v>
+                          <v n="Value">"MAIN.fbFMS205.dr.fun_Vaciar"</v>
                         </o>
                       </l>
                     </o>
@@ -7320,7 +7320,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.ui.act_L_1"</v>
+                          <v n="Value">"MAIN.fbFMS205.mdMedidorTapa.L_1.uiValue"</v>
                         </o>
                       </l>
                     </o>
@@ -11981,7 +11981,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.ui.sen_h0"</v>
+                          <v n="Value">"MAIN.fbFMS205.mdPickAndPlaceDescarga.h0.uiValue"</v>
                         </o>
                       </l>
                     </o>
@@ -13846,7 +13846,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.ui.act_Avanza"</v>
+                          <v n="Value">"MAIN.fbFMS205.dr.act_Avanza"</v>
                         </o>
                       </l>
                     </o>
@@ -13947,7 +13947,7 @@
                     </o>
                     <o>
                       <v n="Id">1999528970L</v>
-                      <v n="Value">"MAIN.ui.act_Avanza"</v>
+                      <v n="Value">"&lt;toggle/tap variable&gt;"</v>
                     </o>
                     <o>
                       <v n="Id">2496894244L</v>
@@ -14287,7 +14287,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.ui.act_Retroc"</v>
+                          <v n="Value">"MAIN.fbFMS205.dr.act_Retroc"</v>
                         </o>
                       </l>
                     </o>
@@ -14388,7 +14388,7 @@
                     </o>
                     <o>
                       <v n="Id">1999528970L</v>
-                      <v n="Value">"MAIN.ui.act_Retroc"</v>
+                      <v n="Value">"&lt;toggle/tap variable&gt;"</v>
                     </o>
                     <o>
                       <v n="Id">2496894244L</v>
@@ -15659,6 +15659,10 @@
                       <v n="Value">"MAIN.fbFMS205.sectores[7].strUi"</v>
                     </o>
                     <o>
+                      <v n="Id">401380312L</v>
+                      <v n="Value">"MAIN.fbFMS205.sectores[7].ColorSector"</v>
+                    </o>
+                    <o>
                       <v n="Id">823443203L</v>
                       <v n="Value">"471"</v>
                     </o>
@@ -15789,6 +15793,10 @@
                     <o>
                       <v n="Id">2477733581L</v>
                       <v n="Value">"MAIN.fbFMS205.sectores[0].strUi"</v>
+                    </o>
+                    <o>
+                      <v n="Id">401380312L</v>
+                      <v n="Value">"MAIN.fbFMS205.sectores[0].ColorSector"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -15923,6 +15931,10 @@
                       <v n="Value">"MAIN.fbFMS205.sectores[1].strUi"</v>
                     </o>
                     <o>
+                      <v n="Id">401380312L</v>
+                      <v n="Value">"MAIN.fbFMS205.sectores[1].ColorSector"</v>
+                    </o>
+                    <o>
                       <v n="Id">823443203L</v>
                       <v n="Value">"471"</v>
                     </o>
@@ -16053,6 +16065,10 @@
                     <o>
                       <v n="Id">2477733581L</v>
                       <v n="Value">"MAIN.fbFMS205.sectores[2].strUi"</v>
+                    </o>
+                    <o>
+                      <v n="Id">401380312L</v>
+                      <v n="Value">"MAIN.fbFMS205.sectores[2].ColorSector"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -16187,6 +16203,10 @@
                       <v n="Value">"MAIN.fbFMS205.sectores[3].strUi"</v>
                     </o>
                     <o>
+                      <v n="Id">401380312L</v>
+                      <v n="Value">"MAIN.fbFMS205.sectores[3].ColorSector"</v>
+                    </o>
+                    <o>
                       <v n="Id">823443203L</v>
                       <v n="Value">"471"</v>
                     </o>
@@ -16317,6 +16337,10 @@
                     <o>
                       <v n="Id">2477733581L</v>
                       <v n="Value">"MAIN.fbFMS205.sectores[4].strUi"</v>
+                    </o>
+                    <o>
+                      <v n="Id">401380312L</v>
+                      <v n="Value">"MAIN.fbFMS205.sectores[4].ColorSector"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -16451,6 +16475,10 @@
                       <v n="Value">"MAIN.fbFMS205.sectores[5].strUi"</v>
                     </o>
                     <o>
+                      <v n="Id">401380312L</v>
+                      <v n="Value">"MAIN.fbFMS205.sectores[5].ColorSector"</v>
+                    </o>
+                    <o>
                       <v n="Id">823443203L</v>
                       <v n="Value">"471"</v>
                     </o>
@@ -16581,6 +16609,10 @@
                     <o>
                       <v n="Id">2477733581L</v>
                       <v n="Value">"MAIN.fbFMS205.sectores[6].strUi"</v>
+                    </o>
+                    <o>
+                      <v n="Id">401380312L</v>
+                      <v n="Value">"MAIN.fbFMS205.sectores[6].ColorSector"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -19406,16 +19438,18 @@
           <o n="GeneratedLMMDescriptions" t="GeneratedLanguageModelEntriesData">
             <o n="GeneratedVisuFbDescription" t="GenericFbDescription">
               <d n="FbMethods" t="CaseInsensitiveHashtable" ckt="String" cvt="Guid">
-                <v>GetUpdateRects</v>
-                <v>c0803fe8-ce24-49f8-832b-730aee9ef71c</v>
+                <v>HasVisibilityAccess</v>
+                <v>afa60003-4053-44a5-9fa3-7ce7e04d900d</v>
                 <v>ContainsPoint</v>
                 <v>f872e0f8-f9b0-4c0d-974d-da354c45809b</v>
-                <v>SetStaticState</v>
-                <v>1c0d39cf-1835-4281-9fa4-a2186314e9f8</v>
+                <v>HasInputAccess</v>
+                <v>15d80562-8c3e-440d-b470-d161f29c861d</v>
                 <v>HasInputAccessIntern</v>
                 <v>d84d4f12-fb26-4f14-9c93-0204962b196a</v>
                 <v>GetTooltip</v>
                 <v>691df828-cdd5-414e-a0be-66763db6b63d</v>
+                <v>GetUpdateRects</v>
+                <v>c0803fe8-ce24-49f8-832b-730aee9ef71c</v>
                 <v>GetNamespace</v>
                 <v>7afd6603-1159-44dd-9b1b-c6f8bc9b5527</v>
                 <v>GetTranslator</v>
@@ -19428,8 +19462,6 @@
                 <v>9b605501-53df-48eb-bae7-37c9bb760dfe</v>
                 <v>Paint</v>
                 <v>6f67b9c1-b377-4bb2-af5b-cf4dc0f03418</v>
-                <v>HasVisibilityAccess</v>
-                <v>afa60003-4053-44a5-9fa3-7ce7e04d900d</v>
                 <v>GetElementArray</v>
                 <v>7e24ba21-e702-477c-8700-4d9cc57495e2</v>
                 <v>SetVisuFlagsInternal</v>
@@ -19442,14 +19474,14 @@
                 <v>b71e48a1-3bfe-4f04-aebf-409044db8d8e</v>
                 <v>Initialize</v>
                 <v>dfeb1032-57a3-4d9a-8fda-ba110a2ff475</v>
-                <v>HasInputAccess</v>
-                <v>15d80562-8c3e-440d-b470-d161f29c861d</v>
                 <v>HasVisibilityAccessIntern</v>
                 <v>ad62f209-586a-4ae4-8ba8-058e0066ba60</v>
                 <v>GetSurroundingRect</v>
                 <v>550f31c7-2f13-4797-9f6f-1b64a444255a</v>
                 <v>ElementInfo</v>
                 <v>0f29d595-ad71-4564-b983-0334dc8f3bee</v>
+                <v>SetStaticState</v>
+                <v>1c0d39cf-1835-4281-9fa4-a2186314e9f8</v>
                 <v>GetLocalUsergroup</v>
                 <v>770274cc-9607-4869-8c96-5226df8d86e8</v>
                 <v>GetName</v>
