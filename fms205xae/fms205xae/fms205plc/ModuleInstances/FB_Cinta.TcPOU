@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_Cinta" Id="{f4de692b-96c6-493e-9b33-3a90e20acfad}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Cinta EXTENDS FB_Module
 VAR_INPUT
@@ -50,8 +50,8 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 
-fbController.SFCPause := Pausar;
-fbController.SFCReset := Reset;
+fbController.SFCPause := dr.gmModeActual = E_GEMMA.A3ParadaEstado;
+fbController.SFCReset := dr.gmModeActual = E_GEMMA.A6Inicializando;
 
 pp.ProcessCycle(dr:=dr, sfcValue=>fbController.pp);
 cp0.ProcessCycle(dr:=dr, sfcValue=>fbController.cp0);
@@ -69,5 +69,17 @@ S_1.ProcessCycle(dr:=dr, sfcValue:=fbController.S_1);
 IsActive := RUN.uiValue OR REV.uiValue OR R_1.uiValue OR S_1.uiValue;]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_Cinta">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Cinta.InitialConditions">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Cinta.ProcessCycle">
+      <LineId Id="3" Count="1" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="6" Count="14" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

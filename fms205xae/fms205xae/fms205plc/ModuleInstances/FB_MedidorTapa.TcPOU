@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_MedidorTapa" Id="{a37cb369-72d3-405d-8544-ddf9b249bb92}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_MedidorTapa EXTENDS FB_Module
 (*
@@ -65,8 +65,8 @@ END_VAR
 //----------------------------------- preparar los datos que necesita el controlador
 IC := InitialConditions();
 
-fbController.SFCPause := Pausar;
-fbController.SFCReset := Reset;
+fbController.SFCPause := dr.gmModeActual = E_GEMMA.A3ParadaEstado;
+fbController.SFCReset := dr.gmModeActual = E_GEMMA.A6Inicializando;
 
 //----------------------------------- ejecutar el controlador
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
@@ -113,5 +113,17 @@ END_IF
 ]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_MedidorTapa">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MedidorTapa.InitialConditions">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MedidorTapa.ProcessCycle">
+      <LineId Id="3" Count="4" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="9" Count="43" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

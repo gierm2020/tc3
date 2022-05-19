@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_FMS205" Id="{a261f573-1402-443e-9bab-e88e0bf02070}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205
 VAR_INPUT
@@ -63,27 +63,6 @@ END_VAR
 	FinTarea := FALSE,
 	Preparada  := TRUE,
 	Finalizada := TRUE);
-	
-mdPickAndPlaceCarga.Pausar := dr.bot_Pausar;
-mdPickAndPlaceCarga.Reset := dr.bot_Reset;
-
-mdAlimentador.Pausar := dr.bot_Pausar;
-mdAlimentador.Reset := dr.bot_Reset;
-
-mdMedidorTapa.Pausar := dr.bot_Pausar;
-mdMedidorTapa.Reset := dr.bot_Reset;
-
-mdEvacuador.Pausar := dr.bot_Pausar;
-mdEvacuador.Reset := dr.bot_Reset;
-
-mdPickAndPlaceDescarga.Pausar := dr.bot_Pausar;
-mdPickAndPlaceDescarga.Reset := dr.bot_Reset;
-
-mdPlatoDivisor.Pausar := dr.bot_Pausar;
-mdPlatoDivisor.Reset := dr.bot_Reset;
-
-mdCinta.Pausar := dr.bot_Pausar;
-mdCinta.Reset := dr.bot_Reset;
 
 IF dr.bot_Funcion THEN
 	F5VerificacionOrdenada();
@@ -193,6 +172,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[fbFMS205_Producir_SFC(		
+
 	mdAlimentador 			:= mdAlimentador,
 	mdPickAndPlaceCarga 	:= mdPickAndPlaceCarga,
 	mdMedidorTapa			:= mdMedidorTapa,
@@ -202,7 +182,7 @@ END_VAR
 	mdPickAndPlaceDescarga 	:= mdPickAndPlaceDescarga,
 	mdPlatoDivisor			:= mdPlatoDivisor,
 	mdCinta					:= mdCinta,
-	IC:=IC, Execute:=Execute, Ack:=Ack,
+	IC:=IC, Execute:=TRUE, Ack:=Ack,
 	Ready=>Ready, Done=>Done, Failure=>Failure);
 ]]></ST>
       </Implementation>
@@ -214,16 +194,28 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[mdAlimentador.Execute           := dr.bot_Ejecutar AND dr.fun_Alimentar;
+
+mdPickAndPlaceCarga.Mover	    := dr.bot_Ejecutar AND dr.fun_Cargar;
 mdPickAndPlaceCarga.Execute     := dr.bot_Ejecutar AND dr.fun_Cargar;
+
 mdMedidorTapa.Execute           := dr.bot_Ejecutar AND dr.fun_Altura;
+
 mdDetectorFotoelectrico.Execute := dr.bot_Ejecutar AND dr.fun_Color;
+
 mdCaptadorInductivo.Execute     := dr.bot_Ejecutar AND dr.fun_Material;
+
+mdEvacuador.Evacuar 			:= dr.bot_Ejecutar AND dr.fun_Rechazar;
 mdEvacuador.Execute             := dr.bot_Ejecutar AND dr.fun_Rechazar;
+
+mdPickAndPlaceDescarga.Mover	:= dr.bot_Ejecutar AND dr.fun_Descargar;
 mdPickAndPlaceDescarga.Execute  := dr.bot_Ejecutar AND dr.fun_Descargar;
+
 mdPlatoDivisor.Execute          := dr.bot_Ejecutar AND dr.fun_Girar;
-mdCinta.Execute					:= dr.bot_Ejecutar AND (dr.fun_Situar OR dr.fun_Transferir);
+
 mdCinta.Situar					:= dr.fun_Situar;
 mdCinta.Transferir				:= dr.fun_Transferir;
+mdCinta.Execute					:= dr.bot_Ejecutar AND (dr.fun_Situar OR dr.fun_Transferir);
+
 
 mdAlimentador.Ack               := dr.bot_Continuar AND dr.fun_Alimentar;
 mdPickAndPlaceCarga.Ack         := dr.bot_Continuar AND dr.fun_Cargar;
@@ -312,5 +304,52 @@ mdCinta.ProcessCycle(dr:=dr);
 ]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_FMS205">
+      <LineId Id="3" Count="6" />
+      <LineId Id="31" Count="3" />
+      <LineId Id="185" Count="0" />
+      <LineId Id="36" Count="94" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FMS205.F1ProduccionNormal">
+      <LineId Id="3" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="4" Count="10" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FMS205.F5VerificacionOrdenada">
+      <LineId Id="3" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="4" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="13" Count="9" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FMS205.InitialConditions">
+      <LineId Id="3" Count="14" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FMS205.ProcessCycle">
+      <LineId Id="3" Count="39" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

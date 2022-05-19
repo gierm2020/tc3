@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_Director" Id="{1485be2f-2009-4092-b7e4-7ed9a9ca4fab}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Director
 VAR_INPUT
@@ -17,7 +17,7 @@ VAR
 	ProdRealizada	: UINT := 0;
 	ProdPendiente	: UINT := 2;
 	ProdRechazada	: UINT := 0;
-	ProdUmbralAlta	: REAL := 20; // TODO - ACTUALIZAR
+	ProdUmbralAlta	: REAL := 18.5;
 	ProdAluBaja		: BOOL := TRUE;
 	ProdAluAlta		: BOOL := TRUE;
 	ProdBlaBaja		: BOOL := TRUE;
@@ -28,7 +28,7 @@ VAR
 	
 END_VAR
 VAR_OUTPUT
-	gmLocalHost		: BOOL := TRUE; // TODO - SUSTITUIR ESTO POR LA CONDICIÓN DE LOCALHOST
+	gmLocalHost		: BOOL := FALSE; // TODO - SUSTITUIR ESTO POR LA CONDICIÓN DE LOCALHOST
 	
 	gmFamiArret		: BOOL := TRUE; 			// Familia de parada
 	gmFamiFonct		: BOOL := FALSE; 			// Familia de funcionamiento
@@ -192,7 +192,10 @@ IF bot_Emerg THEN
 	
 ELSIF bot_Reset THEN //  fbPanel.cn.Reinicia THEN
     gmModeActual := E_GEMMA.A6Inicializando;
-
+	
+ELSIF bot_Pausar THEN //  fbPanel.cn.Reinicia THEN
+    gmModeActual := E_GEMMA.A3ParadaEstado;
+	
 ELSIF bot_Funcion AND gmModeActual <> E_GEMMA.F5VerificacionOrdenada THEN //  fbPanel.cn.Pruebas AND gm.ModeActual <> E_GEMMA.F6Probando THEN
 	gmModePrev := gmModeActual; 			// guardamos el modo en que estaba la máquiina antes de entrar a modo pruebas
 	gmModeActual := E_GEMMA.F5VerificacionOrdenada; 	// y pasamos al modo pruebas 
@@ -416,5 +419,20 @@ tmD_1 						:= TO_TIME(TO_REAL(dt_D_1) * factor);					// tiempo para girar el pl
 ]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_Director">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Director.ProcessCycle">
+      <LineId Id="3" Count="7" />
+      <LineId Id="212" Count="1" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="214" Count="0" />
+      <LineId Id="12" Count="190" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Director.UpdateSpeed">
+      <LineId Id="3" Count="18" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_Module" Id="{cba3fcf8-6c8d-4174-8dda-f766b8b369f3}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Module
 
@@ -12,8 +12,7 @@ VAR_INPUT
 	IC: BOOL;
 	Execute: BOOL;
 	Ack: BOOL;
-	Pausar: BOOL;
-	Reset: BOOL;
+
 END_VAR
 VAR_OUTPUT
 	Ready: BOOL;
@@ -53,5 +52,14 @@ END_VAR]]></Declaration>
         <ST><![CDATA[IsActive := FALSE;]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_Module">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Module.InitialConditions">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Module.ProcessCycle">
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>
