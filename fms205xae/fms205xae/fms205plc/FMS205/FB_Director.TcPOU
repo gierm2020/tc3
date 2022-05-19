@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Director" Id="{1485be2f-2009-4092-b7e4-7ed9a9ca4fab}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Director
 VAR_INPUT
@@ -28,7 +28,7 @@ VAR
 	
 END_VAR
 VAR_OUTPUT
-	gmLocalHost		: BOOL := FALSE; // TODO - SUSTITUIR ESTO POR LA CONDICIÓN DE LOCALHOST
+	gmLocalHost		: BOOL := TRUE; // TODO - SUSTITUIR ESTO POR LA CONDICIÓN DE LOCALHOST
 	
 	gmFamiArret		: BOOL := TRUE; 			// Familia de parada
 	gmFamiFonct		: BOOL := FALSE; 			// Familia de funcionamiento
@@ -419,20 +419,5 @@ tmD_1 						:= TO_TIME(TO_REAL(dt_D_1) * factor);					// tiempo para girar el pl
 ]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_Director">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Director.ProcessCycle">
-      <LineId Id="3" Count="7" />
-      <LineId Id="212" Count="1" />
-      <LineId Id="11" Count="0" />
-      <LineId Id="214" Count="0" />
-      <LineId Id="12" Count="190" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Director.UpdateSpeed">
-      <LineId Id="3" Count="18" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>
