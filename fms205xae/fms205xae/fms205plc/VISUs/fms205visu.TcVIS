@@ -1811,7 +1811,7 @@
                     </o>
                     <o>
                       <v n="Id">390574330L</v>
-                      <v n="Value">"UmbralIn"</v>
+                      <v n="Value">"%s"</v>
                     </o>
                     <o>
                       <v n="Id">2340015797L</v>
@@ -1841,11 +1841,15 @@
                     </o>
                     <o>
                       <v n="Id">2597686782L</v>
-                      <v n="Value">true</v>
+                      <v n="Value">false</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
-                      <v n="Value">"850"</v>
+                      <v n="Value">"471"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">"MAIN.fbFMS205.dr.ProdUmbralAlta"</v>
                     </o>
                   </l>
                 </o>
@@ -2311,7 +2315,7 @@
                     </o>
                     <o>
                       <v n="Id">390574330L</v>
-                      <v n="Value">"Aceptar aluminio"</v>
+                      <v n="Value">"Producir aluminio"</v>
                     </o>
                     <o>
                       <v n="Id">2340015797L</v>
@@ -2345,7 +2349,7 @@
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
-                      <v n="Value">"907"</v>
+                      <v n="Value">"292"</v>
                     </o>
                   </l>
                 </o>
@@ -2490,6 +2494,10 @@
                       <v n="Id">823443203L</v>
                       <v n="Value">"913"</v>
                     </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">"MAIN.fbFMS205.dr.ProdAluBaja"</v>
+                    </o>
                   </l>
                 </o>
                 <v n="VisualElementName">"Rectangle"</v>
@@ -2632,6 +2640,10 @@
                     <o>
                       <v n="Id">823443203L</v>
                       <v n="Value">"920"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">"MAIN.fbFMS205.dr.ProdAluAlta"</v>
                     </o>
                   </l>
                 </o>
@@ -3116,7 +3128,7 @@
                     </o>
                     <o>
                       <v n="Id">390574330L</v>
-                      <v n="Value">"Aceptar blancas"</v>
+                      <v n="Value">"Producir blancas"</v>
                     </o>
                     <o>
                       <v n="Id">2340015797L</v>
@@ -3150,7 +3162,7 @@
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
-                      <v n="Value">"932"</v>
+                      <v n="Value">"871"</v>
                     </o>
                   </l>
                 </o>
@@ -3295,6 +3307,10 @@
                       <v n="Id">823443203L</v>
                       <v n="Value">"939"</v>
                     </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">"MAIN.fbFMS205.dr.ProdBlaBaja"</v>
+                    </o>
                   </l>
                 </o>
                 <v n="VisualElementName">"Rectangle"</v>
@@ -3437,6 +3453,10 @@
                     <o>
                       <v n="Id">823443203L</v>
                       <v n="Value">"945"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">"MAIN.fbFMS205.dr.ProdBlaAlta"</v>
                     </o>
                   </l>
                 </o>
@@ -4683,7 +4703,7 @@
                     </o>
                     <o>
                       <v n="Id">390574330L</v>
-                      <v n="Value">"Negro"</v>
+                      <v n="Value">"Producir Negras"</v>
                     </o>
                     <o>
                       <v n="Id">2340015797L</v>
@@ -4717,7 +4737,7 @@
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
-                      <v n="Value">"867"</v>
+                      <v n="Value">"1521"</v>
                     </o>
                   </l>
                 </o>
@@ -4862,6 +4882,10 @@
                       <v n="Id">823443203L</v>
                       <v n="Value">"708"</v>
                     </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">"MAIN.fbFMS205.dr.ProdNegBaja"</v>
+                    </o>
                   </l>
                 </o>
                 <v n="VisualElementName">"Rectangle"</v>
@@ -5004,6 +5028,10 @@
                     <o>
                       <v n="Id">823443203L</v>
                       <v n="Value">"712"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">"MAIN.fbFMS205.dr.ProdNegAlta"</v>
                     </o>
                   </l>
                 </o>
@@ -17375,7 +17403,7 @@
                     </o>
                     <o>
                       <v n="Id">2880254039L</v>
-                      <v n="Value">"Not MAIN.fbFMS205.mdPlatoDivisor.IsActive"</v>
+                      <v n="Value">"MAIN.fbFMS205.mdPlatoDivisor.Ready"</v>
                     </o>
                   </l>
                 </o>
@@ -17542,7 +17570,7 @@
                     </o>
                     <o>
                       <v n="Id">2880254039L</v>
-                      <v n="Value">"not MAIN.fbFMS205.mdAlimentador.IsActive"</v>
+                      <v n="Value">"MAIN.fbFMS205.mdAlimentador.Ready"</v>
                     </o>
                     <o>
                       <v n="Id">2597686782L</v>
@@ -17884,7 +17912,7 @@
                     </o>
                     <o>
                       <v n="Id">2880254039L</v>
-                      <v n="Value">"not MAIN.fbFMS205.mdDetectorFotoelectrico.IsActive"</v>
+                      <v n="Value">"MAIN.fbFMS205.mdDetectorFotoelectrico.Ready"</v>
                     </o>
                     <o>
                       <v n="Id">2597686782L</v>
@@ -18055,7 +18083,7 @@
                     </o>
                     <o>
                       <v n="Id">2880254039L</v>
-                      <v n="Value">"not MAIN.fbFMS205.mdCaptadorInductivo.IsActive"</v>
+                      <v n="Value">"MAIN.fbFMS205.mdCaptadorInductivo.Ready"</v>
                     </o>
                     <o>
                       <v n="Id">2597686782L</v>
@@ -18226,7 +18254,7 @@
                     </o>
                     <o>
                       <v n="Id">2880254039L</v>
-                      <v n="Value">"NOT MAIN.fbFMS205.mdEvacuador.IsActive"</v>
+                      <v n="Value">"MAIN.fbFMS205.mdEvacuador.Ready"</v>
                     </o>
                     <o>
                       <v n="Id">2597686782L</v>
@@ -18397,7 +18425,7 @@
                     </o>
                     <o>
                       <v n="Id">2880254039L</v>
-                      <v n="Value">"NOT MAIN.fbFMS205.mdPickAndPlaceDescarga.IsActive"</v>
+                      <v n="Value">"MAIN.fbFMS205.mdPickAndPlaceDescarga.Ready"</v>
                     </o>
                     <o>
                       <v n="Id">2597686782L</v>
@@ -18568,7 +18596,7 @@
                     </o>
                     <o>
                       <v n="Id">2880254039L</v>
-                      <v n="Value">"NOT MAIN.fbFMS205.mdCinta.IsActive"</v>
+                      <v n="Value">"MAIN.fbFMS205.mdCinta.Ready"</v>
                     </o>
                     <o>
                       <v n="Id">2597686782L</v>
@@ -18739,7 +18767,7 @@
                     </o>
                     <o>
                       <v n="Id">2880254039L</v>
-                      <v n="Value">"NOT MAIN.fbFMS205.mdPickAndPlaceCarga.IsActive"</v>
+                      <v n="Value">"MAIN.fbFMS205.mdPickAndPlaceCarga.Ready"</v>
                     </o>
                     <o>
                       <v n="Id">2597686782L</v>
@@ -18838,7 +18866,12 @@
                     </o>
                     <o>
                       <v n="Id">2662675643L</v>
-                      <v n="Value">4278190080U</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-16777216</v>
+                          <v n="CanonicalName">"Black"</v>
+                        </o>
+                      </l>
                     </o>
                     <o>
                       <v n="Id">407095135L</v>
@@ -19447,10 +19480,10 @@
               <d n="FbMethods" t="CaseInsensitiveHashtable" ckt="String" cvt="Guid">
                 <v>FB_Init</v>
                 <v>c7fbd946-cab7-4d95-87d7-16305e188b7a</v>
-                <v>FB_Reinit</v>
-                <v>20c92b2e-dcf5-4036-b9fe-1da038b4a7c2</v>
                 <v>FB_Exit</v>
                 <v>6b90a740-e979-4a59-8d7c-462350827e98</v>
+                <v>FB_Reinit</v>
+                <v>20c92b2e-dcf5-4036-b9fe-1da038b4a7c2</v>
               </d>
               <v n="FbName">"NotImportant"</v>
               <v n="FbGuid">{8ea61716-5341-4327-a182-a3054ff68765}</v>

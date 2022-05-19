@@ -706,6 +706,21 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"292"</v>
+              <v n="TextDefault">"Producir aluminio"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"871"</v>
+              <v n="TextDefault">"Producir blancas"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"1521"</v>
+              <v n="TextDefault">"Producir Negras"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"1484"</v>
               <v n="TextDefault">"PS"</v>
               <l n="LanguageTexts" t="ArrayList" />

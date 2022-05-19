@@ -17,6 +17,14 @@ VAR
 	ProdRealizada	: UINT := 0;
 	ProdPendiente	: UINT := 2;
 	ProdRechazada	: UINT := 0;
+	ProdUmbralAlta	: REAL := 20; // TODO - ACTUALIZAR
+	ProdAluBaja		: BOOL := TRUE;
+	ProdAluAlta		: BOOL := TRUE;
+	ProdBlaBaja		: BOOL := TRUE;
+	ProdBlaAlta		: BOOL := TRUE;
+	ProdNegAlta		: BOOL := TRUE;
+	ProdNegBaja		: BOOL := FALSE;	
+	
 	
 END_VAR
 VAR_OUTPUT
