@@ -12,12 +12,15 @@ neumático que realiza la extracción
 *)
 
 VAR
-	(* Controlador  específico *)
+	// Controlador
 	fbController: FB_Alimentador_SFC:=(dr:=dr);
 	
-	k1 : dvSensor; //AT %I*: BOOL; (* Se corresponde con empujador tapa delante c1 *)
-	K_1 : dvActuator := (tm:=tm); //AT %Q*: BOOL; (* Se corresponde con el cTAP *)
-	FM : dvActuator := (tm:=tm); //AT %Q*: BOOL;  (* Se corresponde con el zFM *)
+	// Sensores
+	k1 	: dvSensor := (dr:=dr); //AT %I*: BOOL; (* Se corresponde con empujador tapa delante c1 *)
+	
+	// Actuadores
+	K_1 : dvActuator := (dr:=dr); //AT %Q*: BOOL; (* Se corresponde con el cTAP *)
+	FM 	: dvActuator := (dr:=dr); //AT %Q*: BOOL;  (* Se corresponde con el zFM *)
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -29,30 +32,29 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[InitialConditions :=NOT k1.GetValue();//  k1.hwValue; // el alimentador está en estado inicial si k1 está apagado]]></ST>
+        <ST><![CDATA[InitialConditions := NOT k1.uiValue; // el alimentador está en estado inicial si k1 está apagado]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ModuleControlFlow" Id="{d7358fc0-6ede-496b-926f-c7f1a8440317}">
-      <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
+    <Method Name="ProcessCycle" Id="{d7358fc0-6ede-496b-926f-c7f1a8440317}">
+      <Declaration><![CDATA[METHOD ProcessCycle : BOOL 
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Pause y reset
-fbController.SFCPause := dr.ModeActual=E_GEMMA.A3ParadaEstado; //  Pausar;
-fbController.SFCReset := dr.ModeActual=E_GEMMA.A6Inicializando; //  Reset;
+fbController.SFCPause := dr.gmModeActual=E_GEMMA.A3ParadaEstado; //  Pausar;
+fbController.SFCReset := dr.gmModeActual=E_GEMMA.A6Inicializando; //  Reset;
 
 // Sensores y condiciones iniciales
-k1.ProcessCycle(gm.ModeActual, sfcValue=>fbController.k1);
+k1.ProcessCycle(dr:=dr, sfcValue=>fbController.k1);
 IC := InitialConditions();
 
 // Controlador
 fbController(
-dr:=dr, tm := tm, 
-IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 
 // Actuadores
-K_1.ProcessCycle(gm.ModeActual, sfcValue:=fbController.K_1);
-FM.ProcessCycle(gm.ModeActual, sfcValue:=fbController.FM);
-
+K_1.ProcessCycle(dr:=dr, sfcValue:=fbController.K_1);
+FM.ProcessCycle (dr:=dr, sfcValue:=fbController.FM);
+IsActive := K_1.uiValue OR fm.uiValue;
 ]]></ST>
       </Implementation>
     </Method>

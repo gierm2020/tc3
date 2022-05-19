@@ -13,38 +13,45 @@ blanco
  
 *)
 
-// TODO PENDIENTE VER QUÉ PASA MIENTRAS SE MUEVE EL PLATO. NO DEBERÍA CAMBIAR EL SENSOR PORQUE NO HA PASADO POR ACK
-VAR_INPUT
-    df         : dvSensor; //AT %I*: BOOL; (* ef  (nombre=df  c=I32 B=J1 b=04 módulo=EL1008 T=7  C=7 etiqueta=-B20, input) Detector fotoeléctrico *)
-END_VAR
 VAR_OUTPUT
-	LecturaFiable: BOOL := FALSE; 
-	TapaClara: BOOL;
+	Lectura_Registrada: BOOL := FALSE; 
+	Tapa_Clara: BOOL;
 	strUi : STRING := '?';
 END_VAR
 
 VAR
-   	fbController: FB_Simple;
+	// Controlador
+   	fbController: FB_Simple_SFC:=(dr:=dr);
+
+	// Sensores
+    df         : dvSensor := (dr:=dr); //AT %I*: BOOL; (* ef  (nombre=df  c=I32 B=J1 b=04 módulo=EL1008 T=7  C=7 etiqueta=-B20, input) Detector fotoeléctrico *)
+
+	// Actuadores
+	
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="ModulePerformActions" Id="{357ca19b-a2f2-4f95-9ae5-44e396b69f2c}">
-      <Declaration><![CDATA[METHOD ModulePerformActions : BOOL
+    <Method Name="ProcessCycle" Id="{357ca19b-a2f2-4f95-9ae5-44e396b69f2c}">
+      <Declaration><![CDATA[METHOD ProcessCycle : BOOL
 VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
-IF Done AND NOT LecturaFiable THEN
+        <ST><![CDATA[df.ProcessCycle(dr:=dr);
+IC := InitialConditions();
+fbController(
+	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+
+IF Done AND NOT Lectura_Registrada THEN
 	// si ha terminado de captar: guardar resultado
-	LecturaFiable		:= TRUE;
-	TapaClara			:= df.GetValue();
-	strUi := SEL(TapaClara, 'Oscura','Clara');
+	Lectura_Registrada	:= TRUE;
+	Tapa_Clara			:= df.uiValue;
+	strUi := SEL(Tapa_Clara, 'Oscura','Clara');
 ELSIF Ready THEN
 	// una vez que cambia el ciclo la lectura ya no es fiable
-	LecturaFiable		:= FALSE;
+	Lectura_Registrada		:= FALSE;
 	strUi := '?';
 END_IF
 ]]></ST>

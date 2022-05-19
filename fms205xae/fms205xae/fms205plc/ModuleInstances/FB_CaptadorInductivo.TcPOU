@@ -12,41 +12,48 @@ proporciona una señal al PLC, únicamente en el caso de que la tapa que el
 plato sitúa frente a él cada vez que realiza un giro, sea de aluminio.
 
 *)
-VAR_INPUT
-    di         : dvSensor; // AT %I*: BOOL; (* ei (nombre=di c=I31 B=J1 b=13 módulo=EL1008 T=7 C=7 etiqueta=-B19, input) Detector inductivo *)
-END_VAR
 
 VAR_OUTPUT
-	LecturaFiable: BOOL := FALSE; 
-	TapaMetalica: BOOL;
+	Lectura_Registrada: BOOL := FALSE; 
+	Tapa_Metalica: BOOL;
 	strUi	: STRING := '?';
 END_VAR
 
 VAR
-   	fbController: FB_Simple;
+	// Controlador
+	fbController: FB_Simple_SFC:=(dr:=dr);
+	
+	// Sensores
+	di         : dvSensor := (dr:=dr); // AT %I*: BOOL; (* ei (nombre=di c=I31 B=J1 b=13 módulo=EL1008 T=7 C=7 etiqueta=-B19, input) Detector inductivo *)
+	
+	// Actuadores
+		
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="ModuleControlFlow" Id="{92b62e2d-235a-4064-b6db-fd2bfc42a191}">
-      <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL
+    <Method Name="ProcessCycle" Id="{92b62e2d-235a-4064-b6db-fd2bfc42a191}">
+      <Declaration><![CDATA[METHOD ProcessCycle : BOOL
 VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[fbController(
-	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+        <ST><![CDATA[di.ProcessCycle(dr:=dr);
+IC := InitialConditions();
 
-IF Done AND NOT LecturaFiable THEN
+fbController(
+	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+
+IF Done AND NOT Lectura_Registrada THEN
 	// si ha terminado de captar: guardar resultado
-	LecturaFiable		:= TRUE;
-	TapaMetalica		:= di.GetValue();
-	strUi := SEL(TapaMetalica, 'Plástico','Metálica');
+	Lectura_Registrada		:= TRUE;
+	Tapa_Metalica		:= di.uiValue;
+	strUi := SEL(Tapa_Metalica, 'Plástico','Metálica');
 
-ELSIF Ack THEN
+ELSIF Ready THEN
 	// una vez que cambia el ciclo la lectura ya no es fiable
-	LecturaFiable		:= FALSE;
+	Lectura_Registrada		:= FALSE;
 	strUi := '?';
 END_IF
 

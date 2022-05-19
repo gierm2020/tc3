@@ -7,6 +7,9 @@ VAR_INPUT
 	Transferir: BOOL;
 	
 	pp: BOOL; // presencia de pale
+	cp0: BOOL; // presencia de pale
+	cp1: BOOL; // presencia de pale
+	cp2: BOOL; // presencia de pale
 END_VAR
 VAR_OUTPUT
 	RUN: BOOL; // activa motor
@@ -862,7 +865,7 @@ END_VAR]]></Declaration>
                                     <o>
                                       <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                       <o n="Value" t="StringValue">
-                                        <v n="Value">"(F1Retenedor.t&gt;tm.R_1) AND (F1Retenedor.t&gt;tm.S_1)"</v>
+                                        <v n="Value">"(F1Retenedor.t&gt;dr.tmR_1) AND (F1Retenedor.t&gt;dr.tmS_1)"</v>
                                         <v n="DefaultValue">""</v>
                                       </o>
                                       <v n="Id">328L</v>
@@ -1548,7 +1551,7 @@ END_VAR]]></Declaration>
                                     <o>
                                       <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                       <o n="Value" t="StringValue">
-                                        <v n="Value">"F1Salida.t&gt;tm.dt_XP"</v>
+                                        <v n="Value">"F1Salida.t&gt;dr.tmXP"</v>
                                         <v n="DefaultValue">""</v>
                                       </o>
                                       <v n="Id">347L</v>
@@ -1838,7 +1841,7 @@ END_VAR]]></Declaration>
                                     <o>
                                       <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                       <o n="Value" t="StringValue">
-                                        <v n="Value">"F1Retencion.t&gt;tm.R_1"</v>
+                                        <v n="Value">"F1Retencion.t&gt;dr.tmR_1"</v>
                                         <v n="DefaultValue">""</v>
                                       </o>
                                       <v n="Id">563L</v>
@@ -2075,7 +2078,7 @@ END_VAR]]></Declaration>
                                     <o>
                                       <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                       <o n="Value" t="StringValue">
-                                        <v n="Value">"F1Transferencia.t&gt;tm.dt_TP"</v>
+                                        <v n="Value">"F1Transferencia.t&gt;dr.tmTP"</v>
                                         <v n="DefaultValue">""</v>
                                       </o>
                                       <v n="Id">366L</v>
@@ -2653,7 +2656,7 @@ END_VAR]]></Declaration>
                                     <o>
                                       <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                       <o n="Value" t="StringValue">
-                                        <v n="Value">"F1Ajuste.t&gt;tm.dt_EP"</v>
+                                        <v n="Value">"F1Ajuste.t&gt;dr.tmEP"</v>
                                         <v n="DefaultValue">""</v>
                                       </o>
                                       <v n="Id">385L</v>

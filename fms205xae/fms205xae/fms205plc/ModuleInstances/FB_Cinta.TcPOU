@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Cinta" Id="{f4de692b-96c6-493e-9b33-3a90e20acfad}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Cinta EXTENDS FB_Module
 VAR_INPUT
@@ -13,16 +13,21 @@ VAR_INPUT
 	TX: TIME := T#1S;
 END_VAR
 VAR
-	fbController: FB_Cinta_SFC;
+	// Controlador
+	fbController: FB_Cinta_SFC:=(dr:=dr);
 
-	(* Sensores especificos *)
-	pp: dvSensor; // presencia de pale
+	// Sensores
+	pp	: dvSensor := (dr:=dr); // presencia de pale
+	cp0	: dvSensor := (dr:=dr); // presencia de pale
+	cp1	: dvSensor := (dr:=dr); // presencia de pale
+	cp2	: dvSensor := (dr:=dr); // presencia de pale
 
-	(* Actuadores especificos *)
-	RUN: dvActuator; // activa motor
-	REV: dvActuator; // invierte motor
-	R_1: dvActuator; // retenedor baja
-	S_1: dvActuator; // separador sube
+	// Actuadores
+	RUN	: dvActuator := (dr:=dr); // activa motor
+	REV	: dvActuator := (dr:=dr); // invierte motor
+	R_1	: dvActuator := (dr:=dr); // retenedor baja
+	S_1	: dvActuator := (dr:=dr); // separador sube
+	
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -37,8 +42,8 @@ END_VAR
         <ST><![CDATA[InitialConditions:= TRUE;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ModuleControlFlow" Id="{8ef223d1-a933-4fe3-87e8-40d9ed750433}">
-      <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
+    <Method Name="ProcessCycle" Id="{8ef223d1-a933-4fe3-87e8-40d9ed750433}">
+      <Declaration><![CDATA[METHOD ProcessCycle : BOOL 
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
@@ -46,31 +51,21 @@ END_VAR
 fbController.SFCPause := Pausar;
 fbController.SFCReset := Reset;
 
-pp.ProcessCycle(gm.ModeActual, sfcValue=>fbController.pp);
+pp.ProcessCycle(dr:=dr, sfcValue=>fbController.pp);
+cp0.ProcessCycle(dr:=dr, sfcValue=>fbController.cp0);
+cp1.ProcessCycle(dr:=dr, sfcValue=>fbController.cp1);
+cp2.ProcessCycle(dr:=dr, sfcValue=>fbController.cp2);
 IC := InitialConditions();
 
-fbController(	
-	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack,
-	Situar := Situar, Transferir := Transferir,
-	Ready=>Ready, Done=>Done, Failure=>Failure);
+fbController(Situar := Situar, Transferir := Transferir,	
+	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 
-RUN.ProcessCycle(gm.ModeActual, sfcValue:=fbController.RUN);
-REV.ProcessCycle(gm.ModeActual, sfcValue:=fbController.REV);
-R_1.ProcessCycle(gm.ModeActual, sfcValue:=fbController.R_1);
-S_1.ProcessCycle(gm.ModeActual, sfcValue:=fbController.S_1);]]></ST>
+RUN.ProcessCycle(dr:=dr, sfcValue:=fbController.RUN);
+REV.ProcessCycle(dr:=dr, sfcValue:=fbController.REV);
+R_1.ProcessCycle(dr:=dr, sfcValue:=fbController.R_1);
+S_1.ProcessCycle(dr:=dr, sfcValue:=fbController.S_1);
+IsActive := RUN.uiValue OR REV.uiValue OR R_1.uiValue OR S_1.uiValue;]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_Cinta">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Cinta.InitialConditions">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Cinta.ModuleControlFlow">
-      <LineId Id="3" Count="5" />
-      <LineId Id="19" Count="0" />
-      <LineId Id="9" Count="8" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

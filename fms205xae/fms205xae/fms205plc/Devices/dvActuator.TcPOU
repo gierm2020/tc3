@@ -10,14 +10,14 @@ END_VAR
 VAR_INPUT	
 END_VAR
 VAR_OUTPUT
+	uiValue			: BOOL;					// Vinculación a la visualización
 END_VAR
 VAR
-	tm				: REFERENCE TO FB_Timelimits;
-	ModeActual		: E_GEMMA := E_GEMMA.A6Inicializando;
+	dr				: REFERENCE TO FB_Director;
+	
 	Name			: STRING; 				// Nombre del actuador, p.ej. K_1
 	prValue			: BOOL := FALSE;		// Valor previo para detectar cambios de estado	
 	hwValue AT %Q*	: BOOL;					// Vinculación al hardware de la estación
-	uiValue			: BOOL;					// Vinculación a la visualización
 	uiToolTip		: STRING;				// Tooltip en la visualización
 	uiEnabled		: BOOL := FALSE; 		// Deshabilitar el control cuando no está en modo manual
 	uiColor			: DWORD := COLOR_AAct;	// Color por defecto rojo pálido
@@ -37,14 +37,12 @@ END_VAR
     <Method Name="ProcessCycle" Id="{ecf71777-ee3c-4e39-a4e9-a6f0d14f2603}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL
 VAR_INPUT
-	ModeActual	: E_GEMMA := E_GEMMA.A6Inicializando;
+	dr			: reference to FB_Director;
 	sfcValue 	: BOOL;		// estado del actuador devuelto por el Grafcet	
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[uiEnabled :=  FALSE; // (ModeActual = E_GEMMA.F4VerificacionSinOrden); // Planta habilitado sólo en modo F4
- 
-IF uiEnabled THEN
+        <ST><![CDATA[IF dr.gmModeActual = E_GEMMA.F4VerificacionSinOrden THEN
 	// Actualizar el hardware con la entrada desde la visualización
 	hwValue := uiValue;
 ELSE
@@ -81,16 +79,6 @@ END_IF
 uiInvisible := NOT hwValue;
 //uiColor := SEL(hwValue, COLOR_AIna, COLOR_AAct);
 ]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="SetValue" Id="{10585dcd-ae75-4b8a-8c38-8c1273112952}">
-      <Declaration><![CDATA[METHOD SetValue : BOOL
-VAR_INPUT
-	newValue: BOOL;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[hwValue := newValue;]]></ST>
       </Implementation>
     </Method>
   </POU>

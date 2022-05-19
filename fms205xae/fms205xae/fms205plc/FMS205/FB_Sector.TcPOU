@@ -63,8 +63,8 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Claridad_Medida	:= mdFotoe.LecturaFiable;
-Tapa_Clara		:= mdFotoe.TapaClara;
+        <ST><![CDATA[Claridad_Medida	:= mdFotoe.Lectura_Registrada;
+Tapa_Clara		:= mdFotoe.Tapa_Clara;
 UpdateUi();]]></ST>
       </Implementation>
     </Method>
@@ -79,7 +79,7 @@ END_VAR
         <ST><![CDATA[Inicializado	:= FALSE;
 
 // TapaCargada		:= FALSE; pendiente asignar en función de la altura
-Altura_Medida	:= TRUE;
+Altura_Medida	:= mdMedid.Lectura_Registrada;
 Altura_Pulsos	:= mdMedid.Altura_Pulsos;
 Altura_Mm 		:= mdMedid.Altura_mm;
 Tapa_Alta 		:= Altura_Mm > Umbral_Mm;

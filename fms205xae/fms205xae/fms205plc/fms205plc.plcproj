@@ -63,22 +63,13 @@
     <Compile Include="FMS205\FB_Sector.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FMS205\FB_Timelimits.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="GlobalTextList.TcGTLO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ModuleBase\FB_ControllerBase_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ModuleBase\FB_Controller_SFC.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ModuleBase\FB_Module.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ModuleBase\FB_Module_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ModuleInstances\FB_Alimentador.TcPOU">
@@ -111,7 +102,7 @@
     <Compile Include="ModuleInstances\FB_MedidorTapa_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ModuleInstances\FB_Simple.TcPOU">
+    <Compile Include="ModuleInstances\FB_Simple_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ModuleInstances\FB_PickAndPlace.TcPOU">
@@ -137,10 +128,6 @@
     </Compile>
     <Compile Include="VISUs\FB_FMS205_UI.TcPOU">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="VISUs\FMS205Testing.TcVIS">
-      <SubType>Code</SubType>
-      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
     <Compile Include="VISUs\fms205visu.TcVIS">
       <SubType>Code</SubType>

@@ -106,6 +106,21 @@
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.fbFMS205.mdCinta.cp0.hwValue</Name>
+							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdCinta.cp1.hwValue</Name>
+							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.mdCinta.cp2.hwValue</Name>
+							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.fbFMS205.fbPanel.hw.PE_Seta</Name>
 							<Comment><![CDATA[ Botones y alarmas específicos de una estación ]]></Comment>
 							<Type>BOOL</Type>

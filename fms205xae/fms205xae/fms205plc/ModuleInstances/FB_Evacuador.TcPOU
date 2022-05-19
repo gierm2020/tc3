@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Evacuador" Id="{50116491-c91a-4b60-887b-578d95c086cb}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Evacuador EXTENDS FB_Module
 (* 
@@ -22,15 +22,20 @@ VAR_INPUT
 END_VAR
 
 VAR
-	fbController		: FB_Evacuador_SFC; 		// controlador para ejecución normal
-	f0 		: dvSensor;
-	f1 		: dvSensor;
-	g0 		: dvSensor;
-	v1 		: dvSensor;
-	F_0		: dvActuator := (tm:=tm);
-	F_1		: dvActuator := (tm:=tm);
-	G_1		: dvActuator := (tm:=tm);
-	V_1		: dvActuator := (tm:=tm);
+	// Controlador
+	fbController		: FB_Evacuador_SFC:=(dr:=dr); 		// controlador para ejecución normal
+
+	// Sensores
+	f0 		: dvSensor := (dr:=dr);
+	f1 		: dvSensor := (dr:=dr);
+	g0 		: dvSensor := (dr:=dr);
+	v1 		: dvSensor := (dr:=dr);
+
+	// Actuadores
+	F_0		: dvActuator := (dr:=dr);
+	F_1		: dvActuator := (dr:=dr);
+	G_1		: dvActuator := (dr:=dr);
+	V_1		: dvActuator := (dr:=dr);
 END_VAR
 
 ]]></Declaration>
@@ -47,8 +52,8 @@ END_VAR
         <ST><![CDATA[InitialConditions := f1.hwValue; // el evacuador está en condiciones iniciales cuando el sensor f1 está activado]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ModuleControlFlow" Id="{088423ab-0767-49f6-96df-c713fe6fe249}">
-      <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
+    <Method Name="ProcessCycle" Id="{088423ab-0767-49f6-96df-c713fe6fe249}">
+      <Declaration><![CDATA[METHOD ProcessCycle : BOOL 
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[//----------------------------------- leer los sensores para determinar el estado del módulo
@@ -58,10 +63,10 @@ END_VAR
 fbController.SFCPause := Pausar;
 fbController.SFCReset := Reset;
 
-f0.ProcessCycle(gm.ModeActual, sfcValue=>fbController.f0);
-f1.ProcessCycle(gm.ModeActual, sfcValue=>fbController.f1);
-g0.ProcessCycle(gm.ModeActual, sfcValue=>fbController.g0);
-v1.ProcessCycle(gm.ModeActual, sfcValue=>fbController.v1);
+f0.ProcessCycle(dr:=dr, sfcValue=>fbController.f0);
+f1.ProcessCycle(dr:=dr, sfcValue=>fbController.f1);
+g0.ProcessCycle(dr:=dr, sfcValue=>fbController.g0);
+v1.ProcessCycle(dr:=dr, sfcValue=>fbController.v1);
 
 //ctInp.HwIC := InitialConditions();
 IC := InitialConditions();
@@ -70,45 +75,16 @@ IC := InitialConditions();
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 fbController(
 	Evacuar	:= Evacuar,							// otras entradas específicas
-	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 
-	
-//----------------------------------- utilizar los resultados del controlador
-
-// Cambios en actuadores por el modo manual
-//IF gm.ModeActual=E_GEMMA.F4VerificacionSinOrden THEN
-	; // TODO AÑADIR AQUI EL MODO MANUAL DEL ALIMENTADOR
-
-// Cambios en actuadores por el resultado del controlador
-//ELSE
-	// Actualizar actuadores hardware con lo que indique el controlador
-    //F_1       := fbController.F_1;
-    //F_0       := fbController.F_0;
-    // G_1       := fbController.G_1;
-    //V_1       := fbController.V_1;
-//END_IF
-F_0.ProcessCycle(gm.ModeActual, sfcValue:=fbController.F_0);
-F_1.ProcessCycle(gm.ModeActual, sfcValue:=fbController.F_1);
-G_1.ProcessCycle(gm.ModeActual, sfcValue:=fbController.G_1);
-V_1.ProcessCycle(gm.ModeActual, sfcValue:=fbController.V_1);
-
+F_0.ProcessCycle(dr:=dr, sfcValue:=fbController.F_0);
+F_1.ProcessCycle(dr:=dr, sfcValue:=fbController.F_1);
+G_1.ProcessCycle(dr:=dr, sfcValue:=fbController.G_1);
+V_1.ProcessCycle(dr:=dr, sfcValue:=fbController.V_1);
+IsActive := F_0.uiValue OR F_1.uiValue OR G_1.uiValue OR V_1.uiValue;
 
 ]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_Evacuador">
-      <LineId Id="3" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Evacuador.InitialConditions">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Evacuador.ModuleControlFlow">
-      <LineId Id="3" Count="3" />
-      <LineId Id="46" Count="0" />
-      <LineId Id="45" Count="0" />
-      <LineId Id="7" Count="35" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

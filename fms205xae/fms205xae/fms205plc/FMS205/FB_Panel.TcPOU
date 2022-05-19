@@ -1,10 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Panel" Id="{514e5db3-ac71-4add-977b-df9fa295436c}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Panel
 VAR_INPUT
-	gm: S_Gemma;
-	TR: TIME := T#3S; 	// Tiempo de reinicio
+	dr: REFERENCE TO FB_Director;
 END_VAR
 
 VAR_OUTPUT
@@ -59,39 +58,34 @@ cn.Pruebas			:= Probando;
 // Señales
 
 hw.AS_AvisadorSonoro := 
-	gm.ModeActual = E_GEMMA.F3SecuenciaFinalizacion OR
+	dr.gmModeActual = E_GEMMA.F3SecuenciaFinalizacion OR
 	(
 		(
-			gm.ModeActual = E_GEMMA.D1ParadaEmergencia OR
-			gm.ModeActual = E_GEMMA.D2TratamientoFallos OR 
-			gm.ModeActual = E_GEMMA.F2SecuenciaPreparacion 
+			dr.gmModeActual = E_GEMMA.D1ParadaEmergencia OR
+			dr.gmModeActual = E_GEMMA.D2TratamientoFallos OR 
+			dr.gmModeActual = E_GEMMA.F2SecuenciaPreparacion 
 		) AND FALSE
 	); //  TODO - TERMINAR LA IMPLENTACIÓN CON EL RELOJ - CLK.Q;
 	
 hw.LA_LamparaAlarma := 
-	gm.ModeActual = E_GEMMA.A6Inicializando OR
+	dr.gmModeActual = E_GEMMA.A6Inicializando OR
 	(
 		(
-			gm.ModeActual = E_GEMMA.D1ParadaEmergencia OR
-			gm.ModeActual = E_GEMMA.D2TratamientoFallos
+			dr.gmModeActual = E_GEMMA.D1ParadaEmergencia OR
+			dr.gmModeActual = E_GEMMA.D2TratamientoFallos
 		) 
 		AND TRUE
 	);  //  TODO - TERMINAR LA IMPLENTACIÓN CON EL RELOJ - CLK.Q;
 
 hw.LM_LamparaMarcha := 	
-	gm.ModeActual = E_GEMMA.A2ParaFinCiclo OR
-	gm.ModeActual = E_GEMMA.F1ProduccionNormal OR
-	gm.ModeActual = E_GEMMA.F2SecuenciaPreparacion OR
-	gm.ModeActual = E_GEMMA.F3SecuenciaFinalizacion OR
+	dr.gmModeActual = E_GEMMA.A2ParaFinCiclo OR
+	dr.gmModeActual = E_GEMMA.F1ProduccionNormal OR
+	dr.gmModeActual = E_GEMMA.F2SecuenciaPreparacion OR
+	dr.gmModeActual = E_GEMMA.F3SecuenciaFinalizacion OR
 	(
-		gm.ModeActual = E_GEMMA.A1ParadaInicial AND TRUE 
+		dr.gmModeActual = E_GEMMA.A1ParadaInicial AND TRUE 
 	);  //  TODO - TERMINAR LA IMPLENTACIÓN CON EL RELOJ - CLK.Q; 
 ]]></ST>
     </Implementation>
-    <LineIds Name="FB_Panel">
-      <LineId Id="85" Count="0" />
-      <LineId Id="3" Count="46" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

@@ -9,9 +9,6 @@ VAR_INPUT
 	Name	: STRING;		// Nombre del módulo (para erroers)
 	Descr	: STRING; 		// Descripción del módulo (para tooltips)
 	
-	gm		: REFERENCE TO S_Gemma;
-	tm		: REFERENCE TO FB_Timelimits;
-
 	IC: BOOL;
 	Execute: BOOL;
 	Ack: BOOL;
@@ -22,6 +19,7 @@ VAR_OUTPUT
 	Ready: BOOL;
 	Failure: BOOL;
 	Done: BOOL;
+	IsActive: BOOL;
 END_VAR
 
 // TODO AÑADIR UN METODO GEMMA QUE SE INVOQUE DESDE PROCESSCYCLE PARA TRATAMIENTO DE PARADA, PAUSA...
@@ -32,12 +30,6 @@ VAR_OUTPUT
 	//ctOut: S_ControllerOutput;
 //	IC: BOOL;
 //	Done: BOOL;
-END_VAR
-VAR
-	// Parámetros que se establecen en el constructor
-
-	// Variables que permanecen durante la ejecución del objeto
-	fbModuleController: FB_Module_SFC;	
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -52,92 +44,11 @@ END_VAR
         <ST><![CDATA[InitialConditions := TRUE;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ModuleControlFlow" Id="{9383c466-5ef4-45f2-bc56-c203e01f0aa7}">
-      <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
+    <Method Name="ProcessCycle" Id="{9383c466-5ef4-45f2-bc56-c203e01f0aa7}">
+      <Declaration><![CDATA[METHOD ProcessCycle : BOOL 
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[//----------------------------------- leer los sensores para determinar el estado del módulo
-
-
-//----------------------------------- preparar los datos que necesita el controlador
-//ctInp.HwIC := InitialConditions();
-IC := InitialConditions();
-
-
-
-//----------------------------------- ejecutar el controlador
-//fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
-fbModuleController(
-	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack,
-	Ready=>Ready, Done=>Done, Failure=>Failure);
-
-
-
-//----------------------------------- utilizar los resultados del controlador
-
-
-
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="ModuleManageErrors" Id="{8ade10c1-f39a-4934-8daa-f961efae09a8}">
-      <Declaration><![CDATA[METHOD ModuleManageErrors : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="ModulePerformActions" Id="{17632846-53ea-4ba0-9b40-61e8d351137e}">
-      <Declaration><![CDATA[METHOD ModulePerformActions : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="ModuleProcessCycle" Id="{f59c6a25-056d-46b7-b6cf-2d87510fdf05}">
-      <Declaration><![CDATA[METHOD ModuleProcessCycle : BOOL
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[ModuleProcessGemma();
-ModuleReadInputs();
-ModuleControlFlow();
-ModulePerformActions();
-ModuleManageErrors();]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="ModuleProcessGemma" Id="{c87b0fa3-9ed6-4dfb-b9a8-19a8413dd1b6}">
-      <Declaration><![CDATA[METHOD ModuleProcessGemma : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="ModuleReadInputs" Id="{72cc98b4-db8c-4331-bea1-c85f00e58403}">
-      <Declaration><![CDATA[METHOD ModuleReadInputs : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[// leer los sensores y guardar el resultados que necesita el controlador
-
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="NegarSensores" Id="{25f09da9-7351-4c85-b6d1-aeccbc4704f1}">
-      <Declaration><![CDATA[METHOD NegarSensores : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[// este método sirve para hacer pruebas
-// cada sensor se cambia de True a False o viceversa
-// de forma que al ejecutar el método el controlador salta al siguiente estaddo]]></ST>
+        <ST><![CDATA[IsActive := FALSE;]]></ST>
       </Implementation>
     </Method>
   </POU>

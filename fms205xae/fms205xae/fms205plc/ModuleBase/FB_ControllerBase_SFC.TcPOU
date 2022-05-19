@@ -5,8 +5,6 @@
 VAR_INPUT
 	dr: REFERENCE TO FB_Director;
 	
-	tm: REFERENCE TO FB_Timelimits; //S_Timeouts;
-	//tm: FB_Timelimits; //S_Timeouts;
 	IC: BOOL;
 	Execute: BOOL;
 	Ack: BOOL;

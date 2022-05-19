@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Evacuador_SFC" Id="{732a5d89-d610-4122-b553-0a1448cdc8d0}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Evacuador_SFC EXTENDS FB_ControllerBase_SFC
 
@@ -2395,7 +2395,7 @@ END_VAR
                                     <o>
                                       <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                       <o n="Value" t="StringValue">
-                                        <v n="Value">"F1Soltar.t &gt; tm.SOL"</v>
+                                        <v n="Value">"F1Soltar.t &gt; dr.tmSOL"</v>
                                         <v n="DefaultValue">""</v>
                                       </o>
                                       <v n="Id">869L</v>

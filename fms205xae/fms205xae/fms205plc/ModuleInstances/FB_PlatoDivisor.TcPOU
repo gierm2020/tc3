@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_PlatoDivisor" Id="{c71a4a01-3eb1-443b-a07e-accb57d2980d}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_PlatoDivisor EXTENDS FB_Module
 VAR_INPUT
@@ -10,18 +10,15 @@ VAR_INPUT
 END_VAR
 
 VAR
-	//tm: FB_Timelimits := (Speed:=10.0); //S_Timeouts;
-	
-	fbController: FB_PlatoDivisor_SFC;  // controlador para ejecución normal
-	
-	(* Sensores específicos *)
-	d0 : dvSensor; //         AT %I*: BOOL; (* b0  (nombre=d0  c=I21 B=J1 b=29 módulo=EL1008 T=6  C=6 etiqueta=-B9,  input) Empujador del plato detrás *)
-//    k1         AT %I*: BOOL; (* c1  (nombre=k1  c=I30 B=J1 b=15 módulo=EL1008 T=7  C=7 etiqueta=-B18, input) Empujador de tapa delante *)
+	// Controlador
+	fbController: FB_PlatoDivisor_SFC:=(dr:=dr);  // controlador para ejecución normal
 
-	(* Actuadores específicos *)
-    D_1       : dvActuator;// AT %Q*: BOOL; (* bEMP (nombre=D+  c=Q20 B=J2  b=05 módulo=EL2008 T=8 C=8 etiqueta=-Y6,  output) Empujador del plato avanza *)
-    E_1       : dvActuator;// AT %Q*: BOOL; (* bRET (nombre=E+  c=Q21 B=J2  b=02 módulo=EL2008 T=8 C=8 etiqueta=-Y7,  output) Retenedor del plato retrocede *)
+	// Sensores
+	d0 : dvSensor := (dr:=dr); //         AT %I*: BOOL; (* b0  (nombre=d0  c=I21 B=J1 b=29 módulo=EL1008 T=6  C=6 etiqueta=-B9,  input) Empujador del plato detrás *)
 
+	// Actuadores	
+    D_1       : dvActuator := (dr:=dr);// AT %Q*: BOOL; (* bEMP (nombre=D+  c=Q20 B=J2  b=05 módulo=EL2008 T=8 C=8 etiqueta=-Y6,  output) Empujador del plato avanza *)
+    E_1       : dvActuator := (dr:=dr);// AT %Q*: BOOL; (* bRET (nombre=E+  c=Q21 B=J2  b=02 módulo=EL2008 T=8 C=8 etiqueta=-Y7,  output) Retenedor del plato retrocede *)	
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -36,8 +33,8 @@ END_VAR
         <ST><![CDATA[InitialConditions := TRUE; // InitialConditions := d0;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ModuleControlFlow" Id="{a7156aed-454d-425e-80f1-664f90d71526}">
-      <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL 
+    <Method Name="ProcessCycle" Id="{a7156aed-454d-425e-80f1-664f90d71526}">
+      <Declaration><![CDATA[METHOD ProcessCycle : BOOL 
 
 ]]></Declaration>
       <Implementation>
@@ -45,26 +42,14 @@ END_VAR
 fbController.SFCReset := Reset;
 
 //tm.UpdateSpeed(NewSpeed:= 0.01);
-d0.ProcessCycle(gm.ModeActual, sfcValue=>fbController.d0);
+d0.ProcessCycle(dr:=dr, sfcValue=>fbController.d0);
 IC := InitialConditions();
 fbController(
-tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
-D_1.ProcessCycle(gm.ModeActual, sfcValue:=fbController.D_1);
-E_1.ProcessCycle(gm.ModeActual, sfcValue:=fbController.E_1);
-]]></ST>
+	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+D_1.ProcessCycle(dr:=dr, sfcValue:=fbController.D_1);
+E_1.ProcessCycle(dr:=dr, sfcValue:=fbController.E_1);
+IsActive:=D_1.uiValue OR E_1.uiValue;]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_PlatoDivisor">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_PlatoDivisor.InitialConditions">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_PlatoDivisor.ModuleControlFlow">
-      <LineId Id="14" Count="0" />
-      <LineId Id="12" Count="1" />
-      <LineId Id="3" Count="6" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

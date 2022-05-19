@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_PickAndPlace" Id="{0acadc22-7b10-494f-8323-7cb38d3e0455}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_PickAndPlace EXTENDS FB_Module
 (* ESTACIÓN DE CARGA - Manual de usuario #31/27 
@@ -25,23 +25,25 @@ realizando un giro hasta el punto de descarga mediante un actuador neumático ro
 
 VAR_INPUT
 	Mover: BOOL := TRUE; // TODO HAY QUE CARGAR O DESCARGAR EN FUNCIÓN DEL RESTO DE LA MÁQUINA Y LAS CONSIGNAS DEL PANEL
-	TPIN: TIME := T#1S;  // Tiempo para que la pinza sujete la tapa	
 END_VAR
 
 VAR
-	fbController: FB_PickAndPlace_SFC; // controlador para ejecución normal
 
-	(* Sensores específicos *)
-	h0 : dvSensor; //AT %I*: BOOL; (* Final de carrera horizontal retraida *)
-	h1 : dvSensor; //AT %I*: BOOL; (* Final de carrera horizontal extendido *)
-	v1 : dvSensor; //AT %I*: BOOL; (*Final de carrera vertical abajo*)
-	v0 : dvSensor; //AT %I*: BOOL; (*Final de carrera vertical arriba*)
+	// Controlador
+	fbController: FB_PickAndPlace_SFC:=(dr:=dr); // controlador para ejecución normal
 
-	(* Actuadores específicos *)
-	HOR : dvActuator; // AT %Q*: BOOL; (* Actuador de extension de brazo horizontal *)
-	VER : dvActuator; //AT %Q*: BOOL; (* Actuador de movimiento vertical de brazo*)
-	PIN : dvActuator; //AT %Q*: BOOL; (*Actuador de pinza de brazo*)
-END_VAR]]></Declaration>
+	// Sensores
+	h0 : dvSensor := (dr:=dr); //AT %I*: BOOL; (* Final de carrera horizontal retraida *)
+	h1 : dvSensor := (dr:=dr); //AT %I*: BOOL; (* Final de carrera horizontal extendido *)
+	v1 : dvSensor := (dr:=dr); //AT %I*: BOOL; (*Final de carrera vertical abajo*)
+	v0 : dvSensor := (dr:=dr); //AT %I*: BOOL; (*Final de carrera vertical arriba*)
+
+	// Actuadores	
+	HOR : dvActuator := (dr:=dr); // AT %Q*: BOOL; (* Actuador de extension de brazo horizontal *)
+	VER : dvActuator := (dr:=dr); //AT %Q*: BOOL; (* Actuador de movimiento vertical de brazo*)
+	PIN : dvActuator := (dr:=dr); //AT %Q*: BOOL; (*Actuador de pinza de brazo*)
+END_VAR
+]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
@@ -52,17 +54,17 @@ END_VAR]]></Declaration>
         <ST><![CDATA[InitialConditions := TRUE; // InitialConditions := v0 AND h0; // el brazo está en condiciones iniciales cuando está arriba y retraído]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ModuleControlFlow" Id="{ad50b7d3-ffb1-4d5e-9f1d-9c4b9b9b584c}">
-      <Declaration><![CDATA[METHOD ModuleControlFlow : BOOL
+    <Method Name="ProcessCycle" Id="{ad50b7d3-ffb1-4d5e-9f1d-9c4b9b9b584c}">
+      <Declaration><![CDATA[METHOD ProcessCycle : BOOL
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[fbController.SFCPause := Pausar;
 fbController.SFCReset := Reset;
 
-h0.ProcessCycle(gm.ModeActual, sfcValue=>fbController.h0);
-h1.ProcessCycle(gm.ModeActual, sfcValue=>fbController.h1);
-v0.ProcessCycle(gm.ModeActual, sfcValue=>fbController.v0);
-v1.ProcessCycle(gm.ModeActual, sfcValue=>fbController.v1);
+h0.ProcessCycle(dr:=dr, sfcValue=>fbController.h0);
+h1.ProcessCycle(dr:=dr, sfcValue=>fbController.h1);
+v0.ProcessCycle(dr:=dr, sfcValue=>fbController.v0);
+v1.ProcessCycle(dr:=dr, sfcValue=>fbController.v1);
 
 
 //----------------------------------- preparar los datos que necesita el controlador
@@ -71,17 +73,14 @@ IC := InitialConditions();
 //----------------------------------- ejecutar el controlador
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 fbController(
-	//ctInp := ctInp,								// entrada estándar
-	//TPIN := TPIN,								// temporizadores específicos
-    //h0 := h0, h1 := h1, v0 := v0, v1 := v1,		// sensores específicos
-	Mover := Mover,							// otras entradas específicas
-	tm := tm, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+		Mover := Mover,							// otras entradas específicas
+		dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 
 
-HOR.ProcessCycle(gm.ModeActual, sfcValue:=fbController.HOR);
-VER.ProcessCycle(gm.ModeActual, sfcValue:=fbController.VER);
-PIN.ProcessCycle(gm.ModeActual, sfcValue:=fbController.PIN);
-
+HOR.ProcessCycle(dr:=dr, sfcValue:=fbController.HOR);
+VER.ProcessCycle(dr:=dr, sfcValue:=fbController.VER);
+PIN.ProcessCycle(dr:=dr, sfcValue:=fbController.PIN);
+IsActive:=HOR.uiValue OR VER.uiValue OR PIN.uiValue;
 (*
 //----------------------------------- utilizar los resultados del controlador
 
@@ -99,18 +98,5 @@ END_IF
 	*)]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_PickAndPlace">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_PickAndPlace.InitialConditions">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_PickAndPlace.ModuleControlFlow">
-      <LineId Id="41" Count="0" />
-      <LineId Id="43" Count="0" />
-      <LineId Id="42" Count="0" />
-      <LineId Id="3" Count="36" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

@@ -8,6 +8,8 @@ VAR_OUTPUT
 	uiValue			: BOOL;					// Vinculación a la visualización
 END_VAR
 VAR	
+	dr				: REFERENCE TO FB_Director;
+	
 	Name			: STRING; 				// Nombre del actuador, p.ej. K_1
 	ModeActual		: E_GEMMA := E_GEMMA.A6Inicializando;
 	prValue			: BOOL := FALSE;		// Valor previo para detectar cambios de estado	
@@ -20,40 +22,19 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="GetValue" Id="{d2bc4544-5acf-452e-b8a0-06f8db439409}">
-      <Declaration><![CDATA[METHOD GetValue : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[uiEnabled := TRUE; // (ModeActual = E_GEMMA.F4VerificacionSinOrden); // Planta habilitado sólo en modo F4
-
- 
-IF uiEnabled THEN
-	// Si está ejecutando en local, simular que el hardware a recibido el valor de la visualización
-	hwValue := uiValue;
-ELSE
-	// Si está ejecutando en la estación, el valor de la visualización debe actualizarse con lo que viene del hardware
-	uiValue := hwValue;
-END_IF
-
-GetValue := hwValue;]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="ProcessCycle" Id="{71ee41d9-0d14-4d00-a8c7-99dc223f0a9d}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL
 VAR_INPUT
-	ModeActual	: E_GEMMA := E_GEMMA.A6Inicializando;
+	dr	: REFERENCE TO FB_Director;
 END_VAR
-
 VAR_OUTPUT
 	sfcValue 	: BOOL;		// estado del sensor que se entregará al Grafcet
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[uiEnabled := TRUE; // (ModeActual = E_GEMMA.F4VerificacionSinOrden); // Planta habilitado sólo en modo F4
+        <ST><![CDATA[uiEnabled := TRUE; // (dr.gmModeActual = E_GEMMA.F4VerificacionSinOrden); // Planta habilitado sólo en modo F4
  
-IF uiEnabled THEN
-	// Si está ejecutando en local, simular que el hardware a recibido el valor de la visualización
+IF dr.gmLocalHost THEN
+	// permite simular el hardware ejecutando en local haciendo que el valor hwValue dependa de la interfaz
 	hwValue := uiValue;
 ELSE
 	// Si está ejecutando en la estación, el valor de la visualización debe actualizarse con lo que viene del hardware
