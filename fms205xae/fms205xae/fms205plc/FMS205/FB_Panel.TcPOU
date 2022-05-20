@@ -16,18 +16,39 @@ VAR_OUTPUT
 	cnProdNegAlta		: BOOL := TRUE;
 	cnProdNegBaja		: BOOL := FALSE;	
 
-	// consignas del panel, resultado de integrar la información que viene del hardware, el estado GEMMA, los temporizadores y flancos, y la interfaz de usuario
-		
-	cnD1_Emergencia	: BOOL; // pulsar la seta
-	hwPE_Seta		: BOOL; // seta en el panel físico
-	swPE_Seta		: BOOL; // botón en la visualización
-	ttPE_Seta		: STRING := '';
-	
+	// consignas del panel, resultado de integrar la información que viene del hardware, el estado GEMMA, los temporizadores y flancos, y la interfaz de usuario		
+	cnD1_Emergencia		: BOOL; // pulsar la seta
 	cnF4_Planta			: BOOL; // modo verificación sin orden
-	swF4_Planta			: BOOL; // botón en la visualización
-	ttF4_Planta			: STRING :='';
-	swF4_Avanza			: BOOL := FALSE;
- 	swF4_Retroc			: BOOL := FALSE;
+	cnF5_Funcion		: BOOL; // modo verificación ordenada
+	swF5_Alimentar					: BOOL;
+	swF5_Situar						: BOOL;
+	swF5_Transferir					: BOOL;
+	swF5_Cargar						: BOOL;
+	swF5_Evacuar					: BOOL;
+	swF5_Descargar					: BOOL;
+	swF5_Medir						: BOOL;
+	swF5_Claridad					: BOOL;
+	swF5_Material					: BOOL;
+	swF5_Girar						: BOOL;
+	swF5_Ejecutar					: BOOL;
+	swF5_Ack						: BOOL;
+
+END_VAR
+
+VAR
+	swMensaje		: STRING(255) :='';
+	
+	hwPE_Seta 				AT %I*	: BOOL;
+	swPE_Seta						: BOOL;
+	ttPE_Seta						: STRING := '';
+	
+	hwSM_SelecAutoManual	AT %I*	: BOOL; // SM - Selector modo auto/man
+	swF4_Planta						: BOOL; // botón en la visualización
+	ttF4_Planta						: STRING :='';
+	swF4_Avanza						: BOOL := FALSE;
+ 	swF4_Retroc						: BOOL := FALSE;
+	
+	swF5_Funcion					: BOOL; // botón en la visualización
 	
 END_VAR
 
@@ -127,8 +148,10 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// Modo D1
-cnD1_Emergencia 		:= hwPE_Seta OR swPE_Seta; 
+        <ST><![CDATA[
+
+//----------------------------------------------------------------- Modo D1
+cnD1_Emergencia := hwPE_Seta OR swPE_Seta; 
 IF hwPE_Seta THEN
 	IF swPE_Seta THEN
 		ttPE_Seta := 'Desarmar la seta y desactivar el botón para reinicializar';
@@ -144,27 +167,74 @@ ELSE
 END_IF
 
 
-// Modo F4
-// sólo se puede entrar o salir del modo F4 desde determinados estados
-IF (gmModeActual = E_GEMMA.A6Inicializando OR 
+//----------------------------------------------------------------- Modo F4
+IF (gmModeActual = E_GEMMA.A6Inicializando OR 				// sólo se puede entrar o salir del modo desde determinados estados 
 	gmModeActual = E_GEMMA.A1ParadaInicial OR		
-	gmModeActual = E_GEMMA.F4VerificacionSinOrden) THEN
-	
-	cnF4_Planta := swF4_Planta;
+	gmModeActual = E_GEMMA.F5VerificacionOrdenada OR		
+	gmModeActual = E_GEMMA.F4VerificacionSinOrden) THEN	
+	cnF4_Planta := hwSM_SelecAutoManual OR swF4_Planta;
 END_IF 
-	
-IF cnF4_Planta THEN
-	ttF4_Planta := 'Mandos directos activos';
-	IF swF4_Avanza THEN
-		swF4_Retroc := FALSE;
-	ELSIF
-		swF4_Retroc THEN
-		swF4_Avanza := FALSE;
-	END_IF
-ELSE
+IF NOT cnF4_Planta AND (hwSM_SelecAutoManual OR swF4_Planta) THEN
+	// si no se puede pasar al modo F4 hay que explicar poor qué
 	swF4_Planta := FALSE; // si no se puede entrar en modo F4 hay que desactivar el botón
-	ttF4_Planta := 'Mandos directos inactivos';
-END_IF]]></ST>
+	swMensaje := 'Sólo se puede pasar al modo F4 desde A1, A6 o F5';
+ELSE
+	swMensaje := '';
+	IF hwSM_SelecAutoManual THEN
+		IF swF4_Planta THEN
+			ttF4_Planta := 'Mandos directos ativados desde panel físico y visualización';	
+		ELSE
+			ttF4_Planta := 'Mandos directos ativados desde panel físico';
+		END_IF
+	ELSE
+		IF swF4_Planta THEN
+			ttF4_Planta := 'Mandos directos ativados desde visualización';
+		ELSE
+			ttF4_Planta := 'Mandos directos desactivados';
+		END_IF	
+	END_IF
+	
+	IF cnF4_Planta THEN
+		swF5_Funcion := FALSE; // si se pasa a modo F4 hay que desactivar el F5	
+		// avanza y retrocede son mandos directos excluyentes
+		IF swF4_Avanza THEN 
+			swF4_Retroc := FALSE;
+		ELSIF swF4_Retroc THEN		
+			swF4_Avanza := FALSE;
+		END_IF		
+	END_IF
+END_IF
+
+
+//----------------------------------------------------------------- Modo F5
+IF (gmModeActual = E_GEMMA.A1ParadaInicial OR				// sólo se puede entrar o salir del modo desde determinados estados
+	gmModeActual = E_GEMMA.F4VerificacionSinOrden OR
+	gmModeActual = E_GEMMA.F5VerificacionOrdenada) THEN	
+	cnF5_Funcion := swF5_Funcion;
+END_IF 
+
+IF NOT cnF5_Funcion AND swF5_Funcion THEN
+	// si no se puede pasar al modo F5 hay que explicar poor qué
+	swF5_Funcion := FALSE; // si no se puede entrar en modo F4 hay que desactivar el botón
+	swMensaje := 'Sólo se puede pasar al modo función desde A1, A6 o F4';
+
+ELSIF cnF5_Funcion THEN
+	swMensaje := '';
+	swF4_Planta := FALSE; // si se pasa a modo F5 hay que desaactivar el F4
+	IF swF5_Girar AND (swF5_Cargar OR swF5_Evacuar OR swF5_Descargar OR swF5_Medir) THEN // funciones incompatibles
+		swF5_Girar := FALSE;
+		swMensaje := 'No se puede girar a la vez que cargar, evacuar, descargar o medir por riesgo de avería';
+	END_IF
+	IF swF5_Alimentar AND swF5_Cargar THEN // funciones incompatibles
+		swF5_Cargar := FALSE;
+		swMensaje := 'No se puede cargar a la vez que alimentar por riesgo de avería';
+	END_IF
+	IF swF5_Transferir AND swF5_Descargar THEN
+		swF5_Transferir := FALSE;
+		swMensaje := 'No se puede descargar a la vez que transferer por riesgo de avería';
+	END_IF
+END_IF
+]]></ST>
       </Implementation>
     </Method>
   </POU>

@@ -8572,7 +8572,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.bot_Funcion"</v>
+                          <v n="Value">"MAIN.fbFMS205.fbPanel.swF5_Funcion"</v>
                         </o>
                       </l>
                     </o>
@@ -8615,7 +8615,7 @@
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">496</v>
+                      <v n="Value" t="Int16">528</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -8631,7 +8631,7 @@
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">496</v>
+                      <v n="Value" t="Int16">528</v>
                     </o>
                     <o>
                       <v n="Id">2678395525L</v>
@@ -9009,7 +9009,11 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.fun_Alimentar"</v>
+                          <v n="Value">"MAIN.fbFMS205.fbPanel.swF5_Alimentar"</v>
+                        </o>
+                        <o>
+                          <v n="Id">2164770859L</v>
+                          <v n="Value">false</v>
                         </o>
                       </l>
                     </o>
@@ -9032,7 +9036,7 @@
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">536</v>
+                      <v n="Value" t="Int16">564</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -9048,7 +9052,7 @@
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">536</v>
+                      <v n="Value" t="Int16">564</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -9125,6 +9129,10 @@
                       <v n="Value">false</v>
                     </o>
                     <o>
+                      <v n="Id">2496894244L</v>
+                      <v n="Value">"not MAIN.fbFMS205.fbPanel.cnF5_Funcion"</v>
+                    </o>
+                    <o>
                       <v n="Id">823443203L</v>
                       <v n="Value">"225"</v>
                     </o>
@@ -9152,7 +9160,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.fun_Girar"</v>
+                          <v n="Value">"MAIN.fbFMS205.fbPanel.swF5_Girar"</v>
                         </o>
                       </l>
                     </o>
@@ -9175,7 +9183,7 @@
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">536</v>
+                      <v n="Value" t="Int16">703</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -9191,7 +9199,7 @@
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">536</v>
+                      <v n="Value" t="Int16">703</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -9268,6 +9276,10 @@
                       <v n="Value">false</v>
                     </o>
                     <o>
+                      <v n="Id">2496894244L</v>
+                      <v n="Value">"not MAIN.fbFMS205.fbPanel.cnF5_Funcion"</v>
+                    </o>
+                    <o>
                       <v n="Id">823443203L</v>
                       <v n="Value">"615"</v>
                     </o>
@@ -9295,7 +9307,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.fun_Situar"</v>
+                          <v n="Value">"MAIN.fbFMS205.fbPanel.swF5_Situar"</v>
                         </o>
                       </l>
                     </o>
@@ -9314,11 +9326,11 @@
                     </o>
                     <o>
                       <v n="Id">1649127785L</v>
-                      <v n="Value" t="Int16">170</v>
+                      <v n="Value" t="Int16">90</v>
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">536</v>
+                      <v n="Value" t="Int16">564</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -9330,11 +9342,11 @@
                     </o>
                     <o>
                       <v n="Id">550940142L</v>
-                      <v n="Value" t="Int16">170</v>
+                      <v n="Value" t="Int16">90</v>
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">536</v>
+                      <v n="Value" t="Int16">564</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -9411,6 +9423,10 @@
                       <v n="Value">false</v>
                     </o>
                     <o>
+                      <v n="Id">2496894244L</v>
+                      <v n="Value">"not MAIN.fbFMS205.fbPanel.cnF5_Funcion"</v>
+                    </o>
+                    <o>
                       <v n="Id">823443203L</v>
                       <v n="Value">"443"</v>
                     </o>
@@ -9438,7 +9454,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.fun_Altura"</v>
+                          <v n="Value">"MAIN.fbFMS205.fbPanel.swF5_Medir"</v>
                         </o>
                       </l>
                     </o>
@@ -9461,7 +9477,7 @@
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">616</v>
+                      <v n="Value" t="Int16">634</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -9477,7 +9493,7 @@
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">616</v>
+                      <v n="Value" t="Int16">634</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -9554,6 +9570,10 @@
                       <v n="Value">false</v>
                     </o>
                     <o>
+                      <v n="Id">2496894244L</v>
+                      <v n="Value">"not MAIN.fbFMS205.fbPanel.cnF5_Funcion"</v>
+                    </o>
+                    <o>
                       <v n="Id">823443203L</v>
                       <v n="Value">"1334"</v>
                     </o>
@@ -9581,7 +9601,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.fun_Color"</v>
+                          <v n="Value">"MAIN.fbFMS205.fbPanel.swF5_Claridad"</v>
                         </o>
                       </l>
                     </o>
@@ -9604,7 +9624,7 @@
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">616</v>
+                      <v n="Value" t="Int16">634</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -9620,7 +9640,7 @@
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">616</v>
+                      <v n="Value" t="Int16">634</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -9660,7 +9680,7 @@
                     </o>
                     <o>
                       <v n="Id">390574330L</v>
-                      <v n="Value">"DetColor"</v>
+                      <v n="Value">"Claridad"</v>
                     </o>
                     <o>
                       <v n="Id">2340015797L</v>
@@ -9697,8 +9717,12 @@
                       <v n="Value">false</v>
                     </o>
                     <o>
+                      <v n="Id">2496894244L</v>
+                      <v n="Value">"not MAIN.fbFMS205.fbPanel.cnF5_Funcion"</v>
+                    </o>
+                    <o>
                       <v n="Id">823443203L</v>
-                      <v n="Value">"565"</v>
+                      <v n="Value">"267"</v>
                     </o>
                   </l>
                 </o>
@@ -9724,7 +9748,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.fun_Material"</v>
+                          <v n="Value">"MAIN.fbFMS205.fbPanel.swF5_Material"</v>
                         </o>
                       </l>
                     </o>
@@ -9747,7 +9771,7 @@
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">616</v>
+                      <v n="Value" t="Int16">634</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -9763,7 +9787,7 @@
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">616</v>
+                      <v n="Value" t="Int16">634</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -9803,7 +9827,7 @@
                     </o>
                     <o>
                       <v n="Id">390574330L</v>
-                      <v n="Value">"DetMaterial"</v>
+                      <v n="Value">"Material"</v>
                     </o>
                     <o>
                       <v n="Id">2340015797L</v>
@@ -9840,8 +9864,12 @@
                       <v n="Value">false</v>
                     </o>
                     <o>
+                      <v n="Id">2496894244L</v>
+                      <v n="Value">"not MAIN.fbFMS205.fbPanel.cnF5_Funcion"</v>
+                    </o>
+                    <o>
                       <v n="Id">823443203L</v>
-                      <v n="Value">"571"</v>
+                      <v n="Value">"1121"</v>
                     </o>
                   </l>
                 </o>
@@ -9875,7 +9903,7 @@
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">646</v>
+                      <v n="Value" t="Int16">664</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -9891,7 +9919,7 @@
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">646</v>
+                      <v n="Value" t="Int16">664</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -10003,7 +10031,7 @@
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">646</v>
+                      <v n="Value" t="Int16">664</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -10019,7 +10047,7 @@
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">646</v>
+                      <v n="Value" t="Int16">664</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -10131,7 +10159,7 @@
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">646</v>
+                      <v n="Value" t="Int16">664</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -10147,7 +10175,7 @@
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">646</v>
+                      <v n="Value" t="Int16">664</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -10251,7 +10279,11 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.fun_Cargar"</v>
+                          <v n="Value">"MAIN.fbFMS205.fbPanel.swF5_Cargar"</v>
+                        </o>
+                        <o>
+                          <v n="Id">2164770859L</v>
+                          <v n="Value">false</v>
                         </o>
                       </l>
                     </o>
@@ -10274,7 +10306,7 @@
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">585</v>
+                      <v n="Value" t="Int16">603</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -10290,7 +10322,7 @@
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">585</v>
+                      <v n="Value" t="Int16">603</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -10367,6 +10399,10 @@
                       <v n="Value">false</v>
                     </o>
                     <o>
+                      <v n="Id">2496894244L</v>
+                      <v n="Value">"not MAIN.fbFMS205.fbPanel.cnF5_Funcion"</v>
+                    </o>
+                    <o>
                       <v n="Id">823443203L</v>
                       <v n="Value">"559"</v>
                     </o>
@@ -10394,7 +10430,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.fun_Rechazar"</v>
+                          <v n="Value">"MAIN.fbFMS205.fbPanel.swF5_Evacuar"</v>
                         </o>
                       </l>
                     </o>
@@ -10417,7 +10453,7 @@
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">585</v>
+                      <v n="Value" t="Int16">603</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -10433,7 +10469,7 @@
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">585</v>
+                      <v n="Value" t="Int16">603</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -10473,7 +10509,7 @@
                     </o>
                     <o>
                       <v n="Id">390574330L</v>
-                      <v n="Value">"Rechazar"</v>
+                      <v n="Value">"Evacuar"</v>
                     </o>
                     <o>
                       <v n="Id">2340015797L</v>
@@ -10510,8 +10546,12 @@
                       <v n="Value">false</v>
                     </o>
                     <o>
+                      <v n="Id">2496894244L</v>
+                      <v n="Value">"not MAIN.fbFMS205.fbPanel.cnF5_Funcion"</v>
+                    </o>
+                    <o>
                       <v n="Id">823443203L</v>
-                      <v n="Value">"587"</v>
+                      <v n="Value">"1256"</v>
                     </o>
                   </l>
                 </o>
@@ -10537,7 +10577,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.fun_Descargar"</v>
+                          <v n="Value">"MAIN.fbFMS205.fbPanel.swF5_Descargar"</v>
                         </o>
                       </l>
                     </o>
@@ -10560,7 +10600,7 @@
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">585</v>
+                      <v n="Value" t="Int16">603</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -10576,7 +10616,7 @@
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">585</v>
+                      <v n="Value" t="Int16">603</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -10653,6 +10693,10 @@
                       <v n="Value">false</v>
                     </o>
                     <o>
+                      <v n="Id">2496894244L</v>
+                      <v n="Value">"not MAIN.fbFMS205.fbPanel.cnF5_Funcion"</v>
+                    </o>
+                    <o>
                       <v n="Id">823443203L</v>
                       <v n="Value">"599"</v>
                     </o>
@@ -10680,7 +10724,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.fun_Transferir"</v>
+                          <v n="Value">"MAIN.fbFMS205.fbPanel.swF5_Transferir"</v>
                         </o>
                       </l>
                     </o>
@@ -10703,7 +10747,7 @@
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">693</v>
+                      <v n="Value" t="Int16">564</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -10719,7 +10763,7 @@
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">693</v>
+                      <v n="Value" t="Int16">564</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -10796,6 +10840,10 @@
                       <v n="Value">false</v>
                     </o>
                     <o>
+                      <v n="Id">2496894244L</v>
+                      <v n="Value">"not MAIN.fbFMS205.fbPanel.cnF5_Funcion"</v>
+                    </o>
+                    <o>
                       <v n="Id">823443203L</v>
                       <v n="Value">"463"</v>
                     </o>
@@ -10823,7 +10871,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.bot_Ejecutar"</v>
+                          <v n="Value">"MAIN.fbFMS205.fbPanel.swF5_Ejecutar"</v>
                         </o>
                       </l>
                     </o>
@@ -10866,7 +10914,7 @@
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">732</v>
+                      <v n="Value" t="Int16">744</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -10882,7 +10930,7 @@
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">732</v>
+                      <v n="Value" t="Int16">744</v>
                     </o>
                     <o>
                       <v n="Id">2678395525L</v>
@@ -10940,7 +10988,7 @@
                     </o>
                     <o>
                       <v n="Id">2496894244L</v>
-                      <v n="Value">"NOT MAIN.fbFMS205.dr.bot_Funcion"</v>
+                      <v n="Value">"not MAIN.fbFMS205.fbPanel.cnF5_Funcion"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -10970,7 +11018,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.bot_Continuar"</v>
+                          <v n="Value">"MAIN.fbFMS205.fbPanel.swF5_Ack"</v>
                         </o>
                       </l>
                     </o>
@@ -11013,7 +11061,7 @@
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">732</v>
+                      <v n="Value" t="Int16">744</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -11029,7 +11077,7 @@
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">732</v>
+                      <v n="Value" t="Int16">744</v>
                     </o>
                     <o>
                       <v n="Id">2678395525L</v>
@@ -11045,7 +11093,7 @@
                     </o>
                     <o>
                       <v n="Id">390574330L</v>
-                      <v n="Value">"Continuar"</v>
+                      <v n="Value">"Visto"</v>
                     </o>
                     <o>
                       <v n="Id">2340015797L</v>
@@ -11087,11 +11135,11 @@
                     </o>
                     <o>
                       <v n="Id">2496894244L</v>
-                      <v n="Value">"NOT MAIN.fbFMS205.dr.bot_Funcion"</v>
+                      <v n="Value">"not MAIN.fbFMS205.fbPanel.cnF5_Funcion"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
-                      <v n="Value">"491"</v>
+                      <v n="Value">"1336"</v>
                     </o>
                   </l>
                 </o>
@@ -15035,11 +15083,11 @@
                     </o>
                     <o>
                       <v n="Id">1649127785L</v>
-                      <v n="Value" t="Int16">10</v>
+                      <v n="Value" t="Int16">11</v>
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value" t="Int16">797</v>
+                      <v n="Value" t="Int16">798</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -15051,11 +15099,11 @@
                     </o>
                     <o>
                       <v n="Id">550940142L</v>
-                      <v n="Value" t="Int16">10</v>
+                      <v n="Value" t="Int16">11</v>
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value" t="Int16">797</v>
+                      <v n="Value" t="Int16">798</v>
                     </o>
                     <o>
                       <v n="Id">494569607L</v>
@@ -15095,7 +15143,7 @@
                     </o>
                     <o>
                       <v n="Id">390574330L</v>
-                      <v n="Value">"MensajesOut"</v>
+                      <v n="Value">"%s"</v>
                     </o>
                     <o>
                       <v n="Id">2340015797L</v>
@@ -15125,11 +15173,15 @@
                     </o>
                     <o>
                       <v n="Id">2597686782L</v>
-                      <v n="Value">true</v>
+                      <v n="Value">false</v>
+                    </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">"main.fbFMS205.fbPanel.swMensaje"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
-                      <v n="Value">"515"</v>
+                      <v n="Value">"471"</v>
                     </o>
                   </l>
                 </o>
@@ -19447,18 +19499,16 @@
           <o n="GeneratedLMMDescriptions" t="GeneratedLanguageModelEntriesData">
             <o n="GeneratedVisuFbDescription" t="GenericFbDescription">
               <d n="FbMethods" t="CaseInsensitiveHashtable" ckt="String" cvt="Guid">
-                <v>HasVisibilityAccess</v>
-                <v>afa60003-4053-44a5-9fa3-7ce7e04d900d</v>
+                <v>GetUpdateRects</v>
+                <v>c0803fe8-ce24-49f8-832b-730aee9ef71c</v>
                 <v>ContainsPoint</v>
                 <v>f872e0f8-f9b0-4c0d-974d-da354c45809b</v>
-                <v>HasInputAccess</v>
-                <v>15d80562-8c3e-440d-b470-d161f29c861d</v>
+                <v>SetStaticState</v>
+                <v>1c0d39cf-1835-4281-9fa4-a2186314e9f8</v>
                 <v>HasInputAccessIntern</v>
                 <v>d84d4f12-fb26-4f14-9c93-0204962b196a</v>
                 <v>GetTooltip</v>
                 <v>691df828-cdd5-414e-a0be-66763db6b63d</v>
-                <v>GetUpdateRects</v>
-                <v>c0803fe8-ce24-49f8-832b-730aee9ef71c</v>
                 <v>GetNamespace</v>
                 <v>7afd6603-1159-44dd-9b1b-c6f8bc9b5527</v>
                 <v>GetTranslator</v>
@@ -19471,6 +19521,8 @@
                 <v>9b605501-53df-48eb-bae7-37c9bb760dfe</v>
                 <v>Paint</v>
                 <v>6f67b9c1-b377-4bb2-af5b-cf4dc0f03418</v>
+                <v>HasVisibilityAccess</v>
+                <v>afa60003-4053-44a5-9fa3-7ce7e04d900d</v>
                 <v>GetElementArray</v>
                 <v>7e24ba21-e702-477c-8700-4d9cc57495e2</v>
                 <v>SetVisuFlagsInternal</v>
@@ -19483,14 +19535,14 @@
                 <v>b71e48a1-3bfe-4f04-aebf-409044db8d8e</v>
                 <v>Initialize</v>
                 <v>dfeb1032-57a3-4d9a-8fda-ba110a2ff475</v>
+                <v>HasInputAccess</v>
+                <v>15d80562-8c3e-440d-b470-d161f29c861d</v>
                 <v>HasVisibilityAccessIntern</v>
                 <v>ad62f209-586a-4ae4-8ba8-058e0066ba60</v>
                 <v>GetSurroundingRect</v>
                 <v>550f31c7-2f13-4797-9f6f-1b64a444255a</v>
                 <v>ElementInfo</v>
                 <v>0f29d595-ad71-4564-b983-0334dc8f3bee</v>
-                <v>SetStaticState</v>
-                <v>1c0d39cf-1835-4281-9fa4-a2186314e9f8</v>
                 <v>GetLocalUsergroup</v>
                 <v>770274cc-9607-4869-8c96-5226df8d86e8</v>
                 <v>GetName</v>
@@ -19606,12 +19658,12 @@
               <v>0</v>
               <o>
                 <v n="Width">1488</v>
-                <v n="Height">824</v>
+                <v n="Height">825</v>
               </o>
               <v>1</v>
               <o>
                 <v n="Width">1488</v>
-                <v n="Height">824</v>
+                <v n="Height">825</v>
               </o>
             </d2>
             <v n="Version">1</v>

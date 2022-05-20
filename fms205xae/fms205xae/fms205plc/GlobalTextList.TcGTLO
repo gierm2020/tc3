@@ -241,6 +241,16 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"267"</v>
+              <v n="TextDefault">"Claridad"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"521"</v>
+              <v n="TextDefault">"Color"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"566"</v>
               <v n="TextDefault">"ColorOut"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -368,6 +378,16 @@
             <o>
               <v n="TextID">"24"</v>
               <v n="TextDefault">"Evacuador"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"1256"</v>
+              <v n="TextDefault">"Evacuar"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"699"</v>
+              <v n="TextDefault">"EvacuarRechazar"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -543,6 +563,11 @@
             <o>
               <v n="TextID">"217"</v>
               <v n="TextDefault">"L_1"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"1121"</v>
+              <v n="TextDefault">"Material"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -903,6 +928,16 @@
             <o>
               <v n="TextID">"10"</v>
               <v n="TextDefault">"Velocidad"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"1336"</v>
+              <v n="TextDefault">"Visto"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"681"</v>
+              <v n="TextDefault">"VistoContinuar"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>

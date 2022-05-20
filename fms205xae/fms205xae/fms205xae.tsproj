@@ -121,6 +121,15 @@
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hwPE_Seta</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hwSM_SelecAutoManual</Name>
+							<Comment><![CDATA[ SM - Selector modo auto/man]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.fbFMS205.fbPanel.hw.PE_Seta</Name>
 							<Comment><![CDATA[ Botones y alarmas específicos de una estación ]]></Comment>
 							<Type>BOOL</Type>

@@ -199,31 +199,31 @@ END_VAR
 		END_IF
 		
 	E_GEMMA.F5VerificacionOrdenada : // tener en cuenta las consignas relacionadas con F5
-		mdAlimentador.Execute           := dr.bot_Ejecutar AND dr.fun_Alimentar;
-		mdPickAndPlaceCarga.Mover	    := TRUE; //dr.bot_Ejecutar AND dr.fun_Cargar;
-		mdPickAndPlaceCarga.Execute     := dr.bot_Ejecutar AND dr.fun_Cargar;
-		mdMedidorTapa.Execute           := dr.bot_Ejecutar AND dr.fun_Altura;
-		mdDetectorFotoelectrico.Execute := dr.bot_Ejecutar AND dr.fun_Color;
-		mdCaptadorInductivo.Execute     := dr.bot_Ejecutar AND dr.fun_Material;
-		mdEvacuador.Evacuar 			:= TRUE; // dr.bot_Ejecutar AND dr.fun_Rechazar;
-		mdEvacuador.Execute             := dr.bot_Ejecutar AND dr.fun_Rechazar;
-		mdPickAndPlaceDescarga.Mover	:= TRUE; // dr.bot_Ejecutar AND dr.fun_Descargar;
-		mdPickAndPlaceDescarga.Execute  := dr.bot_Ejecutar AND dr.fun_Descargar;
-		mdPlatoDivisor.Execute          := dr.bot_Ejecutar AND dr.fun_Girar;
-		mdCinta.Situar					:= dr.fun_Situar;
-		mdCinta.Transferir				:= dr.fun_Transferir;
-		mdCinta.Execute					:= dr.bot_Ejecutar AND (dr.fun_Situar OR dr.fun_Transferir);
-
-		mdAlimentador.Ack               := dr.bot_Continuar AND dr.fun_Alimentar;
-		mdPickAndPlaceCarga.Ack         := dr.bot_Continuar AND dr.fun_Cargar;
-		mdMedidorTapa.Ack               := dr.bot_Continuar AND dr.fun_Altura;
-		mdDetectorFotoelectrico.Ack     := dr.bot_Continuar AND dr.fun_Color;
-		mdCaptadorInductivo.Ack         := dr.bot_Continuar AND dr.fun_Material;
-		mdEvacuador.Ack                 := dr.bot_Continuar AND dr.fun_Rechazar;
-		mdPickAndPlaceDescarga.Ack      := dr.bot_Continuar AND dr.fun_Descargar;
-		mdPlatoDivisor.Ack              := dr.bot_Continuar AND dr.fun_Girar;
-		mdCinta.Ack						:= dr.bot_Continuar AND (dr.fun_Situar OR dr.fun_Transferir);
+		mdAlimentador.Execute           := fbPanel.swF5_Ejecutar AND fbPanel.swF5_Alimentar;
+		mdPickAndPlaceCarga.Execute     := fbPanel.swF5_Ejecutar AND fbPanel.swF5_Cargar;
+		mdMedidorTapa.Execute           := fbPanel.swF5_Ejecutar AND fbPanel.swF5_Medir;
+		mdDetectorFotoelectrico.Execute := fbPanel.swF5_Ejecutar AND fbPanel.swF5_Claridad;
+		mdCaptadorInductivo.Execute     := fbPanel.swF5_Ejecutar AND fbPanel.swF5_Material;
+		mdEvacuador.Execute             := fbPanel.swF5_Ejecutar AND fbPanel.swF5_Evacuar;
+		mdPickAndPlaceDescarga.Execute  := fbPanel.swF5_Ejecutar AND fbPanel.swF5_Descargar;
+		mdPlatoDivisor.Execute          := fbPanel.swF5_Ejecutar AND fbPanel.swF5_Girar;
+		mdCinta.Situar					:= fbPanel.swF5_Situar;
+		mdCinta.Transferir				:= fbPanel.swF5_Transferir;
+		mdCinta.Execute					:= fbPanel.swF5_Ejecutar AND (fbPanel.swF5_Situar OR fbPanel.swF5_Transferir);
 		
+		mdPickAndPlaceCarga.Mover	    := TRUE; //dr.bot_Ejecutar AND fbPanel.swF5_Cargar;
+		mdEvacuador.Evacuar 			:= TRUE; // fbPanel.swF5_Ejecutar AND fbPanel.swF5_Rechazar;
+		mdPickAndPlaceDescarga.Mover	:= TRUE; // fbPanel.swF5_Ejecutar AND fbPanel.swF5_Descargar;
+
+		mdAlimentador.Ack               := fbPanel.swF5_Ack AND fbPanel.swF5_Alimentar;
+		mdPickAndPlaceCarga.Ack         := fbPanel.swF5_Ack AND fbPanel.swF5_Cargar;
+		mdMedidorTapa.Ack               := fbPanel.swF5_Ack AND fbPanel.swF5_Medir;
+		mdDetectorFotoelectrico.Ack     := fbPanel.swF5_Ack AND fbPanel.swF5_Claridad;
+		mdCaptadorInductivo.Ack         := fbPanel.swF5_Ack AND fbPanel.swF5_Material;
+		mdEvacuador.Ack                 := fbPanel.swF5_Ack AND fbPanel.swF5_Evacuar;
+		mdPickAndPlaceDescarga.Ack      := fbPanel.swF5_Ack AND fbPanel.swF5_Descargar;
+		mdPlatoDivisor.Ack              := fbPanel.swF5_Ack AND fbPanel.swF5_Girar;
+		mdCinta.Ack						:= fbPanel.swF5_Ack AND (fbPanel.swF5_Situar OR fbPanel.swF5_Transferir);		
 END_CASE
 	
 ]]></ST>

@@ -146,13 +146,6 @@ ELSIF bot_Reset THEN //  fbPanel.cn.Reinicia THEN
 ELSIF bot_Pausar THEN //  fbPanel.cn.Reinicia THEN
     gmModeActual := E_GEMMA.A3ParadaEstado;
 	
-ELSIF bot_Funcion AND gmModeActual <> E_GEMMA.F5VerificacionOrdenada THEN //  fbPanel.cn.Pruebas AND gm.ModeActual <> E_GEMMA.F6Probando THEN
-	gmModePrev := gmModeActual; 			// guardamos el modo en que estaba la máquiina antes de entrar a modo pruebas
-	gmModeActual := E_GEMMA.F5VerificacionOrdenada; 	// y pasamos al modo pruebas 
-
-ELSIF gmModeActual = E_GEMMA.F5VerificacionOrdenada AND NOT bot_Funcion THEN //  fbPanel.cn.Pruebas THEN
-	gmModeActual := gmModePrev; 			// restauramos el modo en que estaba la máquina antes de pasar a modo pruebas
-    // Previo := E_GEMMA.F6Probando;		// y el modo previo queda a F6 DUDAS
 
 
 ELSE
@@ -164,9 +157,16 @@ ELSE
         E_GEMMA.A1ParadaInicial: (* Parada en el estado inicial *)
             IF NOT IC THEN // IF NOT Restaurada THEN
                 gmModeActual := E_GEMMA.A6Inicializando;
-            ELSIF pn.cnF4_Planta THEN //  fbPanel.cn.Manual THEN
+				
+            ELSIF pn.cnF4_Planta AND gmModeActual <> E_GEMMA.F4VerificacionSinOrden THEN 
+				gmModePrev := E_GEMMA.A1ParadaInicial;
                 gmModeActual := E_GEMMA.F4VerificacionSinOrden;
-            ELSIF bot_Empezar AND IC THEN //  fbPanel.cn.Marcha AND IC THEN  // ELSIF Marcha THEN
+				
+			ELSIF pn.cnF5_Funcion AND gmModeActual <> E_GEMMA.F5VerificacionOrdenada THEN 
+				gmModePrev := E_GEMMA.A1ParadaInicial;
+				gmModeActual := E_GEMMA.F5VerificacionOrdenada; 	// y pasamos al modo pruebas 
+            
+			ELSIF bot_Empezar AND IC THEN //  fbPanel.cn.Marcha AND IC THEN  // ELSIF Marcha THEN
                 gmModeActual := E_GEMMA.F2SecuenciaPreparacion;
 			ELSE
 				; // Esperar a que se pulse el bortón de marcha
@@ -200,7 +200,8 @@ ELSE
         E_GEMMA.A6Inicializando: (* Situando la PO en el estado inicial *)
             IF IC THEN // Restaurada
                 gmModeActual := E_GEMMA.A1ParadaInicial;
-            ELSIF bot_Planta THEN //  fbPanel.cn.Manual THEN
+			ELSIF pn.cnF4_Planta THEN 
+				gmModePrev := E_GEMMA.A6Inicializando;
                 gmModeActual := E_GEMMA.F4VerificacionSinOrden;
             END_IF
 			
@@ -239,17 +240,37 @@ ELSE
 			
         E_GEMMA.F4VerificacionSinOrden: (* Verificacion sin orden *)
             IF Fallo THEN
-                gmModePrev := E_GEMMA.F4VerificacionSinOrden; // DUDAS E_GEMMA.A2ParaFinCiclo; //!!! Creo que está mal, no debería ser F4?
+				// desupués de un fallo no es seguro volver a F4
+                gmModePrev := E_GEMMA.A6Inicializando; 	 
                 gmModeActual := E_GEMMA.D2TratamientoFallos;
+				
             ELSIF NOT pn.cnF4_Planta THEN 
-				gmModeActual := E_GEMMA.A6Inicializando; // después del modo manual, volver a inicializar
+				// al salir del modo planta volver al modo previo
+				gmModeActual := gmModePrev;				
             ELSE
-                // Seguir en modo manual hasta que halla un fallo o se vuelva al modo automático
+                // Seguir en modo manual
                 ;
             END_IF
 			
         E_GEMMA.F5VerificacionOrdenada: (* Verificacion en orden *)
-            ; // estado no tratado en la FMS205
+            IF Fallo THEN
+				// después de un fallo no es seguro volver a F5
+                gmModePrev := E_GEMMA.A6Inicializando;  
+                gmModeActual := E_GEMMA.D2TratamientoFallos;
+			
+			ELSIF pn.cnF4_Planta THEN
+				// al salir del modo F4 volver a modo F5
+				gmModePrev := E_GEMMA.F5VerificacionOrdenada;
+				gmModeActual := E_GEMMA.F4VerificacionSinOrden;
+ 
+            ELSIF NOT pn.cnF5_Funcion THEN
+				// al salir del modo función volver al modo A6
+				gmModePrev := E_GEMMA.A1ParadaInicial; 
+				gmModeActual := E_GEMMA.A6Inicializando; 
+            ELSE
+                // Seguir en modo F5
+                ;
+            END_IF
 			
         E_GEMMA.F6Probando: (* Prueba *)
             ; // estado no tratado en la FMS205
@@ -288,6 +309,11 @@ gmFamiDefail := (gmModeActual >= E_GEMMA.D1ParadaEmergencia) AND
 				(gmModeActual <= E_GEMMA.D3ProducirConFallos);
 gmModeColor := SEL(gmFamiArret,SEL(gmFamiFonct, gmColorDefail, gmColorFonct), gmColorArret);
 
+// actualizar las consignas del panel TODO REVISAR
+//pn.cnF4_Planta 		:= gmModeActual = E_GEMMA.F4VerificacionSinOrden;
+//pn.cnF5_Funcion 	:= gmModeActual = E_GEMMA.F5VerificacionOrdenada;
+
+// actualizar los mensajes
 CASE gmModeActual OF
 	E_GEMMA.A1ParadaInicial:
 		gmModeName	:= 'Mode A1';
@@ -337,7 +363,7 @@ CASE gmModeActual OF
 	E_GEMMA.D3ProducirConFallos:
 		gmModeName	:= 'Mode D3';
 		gmModeDescr	:= 'Producir con fallos';
-	END_CASE]]></ST>
+END_CASE]]></ST>
       </Implementation>
     </Method>
     <Method Name="UpdateSpeed" Id="{294b2399-b561-4a6c-95ce-bc201f079bc3}">
