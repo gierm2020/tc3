@@ -7,7 +7,18 @@ VAR_INPUT
 END_VAR
 
 VAR_OUTPUT
-	cn						: S_Panel_Consignas; //
+	cnUmbralAlta		: REAL := 18.5;
+	cnProdAluBaja		: BOOL := TRUE;
+	cnProdAluAlta		: BOOL := TRUE;
+	cnProdBlaBaja		: BOOL := TRUE;
+	cnProdBlaAlta		: BOOL := TRUE;
+	cnProdNegAlta		: BOOL := TRUE;
+	cnProdNegBaja		: BOOL := FALSE;	
+END_VAR
+
+
+VAR_OUTPUT
+	//cn						: S_Panel_Consignas; //
 	TmpReinicio				: TON; 
 	FP_PM					: R_TRIG;
 	Probando:	BOOL;	// DESDE LA VISU		Vamos a hacer pruebas
@@ -31,6 +42,14 @@ VAR_OUTPUT
 	ProbarAck: BOOL;
 	*)
 	
+	// consignas del panel, resultado de integrar la información que viene del hardware, el estado GEMMA, los temporizadores y flancos, y la interfaz de usuario	
+	cnEmergencia		: BOOL; // pulsar la seta
+	cnManual			: BOOL; // Selector manual/automático
+	cnReinicia			: BOOL; // DUDAS reinicia la situación inicial
+	cnRestablece		: BOOL; // restablece la condición de fallo
+	cnRestaura			: BOOL; // DUDAS restaura condiciones iniciales
+	cnMarcha			: BOOL; // 
+	cnPara				: BOOL; //
 END_VAR
 VAR
 	hw 						: S_Panel_Hardware; // estado de sensores y actuadores del panel físico
@@ -46,14 +65,14 @@ FP_PM(CLk := hw.PM_PulsadorMarcha);
 // DUDAS - No habría que tener en cuenta el modo de GEMMA para informar Reinicia, Restaura, ...?
 
 // Consignas
-cn.Emergencia 		:= hw.PE_Seta; 					// TODO OR control de parada de emergencia en interfaz de usuario
-cn.Manual 			:= TRUE; hw.SM_SelecAutoManual; 		// ídem
-cn.Reinicia			:= TmpReinicio.Q;
-cn.Restablece		:= hw.PM_PulsadorMarcha;
-cn.Restaura			:= hw.PM_PulsadorMarcha;
-cn.Marcha			:= FP_PM.Q;
-cn.Para				:= NOT hw.PS_PulsadorStop;
-cn.Pruebas			:= Probando;
+cnEmergencia 		:= hw.PE_Seta; 					// TODO OR control de parada de emergencia en interfaz de usuario
+cnManual 			:= hw.SM_SelecAutoManual; 		// ídem
+cnReinicia			:= TmpReinicio.Q;
+cnRestablece		:= hw.PM_PulsadorMarcha;
+cnRestaura			:= hw.PM_PulsadorMarcha;
+cnMarcha			:= FP_PM.Q;
+cnPara				:= NOT hw.PS_PulsadorStop;
+//cnPruebas			:= Probando;
 
 // Señales
 

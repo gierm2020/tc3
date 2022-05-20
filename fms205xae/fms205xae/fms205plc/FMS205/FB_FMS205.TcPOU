@@ -165,6 +165,17 @@ ProcessCycle();
 
 ]]></ST>
     </Implementation>
+    <Method Name="ActualizarUi" Id="{d0a41ddf-2eed-44de-882f-33a6fd82622d}">
+      <Declaration><![CDATA[METHOD ActualizarUi : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+// Actualizar los 8 sectores
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="F1ProduccionNormal" Id="{7ca323ea-768d-4b20-9a60-81cfe805fdbf}">
       <Declaration><![CDATA[METHOD F1ProduccionNormal : BOOL
 VAR_INPUT
@@ -195,7 +206,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[mdAlimentador.Execute           := dr.bot_Ejecutar AND dr.fun_Alimentar;
 
-mdPickAndPlaceCarga.Mover	    := dr.bot_Ejecutar AND dr.fun_Cargar;
+mdPickAndPlaceCarga.Mover	    := TRUE; //dr.bot_Ejecutar AND dr.fun_Cargar;
 mdPickAndPlaceCarga.Execute     := dr.bot_Ejecutar AND dr.fun_Cargar;
 
 mdMedidorTapa.Execute           := dr.bot_Ejecutar AND dr.fun_Altura;
@@ -204,10 +215,10 @@ mdDetectorFotoelectrico.Execute := dr.bot_Ejecutar AND dr.fun_Color;
 
 mdCaptadorInductivo.Execute     := dr.bot_Ejecutar AND dr.fun_Material;
 
-mdEvacuador.Evacuar 			:= dr.bot_Ejecutar AND dr.fun_Rechazar;
+mdEvacuador.Evacuar 			:= TRUE; // dr.bot_Ejecutar AND dr.fun_Rechazar;
 mdEvacuador.Execute             := dr.bot_Ejecutar AND dr.fun_Rechazar;
 
-mdPickAndPlaceDescarga.Mover	:= dr.bot_Ejecutar AND dr.fun_Descargar;
+mdPickAndPlaceDescarga.Mover	:= TRUE; // dr.bot_Ejecutar AND dr.fun_Descargar;
 mdPickAndPlaceDescarga.Execute  := dr.bot_Ejecutar AND dr.fun_Descargar;
 
 mdPlatoDivisor.Execute          := dr.bot_Ejecutar AND dr.fun_Girar;
@@ -265,37 +276,45 @@ END_VAR]]></Declaration>
         <ST><![CDATA[mdAlimentador.ProcessCycle(dr:=dr);
 
 mdPickAndPlaceCarga.ProcessCycle(dr:=dr);
-IF mdPickAndPlaceCarga.Done AND NOT girado THEN
-	NumSector := (NumGiros+0) MOD 8;
-	sectores[NumSector].Cargar(dr:=dr, mdCarga:=mdPickAndPlaceCarga);
-END_IF
-
-mdMedidorTapa.ProcessCycle(dr:=dr);	// Revisar es medidor
-IF mdMedidorTapa.Done AND NOT girado THEN
-	NumSector := (NumGiros+6) MOD 8;
-	sectores[NumSector].Medir(dr:= dr, mdMedid:=mdMedidorTapa); 
-END_IF
-
+mdMedidorTapa.ProcessCycle(dr:=dr);	
 mdDetectorFotoelectrico.ProcessCycle(dr:=dr);
-IF mdDetectorFotoelectrico.Done AND NOT girado THEN
-	NumSector := (NumGiros+5) MOD 8;
-	sectores[NumSector].Claridad(dr:=dr, mdFotoe:=mdDetectorFotoelectrico); 
-END_IF
-
 mdCaptadorInductivo.ProcessCycle(dr:=dr);
-IF mdCaptadorInductivo.Done AND NOT girado THEN
+mdEvacuador.ProcessCycle(dr:=dr);
+mdPickAndPlaceDescarga.ProcessCycle(dr:=dr);
+mdPlatoDivisor.ProcessCycle(dr:=dr);
+
+
+IF NOT girado THEN
+	// Actualizar la posición de carga
+	NumSector := (NumGiros+0) MOD 8;
+	sectores[NumSector].Cargar(mdCarga:=mdPickAndPlaceCarga);
+	
+	// Actualizar la posición del medidor
+	NumSector := (NumGiros+6) MOD 8;
+	sectores[NumSector].Medir(mdMedid:=mdMedidorTapa, 
+								cnUmbralAlta:=fbPanel.cnUmbralAlta);
+	
+	// Actualizar la poisición del fotoeléctrico
+	NumSector := (NumGiros+5) MOD 8;
+	sectores[NumSector].Claridad(mdFotoe:=mdDetectorFotoelectrico);
+
+	// Actualizar la posición del inductivo
 	NumSector := (NumGiros+4) MOD 8;
-	sectores[NumSector].Material(dr:=dr, mdInduc:=mdCaptadorInductivo); 
+	sectores[NumSector].Material(mdInduc:=mdCaptadorInductivo);
+
+	// Actualizar la posición del evaccuador
+	NumSector := (NumGiros+2) MOD 8;
+	sectores[NumSector].Evacuar(fbEvacu:=mdEvacuador);
+	
+	// Actualizar la posición de descarga
+ 	NumSector := (NumGiros+1) MOD 8;
+	sectores[NumSector].Descargar(mdDesca:=mdPickAndPlaceDescarga);
 END_IF
 
+FOR i := 0 TO 8 DO
+	sectores[i].ActualizarUi(pn:=fbPanel);
+END_FOR
 
-mdEvacuador.ProcessCycle(dr:=dr);
-
-mdPickAndPlaceDescarga.ProcessCycle(dr:=dr);
-
-
-
-mdPlatoDivisor.ProcessCycle(dr:=dr);
 IF mdPlatoDivisor.Done AND NOT girado THEN
 	numGiros := numGiros + 1;
 	girado := TRUE;
@@ -307,9 +326,7 @@ END_IF
 
 mdCinta.ProcessCycle(dr:=dr);
 
-FOR i := 0 TO 8 do
-	sectores[i].UpdateUi(dr:=dr);
-END_FOR]]></ST>
+]]></ST>
       </Implementation>
     </Method>
   </POU>
