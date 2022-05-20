@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
-  <POU Name="FB_FMS205_SFC" Id="{a81c472c-1220-4b76-860b-f7f6b111694f}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205_SFC
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_FMS205_Producir_SFC" Id="{a81c472c-1220-4b76-860b-f7f6b111694f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205_Producir_SFC
 VAR_INPUT
 	IC: BOOL;
 	Execute: BOOL;
 	Ack: BOOL;
+	FinCiclo : BOOL;
 END_VAR
 VAR_OUTPUT
 	Ready: BOOL;
@@ -14,15 +15,15 @@ VAR_OUTPUT
 END_VAR
 
 VAR_IN_OUT
-	mdAlimentador			: FB_Alimentador;
-	mdPickAndPlaceCarga 	: FB_PickAndPlace;
-	mdMedidorTapa			: FB_MedidorTapa;
-	mdCaptadorInductivo 	: FB_CaptadorInductivo;
-	mdDetectorFotoelectrico : FB_DetectorFotoelectrico;
-	mdEvacuador			 	: FB_Evacuador;
-	mdPickAndPlaceDescarga 	: FB_PickAndPlace;
-	mdPlatoDivisor			: FB_PlatoDivisor;
-	mdCinta					: FB_Cinta;
+	Alime			: FB_Alimentador;
+	Carga		 	: FB_PickAndPlace;
+	Medid			: FB_MedidorTapa;
+	Induc		 	: FB_CaptadorInductivo;
+	Fotoe			: FB_DetectorFotoelectrico;
+	Evacu		 	: FB_Evacuador;
+	Desca			: FB_PickAndPlace;
+	Plato			: FB_PlatoDivisor;
+	Cinta			: FB_Cinta;
 END_VAR
 // TODO PENDIENTE TERMINAR EL RESTO DE MÓDULOS
 VAR
@@ -233,7 +234,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdCinta.Execute"</v>
+                                  <v n="Value">"Cinta.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">378L</v>
@@ -286,7 +287,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdCinta.Situar"</v>
+                                  <v n="Value">"Cinta.Situar"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">384L</v>
@@ -450,7 +451,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdCinta.Done"</v>
+                            <v n="Value">"Cinta.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">365L</v>
@@ -523,7 +524,60 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdAlimentador.Execute"</v>
+                                  <v n="Value">"Cinta.Ack"</v>
+                                  <v n="DefaultValue">""</v>
+                                </o>
+                                <v n="Id">585L</v>
+                                <v n="IdParent">584L</v>
+                              </o>
+                              <o>
+                                <v n="AttributeId">{7d894980-aeea-405c-a0f6-e2b26429c58f}</v>
+                                <o n="Value" t="StringValue">
+                                  <v n="Value">""</v>
+                                  <v n="DefaultValue">""</v>
+                                </o>
+                                <v n="Id">586L</v>
+                                <v n="IdParent">584L</v>
+                              </o>
+                              <o>
+                                <v n="AttributeId">{01580b27-6378-448b-8ecb-0e4b795b58d6}</v>
+                                <o n="Value" t="BoolValue">
+                                  <v n="Value">"FALSE"</v>
+                                  <v n="DefaultValue">"FALSE"</v>
+                                </o>
+                                <v n="Id">587L</v>
+                                <v n="IdParent">584L</v>
+                              </o>
+                              <o>
+                                <v n="AttributeId">{bc882c11-1e91-4dd8-a6b8-2075724ed18b}</v>
+                                <o n="Value" t="EnumValue">
+                                  <v n="TemplateGuid">{79a4fdd5-c859-4de4-aa8d-c03372c880c2}</v>
+                                  <n n="BaseType" />
+                                  <v n="Value">"0"</v>
+                                  <v n="DefaultValue">"0"</v>
+                                </o>
+                                <v n="Id">588L</v>
+                                <v n="IdParent">584L</v>
+                              </o>
+                              <o>
+                                <v n="AttributeId">{e174fc0d-80b0-4a9e-a530-ca239c249a50}</v>
+                                <o n="Value" t="StringValue">
+                                  <v n="Value">"N"</v>
+                                  <v n="DefaultValue">""</v>
+                                </o>
+                                <v n="Id">589L</v>
+                                <v n="IdParent">584L</v>
+                              </o>
+                            </l2>
+                            <v n="Id">584L</v>
+                            <v n="IdParent">42L</v>
+                          </o>
+                          <o>
+                            <l2 n="Attributes" cet="SFCAttribute">
+                              <o>
+                                <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
+                                <o n="Value" t="StringValue">
+                                  <v n="Value">"Alime.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">55L</v>
@@ -687,7 +741,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdAlimentador.Done"</v>
+                            <v n="Value">"Alime.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">36L</v>
@@ -760,7 +814,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdPickAndPlaceCarga.Execute"</v>
+                                  <v n="Value">"Carga.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">87L</v>
@@ -924,7 +978,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdPickAndPlaceCarga.Done"</v>
+                            <v n="Value">"Carga.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">68L</v>
@@ -997,7 +1051,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdMedidorTapa.Execute"</v>
+                                  <v n="Value">"Medid.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">138L</v>
@@ -1154,14 +1208,14 @@ END_VAR
                       <v n="IdParent">9L</v>
                     </o>
                     <o t="SFCTransition">
-                      <v n="VariableName">"Medir__to__Captar"</v>
+                      <v n="VariableName">"Medir__to__Claridad"</v>
                       <n n="EmbeddedTransition" />
                       <l2 n="EmbeddedTransitionProperties" />
                       <l2 n="Attributes" cet="SFCAttribute">
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdMedidorTapa.Done"</v>
+                            <v n="Value">"Medid.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">131L</v>
@@ -1234,7 +1288,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdCaptadorInductivo.Execute"</v>
+                                  <v n="Value">"Fotoe.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">163L</v>
@@ -1288,7 +1342,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"Captar"</v>
+                            <v n="Value">"Claridad"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">144L</v>
@@ -1391,14 +1445,14 @@ END_VAR
                       <v n="IdParent">9L</v>
                     </o>
                     <o t="SFCTransition">
-                      <v n="VariableName">"Captar__to__Detectar"</v>
+                      <v n="VariableName">"Claridad__to__Materaial"</v>
                       <n n="EmbeddedTransition" />
                       <l2 n="EmbeddedTransitionProperties" />
                       <l2 n="Attributes" cet="SFCAttribute">
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdCaptadorInductivo.Done"</v>
+                            <v n="Value">"Fotoe.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">156L</v>
@@ -1471,7 +1525,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdDetectorFotoelectrico.Execute"</v>
+                                  <v n="Value">"Induc.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">188L</v>
@@ -1525,7 +1579,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"Detectar"</v>
+                            <v n="Value">"Materaial"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">169L</v>
@@ -1628,14 +1682,14 @@ END_VAR
                       <v n="IdParent">9L</v>
                     </o>
                     <o t="SFCTransition">
-                      <v n="VariableName">"Detectar__to__Evacuar"</v>
+                      <v n="VariableName">"Materaial__to__Evacuar"</v>
                       <n n="EmbeddedTransition" />
                       <l2 n="EmbeddedTransitionProperties" />
                       <l2 n="Attributes" cet="SFCAttribute">
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdCaptadorInductivo.Done"</v>
+                            <v n="Value">"Induc.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">181L</v>
@@ -1708,7 +1762,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdEvacuador.Execute"</v>
+                                  <v n="Value">"Evacu.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">233L</v>
@@ -1872,7 +1926,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdEvacuador.Done"</v>
+                            <v n="Value">"Evacu.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">226L</v>
@@ -1945,7 +1999,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdPickAndPlaceDescarga.Execute"</v>
+                                  <v n="Value">"Desca.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">258L</v>
@@ -2109,7 +2163,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdPickAndPlaceDescarga.Done"</v>
+                            <v n="Value">"Desca.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">251L</v>
@@ -2182,7 +2236,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdCinta.Execute"</v>
+                                  <v n="Value">"Cinta.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">409L</v>
@@ -2235,7 +2289,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdCinta.Transferir"</v>
+                                  <v n="Value">"Cinta.Transferir"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">415L</v>
@@ -2399,7 +2453,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdCinta.Done"</v>
+                            <v n="Value">"Cinta.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">402L</v>
@@ -2472,7 +2526,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdPlatoDivisor.Execute"</v>
+                                  <v n="Value">"Plato.Execute"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">283L</v>
@@ -2636,7 +2690,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"mdPlatoDivisor.Done"</v>
+                            <v n="Value">"Plato.Done"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">276L</v>
@@ -2712,8 +2766,8 @@ END_VAR
                                   <v n="Value">"Done"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
-                                <v n="Id">520L</v>
-                                <v n="IdParent">519L</v>
+                                <v n="Id">579L</v>
+                                <v n="IdParent">578L</v>
                               </o>
                               <o>
                                 <v n="AttributeId">{7d894980-aeea-405c-a0f6-e2b26429c58f}</v>
@@ -2721,8 +2775,8 @@ END_VAR
                                   <v n="Value">""</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
-                                <v n="Id">521L</v>
-                                <v n="IdParent">519L</v>
+                                <v n="Id">580L</v>
+                                <v n="IdParent">578L</v>
                               </o>
                               <o>
                                 <v n="AttributeId">{01580b27-6378-448b-8ecb-0e4b795b58d6}</v>
@@ -2730,8 +2784,8 @@ END_VAR
                                   <v n="Value">"FALSE"</v>
                                   <v n="DefaultValue">"FALSE"</v>
                                 </o>
-                                <v n="Id">522L</v>
-                                <v n="IdParent">519L</v>
+                                <v n="Id">581L</v>
+                                <v n="IdParent">578L</v>
                               </o>
                               <o>
                                 <v n="AttributeId">{bc882c11-1e91-4dd8-a6b8-2075724ed18b}</v>
@@ -2741,8 +2795,8 @@ END_VAR
                                   <v n="Value">"0"</v>
                                   <v n="DefaultValue">"0"</v>
                                 </o>
-                                <v n="Id">523L</v>
-                                <v n="IdParent">519L</v>
+                                <v n="Id">582L</v>
+                                <v n="IdParent">578L</v>
                               </o>
                               <o>
                                 <v n="AttributeId">{e174fc0d-80b0-4a9e-a530-ca239c249a50}</v>
@@ -2750,12 +2804,12 @@ END_VAR
                                   <v n="Value">"N"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
-                                <v n="Id">524L</v>
-                                <v n="IdParent">519L</v>
+                                <v n="Id">583L</v>
+                                <v n="IdParent">578L</v>
                               </o>
                             </l2>
-                            <v n="Id">519L</v>
-                            <v n="IdParent">500L</v>
+                            <v n="Id">578L</v>
+                            <v n="IdParent">558L</v>
                           </o>
                         </l2>
                       </o>
@@ -2766,8 +2820,8 @@ END_VAR
                             <v n="Value">"Actualizar"</v>
                             <v n="DefaultValue">""</v>
                           </o>
-                          <v n="Id">501L</v>
-                          <v n="IdParent">500L</v>
+                          <v n="Id">559L</v>
+                          <v n="IdParent">558L</v>
                         </o>
                         <o>
                           <v n="AttributeId">{7d894980-aeea-405c-a0f6-e2b26429c58f}</v>
@@ -2775,8 +2829,8 @@ END_VAR
                             <v n="Value">""</v>
                             <v n="DefaultValue">""</v>
                           </o>
-                          <v n="Id">502L</v>
-                          <v n="IdParent">500L</v>
+                          <v n="Id">560L</v>
+                          <v n="IdParent">558L</v>
                         </o>
                         <o>
                           <v n="AttributeId">{01580b27-6378-448b-8ecb-0e4b795b58d6}</v>
@@ -2784,8 +2838,8 @@ END_VAR
                             <v n="Value">"FALSE"</v>
                             <v n="DefaultValue">"FALSE"</v>
                           </o>
-                          <v n="Id">503L</v>
-                          <v n="IdParent">500L</v>
+                          <v n="Id">561L</v>
+                          <v n="IdParent">558L</v>
                         </o>
                         <o>
                           <v n="AttributeId">{bc882c11-1e91-4dd8-a6b8-2075724ed18b}</v>
@@ -2795,8 +2849,8 @@ END_VAR
                             <v n="Value">"0"</v>
                             <v n="DefaultValue">"0"</v>
                           </o>
-                          <v n="Id">504L</v>
-                          <v n="IdParent">500L</v>
+                          <v n="Id">562L</v>
+                          <v n="IdParent">558L</v>
                         </o>
                         <o>
                           <v n="AttributeId">{6844a48e-46c2-4cc8-a185-a478f3b99cc0}</v>
@@ -2804,8 +2858,8 @@ END_VAR
                             <v n="Value">"FALSE"</v>
                             <v n="DefaultValue">"FALSE"</v>
                           </o>
-                          <v n="Id">505L</v>
-                          <v n="IdParent">500L</v>
+                          <v n="Id">563L</v>
+                          <v n="IdParent">558L</v>
                         </o>
                         <o>
                           <v n="AttributeId">{62e1754b-7629-4e63-9cec-10ae0c536f1f}</v>
@@ -2813,8 +2867,8 @@ END_VAR
                             <v n="Value">"FALSE"</v>
                             <v n="DefaultValue">"FALSE"</v>
                           </o>
-                          <v n="Id">506L</v>
-                          <v n="IdParent">500L</v>
+                          <v n="Id">564L</v>
+                          <v n="IdParent">558L</v>
                         </o>
                         <o>
                           <v n="AttributeId">{cacf1a68-236e-47c2-b7b1-1cf9199718cb}</v>
@@ -2822,8 +2876,8 @@ END_VAR
                             <v n="Value">""</v>
                             <v n="DefaultValue">""</v>
                           </o>
-                          <v n="Id">507L</v>
-                          <v n="IdParent">500L</v>
+                          <v n="Id">565L</v>
+                          <v n="IdParent">558L</v>
                         </o>
                         <o>
                           <v n="AttributeId">{b693554c-1b01-4a8d-afde-9e3a46f7465d}</v>
@@ -2831,8 +2885,8 @@ END_VAR
                             <v n="Value">""</v>
                             <v n="DefaultValue">""</v>
                           </o>
-                          <v n="Id">508L</v>
-                          <v n="IdParent">500L</v>
+                          <v n="Id">566L</v>
+                          <v n="IdParent">558L</v>
                         </o>
                         <o>
                           <v n="AttributeId">{700a583f-b4d4-43e4-8c14-629c7cd3bec8}</v>
@@ -2840,8 +2894,8 @@ END_VAR
                             <v n="Value">""</v>
                             <v n="DefaultValue">""</v>
                           </o>
-                          <v n="Id">509L</v>
-                          <v n="IdParent">500L</v>
+                          <v n="Id">567L</v>
+                          <v n="IdParent">558L</v>
                         </o>
                         <o>
                           <v n="AttributeId">{a6b08bd8-b696-47e3-9cbf-7408b61c9ff8}</v>
@@ -2849,8 +2903,8 @@ END_VAR
                             <v n="Value">""</v>
                             <v n="DefaultValue">""</v>
                           </o>
-                          <v n="Id">510L</v>
-                          <v n="IdParent">500L</v>
+                          <v n="Id">568L</v>
+                          <v n="IdParent">558L</v>
                         </o>
                         <o>
                           <v n="AttributeId">{a2621e18-7de3-4ea6-ae6d-89e9e0b7befd}</v>
@@ -2858,26 +2912,26 @@ END_VAR
                             <v n="Value">""</v>
                             <v n="DefaultValue">""</v>
                           </o>
-                          <v n="Id">511L</v>
-                          <v n="IdParent">500L</v>
+                          <v n="Id">569L</v>
+                          <v n="IdParent">558L</v>
                         </o>
                       </l2>
-                      <v n="Id">500L</v>
+                      <v n="Id">558L</v>
                       <v n="IdParent">9L</v>
                     </o>
                     <o t="SFCTransition">
-                      <v n="VariableName">"Actualizar__to__Sincronizar"</v>
+                      <v n="VariableName">"Actualizar__to__Terminar"</v>
                       <n n="EmbeddedTransition" />
                       <l2 n="EmbeddedTransitionProperties" />
                       <l2 n="Attributes" cet="SFCAttribute">
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"Ack"</v>
+                            <v n="Value">"FinCiclo"</v>
                             <v n="DefaultValue">""</v>
                           </o>
-                          <v n="Id">513L</v>
-                          <v n="IdParent">512L</v>
+                          <v n="Id">571L</v>
+                          <v n="IdParent">570L</v>
                         </o>
                         <o>
                           <v n="AttributeId">{7d894980-aeea-405c-a0f6-e2b26429c58f}</v>
@@ -2885,8 +2939,8 @@ END_VAR
                             <v n="Value">""</v>
                             <v n="DefaultValue">""</v>
                           </o>
-                          <v n="Id">514L</v>
-                          <v n="IdParent">512L</v>
+                          <v n="Id">572L</v>
+                          <v n="IdParent">570L</v>
                         </o>
                         <o>
                           <v n="AttributeId">{01580b27-6378-448b-8ecb-0e4b795b58d6}</v>
@@ -2894,8 +2948,8 @@ END_VAR
                             <v n="Value">"FALSE"</v>
                             <v n="DefaultValue">"FALSE"</v>
                           </o>
-                          <v n="Id">515L</v>
-                          <v n="IdParent">512L</v>
+                          <v n="Id">573L</v>
+                          <v n="IdParent">570L</v>
                         </o>
                         <o>
                           <v n="AttributeId">{bc882c11-1e91-4dd8-a6b8-2075724ed18b}</v>
@@ -2905,8 +2959,8 @@ END_VAR
                             <v n="Value">"0"</v>
                             <v n="DefaultValue">"0"</v>
                           </o>
-                          <v n="Id">516L</v>
-                          <v n="IdParent">512L</v>
+                          <v n="Id">574L</v>
+                          <v n="IdParent">570L</v>
                         </o>
                         <o>
                           <v n="AttributeId">{62e1754b-7629-4e63-9cec-10ae0c536f1f}</v>
@@ -2914,8 +2968,8 @@ END_VAR
                             <v n="Value">"FALSE"</v>
                             <v n="DefaultValue">"FALSE"</v>
                           </o>
-                          <v n="Id">517L</v>
-                          <v n="IdParent">512L</v>
+                          <v n="Id">575L</v>
+                          <v n="IdParent">570L</v>
                         </o>
                         <o>
                           <v n="AttributeId">{8294df19-5962-4dee-a874-1051dabb0e3e}</v>
@@ -2925,11 +2979,11 @@ END_VAR
                             <v n="Value">"0"</v>
                             <v n="DefaultValue">"0"</v>
                           </o>
-                          <v n="Id">518L</v>
-                          <v n="IdParent">512L</v>
+                          <v n="Id">576L</v>
+                          <v n="IdParent">570L</v>
                         </o>
                       </l2>
-                      <v n="Id">512L</v>
+                      <v n="Id">570L</v>
                       <v n="IdParent">9L</v>
                     </o>
                     <o t="SFCStep">
@@ -2946,7 +3000,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdDetectorFotoelectrico.Ack"</v>
+                                  <v n="Value">"Alime.Ack"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">483L</v>
@@ -2999,7 +3053,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdPlatoDivisor.Ack"</v>
+                                  <v n="Value">"Carga.Ack"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">453L</v>
@@ -3052,7 +3106,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdAlimentador.Ack"</v>
+                                  <v n="Value">"Medid.Ack"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">447L</v>
@@ -3105,7 +3159,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdPickAndPlaceCarga.Ack"</v>
+                                  <v n="Value">"Fotoe.Ack"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">459L</v>
@@ -3158,7 +3212,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdMedidorTapa.Ack"</v>
+                                  <v n="Value">"Induc.Ack"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">465L</v>
@@ -3211,7 +3265,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdCaptadorInductivo.Ack"</v>
+                                  <v n="Value">"Evacu.Ack"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">471L</v>
@@ -3264,7 +3318,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdEvacuador.Ack"</v>
+                                  <v n="Value">"Desca.Ack"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">477L</v>
@@ -3317,7 +3371,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdPickAndPlaceDescarga.Ack"</v>
+                                  <v n="Value">"Plato.Ack"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">489L</v>
@@ -3370,7 +3424,7 @@ END_VAR
                               <o>
                                 <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                 <o n="Value" t="StringValue">
-                                  <v n="Value">"mdCinta.Ack"</v>
+                                  <v n="Value">"Cinta.Ack"</v>
                                   <v n="DefaultValue">""</v>
                                 </o>
                                 <v n="Id">495L</v>
@@ -3424,7 +3478,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"Sincronizar"</v>
+                            <v n="Value">"Terminar"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">308L</v>
@@ -3527,7 +3581,7 @@ END_VAR
                       <v n="IdParent">9L</v>
                     </o>
                     <o t="SFCTransition">
-                      <v n="VariableName">"Sincronizar__to__Init"</v>
+                      <v n="VariableName">"Terminar__to__Init"</v>
                       <n n="EmbeddedTransition" />
                       <l2 n="EmbeddedTransitionProperties" />
                       <l2 n="Attributes" cet="SFCAttribute">

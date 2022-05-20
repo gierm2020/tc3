@@ -3,15 +3,25 @@
   <POU Name="FB_FMS205" Id="{a261f573-1402-443e-9bab-e88e0bf02070}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205
 VAR_INPUT
-	IC: 		BOOL := FALSE; 	// todos los módulos están en condiciones iniciales
-    Execute: BOOL;
-	Ack : BOOL;
+	IC		: BOOL := FALSE; 	// todos los módulos están en condiciones iniciales
+    Execute	: BOOL;
+	Ack 	: BOOL;
 END_VAR
+
 VAR_OUTPUT
-	Ready: BOOL;
-	Failure: BOOL;
-	Done: BOOL;	
+	Ready	: BOOL;
+	Failure	: BOOL;
+	Done	: BOOL;	
 END_VAR	
+
+VAR 
+	ProdRequerida	: UINT := 2;
+	ProdRealizada	: UINT := 0;
+	ProdPendiente	: UINT := 2;
+	ProdRechazada	: UINT := 0;
+	FinCiclo		: BOOL := FALSE;	// una pieza se ha completado
+	FinTarea		: BOOL := FALSE;	// el lote se ha completado
+END_VAR
 
 //VAR_INPUT
 //	MaximoTiempoRespuesta: TIME := T#5S;
@@ -19,12 +29,10 @@ END_VAR
 //END_VAR
 
 VAR_OUTPUT
-	ManiobrasRealizadas: UINT := 0;
-	ManiobrasPendientes: UINT;
+	//ManiobrasRealizadas: UINT := 0;
+	//ManiobrasPendientes: UINT;
 	
 	Preparada : BOOL := TRUE;	// la estación está preparada después de encender
-	FinCiclo: 	BOOL := FALSE;	// una pieza se ha completado
-	FinTarea: 	BOOL := FALSE;	// el lote se ha completado
 	Fallo: 		BOOL := FALSE;	// al menos un módulo ha fallado
     Finalizada: BOOL := TRUE;	// la estación está lista para apagarse    	
 END_VAR
@@ -32,10 +40,11 @@ END_VAR
 VAR
 	// controladores de la máquina, la función de producción y la guía GEMMA 
 	dr						: FB_Director;
-	numGiros : DINT := 0;
-	angulo	 : REAL := 0.0;
-	girado	: BOOL := FALSE;
-	sectores : ARRAY [0..7] OF FB_Sector;
+	numGiros 	: DINT := 0;
+	angulo	 	: REAL := 0.0;
+	anguloanim 	: REAL := 0.0; // angulo para animación que gira lentamente
+	girado		: BOOL := FALSE;
+	sectores 	: ARRAY [0..7] OF FB_Sector;
 	
 	// módulos de la FMS205
 	mdAlimentador			: FB_Alimentador			:= (dr:=dr, ID := 1, Name := 'Alimentador');
@@ -49,44 +58,22 @@ VAR
 	mdCinta					: FB_Cinta					:= (dr:=dr, ID := 9, Name :=  'Cinta');
 	
 	fbPanel					: FB_Panel := (dr := dr);	
-	fbFMS205_Producir_SFC	: FB_FMS205_SFC;
-
-	
-
+	fbFMS205_Producir_SFC	: FB_FMS205_Producir_SFC;
 END_VAR
-]]></Declaration>
-    <Implementation>
-      <ST><![CDATA[
-
-
-
-
-
-
-
-
 
 (*
-//fbPanel.ProcessCycle(dr:=dr);
-dr.ProcessCycle(
-	pn := fbPanel,
-	IC := InitialConditions(),
-	Fallo := FALSE,
-	FinCiclo := FALSE,
-	FinTarea := FALSE,
-	Preparada  := TRUE,
-	Finalizada := TRUE);
-*)
-IF fbPanel.cnF4_Planta THEN
-	//F5VerificacionOrdenada();
-	//F4VerificacionSinOrden();
-	;
-	
-ELSIF dr.bot_Empezar THEN
-	//F1ProduccionNormal();
-	;
-	(*
-ELSE
+VAR
+	PosCarga 	: DINT;
+	PosMedid	: DINT;
+	PosFotoe	: DINT;
+	PosInduc	: DINT;
+	PosEvacu	: DINT;
+	PosDesca	: DINT;
+
+END_VAR
+*)]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(*
 	fbPanel(gm:=gm);
 	IC:=InitialConditions();
 	Preparada := TRUE; // PENDIENTE SI LA ESTACIÓN NECESITA UNA SECUENCIA DE PREPARACIÓN 
@@ -175,20 +162,42 @@ ELSE
 			Ready=>Ready, Done=>Done, Failure=>Failure);
 	
 	END_IF
-	*)
-	
 END_IF
 ProcessCycle();
+	*)
+	
 
 ]]></ST>
     </Implementation>
-    <Method Name="CanStop" Id="{63c7f49b-23e4-43c3-ac69-584bc16d9aec}">
-      <Declaration><![CDATA[METHOD CanStop : BOOL
+    <Method Name="InitialConditions" Id="{6c17034c-aab7-41fb-b0b6-e85a6db67498}">
+      <Declaration><![CDATA[METHOD InitialConditions : BOOL
 VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[CanStop := 
+        <ST><![CDATA[(* La estación está en condiciones iniciales si cada módulo lo está *)
+InitialConditions :=
+	(
+		mdAlimentador.InitialConditions() AND
+		mdPickAndPlaceCarga.InitialConditions() AND
+		mdMedidorTapa.InitialConditions() AND 
+		mdCaptadorInductivo.InitialConditions() AND
+		mdDetectorFotoelectrico.InitialConditions() AND
+		mdEvacuador.InitialConditions() AND
+		mdPickAndPlaceDescarga.InitialConditions() AND
+		mdPlatoDivisor.InitialConditions() AND
+		mdCinta.InitialConditions()
+	); 
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsSafe" Id="{63c7f49b-23e4-43c3-ac69-584bc16d9aec}">
+      <Declaration><![CDATA[METHOD IsSafe : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsSafe := 
 	(
 		mdAlimentador.IsStopped AND
 		mdPickAndPlaceCarga.IsStopped AND
@@ -203,35 +212,105 @@ END_VAR
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ControlFlow" Id="{80fd4987-b1ea-4ff4-96de-09984f5bd65d}">
-      <Declaration><![CDATA[METHOD ControlFlow : BOOL
+    <Method Name="ProcessCycle" Id="{02e4c75f-69e3-444f-8a2e-ecad65532e26}">
+      <Declaration><![CDATA[METHOD ProcessCycle : BOOL
 VAR_INPUT
 END_VAR
-]]></Declaration>
+
+VAR
+	NumSector : DINT;
+	i: INT;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[CASE dr.gmModeActual OF
-	E_GEMMA.F1ProduccionNormal: // invocar al grafcet de producción
- 		fbFMS205_Producir_SFC(		
-			mdAlimentador 			:= mdAlimentador,
-			mdPickAndPlaceCarga 	:= mdPickAndPlaceCarga,
-			mdMedidorTapa			:= mdMedidorTapa,
-			mdCaptadorInductivo 	:= mdCaptadorInductivo,
-			mdDetectorFotoelectrico := mdDetectorFotoelectrico,
-			mdEvacuador			 	:= mdEvacuador,
-			mdPickAndPlaceDescarga 	:= mdPickAndPlaceDescarga,
-			mdPlatoDivisor			:= mdPlatoDivisor,
-			mdCinta					:= mdCinta,
-			IC:=IC, Execute:=TRUE, Ack:=Ack,
-			Ready=>Ready, Done=>Done, Failure=>Failure);
+        <ST><![CDATA[// calcular consignas en función del panel y del modo Gemma
+fbPanel.ProcessCycle(gmModeActual := dr.gmModeActual, tmReinicio := dr.tmTiempoReinicio); 
+
+
+
+// calcular el nuevo modo GEMMA en funicón de las consignas del panel
+dr.ProcessCycle(pn:=fbPanel,
+	IC := InitialConditions(),
+	Fallo := FALSE,
+	FinCiclo := FinCiclo,
+	FinTarea := FinTarea,
+	ParadaObtenida := IsSafe(),
+	Preparada  := TRUE,
+	Finalizada := TRUE);
+
 	
-	E_GEMMA.F4VerificacionSinOrden: // tener en cuenta los mandos directos
+(*	
+// actualizaz posición que ocupa cada módulo
+PosCarga := (NumGiros+0) MOD 8;
+PosMedid := (NumGiros+6) MOD 8;
+PosFotoe := (NumGiros+5) MOD 8;
+PosInduc := (NumGiros+4) MOD 8;
+PosEvacu := (NumGiros+2) MOD 8;
+PosDesca := (NumGiros+1) MOD 8;
+*)
+
+// controlar el flujo de la estación en función del estado Gemma y las consignas del panel
+CASE dr.gmModeActual OF
+	
+
+	E_GEMMA.A6Inicializando:
+		ProdRealizada := 0;
+		ProdRechazada := 0;
+
+
+		
+	E_GEMMA.F1ProduccionNormal: // invocar al grafcet de producción
+		mdPickAndPlaceCarga.Mover 	:= sectores[(NumGiros+0) MOD 8].Cargar_Tapa;
+		mdEvacuador.Evacuar 		:= sectores[(NumGiros+2) MOD 8].Evacuar_Tapa;
+		mdPickAndPlaceDescarga.Mover:= sectores[(NumGiros+1) MOD 8].Descargar_Tapa;
+		Execute := NOT Ack; 
+ 		fbFMS205_Producir_SFC(		
+			Alime:= mdAlimentador,
+			Carga := mdPickAndPlaceCarga,
+			Medid := mdMedidorTapa,
+			Induc := mdCaptadorInductivo,
+			Fotoe := mdDetectorFotoelectrico,
+			Evacu := mdEvacuador,
+			Desca := mdPickAndPlaceDescarga,
+			Plato := mdPlatoDivisor,
+			Cinta:= mdCinta,
+			FinCiclo := FinCiclo,
+			IC:=IC, Execute:=Execute, Ack:=Ack,
+			Ready=>Ready, Done=>Done, Failure=>Failure);
+		
+		
+		IF fbFMS205_Producir_SFC.Done THEN // then			
+			IF sectores[(NumGiros+2) MOD 8].Evacuar_Tapa THEN
+				ProdRechazada := ProdRechazada + 1;
+			END_IF
+			
+			IF sectores[(NumGiros+1) MOD 8].Descargar_Tapa THEN
+				ProdRealizada := ProdRealizada + 1;
+			END_IF
+			
+			ProdPendiente 	:= ProdRequerida - ProdRealizada;
+			Ack 			:= FALSE;
+			FinCiclo 		:= TRUE;
+ 			FinTarea 		:= ProdPendiente = 0;
+			
+		ELSIF FinCiclo AND InitialConditions() THEN
+			Ack				:= TRUE;
+			FinCiclo		:= FALSE;
+		END_IF
+		
+		
+		
+	// tener en cuenta los mandos directos
+	E_GEMMA.F4VerificacionSinOrden: 
 		IF fbPanel.swF4_Avanza THEN
 			mdCinta.Avanza();
 		ELSIF fbPanel.swF4_Retroc THEN
 			mdCinta.Retrocede();
 		END_IF
 		
-	E_GEMMA.F5VerificacionOrdenada : // tener en cuenta las consignas relacionadas con F5
+		
+		
+	// tener en cuenta las consignas relacionadas con F5
+	E_GEMMA.F5VerificacionOrdenada : 
 		mdAlimentador.Execute           := fbPanel.swF5_Ejecutar AND fbPanel.swF5_Alimentar;
 		mdPickAndPlaceCarga.Execute     := fbPanel.swF5_Ejecutar AND fbPanel.swF5_Cargar;
 		mdMedidorTapa.Execute           := fbPanel.swF5_Ejecutar AND fbPanel.swF5_Medir;
@@ -258,57 +337,9 @@ END_VAR
 		mdPlatoDivisor.Ack              := fbPanel.swF5_Ack AND fbPanel.swF5_Girar;
 		mdCinta.Ack						:= fbPanel.swF5_Ack AND (fbPanel.swF5_Situar OR fbPanel.swF5_Transferir);		
 END_CASE
-	
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="InitialConditions" Id="{6c17034c-aab7-41fb-b0b6-e85a6db67498}">
-      <Declaration><![CDATA[METHOD InitialConditions : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[(* La estación está en condiciones iniciales si cada módulo lo está *)
-InitialConditions :=
-	(
-		mdAlimentador.InitialConditions() AND
-		mdPickAndPlaceCarga.InitialConditions() AND
-		mdMedidorTapa.InitialConditions() AND 
-		mdCaptadorInductivo.InitialConditions() AND
-		mdDetectorFotoelectrico.InitialConditions() AND
-		mdEvacuador.InitialConditions() AND
-		mdPickAndPlaceDescarga.InitialConditions() AND
-		mdPlatoDivisor.InitialConditions() AND
-		mdCinta.InitialConditions()
-	); 
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="ProcessCycle" Id="{02e4c75f-69e3-444f-8a2e-ecad65532e26}">
-      <Declaration><![CDATA[METHOD ProcessCycle : BOOL
-VAR_INPUT
-END_VAR
 
-VAR
-	NumSector : DINT;
-	i: INT;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[// calcular consignas en función del panel y del modo Gemma
-fbPanel.ProcessCycle(gmModeActual := dr.gmModeActual, tmReinicio := dr.tmTiempoReinicio); 
 
-// calcular el nuevo modo GEMMA en funicón de las consignas del panel
-dr.ProcessCycle(pn:=fbPanel,
-	IC := InitialConditions(),
-	Fallo := FALSE,
-	FinCiclo := FALSE,
-	FinTarea := FALSE,
-	ParadaObtenida := CanStop(),
-	Preparada  := TRUE,
-	Finalizada := TRUE);
 
-// controlar el flujo de la estación en función del estado Gemma y las consignas del panel
-ControlFlow();
 
 // ejecutar el ciclo de cada uno de los módulos
 mdAlimentador.ProcessCycle(dr:=dr);
@@ -319,51 +350,73 @@ mdCaptadorInductivo.ProcessCycle(dr:=dr);
 mdEvacuador.ProcessCycle(dr:=dr);
 mdPickAndPlaceDescarga.ProcessCycle(dr:=dr);
 mdPlatoDivisor.ProcessCycle(dr:=dr);
+mdCinta.ProcessCycle(dr:=dr);
+
+
+IF mdPlatoDivisor.Execute THEN
+	girado := FALSE;
+	anguloanim := 0;
+ELSIF NOT girado THEN
+	IF mdPickAndPlaceCarga.Done THEN
+		sectores[(NumGiros+0) MOD 8].Cargar		(pn:=fbPanel, mdCarga := mdPickAndPlaceCarga);	
+	END_IF
+	IF mdMedidorTapa.Done THEN
+		sectores[(NumGiros+6) MOD 8].Medir		(pn:=fbPanel, mdMedid := mdMedidorTapa, cnUmbralAlta:=fbPanel.cnUmbralAlta);		
+	END_IF
+	IF  mdPlatoDivisor.Done THEN
+		girado := TRUE;
+		numGiros := numGiros + 1;
+		angulo := SEL(angulo =0, angulo-45.0, 315.0); // , angulo+45.0, 0);
+		anguloanim := 0;
+	END_IF
+	
+	sectores[(NumGiros+5) MOD 8].Claridad	(pn:=fbPanel, mdFotoe := mdDetectorFotoelectrico);
+	sectores[(NumGiros+4) MOD 8].Material	(pn:=fbPanel, mdInduc := mdCaptadorInductivo);
+	sectores[(NumGiros+2) MOD 8].Evacuar 	(pn:=fbPanel, mdEvacu := mdEvacuador);
+	sectores[(NumGiros+1) MOD 8].Descargar	(pn:=fbPanel, mdDesca := mdPickAndPlaceDescarga);
+
+ELSIF NOT mdPlatoDivisor.Ready AND NOT mdPlatoDivisor.Done AND anguloanim >-44.0 THEN
+	anguloanim := anguloanim - 0.05;
+END_IF
+
+(*
+
+osCarga := (NumGiros+0) MOD 8;
+PosMedid := ;
+PosFotoe := ;
+PosInduc := ;
+PosEvacu := ;
+PosDesca := ;
 
 
 // actualizar el estado de la estación
 IF NOT girado THEN
-	// Actualizar la posición de carga
-	NumSector := (NumGiros+0) MOD 8;
-	sectores[NumSector].Cargar(mdCarga:=mdPickAndPlaceCarga);
-	
-	// Actualizar la posición del medidor
-	NumSector := (NumGiros+6) MOD 8;
-	sectores[NumSector].Medir(mdMedid:=mdMedidorTapa, 
-								cnUmbralAlta:=fbPanel.cnUmbralAlta);
-	
-	// Actualizar la poisición del fotoeléctrico
-	NumSector := (NumGiros+5) MOD 8;
-	sectores[NumSector].Claridad(mdFotoe:=mdDetectorFotoelectrico);
-
-	// Actualizar la posición del inductivo
-	NumSector := (NumGiros+4) MOD 8;
-	sectores[NumSector].Material(mdInduc:=mdCaptadorInductivo);
-
-	// Actualizar la posición del evaccuador
-	NumSector := (NumGiros+2) MOD 8;
-	sectores[NumSector].Evacuar(fbEvacu:=mdEvacuador);
-	
-	// Actualizar la posición de descarga
- 	NumSector := (NumGiros+1) MOD 8;
-	sectores[NumSector].Descargar(mdDesca:=mdPickAndPlaceDescarga);
+	sectores[PosCarga].Cargar	(pn:=fbPanel, mdCarga := mdPickAndPlaceCarga);
+	sectores[PosMedid].Medir	(pn:=fbPanel, mdMedid := mdMedidorTapa, cnUmbralAlta:=fbPanel.cnUmbralAlta);
+	sectores[PosFotoe].Claridad	(pn:=fbPanel, mdFotoe := mdDetectorFotoelectrico);
+	sectores[PosInduc].Material	(pn:=fbPanel, mdInduc := mdCaptadorInductivo);
+	sectores[PosEvacu].Evacuar 	(pn:=fbPanel, mdEvacu := mdEvacuador);
+	sectores[PosDesca].Descargar(pn:=fbPanel, mdDesca := mdPickAndPlaceDescarga);
 END_IF
 
-FOR i := 0 TO 8 DO
-	sectores[i].ActualizarUi(pn:=fbPanel);
-END_FOR
+
 
 IF mdPlatoDivisor.Done AND NOT girado THEN
 	numGiros := numGiros + 1;
 	girado := TRUE;
-	angulo := SEL(angulo =0, angulo-45.0, 315.0); // , angulo+45.0, 0);	
+	angulo := SEL(angulo =0, angulo-45.0, 315.0); // , angulo+45.0, 0);
+
+	IF sectores[PosEvacu].Descargar_Tapa THEN
+		ProdRechazada := ProdRechazada + 1;
+		
+	END_IF	
 END_IF
 IF mdPlatoDivisor.Ready THEN
 	girado := FALSE;
 END_IF
 
-mdCinta.ProcessCycle(dr:=dr);
 
+*)
 ]]></ST>
       </Implementation>
     </Method>

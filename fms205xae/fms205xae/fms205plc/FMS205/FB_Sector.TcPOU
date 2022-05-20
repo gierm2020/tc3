@@ -37,10 +37,10 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="ActualizarUi" Id="{696fbde6-644b-46b2-97f2-1aa64975cbfe}">
-      <Declaration><![CDATA[METHOD ActualizarUi : BOOL
+    <Method Name="Actualizar" Id="{696fbde6-644b-46b2-97f2-1aa64975cbfe}">
+      <Declaration><![CDATA[METHOD Actualizar : BOOL
 VAR_INPUT
-	pn	: REFERENCE TO FB_Panel;
+	pn		: REFERENCE TO FB_Panel;
 END_VAR
 
 ]]></Declaration>
@@ -94,7 +94,7 @@ END_IF]]></ST>
     <Method Name="Cargar" Id="{1122ff55-ef8e-49b1-95fa-5fba0ac744f8}">
       <Declaration><![CDATA[METHOD Cargar : BOOL
 VAR_INPUT
-	//dr		: REFERENCE TO FB_Director;
+	pn		: REFERENCE TO FB_Panel;
 	mdCarga : REFERENCE TO FB_PickAndPlace;
 END_VAR
 ]]></Declaration>
@@ -113,13 +113,14 @@ END_VAR
 		
 	Materal_Medido	:= FALSE;	
 	Tapa_Metalica 	:= FALSE;
+	Actualizar(pn:=pn);
 END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="Claridad" Id="{28e58372-3814-4775-9d11-afec4f690ea6}">
       <Declaration><![CDATA[METHOD Claridad : BOOL
 VAR_INPUT
-	// dr		: REFERENCE TO FB_Director;
+	pn		: REFERENCE TO FB_Panel;
 	mdFotoe : REFERENCE TO FB_DetectorFotoelectrico;
 END_VAR
 ]]></Declaration>
@@ -127,6 +128,7 @@ END_VAR
         <ST><![CDATA[IF mdFotoe.Done AND mdFotoe.Lectura_Registrada THEN
 	Claridad_Medida	:= TRUE;
 	Tapa_Clara		:= mdFotoe.Tapa_Clara;
+	Actualizar(pn:=pn);
 END_IF
 ]]></ST>
       </Implementation>
@@ -134,38 +136,41 @@ END_IF
     <Method Name="Descargar" Id="{9ac0e44e-a49d-48b0-b0a9-e5b84bb2d5e5}">
       <Declaration><![CDATA[METHOD Descargar : BOOL
 VAR_INPUT
-		mdDesca : reference to FB_PickAndPlace;
+	pn			: REFERENCE TO FB_Panel;
+	mdDesca 	: REFERENCE TO FB_PickAndPlace;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF mdDesca.Done AND mdDesca.Mover THEN
-	Vaciar();	
+	Vaciar(pn:=pn);	
 END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="Evacuar" Id="{8a5360cd-4241-4566-ae3e-195e2da3ad32}">
       <Declaration><![CDATA[METHOD Evacuar : BOOL
 VAR_INPUT
-	fbEvacu		: REFERENCE TO FB_Evacuador;
+	pn			: REFERENCE TO FB_Panel;
+	mdEvacu		: REFERENCE TO FB_Evacuador;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF fbEvacu.Done AND fbEvacu.Evacuar THEN
-	Vaciar();
+        <ST><![CDATA[IF mdEvacu.Done AND mdEvacu.Evacuar THEN
+	Vaciar(pn:=pn);
 END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="Material" Id="{38b5d5a4-2ae8-4309-b195-28ed8d569eac}">
       <Declaration><![CDATA[METHOD Material : BOOL
 VAR_INPUT
-	// dr		: REFERENCE TO FB_Director;
+	pn		: REFERENCE TO FB_Panel;
 	mdInduc : REFERENCE TO FB_CaptadorInductivo;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF mdInduc.Done AND mdInduc.Lectura_Registrada THEN
 	Materal_Medido := TRUE;
-	Tapa_Metalica	:= mdInduc.Tapa_Metalica;	
+	Tapa_Metalica	:= mdInduc.Tapa_Metalica;
+	Actualizar(pn:=pn);
 END_IF
 ]]></ST>
       </Implementation>
@@ -173,7 +178,7 @@ END_IF
     <Method Name="Medir" Id="{66a04e8f-29f9-43b6-8d46-b22e85e170fd}">
       <Declaration><![CDATA[METHOD Medir : BOOL
 VAR_INPUT
-	//dr			: REFERENCE TO FB_Director;
+	pn	: REFERENCE TO FB_Panel;
 	mdMedid			: REFERENCE TO FB_MedidorTapa;
 	cnUmbralAlta	: REAL;			
 END_VAR
@@ -182,7 +187,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[IF mdMedid.Done AND mdMedid.Lectura_Registrada THEN
 	IF mdMedid.Altura_mm < 2 THEN
-		Vaciar();
+		Vaciar(pn:=pn);
 	ELSE
 		Inicializando	:= FALSE;
 		Tapa_Cargada	:= TRUE;			
@@ -190,6 +195,7 @@ END_VAR
 		Altura_Pulsos	:= mdMedid.Altura_Pulsos;
 		Altura_Mm		:= mdMedid.Altura_mm;
 		Tapa_Alta		:= mdMedid.Altura_mm > cnUmbralAlta;
+		Actualizar(pn:=pn);
 	END_IF	
 END_IF
 
@@ -203,6 +209,7 @@ END_IF
     <Method Name="Vaciar" Id="{be008484-5fbe-4682-a356-5dd259269128}">
       <Declaration><![CDATA[METHOD Vaciar : BOOL
 VAR_INPUT
+	pn	: REFERENCE TO FB_Panel;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -219,6 +226,7 @@ Tapa_Clara 		:= FALSE;
 	
 Materal_Medido	:= FALSE;	
 Tapa_Metalica 	:= FALSE;
+Actualizar(pn:=pn);
 	
 ]]></ST>
       </Implementation>

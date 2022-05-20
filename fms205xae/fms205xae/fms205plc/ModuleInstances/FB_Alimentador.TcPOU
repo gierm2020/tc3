@@ -38,7 +38,7 @@ END_VAR
     <Method Name="ProcessCycle" Id="{d7358fc0-6ede-496b-926f-c7f1a8440317}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL 
 VAR_INPUT
-	dr	: REFERENCE TO FB_Director;
+	dr		: REFERENCE TO FB_Director;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Pause y reset
@@ -54,6 +54,7 @@ IC := InitialConditions();
 // Controlador
 fbController(
 dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+
 
 // Actuadores
 K_1.ProcessCycle(dr:=dr, sfcValue:=fbController.K_1);

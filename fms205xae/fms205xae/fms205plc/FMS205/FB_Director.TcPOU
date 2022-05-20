@@ -12,14 +12,7 @@ VAR CONSTANT
 	gmColorDefail 	: DWORD := 16#ff800000;
 END_VAR
 
-VAR 
-	ProdRequerida	: UINT := 2;
-	ProdRealizada	: UINT := 0;
-	ProdPendiente	: UINT := 2;
-	ProdRechazada	: UINT := 0;
-	
-	
-END_VAR
+
 VAR_OUTPUT
 	gmLocalHost		: BOOL := TRUE; // TODO - SUSTITUIR ESTO POR LA CONDICIÓN DE LOCALHOST
 	
@@ -36,40 +29,6 @@ VAR_OUTPUT
 	//ProdUmbralAlta	: REAL := 18.5;
 	
 END_VAR	
-
-VAR_OUTPUT
-    fun_ABIn		: BOOL;
-    fun_AAIn		: BOOL;
-    fun_BBIn		: BOOL;
-    fun_BAIn		: BOOL;
-    fun_NBIn		: BOOL;
-    fun_NAIn		: BOOL;
-    fun_Llenar		: BOOL;
-    fun_Vaciar		: BOOL;
-    fun_Alimentar	: BOOL;
-    fun_Girar		: BOOL;
-    fun_Situar		: BOOL;
-    fun_Altura		: BOOL;
-    fun_Color		: BOOL;
-    fun_Material	: BOOL;
-    fun_Cargar		: BOOL;
-    fun_Rechazar	: BOOL;
-    fun_Descargar	: BOOL;
-    fun_Transferir	: BOOL;
-    bot_Planta		: BOOL;
-    bot_Empezar		: BOOL;
-    //bot_Emerg		: BOOL;
-    bot_Pausar		: BOOL;
-    bot_Reset		: BOOL;
-    bot_Funcion		: BOOL;
-    bot_Ejecutar	: BOOL;
-    bot_Continuar	: BOOL;
-END_VAR
-VAR
-	act_Avanza	: BOOL;
-	act_Retroc	: BOOL;
-
-END_VAR
 
 
 VAR
@@ -160,7 +119,7 @@ ELSE
 				gmModePrev := E_GEMMA.A1ParadaInicial;
 				gmModeActual := E_GEMMA.F5VerificacionOrdenada; 	// y pasamos al modo pruebas 
             
-			ELSIF bot_Empezar AND IC THEN //  fbPanel.cn.Marcha AND IC THEN  // ELSIF Marcha THEN
+			ELSIF pn.cnF1_Empezar AND IC THEN //  fbPanel.cn.Marcha AND IC THEN  // ELSIF Marcha THEN
                 gmModeActual := E_GEMMA.F2SecuenciaPreparacion;
 			ELSE
 				; // Esperar a que se pulse el bortón de marcha
@@ -200,9 +159,9 @@ ELSE
             
         
 		E_GEMMA.A5PreparandoTrasFallo: (* Preparando de reanudacion tras el fallo *)
-            IF bot_Empezar THEN //  fbPanel.cn.Marcha THEN // Continua
+            IF pn.cnF1_Empezar THEN //  fbPanel.cn.Marcha THEN // Continua
                 gmModeActual := gmModePrev;
-            ELSIF bot_Pausar THEN //  fbPanel.cn.Para THEN // Cancela
+            ELSIF pn.cnA3_Estado THEN 
                 gmModeActual := E_GEMMA.A6Inicializando;
 				gmModePrev := gmModeActual; // DUDAS
             END_IF
@@ -228,7 +187,7 @@ ELSE
                 gmModeActual := E_GEMMA.D2TratamientoFallos;
             ELSIF FinTarea THEN
                 gmModeActual := E_GEMMA.F3SecuenciaFinalizacion;
-            ELSIF bot_Pausar THEN //  fbPanel.cn.Para THEN
+            ELSIF pn.cnA3_Estado THEN 
                 gmModeActual := E_GEMMA.A2ParaFinCiclo;
             END_IF
 			

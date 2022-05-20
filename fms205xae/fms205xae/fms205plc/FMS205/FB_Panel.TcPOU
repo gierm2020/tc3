@@ -6,6 +6,23 @@ VAR_INPUT
 	dr: REFERENCE TO FB_Director;
 END_VAR
 
+VAR
+	hwPE_Seta					AT %I*: BOOL;
+	hwPOC_PulsadorReset			AT %I*: BOOL; // POC Botón azul está pulsado (PO Conectada)
+	hwPM_PulsadorMarcha			AT %I*: BOOL; // PM - Pulsador de marcha (verde)
+	hwLM_LamparaMarcha			AT %Q*: BOOL; // LM - Lámpara marcha (verde)
+	hwPS_PulsadorStop			AT %I*: BOOL; // PS - Pulsador de parada (rojo)
+	hwLS_LamparaStop			AT %Q*: BOOL; // DUDAS - LA - Lámpara de alarma o lámpara de stop
+	hwSM_SelecAutoManual	 	AT %I*: BOOL; // SM - Selector modo auto/man
+	
+	hwAS_AvisadorSonoro			AT %Q*: BOOL; // AS - Avisador Sonoro
+	hwLA_LamparaAlarma			AT %Q*: BOOL; // DUDAS - Es lo mismo que falta de material?
+	hwDPO_DesconectaPO			AT %Q*: BOOL; // DPO - Desconecta PO	
+	
+	FP_PM					: R_TRIG;
+END_VAR
+
+
 VAR_OUTPUT
 	// consignas del panel únicamente en la visualización
 	cnUmbralAlta		: REAL := 18.5;
@@ -36,6 +53,7 @@ VAR_OUTPUT
 	cnA2_FinCiclo					: BOOL;
 	cnA3_Estado						: BOOL;
 	cnF1_Reanudar					: BOOL;
+	cnF1_Empezar					: BOOL;
 	cnA6_Inicializar				: BOOL;
 
 END_VAR
@@ -43,12 +61,10 @@ END_VAR
 VAR
 	swMensaje		: STRING(255) :='';
 	
-	hwPE_Seta 				AT %I*	: BOOL;
 	swPE_Seta						: BOOL;
 	ttPE_Seta						: STRING := '';
 	
 	enF4_Planta						: BOOL; // consigna F4_Planta habilitada
-	hwSM_SelecAutoManual	AT %I*	: BOOL; // SM - Selector modo auto/man
 	swF4_Planta						: BOOL; // botón en la visualización
 	ttF4_Planta						: STRING :='';
 	swF4_Avanza						: BOOL := FALSE;
@@ -58,34 +74,25 @@ VAR
 	swF5_Funcion					: BOOL; // botón en la visualización
 	
 	enA2_FinCiclo					: BOOL;
-	hwPS_PulsadorStop		AT %I*	: BOOL; // PS - Pulsador de parada (rojo)
 	swA2_FinCiclo					: BOOL;
 	
 	enA3_Estado						: BOOL;
 	swA3_Estado						: BOOL;
 	
-	hwPM_PulsadorMarcha		AT %I*	: BOOL; // PM - Pulsador de marcha (verde)
+	enF1_Empezar					: BOOL;
 	swF1_Empezar					: BOOL;
 	
 	enF1_Reanduar					: BOOL;
 	swF1_Reanudar					: BOOL;
 	
 	swA6_Inicializar				: BOOL;
-	TmpReinicio						: TON; 
-	
-	
+	TmpReinicio						: TON; 	
 END_VAR
 
 
 VAR_OUTPUT
 	//cn						: S_Panel_Consignas; //
-	FP_PM					: R_TRIG;
-	// Probando:	BOOL;	// DESDE LA VISU		Vamos a hacer pruebas
-
-		
-    (*
-	Emergencia: BOOL; 	// := PE 				Parada de emergencia (seta)
- 
+(* 
 						// POC - 				Conmutador PO Conectada  (negra)
 	Marcha: BOOL; 		// :=FP_PM.Q 			Pulsador de marcha (verde)
     Reinicia: BOOL; 	// :=T(PM AND NOT PS) 	Restablece situacion inicial
@@ -102,14 +109,14 @@ VAR_OUTPUT
 	*)
 	
 	//cnManual			: BOOL; // Selector manual/automático
-	cnReinicia			: BOOL; // DUDAS reinicia la situación inicial
-	cnRestablece		: BOOL; // restablece la condición de fallo
-	cnRestaura			: BOOL; // DUDAS restaura condiciones iniciales
-	cnMarcha			: BOOL; // 
+	//cnReinicia			: BOOL; // DUDAS reinicia la situación inicial
+	//cnRestablece		: BOOL; // restablece la condición de fallo
+	//cnRestaura			: BOOL; // DUDAS restaura condiciones iniciales
+	//cnMarcha			: BOOL; // 
 	//cnPara				: BOOL; //
 END_VAR
 VAR
-	hw 						: S_Panel_Hardware; // estado de sensores y actuadores del panel físico
+	//hw 						: S_Panel_Hardware; // estado de sensores y actuadores del panel físico
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -129,7 +136,8 @@ END_VAR
 
 // invoca a temporizadores y flancos
 //TmpReinicio(IN := hw.PM_PulsadorMarcha AND NOT hw.PS_PulsadorStop, PT:= tm.TiempoReinicio);
-FP_PM(CLk := hw.PM_PulsadorMarcha);
+//FP_PM(CLk := hw.PM_PulsadorMarcha);
+
 
 // calcula el estado de las consignas
 // DUDAS - No habría que tener en cuenta el modo de GEMMA para informar Reinicia, Restaura, ...?
@@ -137,42 +145,14 @@ FP_PM(CLk := hw.PM_PulsadorMarcha);
 // Consignas
 //cnManual 			:= hw.SM_SelecAutoManual; 		// ídem
 //cnReinicia			:= TmpReinicio.Q;
-cnRestablece		:= hw.PM_PulsadorMarcha;
-cnRestaura			:= hw.PM_PulsadorMarcha;
-cnMarcha			:= FP_PM.Q;
+//cnRestablece		:= hw.PM_PulsadorMarcha;
+//cnRestaura			:= hw.PM_PulsadorMarcha;
+//cnMarcha			:= FP_PM.Q;
 //cnPara				:= NOT hw.PS_PulsadorStop;
 //cnPruebas			:= Probando;
 
 // Señales
 
-hw.AS_AvisadorSonoro := 
-	dr.gmModeActual = E_GEMMA.F3SecuenciaFinalizacion OR
-	(
-		(
-			dr.gmModeActual = E_GEMMA.D1ParadaEmergencia OR
-			dr.gmModeActual = E_GEMMA.D2TratamientoFallos OR 
-			dr.gmModeActual = E_GEMMA.F2SecuenciaPreparacion 
-		) AND FALSE
-	); //  TODO - TERMINAR LA IMPLENTACIÓN CON EL RELOJ - CLK.Q;
-	
-hw.LA_LamparaAlarma := 
-	dr.gmModeActual = E_GEMMA.A6Inicializando OR
-	(
-		(
-			dr.gmModeActual = E_GEMMA.D1ParadaEmergencia OR
-			dr.gmModeActual = E_GEMMA.D2TratamientoFallos
-		) 
-		AND TRUE
-	);  //  TODO - TERMINAR LA IMPLENTACIÓN CON EL RELOJ - CLK.Q;
-
-hw.LM_LamparaMarcha := 	
-	dr.gmModeActual = E_GEMMA.A2ParaFinCiclo OR
-	dr.gmModeActual = E_GEMMA.F1ProduccionNormal OR
-	dr.gmModeActual = E_GEMMA.F2SecuenciaPreparacion OR
-	dr.gmModeActual = E_GEMMA.F3SecuenciaFinalizacion OR
-	(
-		dr.gmModeActual = E_GEMMA.A1ParadaInicial AND TRUE 
-	);  //  TODO - TERMINAR LA IMPLENTACIÓN CON EL RELOJ - CLK.Q; 
 ]]></ST>
     </Implementation>
     <Method Name="ProcessCycle" Id="{026a1e81-704d-4f95-ae3e-7d143e02920e}">
@@ -345,6 +325,51 @@ IF cnA6_Inicializar THEN
 	swF5_Funcion := FALSE;
 	swF4_Planta := FALSE;
 END_IF
+
+
+//----------------------------------------------------------------- Consigna F1_Empezar
+FP_PM(CLk := hwPM_PulsadorMarcha);
+enF1_Empezar := (
+	gmModeActual = E_GEMMA.A1ParadaInicial OR
+	gmModeActual = E_GEMMA.A2ParaFinCiclo OR
+	gmModeActual = E_GEMMA.A3ParadaEstado OR
+	gmModeActual = E_GEMMA.A4ParadaObtenida);
+cnF1_Empezar := enF1_Empezar AND (swF1_Empezar OR FP_PM.Q);
+IF NOT cnF1_Empezar AND (swF1_Empezar OR FP_PM.Q) THEN // consigna no válida
+	swF1_Empezar := FALSE; // si no se puede entrar en el modo hay que desactivar el botón
+	swMensaje := 'Sólo se puede empezar desde una parada';
+END_IF
+
+
+//----------------------------------------------------------------- Señales
+hwAS_AvisadorSonoro := 
+	gmModeActual = E_GEMMA.F3SecuenciaFinalizacion OR
+	(
+		(
+			gmModeActual = E_GEMMA.D1ParadaEmergencia OR
+			gmModeActual = E_GEMMA.D2TratamientoFallos OR 
+			gmModeActual = E_GEMMA.F2SecuenciaPreparacion 
+		) AND FALSE
+	); //  TODO - TERMINAR LA IMPLENTACIÓN CON EL RELOJ - CLK.Q;
+	
+hwLA_LamparaAlarma := 
+	gmModeActual = E_GEMMA.A6Inicializando OR
+	(
+		(
+			gmModeActual = E_GEMMA.D1ParadaEmergencia OR
+			gmModeActual = E_GEMMA.D2TratamientoFallos
+		) 
+		AND TRUE
+	);  //  TODO - TERMINAR LA IMPLENTACIÓN CON EL RELOJ - CLK.Q;
+
+hwLM_LamparaMarcha := 	
+	gmModeActual = E_GEMMA.A2ParaFinCiclo OR
+	gmModeActual = E_GEMMA.F1ProduccionNormal OR
+	gmModeActual = E_GEMMA.F2SecuenciaPreparacion OR
+	gmModeActual = E_GEMMA.F3SecuenciaFinalizacion OR
+	(
+		gmModeActual = E_GEMMA.A1ParadaInicial AND TRUE 
+	);  //  TODO - TERMINAR LA IMPLENTACIÓN CON EL RELOJ - CLK.Q; 
 ]]></ST>
       </Implementation>
     </Method>

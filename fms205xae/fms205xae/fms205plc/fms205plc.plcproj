@@ -27,9 +27,6 @@
     <Compile Include="DUTs\E_GEMMA.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\S_Panel_Hardware.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="FMS203 TC2\FB_Clock.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -45,7 +42,7 @@
     <Compile Include="FMS205\FB_FMS205.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FMS205\FB_FMS205_SFC.TcPOU">
+    <Compile Include="FMS205\FB_FMS205_Producir_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FMS205\FB_Panel.TcPOU">
