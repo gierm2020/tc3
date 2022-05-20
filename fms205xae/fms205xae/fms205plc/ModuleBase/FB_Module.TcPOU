@@ -19,6 +19,7 @@ VAR_OUTPUT
 	Failure: BOOL;
 	Done: BOOL;
 	IsActive: BOOL;
+	IsStopped: BOOL := FALSE;
 END_VAR
 
 // TODO AÑADIR UN METODO GEMMA QUE SE INVOQUE DESDE PROCESSCYCLE PARA TRATAMIENTO DE PARADA, PAUSA...
@@ -34,15 +35,6 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="CanStopNow" Id="{5fc1a823-e981-4cf9-ad61-79b86d513681}">
-      <Declaration><![CDATA[METHOD CanStopNow : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[CanStopNow := TRUE;]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="InitialConditions" Id="{569290b0-7483-4183-aad6-de676bf056ec}">
       <Declaration><![CDATA[METHOD InitialConditions : BOOL
 VAR_INPUT

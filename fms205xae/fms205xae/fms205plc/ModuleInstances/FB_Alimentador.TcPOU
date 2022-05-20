@@ -42,8 +42,10 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Pause y reset
-fbController.SFCPause := dr.gmModeActual=E_GEMMA.A3ParadaEstado; //  Pausar;
-fbController.SFCReset := dr.gmModeActual=E_GEMMA.A6Inicializando; //  Reset;
+IsStopped := NOT fbController.UnsafeStop AND (dr.gmModeActual = E_GEMMA.A3ParadaEstado);
+fbController.SFCReset := dr.gmModeActual = E_GEMMA.A6Inicializando;
+fbController.SFCPause := IsStopped;
+
 
 // Sensores y condiciones iniciales
 k1.ProcessCycle(dr:=dr, sfcValue=>fbController.k1);

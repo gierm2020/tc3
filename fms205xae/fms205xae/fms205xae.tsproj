@@ -130,6 +130,16 @@
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hwPS_PulsadorStop</Name>
+							<Comment><![CDATA[ PS - Pulsador de parada (rojo)]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hwPM_PulsadorMarcha</Name>
+							<Comment><![CDATA[ PM - Pulsador de marcha (verde)]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.fbFMS205.fbPanel.hw.PE_Seta</Name>
 							<Comment><![CDATA[ Botones y alarmas específicos de una estación ]]></Comment>
 							<Type>BOOL</Type>

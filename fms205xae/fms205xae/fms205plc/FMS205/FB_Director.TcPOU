@@ -127,6 +127,7 @@ VAR_INPUT
 	Fallo 			: BOOL := FALSE;
 	FinCiclo 		: BOOL := FALSE;
 	FinTarea 		: BOOL := FALSE;
+	ParadaObtenida	: BOOL := FALSE;
 	Preparada 		: BOOL := TRUE;
 	Finalizada 		: BOOL := TRUE;
 END_VAR
@@ -137,17 +138,10 @@ END_VAR
 //IF bot_Emerg THEN
 IF pn.cnD1_Emergencia THEN
     gmModeActual := E_GEMMA.D1ParadaEmergencia;
-	//stMode := 'D1';
 	
-	
-ELSIF bot_Reset THEN //  fbPanel.cn.Reinicia THEN
+ELSIF pn.cnA6_Inicializar THEN 
     gmModeActual := E_GEMMA.A6Inicializando;
 	
-ELSIF bot_Pausar THEN //  fbPanel.cn.Reinicia THEN
-    gmModeActual := E_GEMMA.A3ParadaEstado;
-	
-
-
 ELSE
     CASE gmModeActual OF
 		
@@ -176,18 +170,34 @@ ELSE
             IF Fallo THEN
                 gmModePrev := E_GEMMA.A2ParaFinCiclo;
                 gmModeActual := E_GEMMA.D2TratamientoFallos;
-            ELSIF FinCiclo THEN
-                gmModeActual := E_GEMMA.A1ParadaInicial;
+			ELSIF pn.cnA3_Estado THEN // solicitan parada inmediata porque no pueden esperar a fin de ciclo
+				gmModePrev := E_GEMMA.A2ParaFinCiclo;
+				gmModeActual := E_GEMMA.A3ParadaEstado;				
+            ELSIF ParadaObtenida AND FinCiclo THEN
+                gmModeActual := E_GEMMA.A4ParadaObtenida;
             ELSE
                 // Seguir produciendo hasta final de ciclo
                 ;
             END_IF
 			
         E_GEMMA.A3ParadaEstado: (* Parada solicitada en un estado determinado *)
-            ; // estado no tratado en la FMS205 DUDAS
+            IF Fallo THEN
+                // gmModePrev := gmModeActual; // volver al modo actual cuando se resuelva el error
+                gmModeActual := E_GEMMA.D2TratamientoFallos;
+			ELSIF ParadaObtenida THEN
+                gmModeActual := E_GEMMA.A4ParadaObtenida;
+            ELSE
+                ; // Seguir produciendo hasta que todos los módulos paren en un estado estable
+            END_IF
+            
 			
-        E_GEMMA.A4ParadaObtenida: (* Parada obtenida *)
-            ; // estado no tratado en la FMS205 DUDAS
+        E_GEMMA.A4ParadaObtenida:
+			IF pn.cnF1_Reanudar THEN
+				gmModeActual := gmModePrev; // retomar el estado antes de la parada
+			ELSE
+				; // seguir parada hasta la consigna de reanudar	
+			END_IF
+            
         
 		E_GEMMA.A5PreparandoTrasFallo: (* Preparando de reanudacion tras el fallo *)
             IF bot_Empezar THEN //  fbPanel.cn.Marcha THEN // Continua
@@ -257,7 +267,11 @@ ELSE
 				// después de un fallo no es seguro volver a F5
                 gmModePrev := E_GEMMA.A6Inicializando;  
                 gmModeActual := E_GEMMA.D2TratamientoFallos;
-			
+
+			ELSIF pn.cnA3_Estado THEN
+				gmModePrev := E_GEMMA.F5VerificacionOrdenada;
+				gmModeActual := E_GEMMA.A3ParadaEstado;
+ 			
 			ELSIF pn.cnF4_Planta THEN
 				// al salir del modo F4 volver a modo F5
 				gmModePrev := E_GEMMA.F5VerificacionOrdenada;
@@ -266,7 +280,8 @@ ELSE
             ELSIF NOT pn.cnF5_Funcion THEN
 				// al salir del modo función volver al modo A6
 				gmModePrev := E_GEMMA.A1ParadaInicial; 
-				gmModeActual := E_GEMMA.A6Inicializando; 
+				gmModeActual := E_GEMMA.A6Inicializando;
+ 
             ELSE
                 // Seguir en modo F5
                 ;

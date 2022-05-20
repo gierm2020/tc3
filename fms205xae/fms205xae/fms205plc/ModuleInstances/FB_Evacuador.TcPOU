@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Evacuador" Id="{50116491-c91a-4b60-887b-578d95c086cb}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Evacuador EXTENDS FB_Module
 (* 
@@ -58,12 +58,14 @@ VAR_INPUT
 	dr	: REFERENCE TO FB_Director;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[//----------------------------------- leer los sensores para determinar el estado del módulo
+        <ST><![CDATA[// Pause y reset
+IsStopped := NOT fbController.UnsafeStop AND (dr.gmModeActual = E_GEMMA.A3ParadaEstado);
+fbController.SFCReset := dr.gmModeActual = E_GEMMA.A6Inicializando;
+fbController.SFCPause := IsStopped;
+
 
 
 //----------------------------------- preparar los datos que necesita el controlador
-fbController.SFCPause := dr.gmModeActual = E_GEMMA.A3ParadaEstado;
-fbController.SFCReset := dr.gmModeActual = E_GEMMA.A6Inicializando;
 
 f0.ProcessCycle(dr:=dr, sfcValue=>fbController.f0);
 f1.ProcessCycle(dr:=dr, sfcValue=>fbController.f1);
@@ -88,18 +90,5 @@ IsActive := F_0.uiValue OR F_1.uiValue OR G_1.uiValue OR V_1.uiValue;
 ]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_Evacuador">
-      <LineId Id="3" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Evacuador.InitialConditions">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Evacuador.ProcessCycle">
-      <LineId Id="3" Count="3" />
-      <LineId Id="33" Count="0" />
-      <LineId Id="8" Count="21" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

@@ -421,6 +421,11 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"885"</v>
+              <v n="TextDefault">"Fin ciclo A2"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"226"</v>
               <v n="TextDefault">"FM"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -513,6 +518,11 @@
             <o>
               <v n="TextID">"352"</v>
               <v n="TextDefault">"Inductivo"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"688"</v>
+              <v n="TextDefault">"Inicializar (A6)"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -686,8 +696,28 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"1717"</v>
+              <v n="TextDefault">"Parada ciclo (A2)"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"1709"</v>
+              <v n="TextDefault">"Parada ciclo A2"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"1328"</v>
               <v n="TextDefault">"Parada de Emergencia (D1)"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"1073"</v>
+              <v n="TextDefault">"Parada estado (A3)"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"872"</v>
+              <v n="TextDefault">"Pausa A3"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -698,6 +728,11 @@
             <o>
               <v n="TextID">"736"</v>
               <v n="TextDefault">"Pausar (A3-&gt;4)"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"1186"</v>
+              <v n="TextDefault">"Pausar A3"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -776,6 +811,16 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"828"</v>
+              <v n="TextDefault">"Reanudar"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"316"</v>
+              <v n="TextDefault">"Reanudar (F1)"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"858"</v>
               <v n="TextDefault">"Rechazadas"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -803,6 +848,11 @@
             <o>
               <v n="TextID">"220"</v>
               <v n="TextDefault">"Reset"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"1263"</v>
+              <v n="TextDefault">"Reset (A6)"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>

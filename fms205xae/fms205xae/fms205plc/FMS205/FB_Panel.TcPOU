@@ -33,6 +33,11 @@ VAR_OUTPUT
 	swF5_Ejecutar					: BOOL;
 	swF5_Ack						: BOOL;
 
+	cnA2_FinCiclo					: BOOL;
+	cnA3_Estado						: BOOL;
+	cnF1_Reanudar					: BOOL;
+	cnA6_Inicializar				: BOOL;
+
 END_VAR
 
 VAR
@@ -42,22 +47,40 @@ VAR
 	swPE_Seta						: BOOL;
 	ttPE_Seta						: STRING := '';
 	
+	enF4_Planta						: BOOL; // consigna F4_Planta habilitada
 	hwSM_SelecAutoManual	AT %I*	: BOOL; // SM - Selector modo auto/man
 	swF4_Planta						: BOOL; // botón en la visualización
 	ttF4_Planta						: STRING :='';
 	swF4_Avanza						: BOOL := FALSE;
  	swF4_Retroc						: BOOL := FALSE;
 	
+	enF5_Funcion					: BOOL; // consigna habilitada
 	swF5_Funcion					: BOOL; // botón en la visualización
+	
+	enA2_FinCiclo					: BOOL;
+	hwPS_PulsadorStop		AT %I*	: BOOL; // PS - Pulsador de parada (rojo)
+	swA2_FinCiclo					: BOOL;
+	
+	enA3_Estado						: BOOL;
+	swA3_Estado						: BOOL;
+	
+	hwPM_PulsadorMarcha		AT %I*	: BOOL; // PM - Pulsador de marcha (verde)
+	swF1_Empezar					: BOOL;
+	
+	enF1_Reanduar					: BOOL;
+	swF1_Reanudar					: BOOL;
+	
+	swA6_Inicializar				: BOOL;
+	TmpReinicio						: TON; 
+	
 	
 END_VAR
 
 
 VAR_OUTPUT
 	//cn						: S_Panel_Consignas; //
-	TmpReinicio				: TON; 
 	FP_PM					: R_TRIG;
-	Probando:	BOOL;	// DESDE LA VISU		Vamos a hacer pruebas
+	// Probando:	BOOL;	// DESDE LA VISU		Vamos a hacer pruebas
 
 		
     (*
@@ -78,12 +101,12 @@ VAR_OUTPUT
 	ProbarAck: BOOL;
 	*)
 	
-	cnManual			: BOOL; // Selector manual/automático
+	//cnManual			: BOOL; // Selector manual/automático
 	cnReinicia			: BOOL; // DUDAS reinicia la situación inicial
 	cnRestablece		: BOOL; // restablece la condición de fallo
 	cnRestaura			: BOOL; // DUDAS restaura condiciones iniciales
 	cnMarcha			: BOOL; // 
-	cnPara				: BOOL; //
+	//cnPara				: BOOL; //
 END_VAR
 VAR
 	hw 						: S_Panel_Hardware; // estado de sensores y actuadores del panel físico
@@ -91,6 +114,17 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
+
+
+
+
+
+
+
+
+
+
+
 	
 
 // invoca a temporizadores y flancos
@@ -101,12 +135,12 @@ FP_PM(CLk := hw.PM_PulsadorMarcha);
 // DUDAS - No habría que tener en cuenta el modo de GEMMA para informar Reinicia, Restaura, ...?
 
 // Consignas
-cnManual 			:= hw.SM_SelecAutoManual; 		// ídem
-cnReinicia			:= TmpReinicio.Q;
+//cnManual 			:= hw.SM_SelecAutoManual; 		// ídem
+//cnReinicia			:= TmpReinicio.Q;
 cnRestablece		:= hw.PM_PulsadorMarcha;
 cnRestaura			:= hw.PM_PulsadorMarcha;
 cnMarcha			:= FP_PM.Q;
-cnPara				:= NOT hw.PS_PulsadorStop;
+//cnPara				:= NOT hw.PS_PulsadorStop;
 //cnPruebas			:= Probando;
 
 // Señales
@@ -145,12 +179,14 @@ hw.LM_LamparaMarcha :=
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL
 VAR_INPUT
 	gmModeActual	: E_GEMMA;
+	tmReinicio 		: TIME; // = dr.tmTiempoReinicio
 END_VAR
+
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 
-//----------------------------------------------------------------- Modo D1
+//----------------------------------------------------------------- Consiga cnD1_Emergencia
 cnD1_Emergencia := hwPE_Seta OR swPE_Seta; 
 IF hwPE_Seta THEN
 	IF swPE_Seta THEN
@@ -167,61 +203,65 @@ ELSE
 END_IF
 
 
-//----------------------------------------------------------------- Modo F4
-IF (gmModeActual = E_GEMMA.A6Inicializando OR 				// sólo se puede entrar o salir del modo desde determinados estados 
+//----------------------------------------------------------------- F4_Planta
+enF4_Planta := ( // sólo se puede entrar o salir del modo desde determinados estados 
+	gmModeActual = E_GEMMA.A6Inicializando OR 				 
 	gmModeActual = E_GEMMA.A1ParadaInicial OR		
 	gmModeActual = E_GEMMA.F5VerificacionOrdenada OR		
-	gmModeActual = E_GEMMA.F4VerificacionSinOrden) THEN	
-	cnF4_Planta := hwSM_SelecAutoManual OR swF4_Planta;
-END_IF 
-IF NOT cnF4_Planta AND (hwSM_SelecAutoManual OR swF4_Planta) THEN
-	// si no se puede pasar al modo F4 hay que explicar poor qué
-	swF4_Planta := FALSE; // si no se puede entrar en modo F4 hay que desactivar el botón
-	swMensaje := 'Sólo se puede pasar al modo F4 desde A1, A6 o F5';
-ELSE
-	swMensaje := '';
-	IF hwSM_SelecAutoManual THEN
-		IF swF4_Planta THEN
-			ttF4_Planta := 'Mandos directos ativados desde panel físico y visualización';	
-		ELSE
-			ttF4_Planta := 'Mandos directos ativados desde panel físico';
-		END_IF
-	ELSE
-		IF swF4_Planta THEN
-			ttF4_Planta := 'Mandos directos ativados desde visualización';
-		ELSE
-			ttF4_Planta := 'Mandos directos desactivados';
-		END_IF	
-	END_IF
+	gmModeActual = E_GEMMA.F4VerificacionSinOrden);
 	
-	IF cnF4_Planta THEN
-		swF5_Funcion := FALSE; // si se pasa a modo F4 hay que desactivar el F5	
-		// avanza y retrocede son mandos directos excluyentes
-		IF swF4_Avanza THEN 
-			swF4_Retroc := FALSE;
-		ELSIF swF4_Retroc THEN		
-			swF4_Avanza := FALSE;
-		END_IF		
-	END_IF
-END_IF
+cnF4_Planta := enF4_Planta AND (hwSM_SelecAutoManual OR swF4_Planta);
 
-
-//----------------------------------------------------------------- Modo F5
-IF (gmModeActual = E_GEMMA.A1ParadaInicial OR				// sólo se puede entrar o salir del modo desde determinados estados
-	gmModeActual = E_GEMMA.F4VerificacionSinOrden OR
-	gmModeActual = E_GEMMA.F5VerificacionOrdenada) THEN	
-	cnF5_Funcion := swF5_Funcion;
+IF NOT cnF4_Planta AND (hwSM_SelecAutoManual OR swF4_Planta) THEN // consigna no válida
+	swF4_Planta := FALSE; // Desactivar el botón
+	swMensaje := 'Sólo se puede pasar al modo F4 desde A1, A6 o F5';
+	
+ELSIF cnF4_Planta THEN // reflejar modo plata en la interfaz		
+	swF1_Empezar := FALSE; 
+	swF4_Planta  := TRUE;
+	swF5_Funcion := FALSE; 
+	swMensaje := ''; 
+		
+	IF hwSM_SelecAutoManual AND swF4_Planta THEN
+		ttF4_Planta := 'Mandos directos ativados desde panel físico y visualización';
+	ELSIF hwSM_SelecAutoManual THEN	
+		ttF4_Planta := 'Mandos directos ativados desde panel físico';
+	ELSIF swF4_Planta THEN
+		ttF4_Planta := 'Mandos directos ativados desde visualización';
+	END_IF	
+					
+	// avanza y retrocede son mandos directos excluyentes
+	IF swF4_Avanza THEN 
+		swF4_Retroc := FALSE;
+	ELSIF swF4_Retroc THEN		
+		swF4_Avanza := FALSE;
+	END_IF		
+ELSE
+	ttF4_Planta := 'Mandos directos desactivados';
 END_IF 
 
-IF NOT cnF5_Funcion AND swF5_Funcion THEN
-	// si no se puede pasar al modo F5 hay que explicar poor qué
-	swF5_Funcion := FALSE; // si no se puede entrar en modo F4 hay que desactivar el botón
-	swMensaje := 'Sólo se puede pasar al modo función desde A1, A6 o F4';
 
-ELSIF cnF5_Funcion THEN
-	swMensaje := '';
-	swF4_Planta := FALSE; // si se pasa a modo F5 hay que desaactivar el F4
-	IF swF5_Girar AND (swF5_Cargar OR swF5_Evacuar OR swF5_Descargar OR swF5_Medir) THEN // funciones incompatibles
+//----------------------------------------------------------------- F5_Funcion
+// sólo se puede entrar o salir del modo desde determinados estados
+enF5_Funcion := (
+	gmModeActual = E_GEMMA.A1ParadaInicial OR				
+	gmModeActual = E_GEMMA.F4VerificacionSinOrden OR
+	gmModeActual = E_GEMMA.F5VerificacionOrdenada);
+
+cnF5_Funcion := enF5_Funcion AND (swF5_Funcion);
+
+IF NOT cnF5_Funcion AND swF5_Funcion THEN // consigna no válida
+	swF5_Funcion := FALSE; 
+	swMensaje := 'Sólo se puede pasar al modo función desde A1, o F4';
+		
+ELSIF cnF5_Funcion THEN // reflejar modo plata en la interfaz		
+	swF1_Empezar := FALSE; 
+	swF4_Planta  := FALSE;
+	swF5_Funcion := TRUE;
+	swMensaje := ''; 
+		
+	// funciones incompatibles
+	IF swF5_Girar AND (swF5_Cargar OR swF5_Evacuar OR swF5_Descargar OR swF5_Medir) THEN 
 		swF5_Girar := FALSE;
 		swMensaje := 'No se puede girar a la vez que cargar, evacuar, descargar o medir por riesgo de avería';
 	END_IF
@@ -233,6 +273,77 @@ ELSIF cnF5_Funcion THEN
 		swF5_Transferir := FALSE;
 		swMensaje := 'No se puede descargar a la vez que transferer por riesgo de avería';
 	END_IF
+END_IF 
+
+//----------------------------------------------------------------- Consigna A2_ParaFinCiclo
+// sólo se puede entrar o salir del modo desde determinados estados
+enA2_FinCiclo := (
+	gmModeActual = E_GEMMA.F1ProduccionNormal OR
+	gmModeActual = E_GEMMA.A2ParaFinCiclo OR
+	gmModeActual = E_GEMMA.A4ParadaObtenida);
+
+cnA2_FinCiclo := enA2_FinCiclo AND (swA2_FinCiclo OR hwPS_PulsadorStop);
+
+IF NOT cnA2_FinCiclo AND (swA2_FinCiclo OR hwPS_PulsadorStop) THEN // consigna no válida
+	swA2_FinCiclo := FALSE; // si no se puede entrar en el modo hay que desactivar el botón
+	swMensaje := 'Sólo se puede pasar a A2 desde el modo F1';
+
+ELSIF cnA2_FinCiclo THEN
+	swA2_FinCiclo := TRUE; 
+	IF gmModeActual = E_GEMMA.F1ProduccionNormal THEN
+		swMensaje := 'Esperando a finalizar el ciclo para parar';
+	ELSIF gmModeActual = E_GEMMA.A4ParadaObtenida THEN
+		swMensaje := 'Parada obtenida después de acabar el ciclo';
+	END_IF
+END_IF 
+
+
+//----------------------------------------------------------------- Consigna A3_Estado
+// sólo se puede entrar o salir del modo desde determinados estados
+enA3_Estado := (
+	gmModeActual = E_GEMMA.F1ProduccionNormal OR
+	gmModeActual = E_GEMMA.F5VerificacionOrdenada OR
+	gmModeActual = E_GEMMA.A2ParaFinCiclo OR
+	gmModeActual = E_GEMMA.A3ParadaEstado OR
+	gmModeActual = E_GEMMA.A4ParadaObtenida);
+cnA3_Estado := enA3_Estado AND (swA3_Estado);
+
+IF NOT cnA3_Estado AND (swA3_Estado) THEN // consigna no válida
+	swA3_Estado := FALSE; // si no se puede entrar en el modo hay que desactivar el botón
+	swMensaje := 'Sólo se puede pasar a A3 desde el modo F1, F5 o A2';
+
+ELSIF cnA3_Estado THEN
+	swA3_Estado := TRUE; 
+	IF gmModeActual = E_GEMMA.F1ProduccionNormal THEN
+		swMensaje := 'Esperando a un estado estable para parar';
+	ELSIF gmModeActual = E_GEMMA.A4ParadaObtenida THEN
+		swMensaje := 'Parada obtenida después de alcanzar un estado estable';
+	END_IF
+END_IF
+
+
+//----------------------------------------------------------------- Consigna F1_Reanudar
+enF1_Reanduar := (
+	gmModeActual = E_GEMMA.A2ParaFinCiclo OR
+	gmModeActual = E_GEMMA.A3ParadaEstado OR
+	gmModeActual = E_GEMMA.A4ParadaObtenida);
+cnF1_Reanudar := enF1_Reanduar AND (swF1_Reanudar OR hwPM_PulsadorMarcha);
+ 	
+IF NOT cnF1_Reanudar AND (swF1_Reanudar OR hwPM_PulsadorMarcha) THEN // consigna no válida
+	swF1_Reanudar := FALSE; // si no se puede entrar en el modo hay que desactivar el botón
+	swMensaje := 'Sólo se puede reanudar desde una parada';
+
+ELSIF cnF1_Reanudar THEN
+	swMensaje := 'Reanundando tras la parada';
+END_IF
+
+
+//----------------------------------------------------------------- Consigna A6_Inicializar
+TmpReinicio(IN := hwPM_PulsadorMarcha AND NOT hwPS_PulsadorStop, PT:= tmReinicio);
+cnA6_Inicializar := (swA6_Inicializar OR TmpReinicio.Q);
+IF cnA6_Inicializar THEN
+	swF5_Funcion := FALSE;
+	swF4_Planta := FALSE;
 END_IF
 ]]></ST>
       </Implementation>

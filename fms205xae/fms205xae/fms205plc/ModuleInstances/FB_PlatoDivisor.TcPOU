@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_PlatoDivisor" Id="{c71a4a01-3eb1-443b-a07e-accb57d2980d}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_PlatoDivisor EXTENDS FB_Module
 VAR
@@ -35,8 +35,10 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[fbController.SFCPause := dr.gmModeActual = E_GEMMA.A3ParadaEstado;
+        <ST><![CDATA[// Pause y reset
+IsStopped := NOT fbController.UnsafeStop AND (dr.gmModeActual = E_GEMMA.A3ParadaEstado);
 fbController.SFCReset := dr.gmModeActual = E_GEMMA.A6Inicializando;
+fbController.SFCPause := IsStopped;
 
 //tm.UpdateSpeed(NewSpeed:= 0.01);
 d0.ProcessCycle(dr:=dr, sfcValue=>fbController.d0);
@@ -48,16 +50,5 @@ E_1.ProcessCycle(dr:=dr, sfcValue:=fbController.E_1);
 IsActive:=D_1.uiValue OR E_1.uiValue;]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_PlatoDivisor">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_PlatoDivisor.InitialConditions">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_PlatoDivisor.ProcessCycle">
-      <LineId Id="18" Count="0" />
-      <LineId Id="4" Count="8" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

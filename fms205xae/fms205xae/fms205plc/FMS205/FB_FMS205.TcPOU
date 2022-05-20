@@ -56,7 +56,18 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[//fbPanel.ProcessCycle(dr:=dr);
+      <ST><![CDATA[
+
+
+
+
+
+
+
+
+
+(*
+//fbPanel.ProcessCycle(dr:=dr);
 dr.ProcessCycle(
 	pn := fbPanel,
 	IC := InitialConditions(),
@@ -65,11 +76,12 @@ dr.ProcessCycle(
 	FinTarea := FALSE,
 	Preparada  := TRUE,
 	Finalizada := TRUE);
-
+*)
 IF fbPanel.cnF4_Planta THEN
 	//F5VerificacionOrdenada();
 	//F4VerificacionSinOrden();
 	;
+	
 ELSIF dr.bot_Empezar THEN
 	//F1ProduccionNormal();
 	;
@@ -170,6 +182,27 @@ ProcessCycle();
 
 ]]></ST>
     </Implementation>
+    <Method Name="CanStop" Id="{63c7f49b-23e4-43c3-ac69-584bc16d9aec}">
+      <Declaration><![CDATA[METHOD CanStop : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CanStop := 
+	(
+		mdAlimentador.IsStopped AND
+		mdPickAndPlaceCarga.IsStopped AND
+		mdMedidorTapa.IsStopped AND 
+		mdCaptadorInductivo.IsStopped AND
+		mdDetectorFotoelectrico.IsStopped AND
+		mdEvacuador.IsStopped AND
+		mdPickAndPlaceDescarga.IsStopped AND
+		mdPlatoDivisor.IsStopped AND
+		mdCinta.IsStopped
+	); 
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ControlFlow" Id="{80fd4987-b1ea-4ff4-96de-09984f5bd65d}">
       <Declaration><![CDATA[METHOD ControlFlow : BOOL
 VAR_INPUT
@@ -262,7 +295,7 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// calcular consignas en función del panel y del modo Gemma
-fbPanel.ProcessCycle(gmModeActual := dr.gmModeActual); 
+fbPanel.ProcessCycle(gmModeActual := dr.gmModeActual, tmReinicio := dr.tmTiempoReinicio); 
 
 // calcular el nuevo modo GEMMA en funicón de las consignas del panel
 dr.ProcessCycle(pn:=fbPanel,
@@ -270,6 +303,7 @@ dr.ProcessCycle(pn:=fbPanel,
 	Fallo := FALSE,
 	FinCiclo := FALSE,
 	FinTarea := FALSE,
+	ParadaObtenida := CanStop(),
 	Preparada  := TRUE,
 	Finalizada := TRUE);
 

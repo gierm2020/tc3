@@ -58,10 +58,10 @@ VAR_INPUT
 	dr	: REFERENCE TO FB_Director;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
-
-fbController.SFCPause := dr.gmModeActual = E_GEMMA.A3ParadaEstado;
+        <ST><![CDATA[// Pause y reset
+IsStopped := NOT fbController.UnsafeStop AND (dr.gmModeActual = E_GEMMA.A3ParadaEstado);
 fbController.SFCReset := dr.gmModeActual = E_GEMMA.A6Inicializando;
+fbController.SFCPause := IsStopped;
 
 pp.ProcessCycle(dr:=dr, sfcValue=>fbController.pp);
 cp0.ProcessCycle(dr:=dr, sfcValue=>fbController.cp0);

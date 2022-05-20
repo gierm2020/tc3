@@ -10,8 +10,9 @@ VAR_INPUT
 	Ack: BOOL;
 	
 	// SFC_Flags
-	SFCPause: BOOL;
-	SFCReset: BOOL;
+	SFCPause	: BOOL;
+	SFCReset	: BOOL;
+	UnsafeStop 	: BOOL := FALSE;
 END_VAR
 VAR_OUTPUT
 	Ready: BOOL;

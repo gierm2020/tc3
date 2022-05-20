@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_CaptadorInductivo" Id="{2358bbd4-4505-47c4-8c5f-b848f9a2a136}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_CaptadorInductivo EXTENDS FB_Module
 (*
@@ -39,8 +39,10 @@ VAR_INPUT
 	dr	: REFERENCE TO FB_Director;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[fbController.SFCPause := dr.gmModeActual = E_GEMMA.A3ParadaEstado;
+        <ST><![CDATA[// Pause y reset
+IsStopped := NOT fbController.UnsafeStop AND (dr.gmModeActual = E_GEMMA.A3ParadaEstado);
 fbController.SFCReset := dr.gmModeActual = E_GEMMA.A6Inicializando;
+fbController.SFCPause := IsStopped;
 
 di.ProcessCycle(dr:=dr);
 IC := InitialConditions();
@@ -69,14 +71,5 @@ Plato[4].Fin := (Plato[4].TapaMedida <> vIndefinido);
 ]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_CaptadorInductivo">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_CaptadorInductivo.ProcessCycle">
-      <LineId Id="32" Count="0" />
-      <LineId Id="30" Count="1" />
-      <LineId Id="3" Count="23" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>
