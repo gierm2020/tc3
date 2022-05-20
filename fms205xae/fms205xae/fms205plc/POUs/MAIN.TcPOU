@@ -7,7 +7,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[fbFMS205();]]></ST>
+      <ST><![CDATA[fbFMS205.ProcessCycle();]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

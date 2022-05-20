@@ -58,7 +58,7 @@ VAR_OUTPUT
     fun_Transferir	: BOOL;
     bot_Planta		: BOOL;
     bot_Empezar		: BOOL;
-    bot_Emerg		: BOOL;
+    //bot_Emerg		: BOOL;
     bot_Pausar		: BOOL;
     bot_Reset		: BOOL;
     bot_Funcion		: BOOL;
@@ -121,6 +121,8 @@ END_VAR
     <Method Name="ProcessCycle" Id="{9978d0af-5f0b-4b42-9ddf-3fb2a96798f7}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL
 VAR_INPUT
+	pn				: REFERENCE TO FB_Panel;
+	
 	IC 				: BOOL := TRUE; // InitialConditions()
 	Fallo 			: BOOL := FALSE;
 	FinCiclo 		: BOOL := FALSE;
@@ -131,7 +133,9 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[UpdateSpeed();
-IF bot_Emerg THEN
+
+//IF bot_Emerg THEN
+IF pn.cnD1_Emergencia THEN
     gmModeActual := E_GEMMA.D1ParadaEmergencia;
 	//stMode := 'D1';
 	
@@ -160,7 +164,7 @@ ELSE
         E_GEMMA.A1ParadaInicial: (* Parada en el estado inicial *)
             IF NOT IC THEN // IF NOT Restaurada THEN
                 gmModeActual := E_GEMMA.A6Inicializando;
-            ELSIF bot_Planta THEN //  fbPanel.cn.Manual THEN
+            ELSIF pn.cnF4_Planta THEN //  fbPanel.cn.Manual THEN
                 gmModeActual := E_GEMMA.F4VerificacionSinOrden;
             ELSIF bot_Empezar AND IC THEN //  fbPanel.cn.Marcha AND IC THEN  // ELSIF Marcha THEN
                 gmModeActual := E_GEMMA.F2SecuenciaPreparacion;
@@ -237,7 +241,7 @@ ELSE
             IF Fallo THEN
                 gmModePrev := E_GEMMA.F4VerificacionSinOrden; // DUDAS E_GEMMA.A2ParaFinCiclo; //!!! Creo que está mal, no debería ser F4?
                 gmModeActual := E_GEMMA.D2TratamientoFallos;
-            ELSIF NOT bot_Planta THEN //  fbPanel.cn.Manual THEN
+            ELSIF NOT pn.cnF4_Planta THEN 
 				gmModeActual := E_GEMMA.A6Inicializando; // después del modo manual, volver a inicializar
             ELSE
                 // Seguir en modo manual hasta que halla un fallo o se vuelva al modo automático
@@ -254,7 +258,7 @@ ELSE
 			
         (* ------------------------------------------------------------ Procedimientos de defecto *)
         E_GEMMA.D1ParadaEmergencia: (* Parada de emergencia *)
-            IF NOT bot_Emerg THEN //  fbPanel.cn.Emergencia THEN
+            IF NOT pn.cnD1_Emergencia THEN //  fbPanel.cn.Emergencia THEN
                 gmModeActual := E_GEMMA.A6Inicializando; // Al quitar la parada de emergencia hay que reinicializar la estación
             ELSE
                 // Esperar a que se quite la parada de emergencia

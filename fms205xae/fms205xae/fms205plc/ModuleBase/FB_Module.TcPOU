@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Module" Id="{cba3fcf8-6c8d-4174-8dda-f766b8b369f3}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Module
 
@@ -34,6 +34,15 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="CanStopNow" Id="{5fc1a823-e981-4cf9-ad61-79b86d513681}">
+      <Declaration><![CDATA[METHOD CanStopNow : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CanStopNow := TRUE;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="InitialConditions" Id="{569290b0-7483-4183-aad6-de676bf056ec}">
       <Declaration><![CDATA[METHOD InitialConditions : BOOL
 VAR_INPUT
@@ -52,14 +61,5 @@ END_VAR]]></Declaration>
         <ST><![CDATA[IsActive := FALSE;]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_Module">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Module.InitialConditions">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Module.ProcessCycle">
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

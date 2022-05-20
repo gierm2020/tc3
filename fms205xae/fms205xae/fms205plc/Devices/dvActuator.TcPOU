@@ -34,6 +34,17 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="ForceValue" Id="{289f89d6-23cc-4097-8d90-f6ae49e4f7e1}">
+      <Declaration><![CDATA[METHOD ForceValue : BOOL
+VAR_INPUT
+	NewValue : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[uiValue := NewValue;
+hwValue := NewValue;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ProcessCycle" Id="{ecf71777-ee3c-4e39-a4e9-a6f0d14f2603}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL
 VAR_INPUT

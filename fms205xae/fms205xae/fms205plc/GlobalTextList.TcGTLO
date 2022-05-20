@@ -661,6 +661,11 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"1328"</v>
+              <v n="TextDefault">"Parada de Emergencia (D1)"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"219"</v>
               <v n="TextDefault">"Pausar"</v>
               <l n="LanguageTexts" t="ArrayList" />

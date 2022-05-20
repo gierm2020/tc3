@@ -7,6 +7,7 @@ VAR_INPUT
 END_VAR
 
 VAR_OUTPUT
+	// consignas del panel únicamente en la visualización
 	cnUmbralAlta		: REAL := 18.5;
 	cnProdAluBaja		: BOOL := TRUE;
 	cnProdAluAlta		: BOOL := TRUE;
@@ -14,6 +15,20 @@ VAR_OUTPUT
 	cnProdBlaAlta		: BOOL := TRUE;
 	cnProdNegAlta		: BOOL := TRUE;
 	cnProdNegBaja		: BOOL := FALSE;	
+
+	// consignas del panel, resultado de integrar la información que viene del hardware, el estado GEMMA, los temporizadores y flancos, y la interfaz de usuario
+		
+	cnD1_Emergencia	: BOOL; // pulsar la seta
+	hwPE_Seta		: BOOL; // seta en el panel físico
+	swPE_Seta		: BOOL; // botón en la visualización
+	ttPE_Seta		: STRING := '';
+	
+	cnF4_Planta			: BOOL; // modo verificación sin orden
+	swF4_Planta			: BOOL; // botón en la visualización
+	ttF4_Planta			: STRING :='';
+	swF4_Avanza			: BOOL := FALSE;
+ 	swF4_Retroc			: BOOL := FALSE;
+	
 END_VAR
 
 
@@ -42,8 +57,6 @@ VAR_OUTPUT
 	ProbarAck: BOOL;
 	*)
 	
-	// consignas del panel, resultado de integrar la información que viene del hardware, el estado GEMMA, los temporizadores y flancos, y la interfaz de usuario	
-	cnEmergencia		: BOOL; // pulsar la seta
 	cnManual			: BOOL; // Selector manual/automático
 	cnReinicia			: BOOL; // DUDAS reinicia la situación inicial
 	cnRestablece		: BOOL; // restablece la condición de fallo
@@ -56,7 +69,9 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// hw.DPO_DesconectaPO := TRUE;
+      <ST><![CDATA[
+	
+
 // invoca a temporizadores y flancos
 //TmpReinicio(IN := hw.PM_PulsadorMarcha AND NOT hw.PS_PulsadorStop, PT:= tm.TiempoReinicio);
 FP_PM(CLk := hw.PM_PulsadorMarcha);
@@ -65,7 +80,6 @@ FP_PM(CLk := hw.PM_PulsadorMarcha);
 // DUDAS - No habría que tener en cuenta el modo de GEMMA para informar Reinicia, Restaura, ...?
 
 // Consignas
-cnEmergencia 		:= hw.PE_Seta; 					// TODO OR control de parada de emergencia en interfaz de usuario
 cnManual 			:= hw.SM_SelecAutoManual; 		// ídem
 cnReinicia			:= TmpReinicio.Q;
 cnRestablece		:= hw.PM_PulsadorMarcha;
@@ -106,5 +120,52 @@ hw.LM_LamparaMarcha :=
 	);  //  TODO - TERMINAR LA IMPLENTACIÓN CON EL RELOJ - CLK.Q; 
 ]]></ST>
     </Implementation>
+    <Method Name="ProcessCycle" Id="{026a1e81-704d-4f95-ae3e-7d143e02920e}">
+      <Declaration><![CDATA[METHOD ProcessCycle : BOOL
+VAR_INPUT
+	gmModeActual	: E_GEMMA;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Modo D1
+cnD1_Emergencia 		:= hwPE_Seta OR swPE_Seta; 
+IF hwPE_Seta THEN
+	IF swPE_Seta THEN
+		ttPE_Seta := 'Desarmar la seta y desactivar el botón para reinicializar';
+	ELSE
+		ttPE_Seta := 'Desarmar la seta para reinicializar';		
+	END_IF
+ELSE
+	IF swPE_Seta THEN
+		ttPE_Seta := 'Desactivar el botón para reinicializar';
+	ELSE
+		ttPE_Seta := 'Pulsar la seta o el botón para parada de emergencia';	
+	END_IF
+END_IF
+
+
+// Modo F4
+// sólo se puede entrar o salir del modo F4 desde determinados estados
+IF (gmModeActual = E_GEMMA.A6Inicializando OR 
+	gmModeActual = E_GEMMA.A1ParadaInicial OR		
+	gmModeActual = E_GEMMA.F4VerificacionSinOrden) THEN
+	
+	cnF4_Planta := swF4_Planta;
+END_IF 
+	
+IF cnF4_Planta THEN
+	ttF4_Planta := 'Mandos directos activos';
+	IF swF4_Avanza THEN
+		swF4_Retroc := FALSE;
+	ELSIF
+		swF4_Retroc THEN
+		swF4_Avanza := FALSE;
+	END_IF
+ELSE
+	swF4_Planta := FALSE; // si no se puede entrar en modo F4 hay que desactivar el botón
+	ttF4_Planta := 'Mandos directos inactivos';
+END_IF]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>

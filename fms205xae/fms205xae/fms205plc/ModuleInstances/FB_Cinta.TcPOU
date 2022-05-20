@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Cinta" Id="{f4de692b-96c6-493e-9b33-3a90e20acfad}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Cinta EXTENDS FB_Module
 VAR_INPUT
@@ -33,6 +33,16 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="Avanza" Id="{962ac213-4605-4eb0-b4f2-71abfc5eecac}">
+      <Declaration><![CDATA[METHOD Avanza : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[RUN.ForceValue(NewValue := TRUE);
+REV.ForceValue(NewValue := FALSE);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="InitialConditions" Id="{6207c809-4e5c-471b-9748-498f300af54e}">
       <Declaration><![CDATA[METHOD InitialConditions : BOOL
 VAR_INPUT
@@ -69,17 +79,15 @@ S_1.ProcessCycle(dr:=dr, sfcValue:=fbController.S_1);
 IsActive := RUN.uiValue OR REV.uiValue OR R_1.uiValue OR S_1.uiValue;]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_Cinta">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Cinta.InitialConditions">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Cinta.ProcessCycle">
-      <LineId Id="3" Count="1" />
-      <LineId Id="24" Count="0" />
-      <LineId Id="6" Count="14" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
+    <Method Name="Retrocede" Id="{319ef3db-3f91-40fc-bb86-4c3e886a06cc}">
+      <Declaration><![CDATA[METHOD Retrocede : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[RUN.ForceValue(NewValue := TRUE);
+REV.ForceValue(NewValue := TRUE);]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>
