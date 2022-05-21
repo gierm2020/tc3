@@ -2,6 +2,8 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_FMS205" Id="{a261f573-1402-443e-9bab-e88e0bf02070}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205
+(* Rama de Jorge *)
+
 VAR_INPUT
 	IC		: BOOL := FALSE; 	// todos los módulos están en condiciones iniciales
     Execute	: BOOL;
