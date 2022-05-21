@@ -34,7 +34,7 @@ END_VAR]]></Declaration>
         <ST><![CDATA[IF dr.gmLocalHost THEN
 	// permite simular el hardware ejecutando en local haciendo que el valor hwValue dependa de la interfaz
 	hwValue := uiValue;
-	uiValue := not uiValue;
+	//uiValue := not uiValue;
 ELSE
 	// Si está ejecutando en la estación, el valor de la visualización debe actualizarse con lo que viene del hardware
 	uiValue := hwValue;
