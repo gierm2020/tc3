@@ -14,17 +14,20 @@ VAR_INPUT
 	ReqNumero	: DINT := 0; 		// requisito de número de tapas deseadas
 	ReqAlta		: REAL := 18.5;  	// requisito de tapa alta
 	ReqVacio	: REAL := 2.0; 		// si mide menos el sector está vacío
+
 	ReqAluBaja	: BOOL := FALSE;
 	ReqAluAlta	: BOOL := TRUE;
 	ReqBlnBaja  : BOOL := TRUE;
     ReqBlnAlta  : BOOL := FALSE;
 	ReqNgrBaja  : BOOL := FALSE;
     ReqNgrAlta  : BOOL := FALSE; 
-END_VAR
-VAR_OUTPUT
+
 	ResPend	  	: DINT := 0;
 	ResReal		: DINT := 0;
 	ResRech   	: DINT := 0;
+
+END_VAR
+VAR_OUTPUT
 	Tapa_Alimentada : BOOL;
 END_VAR
 
@@ -174,6 +177,33 @@ END_VAR
 	vTapa_Clara[PosFotoe]		:= Tapa_Clara;
 END_IF
 ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DebeCargar" Id="{bab766a7-5d91-42d2-90cb-869d831df2e1}">
+      <Declaration><![CDATA[METHOD DebeCargar : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[DebeCargar:=TRUE; // PosCarga := (NumGiros+0) MOD 8;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DebeDescargar" Id="{becbf6fd-ea18-4435-b6ab-67ddb434441c}">
+      <Declaration><![CDATA[METHOD DebeDescargar : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[DebeDescargar:=TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DebeEvacuar" Id="{ef228940-ff3a-4cfc-9754-e0b627d5c993}">
+      <Declaration><![CDATA[METHOD DebeEvacuar : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[DebeEvacuar:=TRUE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="Descargado" Id="{8738750d-0f53-4448-9145-e43c2aec455f}">

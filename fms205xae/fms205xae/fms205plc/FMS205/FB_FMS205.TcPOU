@@ -220,9 +220,9 @@ END_VAR
 	
 	E_GEMMA.A2ParaFinCiclo,
 	E_GEMMA.F1ProduccionNormal: 
-		mdPickAndPlaceCarga.Mover 	:= sectores[(NumGiros+0) MOD 8].Cargar_Tapa;
-		mdEvacuador.Evacuar 		:= sectores[(NumGiros+2) MOD 8].Evacuar_Tapa;
-		mdPickAndPlaceDescarga.Mover:= sectores[(NumGiros+1) MOD 8].Descargar_Tapa;
+		mdPickAndPlaceCarga.Mover 	:= tapas.DebeCargar(); // sectores[(NumGiros+0) MOD 8].Cargar_Tapa;
+		mdEvacuador.Evacuar 		:= tapas.DebeEvacuar(); // sectores[(NumGiros+2) MOD 8].Evacuar_Tapa;
+		mdPickAndPlaceDescarga.Mover:= tapas.DebeDescargar();//  sectores[(NumGiros+1) MOD 8].Descargar_Tapa;
 		Execute := NOT Ack; 
  		ctrlF1Producir(		
 			Alime:=mdAlimentador, 			Carga:=mdPickAndPlaceCarga, Medid:=mdMedidorTapa,
@@ -234,18 +234,18 @@ END_VAR
 		
 		
 		IF ctrlF1Producir.Done THEN // then			
-			IF sectores[(NumGiros+2) MOD 8].Evacuar_Tapa THEN
-				ProdRechazada := ProdRechazada + 1;
+			IF mdEvacuador.Evacuar THEN
+				tapas.ResRech := tapas.ResRech+1; //	ProdRechazada := ProdRechazada + 1;
 			END_IF
 			
-			IF sectores[(NumGiros+1) MOD 8].Descargar_Tapa THEN
-				ProdRealizada := ProdRealizada + 1;
+			IF mdPickAndPlaceDescarga.Mover THEN // sectores[(NumGiros+1) MOD 8].Descargar_Tapa THEN
+				tapas.ResReal := tapas.ResReal+1; //  ProdRealizada := ProdRealizada + 1;
 			END_IF
 			
-			ProdPendiente 	:= ProdRequerida - ProdRealizada;
+			tapas.ResPend:= tapas.ReqNumero - tapas.ResReal; // ProdPendiente 	:= ProdRequerida - ProdRealizada;
 			Ack 			:= FALSE;
 			dr.EndCycle		:= TRUE; 
- 			dr.EndBatch		:= ProdPendiente = 0;
+ 			dr.EndBatch		:= tapas.ResPend=0; //  ProdPendiente = 0;
 			
 		ELSIF dr.EndCycle AND InitialConditions() THEN
 			Ack				:= TRUE;
@@ -403,12 +403,12 @@ IF mdPlatoDivisor.Execute THEN
 	girado := FALSE;
 	anguloanim := 0;
 ELSIF NOT girado THEN
-	IF mdPickAndPlaceCarga.Done THEN
-		sectores[(NumGiros+0) MOD 8].Cargar		(pn:=fbPanel, mdCarga := mdPickAndPlaceCarga);	
-	END_IF
-	IF mdMedidorTapa.Done THEN
-		sectores[(NumGiros+6) MOD 8].Medir		(pn:=fbPanel, mdMedid := mdMedidorTapa, cnUmbralAlta:=fbPanel.cnUmbralAlta);		
-	END_IF
+	//IF mdPickAndPlaceCarga.Done THEN
+	//	sectores[(NumGiros+0) MOD 8].Cargar		(pn:=fbPanel, mdCarga := mdPickAndPlaceCarga);	
+	// END_IF
+	//IF mdMedidorTapa.Done THEN
+	//	sectores[(NumGiros+6) MOD 8].Medir		(pn:=fbPanel, mdMedid := mdMedidorTapa, cnUmbralAlta:=fbPanel.cnUmbralAlta);		
+	//END_IF
 	IF  mdPlatoDivisor.Done THEN
 		girado := TRUE;
 		numGiros := numGiros + 1;
@@ -416,10 +416,10 @@ ELSIF NOT girado THEN
 		anguloanim := 0;
 	END_IF
 	
-	sectores[(NumGiros+5) MOD 8].Claridad	(pn:=fbPanel, mdFotoe := mdDetectorFotoelectrico);
-	sectores[(NumGiros+4) MOD 8].Material	(pn:=fbPanel, mdInduc := mdCaptadorInductivo);
-	sectores[(NumGiros+2) MOD 8].Evacuar 	(pn:=fbPanel, mdEvacu := mdEvacuador);
-	sectores[(NumGiros+1) MOD 8].Descargar	(pn:=fbPanel, mdDesca := mdPickAndPlaceDescarga);
+	//sectores[(NumGiros+5) MOD 8].Claridad	(pn:=fbPanel, mdFotoe := mdDetectorFotoelectrico);
+	//sectores[(NumGiros+4) MOD 8].Material	(pn:=fbPanel, mdInduc := mdCaptadorInductivo);
+	//sectores[(NumGiros+2) MOD 8].Evacuar 	(pn:=fbPanel, mdEvacu := mdEvacuador);
+	//sectores[(NumGiros+1) MOD 8].Descargar	(pn:=fbPanel, mdDesca := mdPickAndPlaceDescarga);
 
 ELSIF NOT mdPlatoDivisor.Ready AND NOT mdPlatoDivisor.Done AND anguloanim >-44.0 THEN
 	anguloanim := anguloanim - 0.05;

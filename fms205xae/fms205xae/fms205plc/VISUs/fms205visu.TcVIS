@@ -753,7 +753,7 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.ProdRequerida"</v>
+                      <v n="Value">"MAIN.fbFMS205.tapas.ReqNumero"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -1005,7 +1005,7 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.ProdPendiente"</v>
+                      <v n="Value">"MAIN.fbFMS205.tapas.ResPend"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -1845,7 +1845,7 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.fbPanel.cnUmbralAlta"</v>
+                      <v n="Value">"MAIN.fbFMS205.tapas.ReqAlta"</v>
                     </o>
                     <o>
                       <v n="Id">4168582468L</v>
@@ -2225,7 +2225,7 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.ProdRealizada"</v>
+                      <v n="Value">"MAIN.fbFMS205.tapas.ResReal"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -2379,7 +2379,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.fbPanel.cnProdAluBaja"</v>
+                          <v n="Value">"MAIN.fbFMS205.tapas.ReqAluBaja"</v>
                         </o>
                       </l>
                     </o>
@@ -2526,7 +2526,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.fbPanel.cnProdAluAlta"</v>
+                          <v n="Value">"MAIN.fbFMS205.tapas.ReqAluAlta"</v>
                         </o>
                       </l>
                     </o>
@@ -2895,7 +2895,7 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.ProdRechazada	"</v>
+                      <v n="Value">"MAIN.fbFMS205.tapas.ResRech	"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -3200,7 +3200,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.fbPanel.cnProdBlaBaja"</v>
+                          <v n="Value">"MAIN.fbFMS205.tapas.ReqBlnBaja"</v>
                         </o>
                       </l>
                     </o>
@@ -3347,7 +3347,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.fbPanel.cnProdBlaAlta"</v>
+                          <v n="Value">"MAIN.fbFMS205.tapas.ReqBlnAlta"</v>
                         </o>
                       </l>
                     </o>
@@ -4775,7 +4775,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.fbPanel.cnProdNegBaja"</v>
+                          <v n="Value">"MAIN.fbFMS205.tapas.ReqNgrBaja"</v>
                         </o>
                       </l>
                     </o>
@@ -4922,7 +4922,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.fbPanel.cnProdNegAlta"</v>
+                          <v n="Value">"MAIN.fbFMS205.tapas.ReqNgrAlta"</v>
                         </o>
                       </l>
                     </o>
@@ -15725,11 +15725,11 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[7].strUi"</v>
+                      <v n="Value">"MAIN.fbFMS205.tapas.vstrUi[7]"</v>
                     </o>
                     <o>
                       <v n="Id">401380312L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[7].ColorSector"</v>
+                      <v n="Value">"MAIN.fbFMS205.tapas.vColorSector[7]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -15861,11 +15861,11 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[0].strUi"</v>
+                      <v n="Value">"MAIN.fbFMS205.tapas.vstrUi[0]"</v>
                     </o>
                     <o>
                       <v n="Id">401380312L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[0].ColorSector"</v>
+                      <v n="Value">"MAIN.fbFMS205.tapas.vColorSector[0]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -15997,11 +15997,11 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[1].strUi"</v>
+                      <v n="Value">"MAIN.fbFMS205.tapas.vstrUi[1]"</v>
                     </o>
                     <o>
                       <v n="Id">401380312L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[1].ColorSector"</v>
+                      <v n="Value">"MAIN.fbFMS205.tapas.vColorSector[1]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -16133,11 +16133,11 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[2].strUi"</v>
+                      <v n="Value">"MAIN.fbFMS205.tapas.vstrUi[2]"</v>
                     </o>
                     <o>
                       <v n="Id">401380312L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[2].ColorSector"</v>
+                      <v n="Value">"MAIN.fbFMS205.tapas.vColorSector[2]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -16269,11 +16269,11 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[3].strUi"</v>
+                      <v n="Value">"MAIN.fbFMS205.tapas.vstrUi[3]"</v>
                     </o>
                     <o>
                       <v n="Id">401380312L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[3].ColorSector"</v>
+                      <v n="Value">"MAIN.fbFMS205.tapas.vColorSector[3]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -16405,11 +16405,11 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[4].strUi"</v>
+                      <v n="Value">"MAIN.fbFMS205.tapas.vstrUi[4]"</v>
                     </o>
                     <o>
                       <v n="Id">401380312L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[4].ColorSector"</v>
+                      <v n="Value">"MAIN.fbFMS205.tapas.vColorSector[4]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -16541,11 +16541,11 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[5].strUi"</v>
+                      <v n="Value">"MAIN.fbFMS205.tapas.vstrUi[5]"</v>
                     </o>
                     <o>
                       <v n="Id">401380312L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[5].ColorSector"</v>
+                      <v n="Value">"MAIN.fbFMS205.tapas.vColorSector[5]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -16677,11 +16677,11 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[6].strUi"</v>
+                      <v n="Value">"MAIN.fbFMS205.tapas.vstrUi[6]"</v>
                     </o>
                     <o>
                       <v n="Id">401380312L</v>
-                      <v n="Value">"MAIN.fbFMS205.sectores[6].ColorSector"</v>
+                      <v n="Value">"MAIN.fbFMS205.tapas.vColorSector[6]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -20003,10 +20003,10 @@
               <d n="FbMethods" t="CaseInsensitiveHashtable" ckt="String" cvt="Guid">
                 <v>FB_Init</v>
                 <v>c7fbd946-cab7-4d95-87d7-16305e188b7a</v>
-                <v>FB_Reinit</v>
-                <v>20c92b2e-dcf5-4036-b9fe-1da038b4a7c2</v>
                 <v>FB_Exit</v>
                 <v>6b90a740-e979-4a59-8d7c-462350827e98</v>
+                <v>FB_Reinit</v>
+                <v>20c92b2e-dcf5-4036-b9fe-1da038b4a7c2</v>
               </d>
               <v n="FbName">"NotImportant"</v>
               <v n="FbGuid">{8ea61716-5341-4327-a182-a3054ff68765}</v>
