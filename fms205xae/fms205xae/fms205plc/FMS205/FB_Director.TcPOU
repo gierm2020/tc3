@@ -21,17 +21,17 @@ END_VAR
 
 
 VAR_OUTPUT
-	gmLocalHost		: BOOL := TRUE; // TODO - SUSTITUIR ESTO POR LA CONDICIÓN DE LOCALHOST
+	gmLocalHost		: BOOL 		:= TRUE; // TODO - SUSTITUIR ESTO POR LA CONDICIÓN DE LOCALHOST
 	
-	gmFamiArret		: BOOL := TRUE; 			// Familia de parada
-	gmFamiFonct		: BOOL := FALSE; 			// Familia de funcionamiento
-	gmFamiDefail	: BOOL := FALSE; 			// Familia de salida de fallos
+	gmFamiArret		: BOOL 		:= TRUE; 			// Familia de parada
+	gmFamiFonct		: BOOL 		:= FALSE; 			// Familia de funcionamiento
+	gmFamiDefail	: BOOL 		:= FALSE; 			// Familia de salida de fallos
 	
-	gmModeActual	: E_GEMMA := E_GEMMA.A6Inicializando; 		// Modo GEMMA actual
+	gmModeActual	: E_GEMMA 	:= E_GEMMA.A6Inicializando; 		// Modo GEMMA actual
 	gmModePrev		: E_GEMMA; 		// Modo GEMMA anterior al actual
-	gmModeColor		: DWORD := gmColorArret;
-	gmModeName		: STRING := 'Mode A6';
-	gmModeDescr		: STRING := 'Inicializando';
+	gmModeColor		: DWORD 	:= gmColorArret;
+	gmModeName		: STRING 	:= 'Mode A6';
+	gmModeDescr		: STRING 	:= 'Inicializando';
 	
 END_VAR	
 
@@ -181,7 +181,7 @@ ELSE
 			ELSIF gmModeActual=E_GEMMA.F1ProduccionNormal AND EndBatch THEN
                 gmModeActual := E_GEMMA.F3SecuenciaFinalizacion;
 			ELSIF gmModeActual=E_GEMMA.F3SecuenciaFinalizacion AND IsFinished THEN // (IsFinished or not cnF3)
-				gmModeActual := E_GEMMA.A1ParadaInicial;
+				gmModeActual := E_GEMMA.A1ParadaInicial; // podría ser A6 TODO
 			ELSIF pn.cnA3_Estado THEN 
                 gmModeActual := E_GEMMA.A3ParadaEstado;
 			ELSIF pn.cnF4_Planta THEN 				
@@ -208,16 +208,16 @@ ELSE
 				gmModeActual := E_GEMMA.A3ParadaEstado; 			
 			ELSIF pn.cnF4_Planta THEN
 				gmModeActual := E_GEMMA.F4VerificacionSinOrden;
-            ELSIF NOT pn.cnF5_Funcion THEN // and not pn.cnF6Prueba  // al salir del modo función volver al modo A6				
+            ELSIF NOT pn.cnF5_Funcion THEN // and not pn.cnF6Prueba TODO // al salir del modo función volver al modo A6				
 				gmModeActual := E_GEMMA.A6Inicializando;
             ELSE                
-                ; // Seguir en modo F5
+                ; // Seguir en modo F5 / F6
             END_IF
 			
 			
         (* ------------------------------------------------------------ Procedimientos de defecto *)
         E_GEMMA.D1ParadaEmergencia: (* Parada de emergencia *)
-            IF NOT pn.cnD1_Emergencia THEN //  fbPanel.cn.Emergencia THEN
+            IF NOT pn.cnD1_Emergencia THEN //  TODO CONSIGNA DE EMERGENCIA DEBE TENER ENCUENTA LA POC
                 gmModeActual := E_GEMMA.A6Inicializando; // Al quitar la parada de emergencia hay que reinicializar la estación
             ELSE                
                 ; // Esperar a que se quite la parada de emergencia

@@ -75,7 +75,7 @@ v1.ProcessCycle(dr:=dr, sfcValue=>fbController.v1);
 
 //ctInp.HwIC := InitialConditions();
 IC := InitialConditions();
-
+Evacuar := tapas.DebeEvacuar();
 //----------------------------------- ejecutar el controlador
 //fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
 fbController(

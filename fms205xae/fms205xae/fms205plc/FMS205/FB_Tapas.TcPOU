@@ -11,7 +11,7 @@ VAR CONSTANT
 END_VAR
 
 VAR_INPUT
-	ReqNumero	: DINT := 0; 		// requisito de número de tapas deseadas
+	ReqNumero	: DINT := 2; 		// requisito de número de tapas deseadas
 	ReqAlta		: REAL := 18.5;  	// requisito de tapa alta
 	ReqVacio	: REAL := 2.0; 		// si mide menos el sector está vacío
 
@@ -28,14 +28,14 @@ VAR_INPUT
 
 END_VAR
 VAR_OUTPUT
-	Tapa_Alimentada : BOOL;
+	Falta_Material : BOOL := FALSE; // TODO LOGICA CUANDO FALTA MATERIAL
 END_VAR
 
 VAR
 	NumGiros 	: DINT := 0;
 	angulo	 	: REAL := 0.0;
 	anguloanim 	: REAL := 0.0; // angulo para animación que gira lentamente
-	girado		: BOOL := FALSE;
+	HaGirado	: BOOL := FALSE;
 	
 	vInicializando 		: ARRAY[0..7] OF BOOL;	
 	vCargar_Tapa		: ARRAY[0..7] OF BOOL;
@@ -80,16 +80,16 @@ END_VAR]]></Declaration>
 		vTapa_Metalica[i] 	:= FALSE;
 	
 		vCargar_Tapa[i]		:= FALSE;
-		vEvacuar_Tapa[i]		:= FALSE;
+		vEvacuar_Tapa[i]	:= FALSE;
 		vDescargar_Tapa[i]	:= FALSE;	
-		vColorSector[i] 		:= ColSecIndeterm;
+		vColorSector[i] 	:= ColSecIndeterm;
 		vstrUi[i] 			:= '?';
 	
 	ELSIF NOT vTapa_Cargada[i] THEN
 		vCargar_Tapa[i]		:= TRUE;
-		vEvacuar_Tapa[i]		:= FALSE;
+		vEvacuar_Tapa[i]	:= FALSE;
 		vDescargar_Tapa[i]	:= FALSE;	
-		vColorSector[i] 		:= ColSecVacio;
+		vColorSector[i] 	:= ColSecVacio;
 		vstrUi[i] 			:= '___';
 	ELSE
 		vCargar_Tapa[i]		:= FALSE;
@@ -112,7 +112,9 @@ END_VAR]]></Declaration>
 		vstrUi[i] := CONCAT(vstrUi[i], SEL(vClaridad_Medida[i], '?',SEL(vTapa_Clara[i],'O','C')));
 		vstrUi[i] := CONCAT(vstrUi[i], SEL(vMateral_Medido[i], '?', SEL(vTapa_Metalica[i], 'P','M'))); 		
 	END_IF
-END_FOR ]]></ST>
+END_FOR 
+ResPend := ReqNumero - ResReal;
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="Alimentado" Id="{68228dc4-db57-4234-af5a-76549516de52}">
@@ -124,7 +126,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF Done THEN
-	Tapa_Alimentada := NOT FM;
+	Falta_Material := FM;
 END_IF]]></ST>
       </Implementation>
     </Method>
@@ -142,17 +144,13 @@ END_VAR]]></Declaration>
         <ST><![CDATA[IF Done AND Mover THEN
 	PosCarga := (NumGiros+0) MOD 8;
 	
-	vInicializando[PosCarga]		:= FALSE;
-		
+	vInicializando[PosCarga]	:= FALSE;		
 	vTapa_Cargada[PosCarga]		:= TRUE;
-		
-	vAltura_Medida[PosCarga]		:= FALSE;
-	vAltura_Pulsos[PosCarga]		:= 0;
-	vAltura_Mm[PosCarga] 		:= 0;
-		
+	vAltura_Medida[PosCarga]	:= FALSE;
+	vAltura_Pulsos[PosCarga]	:= 0;
+	vAltura_Mm[PosCarga] 		:= 0;		
 	vClaridad_Medida[PosCarga]	:= FALSE;
-	vTapa_Clara[PosCarga] 		:= FALSE;
-		
+	vTapa_Clara[PosCarga] 		:= FALSE;		
 	vMateral_Medido[PosCarga]	:= FALSE;	
 	vTapa_Metalica[PosCarga] 	:= FALSE;
 END_IF]]></ST>
@@ -161,8 +159,6 @@ END_IF]]></ST>
     <Method Name="Claridad" Id="{afe73e40-fb85-4efe-b906-85a197d79803}">
       <Declaration><![CDATA[METHOD Claridad : BOOL
 VAR_INPUT
-	Done: BOOL;
-	Lectura_Registrada: BOOL;
 	Tapa_Clara: BOOL;
 END_VAR
 
@@ -171,11 +167,9 @@ VAR
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF Done AND Lectura_Registrada THEN
-	PosFotoe 					:= (NumGiros+5) MOD 8;
-	vClaridad_Medida[PosFotoe]	:= TRUE;
-	vTapa_Clara[PosFotoe]		:= Tapa_Clara;
-END_IF
+        <ST><![CDATA[PosFotoe 					:= (NumGiros+5) MOD 8;
+vClaridad_Medida[PosFotoe]	:= TRUE;
+vTapa_Clara[PosFotoe]		:= Tapa_Clara;
 ]]></ST>
       </Implementation>
     </Method>
@@ -185,7 +179,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[DebeCargar:=TRUE; // PosCarga := (NumGiros+0) MOD 8;]]></ST>
+        <ST><![CDATA[DebeCargar:=TRUE; // TODO PosCarga := (NumGiros+0) MOD 8;]]></ST>
       </Implementation>
     </Method>
     <Method Name="DebeDescargar" Id="{becbf6fd-ea18-4435-b6ab-67ddb434441c}">
@@ -194,7 +188,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[DebeDescargar:=TRUE;]]></ST>
+        <ST><![CDATA[DebeDescargar:=TRUE; // TODO]]></ST>
       </Implementation>
     </Method>
     <Method Name="DebeEvacuar" Id="{ef228940-ff3a-4cfc-9754-e0b627d5c993}">
@@ -203,7 +197,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[DebeEvacuar:=TRUE;]]></ST>
+        <ST><![CDATA[DebeEvacuar:=TRUE; // TODO HAY QUE TENER EN CUENTA EL MODO GEMMA F3 PARA FORZAR LA EVACUACIÓN DE TAPAS QUE INCLUSO CUMPLEN]]></ST>
       </Implementation>
     </Method>
     <Method Name="Descargado" Id="{8738750d-0f53-4448-9145-e43c2aec455f}">
@@ -216,6 +210,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[IF Done AND Mover THEN
 	Vaciar(PosVacia := (NumGiros+1) MOD 8);
+	ResReal := ResReal + 1;
 END_IF]]></ST>
       </Implementation>
     </Method>
@@ -230,24 +225,67 @@ END_VAR
       <Implementation>
         <ST><![CDATA[IF Done AND Evacuado THEN
 	Vaciar(PosVacia := (NumGiros+2) MOD 8);
+	ResRech := ResRech + 1;
 END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="Girado" Id="{0ccf35a2-1876-4048-9c8b-4ff29b7fbdc7}">
       <Declaration><![CDATA[METHOD Girado : BOOL
 VAR_INPUT
+	Ready : BOOL;
+	Execute: BOOL;
 	Done: BOOL;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[;]]></ST>
+        <ST><![CDATA[IF Execute THEN
+	HaGirado := FALSE;
+	anguloanim := 0;
+	
+ELSIF NOT HaGirado THEN
+	IF Done THEN
+		HaGirado := TRUE;
+		NumGiros := NumGiros + 1;
+		angulo := SEL(angulo =0, angulo-45.0, 315.0); // , angulo+45.0, 0);
+		anguloanim := 0;		
+	END_IF
+ELSIF NOT Ready AND NOT Done AND anguloanim >-44.0 THEN
+	anguloanim := anguloanim - 0.05;	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Inicializar" Id="{4758c6c6-4ea4-433c-a79f-8e413ab5f879}">
+      <Declaration><![CDATA[METHOD Inicializar : BOOL
+VAR
+	i : DINT;
+END_VAR
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ReqAluBaja	:= TRUE;
+ReqAluAlta	:= TRUE;
+ReqBlnBaja  := TRUE;
+ReqBlnAlta  := TRUE;
+ReqNgrBaja  := TRUE;
+ReqNgrAlta  := TRUE; 
+ResPend	  	:= 0;
+ResReal		:= 0;
+ResRech   	:= 0;
+//Falta_Material := FALSE; 
+NumGiros 	:= 0;
+angulo	 	:= 0.0;
+anguloanim 	:= 0.0; // angulo para animación que gira lentamente
+HaGirado	:= FALSE;
+
+FOR i:=1 TO 8 DO
+	vInicializando[i] := TRUE;
+END_FOR
+Actualizar();]]></ST>
       </Implementation>
     </Method>
     <Method Name="Material" Id="{88973f08-454f-49dc-aa0f-ae73f3546455}">
       <Declaration><![CDATA[METHOD Material : BOOL
 VAR_INPUT
-	Done: BOOL;
-	Lectura_Registrada: BOOL;
 	Tapa_Metalica: BOOL;
 END_VAR
 
@@ -256,19 +294,15 @@ VAR
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF Done AND Lectura_Registrada THEN
-	PosInduc 					:= (NumGiros+4) MOD 8;
-	vMateral_Medido[PosInduc]	:= TRUE;
-	vTapa_Metalica[PosInduc]	:= Tapa_Metalica;
-END_IF
+        <ST><![CDATA[PosInduc 					:= (NumGiros+4) MOD 8;
+vMateral_Medido[PosInduc]	:= TRUE;
+vTapa_Metalica[PosInduc]	:= Tapa_Metalica;
 ]]></ST>
       </Implementation>
     </Method>
     <Method Name="Medido" Id="{e0bd59f6-28b6-48d4-9b89-31b0758ec910}">
       <Declaration><![CDATA[METHOD Medido : BOOL
 VAR_INPUT
-	Done				: BOOL;
-	Lectura_Registrada	: BOOL;
 	Altura_Mm			: REAL;
 	Altura_Pulsos		: UDINT;	
 END_VAR
@@ -278,19 +312,18 @@ VAR
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF Done AND Lectura_Registrada THEN
-	PosMedid := (NumGiros+6) MOD 8;
-	IF Altura_Mm < ReqVacio THEN
-		Vaciar(PosVacia:=PosMedid);
-	ELSE
-		vInicializando[PosMedid]	:= FALSE;
-		vTapa_Cargada[PosMedid]		:= TRUE;			
-		vAltura_Medida[PosMedid]	:= TRUE;
-		vAltura_Pulsos[PosMedid]	:= Altura_Pulsos;
-		vAltura_Mm[PosMedid]		:= Altura_mm;
-		vTapa_Alta[PosMedid]		:= Altura_mm > ReqAlta;
-	END_IF	
-END_IF
+        <ST><![CDATA[
+PosMedid := (NumGiros+6) MOD 8;
+IF Altura_Mm < ReqVacio THEN
+	Vaciar(PosVacia:=PosMedid);
+ELSE
+	vInicializando[PosMedid]	:= FALSE;
+	vTapa_Cargada[PosMedid]		:= TRUE;			
+	vAltura_Medida[PosMedid]	:= TRUE;
+	vAltura_Pulsos[PosMedid]	:= Altura_Pulsos;
+	vAltura_Mm[PosMedid]		:= Altura_mm;
+	vTapa_Alta[PosMedid]		:= Altura_mm > ReqAlta;
+END_IF	
 ]]></ST>
       </Implementation>
     </Method>
@@ -301,17 +334,13 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[vInicializando[PosVacia]	:= FALSE;
-	
-vTapa_Cargada[PosVacia]		:= FALSE;
-	
+        <ST><![CDATA[vInicializando[PosVacia]	:= FALSE;	
+vTapa_Cargada[PosVacia]		:= FALSE;	
 vAltura_Medida[PosVacia]	:= FALSE;
 vAltura_Pulsos[PosVacia]	:= 0;
-vAltura_Mm [PosVacia]		:= 0;
-	
+vAltura_Mm [PosVacia]		:= 0;	
 vClaridad_Medida[PosVacia]	:= FALSE;
 vTapa_Clara[PosVacia] 		:= FALSE;
-	
 vMateral_Medido[PosVacia]	:= FALSE;	
 vTapa_Metalica[PosVacia] 	:= FALSE;]]></ST>
       </Implementation>

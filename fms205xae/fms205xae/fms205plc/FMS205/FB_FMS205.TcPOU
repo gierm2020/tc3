@@ -13,7 +13,7 @@ VAR_OUTPUT
 	Failure	: BOOL;
 	Done	: BOOL;	
 END_VAR	
-
+(*
 VAR 
 	ProdRequerida	: UINT := 2;
 	ProdRealizada	: UINT := 0;
@@ -22,12 +22,12 @@ VAR
 	FinCiclo		: BOOL := FALSE;	// una pieza se ha completado
 	FinTarea		: BOOL := FALSE;	// el lote se ha completado
 END_VAR
-
+*)
 //VAR_INPUT
 //	MaximoTiempoRespuesta: TIME := T#5S;
 //	ManiobrasDeseadas: UINT :=1; // POST15 AÑADIDO VALOR POR DEFECTO
 //END_VAR
-
+(*
 VAR_OUTPUT
 	//ManiobrasRealizadas: UINT := 0;
 	//ManiobrasPendientes: UINT;
@@ -36,28 +36,29 @@ VAR_OUTPUT
 	Fallo: 		BOOL := FALSE;	// al menos un módulo ha fallado
     Finalizada: BOOL := TRUE;	// la estación está lista para apagarse    	
 END_VAR
+*)
+	//numGiros 	: DINT := 0;
+	//angulo	 	: REAL := 0.0;
+	//anguloanim 	: REAL := 0.0; // angulo para animación que gira lentamente
+	//girado		: BOOL := FALSE;
+	//sectores 	: ARRAY [0..7] OF FB_Sector;
+	
 
 VAR
 	// controladores de la máquina, la función de producción y la guía GEMMA 
 	dr						: FB_Director;
 	tapas					: FB_Tapas;
 	
-	numGiros 	: DINT := 0;
-	angulo	 	: REAL := 0.0;
-	anguloanim 	: REAL := 0.0; // angulo para animación que gira lentamente
-	girado		: BOOL := FALSE;
-	sectores 	: ARRAY [0..7] OF FB_Sector;
-	
 	// módulos de la FMS205
 	mdAlimentador			: FB_Alimentador			:= (dr:=dr, ID := 1, Name := 'Alimentador');
 	mdPickAndPlaceCarga 	: FB_PickAndPlace			:= (dr:=dr, ID := 2, Name := 'Carga');
 	mdMedidorTapa			: FB_MedidorTapa			:= (dr:=dr, ID := 3, Name := 'Medidor');
-	mdCaptadorInductivo 	: FB_CaptadorInductivo		:= (dr:=dr, ID := 4, Name :=  'Inductivo');
-	mdDetectorFotoelectrico : FB_DetectorFotoelectrico	:= (dr:=dr, ID := 5, Name :=  'Fotoeléctrico');
-	mdEvacuador			 	: FB_Evacuador				:= (dr:=dr, ID := 6, Name :=  'Evacuador');
-	mdPickAndPlaceDescarga 	: FB_PickAndPlace			:= (dr:=dr, ID := 7, Name :=  'Descarga');
-	mdPlatoDivisor			: FB_PlatoDivisor			:= (dr:=dr, ID := 8, Name :=  'Plato');
-	mdCinta					: FB_Cinta					:= (dr:=dr, ID := 9, Name :=  'Cinta');
+	mdCaptadorInductivo 	: FB_CaptadorInductivo		:= (dr:=dr, ID := 4, Name := 'Inductivo');
+	mdDetectorFotoelectrico : FB_DetectorFotoelectrico	:= (dr:=dr, ID := 5, Name := 'Fotoeléctrico');
+	mdEvacuador			 	: FB_Evacuador				:= (dr:=dr, ID := 6, Name := 'Evacuador');
+	mdPickAndPlaceDescarga 	: FB_PickAndPlace			:= (dr:=dr, ID := 7, Name := 'Descarga');
+	mdPlatoDivisor			: FB_PlatoDivisor			:= (dr:=dr, ID := 8, Name := 'Plato');
+	mdCinta					: FB_Cinta					:= (dr:=dr, ID := 9, Name := 'Cinta');
 	
 	fbPanel					: FB_Panel := (dr := dr);	
 	ctrlF1Producir			: FB_FMS205_F1Producir_SFC; 
@@ -192,20 +193,19 @@ END_VAR
 		; // pendiente implementar
  
 	E_GEMMA.A6Inicializando:
-		ProdRealizada 				:= 0;
-		ProdRechazada 				:= 0;
+		tapas.Inicializar();
 		dr.IC						:= InitialConditions();
 		dr.Failure 					:= FALSE;
 		dr.EndCycle 				:= FALSE;
 		dr.EndBatch					:= FALSE;
-		dr.IsStopped				:= TRUE;
+		dr.IsStopped				:= FALSE; // IsStopped(); TODO
 		ctrlF1Producir.Execute		:= TRUE;
 		ctrlF1Producir.Ack			:= FALSE;
-		ctrlF2SeqPrep.Execute		:= TRUE;
+		ctrlF2SeqPrep.Execute		:= TRUE; // TODO CONSIGNA F2
 		ctrlF2SeqPrep.Ack 			:= FALSE;
-		ctrlF3SeqFin.Execute		:= TRUE;
+		ctrlF3SeqFin.Execute		:= TRUE; // TODO CONSIGNA F3
 		ctrlF3SeqFin.Ack			:= FALSE;
-		ctrlF6Prueba.Execute		:= TRUE;
+		ctrlF6Prueba.Execute		:= TRUE; // TODO CONSIGNA F6
 		ctrlF6Prueba.Ack 			:= FALSE;
 		
 
@@ -228,29 +228,12 @@ END_VAR
 			Alime:=mdAlimentador, 			Carga:=mdPickAndPlaceCarga, Medid:=mdMedidorTapa,
 			Fotoe:=mdDetectorFotoelectrico, Induc:=mdCaptadorInductivo, Evacu:=mdEvacuador,
 			Desca:=mdPickAndPlaceDescarga, 	Plato:=mdPlatoDivisor, 		Cinta:=mdCinta,
-			FinCiclo := FinCiclo,
 			IC:=IC, Execute:=Execute, Ack:=Ack,
 			Ready=>Ready, Done=>Done, Failure=>Failure);
-		
-		
-		IF ctrlF1Producir.Done THEN // then			
-			IF mdEvacuador.Evacuar THEN
-				tapas.ResRech := tapas.ResRech+1; //	ProdRechazada := ProdRechazada + 1;
-			END_IF
-			
-			IF mdPickAndPlaceDescarga.Mover THEN // sectores[(NumGiros+1) MOD 8].Descargar_Tapa THEN
-				tapas.ResReal := tapas.ResReal+1; //  ProdRealizada := ProdRealizada + 1;
-			END_IF
-			
-			tapas.ResPend:= tapas.ReqNumero - tapas.ResReal; // ProdPendiente 	:= ProdRequerida - ProdRealizada;
-			Ack 			:= FALSE;
-			dr.EndCycle		:= TRUE; 
- 			dr.EndBatch		:= tapas.ResPend=0; //  ProdPendiente = 0;
-			
-		ELSIF dr.EndCycle AND InitialConditions() THEN
-			Ack				:= TRUE;
-			dr.EndCycle 	:= FALSE;
-		END_IF
+		dr.EndCycle := ctrlF1Producir.Done;
+		dr.EndBatch := tapas.ReqNumero=tapas.ResReal;
+		ctrlF1Producir.Ack := ctrlF1Producir.Done;
+		ctrlF1Producir.Execute := NOT dr.EndBatch;		
 		
 		
 	E_GEMMA.F3SecuenciaFinalizacion:
@@ -364,27 +347,9 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// calcular consignas en función del panel y del modo Gemma
 fbPanel.ProcessCycle(gmModeActual := dr.gmModeActual, tmReinicio := dr.tmTiempoReinicio); 
-
-
-// calcular el nuevo modo GEMMA en funicón de las consignas del panel
-dr.IC 			:= InitialConditions();
-
+dr.IC  := InitialConditions();
 dr.ProcessCycle(pn:=fbPanel);
-
-	
-(*	
-// actualizaz posición que ocupa cada módulo
-PosCarga := (NumGiros+0) MOD 8;
-PosMedid := (NumGiros+6) MOD 8;
-PosFotoe := (NumGiros+5) MOD 8;
-PosInduc := (NumGiros+4) MOD 8;
-PosEvacu := (NumGiros+2) MOD 8;
-PosDesca := (NumGiros+1) MOD 8;
-*)
-
-// controlar el flujo de la estación en función del estado Gemma y las consignas del panel
-
-
+FlowControl();
 
 
 // ejecutar el ciclo de cada uno de los módulos
@@ -398,32 +363,33 @@ mdPickAndPlaceDescarga.ProcessCycle(dr:=dr, tapas:=tapas);
 mdPlatoDivisor.ProcessCycle(dr:=dr, tapas:=tapas);
 mdCinta.ProcessCycle(dr:=dr, tapas:=tapas);
 
+tapas.Actualizar();
 
-IF mdPlatoDivisor.Execute THEN
-	girado := FALSE;
-	anguloanim := 0;
-ELSIF NOT girado THEN
+//IF mdPlatoDivisor.Execute THEN
+	//girado := FALSE;
+	//anguloanim := 0;
+//ELSIF NOT girado THEN
 	//IF mdPickAndPlaceCarga.Done THEN
 	//	sectores[(NumGiros+0) MOD 8].Cargar		(pn:=fbPanel, mdCarga := mdPickAndPlaceCarga);	
 	// END_IF
 	//IF mdMedidorTapa.Done THEN
 	//	sectores[(NumGiros+6) MOD 8].Medir		(pn:=fbPanel, mdMedid := mdMedidorTapa, cnUmbralAlta:=fbPanel.cnUmbralAlta);		
 	//END_IF
-	IF  mdPlatoDivisor.Done THEN
-		girado := TRUE;
-		numGiros := numGiros + 1;
-		angulo := SEL(angulo =0, angulo-45.0, 315.0); // , angulo+45.0, 0);
-		anguloanim := 0;
-	END_IF
+	//IF  mdPlatoDivisor.Done THEN
+		//girado := TRUE;
+		//numGiros := numGiros + 1;
+		//angulo := SEL(angulo =0, angulo-45.0, 315.0); // , angulo+45.0, 0);
+		//anguloanim := 0;
+	//END_IF
 	
 	//sectores[(NumGiros+5) MOD 8].Claridad	(pn:=fbPanel, mdFotoe := mdDetectorFotoelectrico);
 	//sectores[(NumGiros+4) MOD 8].Material	(pn:=fbPanel, mdInduc := mdCaptadorInductivo);
 	//sectores[(NumGiros+2) MOD 8].Evacuar 	(pn:=fbPanel, mdEvacu := mdEvacuador);
 	//sectores[(NumGiros+1) MOD 8].Descargar	(pn:=fbPanel, mdDesca := mdPickAndPlaceDescarga);
 
-ELSIF NOT mdPlatoDivisor.Ready AND NOT mdPlatoDivisor.Done AND anguloanim >-44.0 THEN
-	anguloanim := anguloanim - 0.05;
-END_IF
+//ELSIF NOT mdPlatoDivisor.Ready AND NOT mdPlatoDivisor.Done AND anguloanim >-44.0 THEN
+//	anguloanim := anguloanim - 0.05;
+//END_IF
 
 (*
 
@@ -463,6 +429,19 @@ END_IF
 
 
 *)
+	
+(*	
+// actualizaz posición que ocupa cada módulo
+PosCarga := (NumGiros+0) MOD 8;
+PosMedid := (NumGiros+6) MOD 8;
+PosFotoe := (NumGiros+5) MOD 8;
+PosInduc := (NumGiros+4) MOD 8;
+PosEvacu := (NumGiros+2) MOD 8;
+PosDesca := (NumGiros+1) MOD 8;
+*)
+
+// controlar el flujo de la estación en función del estado Gemma y las consignas del panel
+
 ]]></ST>
       </Implementation>
     </Method>

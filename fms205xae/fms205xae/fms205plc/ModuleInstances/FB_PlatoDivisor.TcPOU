@@ -24,7 +24,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[InitialConditions := TRUE; // InitialConditions := d0;]]></ST>
+        <ST><![CDATA[InitialConditions := d0.uiValue;]]></ST>
       </Implementation>
     </Method>
     <Method Name="ProcessCycle" Id="{a7156aed-454d-425e-80f1-664f90d71526}">
@@ -46,7 +46,7 @@ IC := InitialConditions();
 fbController(
 	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 	
-// tapas.Girado(Done:=Done);
+tapas.Girado(Ready:=Ready, Execute:=Execute, Done:=Done);
 
 D_1.ProcessCycle(dr:=dr, sfcValue:=fbController.D_1);
 E_1.ProcessCycle(dr:=dr, sfcValue:=fbController.E_1);

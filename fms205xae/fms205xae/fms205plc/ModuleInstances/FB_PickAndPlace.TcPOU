@@ -51,7 +51,7 @@ END_VAR]]></Declaration>
       <Declaration><![CDATA[METHOD InitialConditions : BOOL
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[InitialConditions := TRUE; // InitialConditions := v0 AND h0; // el brazo está en condiciones iniciales cuando está arriba y retraído]]></ST>
+        <ST><![CDATA[InitialConditions := v0.uiValue AND h0.uiValue; // el brazo está en condiciones iniciales cuando está arriba y retraído]]></ST>
       </Implementation>
     </Method>
     <Method Name="ProcessCycle" Id="{ad50b7d3-ffb1-4d5e-9f1d-9c4b9b9b584c}">
@@ -92,21 +92,7 @@ HOR.ProcessCycle(dr:=dr, sfcValue:=fbController.HOR);
 VER.ProcessCycle(dr:=dr, sfcValue:=fbController.VER);
 PIN.ProcessCycle(dr:=dr, sfcValue:=fbController.PIN);
 IsActive:=HOR.uiValue OR VER.uiValue OR PIN.uiValue;
-(*
-//----------------------------------- utilizar los resultados del controlador
-
-// Cambios en actuadores por el modo manual
-IF gm.ModeActual=E_GEMMA.F4VerificacionSinOrden THEN
-	; // TODO AÑADIR AQUI EL MODO MANUAL DEL ALIMENTADOR
-
-// Cambios en actuadores por el resultado del controlador
-ELSE
-	// Actualizar actuadores hardware con lo que indique el controlador
-	HOR := fbController.HOR;
-	VER := fbController.VER;
-	PIN := fbController.PIN;
-END_IF
-	*)]]></ST>
+]]></ST>
       </Implementation>
     </Method>
   </POU>

@@ -59,7 +59,7 @@ IF Done AND NOT Lectura_Registrada THEN
 	Lectura_Registrada		:= TRUE;
 	Tapa_Metalica		:= di.uiValue;
 	strUi := SEL(Tapa_Metalica, 'Plástico','Metálica');
-	tapas.Material(Done:=Done, Lectura_Registrada:=Lectura_Registrada, Tapa_Metalica:=Tapa_Metalica);
+	tapas.Material(Tapa_Metalica:=Tapa_Metalica);
 ELSIF Ready THEN
 	// una vez que cambia el ciclo la lectura ya no es fiable
 	Lectura_Registrada		:= FALSE;

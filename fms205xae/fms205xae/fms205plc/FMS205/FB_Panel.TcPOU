@@ -25,6 +25,7 @@ END_VAR
 
 VAR_OUTPUT
 	// consignas del panel únicamente en la visualización
+	(*
 	cnUmbralAlta		: REAL := 18.5;
 	cnProdAluBaja		: BOOL := TRUE;
 	cnProdAluAlta		: BOOL := TRUE;
@@ -32,6 +33,7 @@ VAR_OUTPUT
 	cnProdBlaAlta		: BOOL := TRUE;
 	cnProdNegAlta		: BOOL := TRUE;
 	cnProdNegBaja		: BOOL := FALSE;	
+*)
 
 	// consignas del panel, resultado de integrar la información que viene del hardware, el estado GEMMA, los temporizadores y flancos, y la interfaz de usuario		
 	cnD1_Emergencia		: BOOL; // pulsar la seta

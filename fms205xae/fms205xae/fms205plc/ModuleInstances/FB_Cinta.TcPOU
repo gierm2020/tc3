@@ -43,15 +43,6 @@ END_VAR
 REV.ForceValue(NewValue := FALSE);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="InitialConditions" Id="{6207c809-4e5c-471b-9748-498f300af54e}">
-      <Declaration><![CDATA[METHOD InitialConditions : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[InitialConditions:= TRUE;]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="ProcessCycle" Id="{8ef223d1-a933-4fe3-87e8-40d9ed750433}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL 
 VAR_INPUT
@@ -77,7 +68,7 @@ RUN.ProcessCycle(dr:=dr, sfcValue:=fbController.RUN);
 REV.ProcessCycle(dr:=dr, sfcValue:=fbController.REV);
 R_1.ProcessCycle(dr:=dr, sfcValue:=fbController.R_1);
 S_1.ProcessCycle(dr:=dr, sfcValue:=fbController.S_1);
-IsActive := RUN.uiValue OR REV.uiValue OR R_1.uiValue OR S_1.uiValue;]]></ST>
+// IsActive := RUN.uiValue OR REV.uiValue OR R_1.uiValue OR S_1.uiValue;]]></ST>
       </Implementation>
     </Method>
     <Method Name="Retrocede" Id="{319ef3db-3f91-40fc-bb86-4c3e886a06cc}">

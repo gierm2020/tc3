@@ -44,15 +44,6 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="InitialConditions" Id="{b1752ba1-1b26-4acb-b292-e17eb0af0fb4}">
-      <Declaration><![CDATA[METHOD InitialConditions : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[InitialConditions:= TRUE; // TODO: ESTABLECER LOS VALORES DE FV QUE INDICAN QUE EL MEDIDOR ESTÁ EN POSICIÓN INICIAL]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="ProcessCycle" Id="{d76d2d9a-68fd-4928-b9fd-2c031ae14f83}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL 
 VAR_INPUT
@@ -61,9 +52,7 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Pause y reset
-IsStopped := NOT fbController.UnsafeStop AND (
-	dr.gmModeActual = E_GEMMA.A3ParadaEstado OR 
-	dr.gmModeActual = E_GEMMA.A4ParadaObtenida);
+IsStopped := NOT fbController.UnsafeStop AND (dr.gmModeActual = E_GEMMA.A3ParadaEstado);
 fbController.SFCReset := dr.gmModeActual = E_GEMMA.A6Inicializando;
 fbController.SFCPause := IsStopped;
 
@@ -102,7 +91,7 @@ IF fbController.Leyendo AND NOT Lectura_Registrada THEN
 	Lectura_Registrada 	:= TRUE;
 	strUi := TO_STRING(Altura_mm);
 	strUi := concat(strUi, ' mm');
-	tapas.Medido(Done:=Done, Lectura_Registrada:=Lectura_Registrada, Altura_Mm:=Altura_mm, Altura_Pulsos:=Altura_Pulsos);
+	tapas.Medido(Altura_Mm:=Altura_mm, Altura_Pulsos:=Altura_Pulsos);
 
 ELSIF Ready THEN
 	Lectura_Registrada 	:= FALSE; 	// Resetear la lectura para el siguiente ciclo
