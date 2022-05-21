@@ -6192,7 +6192,22 @@
                 <l n="UserManagementAccessRights" t="ArrayList" />
               </o>
               <o>
-                <a n="ConfiguredComplexInputs" et="ComplexInput" />
+                <a n="ConfiguredComplexInputs" cet="ComplexInput">
+                  <o>
+                    <n n="DescriptionTree" />
+                    <o n="VisualElemMemberList" t="VisualElemMemberList">
+                      <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
+                        <o>
+                          <v n="Id">1186196937L</v>
+                          <v n="Value">"MAIN.fbFMS205.fbPanel.swF1_Empezar"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <v n="SignatureName">"Visu_TapInput"</v>
+                    <v n="Name">"Tap"</v>
+                    <v n="Description">"Configure the tapping of a Boolean variable"</v>
+                  </o>
+                </a>
                 <l n="Elements" t="ArrayList" />
                 <n n="VisualElementDescription" />
                 <o n="VisualElemMemberList" t="VisualElemMemberList">
@@ -6304,6 +6319,10 @@
                       <v n="Value">""</v>
                     </o>
                     <o>
+                      <v n="Id">2496894244L</v>
+                      <v n="Value">"not MAIN.fbFMS205.fbPanel.enF1_Empezar"</v>
+                    </o>
+                    <o>
                       <v n="Id">823443203L</v>
                       <v n="Value">"717"</v>
                     </o>
@@ -6331,7 +6350,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.fbPanel.SWF2"</v>
+                          <v n="Value">"MAIN.fbFMS205.fbPanel.swF2_Preparar"</v>
                         </o>
                       </l>
                     </o>
@@ -6410,7 +6429,7 @@
                     </o>
                     <o>
                       <v n="Id">390574330L</v>
-                      <v n="Value">"Llenar (F2)"</v>
+                      <v n="Value">"Preparar (F2)"</v>
                     </o>
                     <o>
                       <v n="Id">2340015797L</v>
@@ -6447,8 +6466,12 @@
                       <v n="Value">false</v>
                     </o>
                     <o>
+                      <v n="Id">2496894244L</v>
+                      <v n="Value">"not MAIN.fbFMS205.fbPanel.enF1_Empezar"</v>
+                    </o>
+                    <o>
                       <v n="Id">823443203L</v>
-                      <v n="Value">"722"</v>
+                      <v n="Value">"1761"</v>
                     </o>
                   </l>
                 </o>
@@ -6474,7 +6497,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.fun_Vaciar"</v>
+                          <v n="Value">"MAIN.fbFMS205.fbPanel.swF3_Finalizar"</v>
                         </o>
                       </l>
                     </o>
@@ -6553,7 +6576,7 @@
                     </o>
                     <o>
                       <v n="Id">390574330L</v>
-                      <v n="Value">"Vaciar (F3)"</v>
+                      <v n="Value">"Finalizar (F3)"</v>
                     </o>
                     <o>
                       <v n="Id">2340015797L</v>
@@ -6590,8 +6613,12 @@
                       <v n="Value">false</v>
                     </o>
                     <o>
+                      <v n="Id">2496894244L</v>
+                      <v n="Value">"not MAIN.fbFMS205.fbPanel.enF1_Empezar"</v>
+                    </o>
+                    <o>
                       <v n="Id">823443203L</v>
-                      <v n="Value">"727"</v>
+                      <v n="Value">"873"</v>
                     </o>
                   </l>
                 </o>
@@ -19782,7 +19809,22 @@
                 <l n="UserManagementAccessRights" t="ArrayList" />
               </o>
               <o>
-                <a n="ConfiguredComplexInputs" et="ComplexInput" />
+                <a n="ConfiguredComplexInputs" cet="ComplexInput">
+                  <o>
+                    <n n="DescriptionTree" />
+                    <o n="VisualElemMemberList" t="VisualElemMemberList">
+                      <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
+                        <o>
+                          <v n="Id">1186196937L</v>
+                          <v n="Value">"MAIN.fbFMS205.fbPanel.swF6_Probar"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <v n="SignatureName">"Visu_ToggleInput"</v>
+                    <v n="Name">"Toggle"</v>
+                    <v n="Description">"Configure the toggling of a Boolean variable"</v>
+                  </o>
+                </a>
                 <l n="Elements" t="ArrayList" />
                 <n n="VisualElementDescription" />
                 <o n="VisualElemMemberList" t="VisualElemMemberList">
@@ -19897,6 +19939,10 @@
                       <v n="Id">823443203L</v>
                       <v n="Value">"1491"</v>
                     </o>
+                    <o>
+                      <v n="Id">2496894244L</v>
+                      <v n="Value">"not MAIN.fbFMS205.fbPanel.enF6_Probar"</v>
+                    </o>
                   </l>
                 </o>
                 <v n="VisualElementName">"Button"</v>
@@ -19929,18 +19975,16 @@
           <o n="GeneratedLMMDescriptions" t="GeneratedLanguageModelEntriesData">
             <o n="GeneratedVisuFbDescription" t="GenericFbDescription">
               <d n="FbMethods" t="CaseInsensitiveHashtable" ckt="String" cvt="Guid">
-                <v>HasVisibilityAccess</v>
-                <v>afa60003-4053-44a5-9fa3-7ce7e04d900d</v>
+                <v>GetUpdateRects</v>
+                <v>c0803fe8-ce24-49f8-832b-730aee9ef71c</v>
                 <v>ContainsPoint</v>
                 <v>f872e0f8-f9b0-4c0d-974d-da354c45809b</v>
-                <v>HasInputAccess</v>
-                <v>15d80562-8c3e-440d-b470-d161f29c861d</v>
+                <v>SetStaticState</v>
+                <v>1c0d39cf-1835-4281-9fa4-a2186314e9f8</v>
                 <v>HasInputAccessIntern</v>
                 <v>d84d4f12-fb26-4f14-9c93-0204962b196a</v>
                 <v>GetTooltip</v>
                 <v>691df828-cdd5-414e-a0be-66763db6b63d</v>
-                <v>GetUpdateRects</v>
-                <v>c0803fe8-ce24-49f8-832b-730aee9ef71c</v>
                 <v>GetNamespace</v>
                 <v>7afd6603-1159-44dd-9b1b-c6f8bc9b5527</v>
                 <v>GetTranslator</v>
@@ -19953,6 +19997,8 @@
                 <v>9b605501-53df-48eb-bae7-37c9bb760dfe</v>
                 <v>Paint</v>
                 <v>6f67b9c1-b377-4bb2-af5b-cf4dc0f03418</v>
+                <v>HasVisibilityAccess</v>
+                <v>afa60003-4053-44a5-9fa3-7ce7e04d900d</v>
                 <v>GetElementArray</v>
                 <v>7e24ba21-e702-477c-8700-4d9cc57495e2</v>
                 <v>SetVisuFlagsInternal</v>
@@ -19965,14 +20011,14 @@
                 <v>b71e48a1-3bfe-4f04-aebf-409044db8d8e</v>
                 <v>Initialize</v>
                 <v>dfeb1032-57a3-4d9a-8fda-ba110a2ff475</v>
+                <v>HasInputAccess</v>
+                <v>15d80562-8c3e-440d-b470-d161f29c861d</v>
                 <v>HasVisibilityAccessIntern</v>
                 <v>ad62f209-586a-4ae4-8ba8-058e0066ba60</v>
                 <v>GetSurroundingRect</v>
                 <v>550f31c7-2f13-4797-9f6f-1b64a444255a</v>
                 <v>ElementInfo</v>
                 <v>0f29d595-ad71-4564-b983-0334dc8f3bee</v>
-                <v>SetStaticState</v>
-                <v>1c0d39cf-1835-4281-9fa4-a2186314e9f8</v>
                 <v>GetLocalUsergroup</v>
                 <v>770274cc-9607-4869-8c96-5226df8d86e8</v>
                 <v>GetName</v>
@@ -20003,10 +20049,10 @@
               <d n="FbMethods" t="CaseInsensitiveHashtable" ckt="String" cvt="Guid">
                 <v>FB_Init</v>
                 <v>c7fbd946-cab7-4d95-87d7-16305e188b7a</v>
-                <v>FB_Reinit</v>
-                <v>20c92b2e-dcf5-4036-b9fe-1da038b4a7c2</v>
                 <v>FB_Exit</v>
                 <v>6b90a740-e979-4a59-8d7c-462350827e98</v>
+                <v>FB_Reinit</v>
+                <v>20c92b2e-dcf5-4036-b9fe-1da038b4a7c2</v>
               </d>
               <v n="FbName">"NotImportant"</v>
               <v n="FbGuid">{8ea61716-5341-4327-a182-a3054ff68765}</v>

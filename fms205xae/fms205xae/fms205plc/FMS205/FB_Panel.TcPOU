@@ -37,8 +37,19 @@ VAR_OUTPUT
 
 	// consignas del panel, resultado de integrar la información que viene del hardware, el estado GEMMA, los temporizadores y flancos, y la interfaz de usuario		
 	cnD1_Emergencia		: BOOL; // pulsar la seta
+
+	cnA2_FinCiclo					: BOOL;
+	cnA3_Estado						: BOOL;
+	cnA6_Inicializar				: BOOL;
+
+	cnF1_Empezar		: BOOL;
+	cnF1_Reanudar					: BOOL;
+	cnF2_Preparar		: BOOL;
+	cnF3_Finalizar		: BOOL;
 	cnF4_Planta			: BOOL; // modo verificación sin orden
 	cnF5_Funcion		: BOOL; // modo verificación ordenada
+	cnF6_Probar			: BOOL;
+	
 	swF5_Alimentar					: BOOL;
 	swF5_Situar						: BOOL;
 	swF5_Transferir					: BOOL;
@@ -52,11 +63,6 @@ VAR_OUTPUT
 	swF5_Ejecutar					: BOOL;
 	swF5_Ack						: BOOL;
 
-	cnA2_FinCiclo					: BOOL;
-	cnA3_Estado						: BOOL;
-	cnF1_Reanudar					: BOOL;
-	cnF1_Empezar					: BOOL;
-	cnA6_Inicializar				: BOOL;
 
 END_VAR
 
@@ -65,76 +71,34 @@ VAR
 	
 	swPE_Seta						: BOOL;
 	ttPE_Seta						: STRING := '';
-	
+
+	enA2_FinCiclo					: BOOL;
+	swA2_FinCiclo					: BOOL;
+	enA3_Estado						: BOOL;
+	swA3_Estado						: BOOL;
+	swA6_Inicializar				: BOOL;
+
+	enF1_Empezar					: BOOL;
+	swF1_Empezar					: BOOL;
+	enF1_Reanduar					: BOOL;
+	swF1_Reanudar					: BOOL;
+	swF2_Preparar					: BOOL;
+	swF3_Finalizar					: BOOL;	
 	enF4_Planta						: BOOL; // consigna F4_Planta habilitada
 	swF4_Planta						: BOOL; // botón en la visualización
 	ttF4_Planta						: STRING :='';
 	swF4_Avanza						: BOOL := FALSE;
- 	swF4_Retroc						: BOOL := FALSE;
-	
+ 	swF4_Retroc						: BOOL := FALSE;	
 	enF5_Funcion					: BOOL; // consigna habilitada
 	swF5_Funcion					: BOOL; // botón en la visualización
-	
-	enA2_FinCiclo					: BOOL;
-	swA2_FinCiclo					: BOOL;
-	
-	enA3_Estado						: BOOL;
-	swA3_Estado						: BOOL;
-	
-	enF1_Empezar					: BOOL;
-	swF1_Empezar					: BOOL;
-	
-	enF1_Reanduar					: BOOL;
-	swF1_Reanudar					: BOOL;
-	
-	swA6_Inicializar				: BOOL;
+	enF6_Probar						: BOOL;
+	swF6_Probar						: BOOL;
 	// TmpReinicio						: TON; 	
 END_VAR
 
-
-VAR_OUTPUT
-	//cn						: S_Panel_Consignas; //
-(* 
-						// POC - 				Conmutador PO Conectada  (negra)
-	Marcha: BOOL; 		// :=FP_PM.Q 			Pulsador de marcha (verde)
-    Reinicia: BOOL; 	// :=T(PM AND NOT PS) 	Restablece situacion inicial
-	Restablece: BOOL;	// :=PM					Restablece la condición de fallo
-	Restaura: BOOL;		// :=PM					Restaura condiciones iniciales
-	
-	Para: BOOL; 		// :=NOT PS				Pulsador de parada (rojo)
-    Manual: BOOL; 		// :=SM			Conmutador de automático/manual (negro)
-						// Pulsador de reset (azul)												
-
-	// variables relacionadas con las pruebas de desarrollo
-	ProbarExecute: 	BOOL;
-	ProbarAck: BOOL;
-	*)
-	
-	//cnManual			: BOOL; // Selector manual/automático
-	//cnReinicia			: BOOL; // DUDAS reinicia la situación inicial
-	//cnRestablece		: BOOL; // restablece la condición de fallo
-	//cnRestaura			: BOOL; // DUDAS restaura condiciones iniciales
-	//cnMarcha			: BOOL; // 
-	//cnPara				: BOOL; //
-END_VAR
-VAR
-	//hw 						: S_Panel_Hardware; // estado de sensores y actuadores del panel físico
-END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
-
-
-
-
-
-
-
-
-
-
-
-	
+      <ST><![CDATA[	
 
 // invoca a temporizadores y flancos
 //TmpReinicio(IN := hw.PM_PulsadorMarcha AND NOT hw.PS_PulsadorStop, PT:= tm.TiempoReinicio);
@@ -190,19 +154,20 @@ enF4_Planta := ( // sólo se puede entrar o salir del modo desde determinados es
 	gmModeActual = E_GEMMA.A6Inicializando OR 				 
 	gmModeActual = E_GEMMA.A1ParadaInicial OR		
 	gmModeActual = E_GEMMA.F5VerificacionOrdenada OR		
-	gmModeActual = E_GEMMA.F4VerificacionSinOrden);
-	
+	gmModeActual = E_GEMMA.F4VerificacionSinOrden OR 
+	gmModeActual = E_GEMMA.F6Probando OR
+	gmModeActual = E_GEMMA.D2TratamientoFallos);
 cnF4_Planta := enF4_Planta AND (hwSM_SelecAutoManual OR swF4_Planta);
 
 IF NOT cnF4_Planta AND (hwSM_SelecAutoManual OR swF4_Planta) THEN // consigna no válida
 	swF4_Planta := FALSE; // Desactivar el botón
-	swMensaje := 'Sólo se puede pasar al modo F4 desde A1, A6 o F5';
+	swMensaje := 'Sólo se puede pasar al modo F4 desde A1, A6, F5, F6 o D2';
 	
 ELSIF cnF4_Planta THEN // reflejar modo plata en la interfaz		
-	swF1_Empezar := FALSE; 
-	swF4_Planta  := TRUE;
+	swA6_Inicializar := FALSE; // TODO HACER ESTO AL PRINCIPIO PORQUE ASÍ NO SE PUEDE
 	swF5_Funcion := FALSE; 
-	swMensaje := ''; 
+	swF1_Empezar := FALSE; 
+	//swMensaje := ''; 
 		
 	IF hwSM_SelecAutoManual AND swF4_Planta THEN
 		ttF4_Planta := 'Mandos directos ativados desde panel físico y visualización';
@@ -211,6 +176,7 @@ ELSIF cnF4_Planta THEN // reflejar modo plata en la interfaz
 	ELSIF swF4_Planta THEN
 		ttF4_Planta := 'Mandos directos ativados desde visualización';
 	END_IF	
+	swF4_Planta  := TRUE;
 					
 	// avanza y retrocede son mandos directos excluyentes
 	IF swF4_Avanza THEN 
@@ -240,7 +206,7 @@ ELSIF cnF5_Funcion THEN // reflejar modo plata en la interfaz
 	swF1_Empezar := FALSE; 
 	swF4_Planta  := FALSE;
 	swF5_Funcion := TRUE;
-	swMensaje := ''; 
+	//swMensaje := ''; 
 		
 	// funciones incompatibles
 	IF swF5_Girar AND (swF5_Cargar OR swF5_Evacuar OR swF5_Descargar OR swF5_Medir) THEN 
@@ -296,10 +262,10 @@ IF NOT cnA3_Estado AND (swA3_Estado) THEN // consigna no válida
 
 ELSIF cnA3_Estado THEN
 	swA3_Estado := TRUE; 
-	IF gmModeActual = E_GEMMA.F1ProduccionNormal THEN
-		swMensaje := 'Esperando a un estado estable para parar';
-	ELSIF gmModeActual = E_GEMMA.A4ParadaObtenida THEN
+	IF gmModeActual = E_GEMMA.A4ParadaObtenida THEN
 		swMensaje := 'Parada obtenida después de alcanzar un estado estable';
+	ELSE
+		swMensaje := 'Esperando a un estado estable para parar';
 	END_IF
 END_IF
 
@@ -342,6 +308,8 @@ IF NOT cnF1_Empezar AND (swF1_Empezar OR FP_PM.Q) THEN // consigna no válida
 	swMensaje := 'Sólo se puede empezar desde una parada';
 END_IF
 
+cnF2_Preparar:= swF2_Preparar;
+cnF3_Finalizar:= swF3_Finalizar;
 
 //----------------------------------------------------------------- Señales
 hwAS_AvisadorSonoro := 

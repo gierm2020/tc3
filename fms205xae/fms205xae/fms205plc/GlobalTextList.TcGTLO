@@ -426,6 +426,11 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"873"</v>
+              <v n="TextDefault">"Finalizar (F3)"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"226"</v>
               <v n="TextDefault">"FM"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -778,6 +783,11 @@
             <o>
               <v n="TextID">"459"</v>
               <v n="TextDefault">"pp"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"1761"</v>
+              <v n="TextDefault">"Preparar (F2)"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>

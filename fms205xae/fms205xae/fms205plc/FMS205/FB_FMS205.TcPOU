@@ -310,7 +310,7 @@ InitialConditions :=
 		mdPickAndPlaceDescarga.InitialConditions() AND
 		mdPlatoDivisor.InitialConditions() AND
 		mdCinta.InitialConditions()
-	); 
+	)  or dr.gmLocalHost; 
 ]]></ST>
       </Implementation>
     </Method>

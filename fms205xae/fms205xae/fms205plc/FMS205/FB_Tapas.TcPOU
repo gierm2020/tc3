@@ -250,7 +250,7 @@ ELSIF NOT HaGirado THEN
 		anguloanim := 0;		
 	END_IF
 ELSIF NOT Ready AND NOT Done AND anguloanim >-44.0 THEN
-	anguloanim := anguloanim - 0.05;	
+	anguloanim := anguloanim - 5;	
 END_IF]]></ST>
       </Implementation>
     </Method>
