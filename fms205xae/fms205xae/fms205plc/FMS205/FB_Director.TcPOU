@@ -3,6 +3,13 @@
   <POU Name="FB_Director" Id="{1485be2f-2009-4092-b7e4-7ed9a9ca4fab}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Director
 VAR_INPUT
+	IC 				: BOOL := TRUE; 	// todos los módulos están en condiciones iniciales
+	Failure			: BOOL := FALSE;	// hay al menos un módulo que ha fallado
+	EndCycle		: BOOL := FALSE;	// se ha completado un ciclo con/sin rechazo/descarga
+	EndBatch		: BOOL := FALSE; 	// se han completado todas las tapas del lote
+	IsStopped		: BOOL := TRUE; 	// estación en estado estable con todos los módulos detenidos
+	IsPrepared		: BOOL := TRUE; 	// secuencia de preparación completada
+	IsFinished		: BOOL := TRUE; 	// secuencia de finalización completada
 END_VAR
 
 
@@ -25,8 +32,6 @@ VAR_OUTPUT
 	gmModeColor		: DWORD := gmColorArret;
 	gmModeName		: STRING := 'Mode A6';
 	gmModeDescr		: STRING := 'Inicializando';
-	
-	//ProdUmbralAlta	: REAL := 18.5;
 	
 END_VAR	
 
@@ -81,14 +86,6 @@ END_VAR
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL
 VAR_INPUT
 	pn				: REFERENCE TO FB_Panel;
-	
-	IC 				: BOOL := TRUE; // InitialConditions()
-	Fallo 			: BOOL := FALSE;
-	FinCiclo 		: BOOL := FALSE;
-	FinTarea 		: BOOL := FALSE;
-	ParadaObtenida	: BOOL := FALSE;
-	Preparada 		: BOOL := TRUE;
-	Finalizada 		: BOOL := TRUE;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -108,69 +105,58 @@ ELSE
         (* ------------------------------------------------------------ Procedimientos de parada *)
 		
         E_GEMMA.A1ParadaInicial: (* Parada en el estado inicial *)
+			gmModePrev := E_GEMMA.A1ParadaInicial;
             IF NOT IC THEN // IF NOT Restaurada THEN
-                gmModeActual := E_GEMMA.A6Inicializando;
-				
-            ELSIF pn.cnF4_Planta AND gmModeActual <> E_GEMMA.F4VerificacionSinOrden THEN 
-				gmModePrev := E_GEMMA.A1ParadaInicial;
-                gmModeActual := E_GEMMA.F4VerificacionSinOrden;
-				
-			ELSIF pn.cnF5_Funcion AND gmModeActual <> E_GEMMA.F5VerificacionOrdenada THEN 
-				gmModePrev := E_GEMMA.A1ParadaInicial;
-				gmModeActual := E_GEMMA.F5VerificacionOrdenada; 	// y pasamos al modo pruebas 
-            
-			ELSIF pn.cnF1_Empezar AND IC THEN //  fbPanel.cn.Marcha AND IC THEN  // ELSIF Marcha THEN
+                gmModeActual := E_GEMMA.A6Inicializando;				
+            ELSIF pn.cnF4_Planta THEN 				
+                gmModeActual := E_GEMMA.F4VerificacionSinOrden;				
+			ELSIF pn.cnF5_Funcion THEN 
+				gmModeActual := E_GEMMA.F5VerificacionOrdenada;             
+			ELSIF pn.cnF1_Empezar THEN
                 gmModeActual := E_GEMMA.F2SecuenciaPreparacion;
 			ELSE
 				; // Esperar a que se pulse el bortón de marcha
             END_IF
 			
         E_GEMMA.A2ParaFinCiclo: (* Parada solicitada a final de ciclo *)
-            IF Fallo THEN
-                gmModePrev := E_GEMMA.A2ParaFinCiclo;
+			IF Failure THEN                
                 gmModeActual := E_GEMMA.D2TratamientoFallos;
 			ELSIF pn.cnA3_Estado THEN // solicitan parada inmediata porque no pueden esperar a fin de ciclo
-				gmModePrev := E_GEMMA.A2ParaFinCiclo;
 				gmModeActual := E_GEMMA.A3ParadaEstado;				
-            ELSIF ParadaObtenida AND FinCiclo THEN
-                gmModeActual := E_GEMMA.A4ParadaObtenida;
-            ELSE
-                // Seguir produciendo hasta final de ciclo
-                ;
+            ELSIF EndCycle THEN
+                gmModeActual := E_GEMMA.A3ParadaEstado;
+            ELSE                
+                ; // Seguir produciendo hasta final de ciclo
             END_IF
 			
         E_GEMMA.A3ParadaEstado: (* Parada solicitada en un estado determinado *)
-            IF Fallo THEN
-                // gmModePrev := gmModeActual; // volver al modo actual cuando se resuelva el error
+            IF Failure THEN
                 gmModeActual := E_GEMMA.D2TratamientoFallos;
-			ELSIF ParadaObtenida THEN
+			ELSIF IsStopped THEN
                 gmModeActual := E_GEMMA.A4ParadaObtenida;
             ELSE
                 ; // Seguir produciendo hasta que todos los módulos paren en un estado estable
             END_IF
-            
-			
+            			
         E_GEMMA.A4ParadaObtenida:
 			IF pn.cnF1_Reanudar THEN
 				gmModeActual := gmModePrev; // retomar el estado antes de la parada
 			ELSE
 				; // seguir parada hasta la consigna de reanudar	
 			END_IF
-            
-        
+                    
 		E_GEMMA.A5PreparandoTrasFallo: (* Preparando de reanudacion tras el fallo *)
             IF pn.cnF1_Empezar THEN //  fbPanel.cn.Marcha THEN // Continua
                 gmModeActual := gmModePrev;
-            ELSIF pn.cnA3_Estado THEN 
-                gmModeActual := E_GEMMA.A6Inicializando;
-				gmModePrev := gmModeActual; // DUDAS
+			ELSIF pn.cnF4_Planta THEN 
+                gmModeActual := E_GEMMA.F4VerificacionSinOrden;
             END_IF
 			
         E_GEMMA.A6Inicializando: (* Situando la PO en el estado inicial *)
-            IF IC THEN // Restaurada
+			gmModePrev := E_GEMMA.A6Inicializando;
+            IF IC THEN 
                 gmModeActual := E_GEMMA.A1ParadaInicial;
-			ELSIF pn.cnF4_Planta THEN 
-				gmModePrev := E_GEMMA.A6Inicializando;
+			ELSIF pn.cnF4_Planta THEN 				
                 gmModeActual := E_GEMMA.F4VerificacionSinOrden;
             END_IF
 			
@@ -181,91 +167,69 @@ ELSE
 			
         (* ------------------------------------------------------------ Procedimientos de funcionamiento *)
         
-		E_GEMMA.F1ProduccionNormal: (* Produccion normal *)
-            IF Fallo THEN
-                gmModePrev := E_GEMMA.F1ProduccionNormal; // DUDAS E_GEMMA.A2ParaFinCiclo; //!!! Creo que está mal, no debería ser F1?
+        E_GEMMA.F2SecuenciaPreparacion, (* Secuencia de preparacion *)
+		E_GEMMA.F1ProduccionNormal, 	(* Produccion normal *)
+		E_GEMMA.F3SecuenciaFinalizacion:(* Secuencia de finalizacion *)
+        
+			gmModePrev := gmModeActual;
+            IF Failure THEN
                 gmModeActual := E_GEMMA.D2TratamientoFallos;
-            ELSIF FinTarea THEN
-                gmModeActual := E_GEMMA.F3SecuenciaFinalizacion;
-            ELSIF pn.cnA3_Estado THEN 
-                gmModeActual := E_GEMMA.A2ParaFinCiclo;
-            END_IF
-			
-        E_GEMMA.F2SecuenciaPreparacion: (* Secuencia de preparacion *)
-            IF Preparada THEN
+            ELSIF gmModeActual=E_GEMMA.F2SecuenciaPreparacion AND IsPrepared THEN // (IsPrepared or not cnF2) 
                 gmModeActual := E_GEMMA.F1ProduccionNormal;
-            ELSE
-                // continuar con la secuencia de preparación hasta que esté preparada o haya un error
-                ;
-            END_IF
-			
-        E_GEMMA.F3SecuenciaFinalizacion: (* Secuencia de finalizacion *)
-            IF Finalizada THEN
-                gmModeActual := E_GEMMA.A1ParadaInicial;
-            ELSE
-                // continuar con la secuencia de finalización hasta que esté finalizada o haya un error
-                ;
+            ELSIF gmModeActual=E_GEMMA.F1ProduccionNormal AND pn.cnA2_FinCiclo THEN
+				gmModeActual := E_GEMMA.A3ParadaEstado;
+			ELSIF gmModeActual=E_GEMMA.F1ProduccionNormal AND EndBatch THEN
+                gmModeActual := E_GEMMA.F3SecuenciaFinalizacion;
+			ELSIF gmModeActual=E_GEMMA.F3SecuenciaFinalizacion AND IsFinished THEN // (IsFinished or not cnF3)
+				gmModeActual := E_GEMMA.A1ParadaInicial;
+			ELSIF pn.cnA3_Estado THEN 
+                gmModeActual := E_GEMMA.A3ParadaEstado;
+			ELSIF pn.cnF4_Planta THEN 				
+                gmModeActual := E_GEMMA.F4VerificacionSinOrden;
+            ELSE                
+                ; // continuar con la preparación/producción/finalización
             END_IF
 			
         E_GEMMA.F4VerificacionSinOrden: (* Verificacion sin orden *)
-            IF Fallo THEN
-				// desupués de un fallo no es seguro volver a F4
-                gmModePrev := E_GEMMA.A6Inicializando; 	 
-                gmModeActual := E_GEMMA.D2TratamientoFallos;
-				
-            ELSIF NOT pn.cnF4_Planta THEN 
-				// al salir del modo planta volver al modo previo
-				gmModeActual := gmModePrev;				
-            ELSE
-                // Seguir en modo manual
-                ;
+            IF Failure THEN
+				gmModeActual := E_GEMMA.D2TratamientoFallos;				
+            ELSIF NOT pn.cnF4_Planta THEN 				
+				gmModeActual := gmModePrev; // al salir del modo planta volver al modo previo				
+            ELSE                
+                ; // Seguir en modo manual
             END_IF
 			
-        E_GEMMA.F5VerificacionOrdenada: (* Verificacion en orden *)
-            IF Fallo THEN
-				// después de un fallo no es seguro volver a F5
-                gmModePrev := E_GEMMA.A6Inicializando;  
-                gmModeActual := E_GEMMA.D2TratamientoFallos;
-
-			ELSIF pn.cnA3_Estado THEN
-				gmModePrev := E_GEMMA.F5VerificacionOrdenada;
-				gmModeActual := E_GEMMA.A3ParadaEstado;
- 			
+        E_GEMMA.F5VerificacionOrdenada,  (* Verificacion en orden *)
+		E_GEMMA.F6Probando: (* Prueba secuencial de carga de una tapa *)
+        	gmModePrev := gmModeActual;
+            IF Failure THEN
+				gmModeActual := E_GEMMA.D2TratamientoFallos;
+			ELSIF pn.cnA3_Estado THEN				
+				gmModeActual := E_GEMMA.A3ParadaEstado; 			
 			ELSIF pn.cnF4_Planta THEN
-				// al salir del modo F4 volver a modo F5
-				gmModePrev := E_GEMMA.F5VerificacionOrdenada;
 				gmModeActual := E_GEMMA.F4VerificacionSinOrden;
- 
-            ELSIF NOT pn.cnF5_Funcion THEN
-				// al salir del modo función volver al modo A6
-				gmModePrev := E_GEMMA.A1ParadaInicial; 
+            ELSIF NOT pn.cnF5_Funcion THEN // and not pn.cnF6Prueba  // al salir del modo función volver al modo A6				
 				gmModeActual := E_GEMMA.A6Inicializando;
- 
-            ELSE
-                // Seguir en modo F5
-                ;
+            ELSE                
+                ; // Seguir en modo F5
             END_IF
-			
-        E_GEMMA.F6Probando: (* Prueba *)
-            ; // estado no tratado en la FMS205
-
 			
 			
         (* ------------------------------------------------------------ Procedimientos de defecto *)
         E_GEMMA.D1ParadaEmergencia: (* Parada de emergencia *)
             IF NOT pn.cnD1_Emergencia THEN //  fbPanel.cn.Emergencia THEN
                 gmModeActual := E_GEMMA.A6Inicializando; // Al quitar la parada de emergencia hay que reinicializar la estación
-            ELSE
-                // Esperar a que se quite la parada de emergencia
-                ;
+            ELSE                
+                ; // Esperar a que se quite la parada de emergencia
             END_IF
 			
         E_GEMMA.D2TratamientoFallos: (* Diagnostico/tratamiento de los fallos *)
-            IF NOT Fallo THEN
+            IF NOT Failure THEN
                 gmModeActual := E_GEMMA.A5PreparandoTrasFallo;
-            ELSE
-                // Esperar a que se resuelva el fallo
-                ;
+			ELSIF pn.cnF4_Planta THEN
+				gmModeActual := E_GEMMA.F4VerificacionSinOrden;
+            ELSE                
+                ; // Esperar a que se resuelva el fallo
             END_IF
 
         E_GEMMA.D3ProducirConFallos: (* Produccion a pesar de los fallos *)

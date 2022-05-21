@@ -86,7 +86,7 @@ VAR
 	swF1_Reanudar					: BOOL;
 	
 	swA6_Inicializar				: BOOL;
-	TmpReinicio						: TON; 	
+	// TmpReinicio						: TON; 	
 END_VAR
 
 
@@ -319,8 +319,8 @@ END_IF
 
 
 //----------------------------------------------------------------- Consigna A6_Inicializar
-TmpReinicio(IN := hwPM_PulsadorMarcha AND NOT hwPS_PulsadorStop, PT:= tmReinicio);
-cnA6_Inicializar := (swA6_Inicializar OR TmpReinicio.Q);
+// TmpReinicio(IN := hwPM_PulsadorMarcha AND NOT hwPS_PulsadorStop, PT:= tmReinicio);
+cnA6_Inicializar := (swA6_Inicializar);//  OR TmpReinicio.Q);
 IF cnA6_Inicializar THEN
 	swF5_Funcion := FALSE;
 	swF4_Planta := FALSE;

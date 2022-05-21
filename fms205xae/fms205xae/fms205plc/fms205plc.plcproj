@@ -42,7 +42,16 @@
     <Compile Include="FMS205\FB_FMS205.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FMS205\FB_FMS205_Producir_SFC.TcPOU">
+    <Compile Include="FMS205\FB_FMS205_F3SeqFin_SFC.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FMS205\FB_FMS205_F6Prueba_SFC.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FMS205\FB_FMS205_F2SeqPrep_SFC.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FMS205\FB_FMS205_F1Producir_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FMS205\FB_Panel.TcPOU">

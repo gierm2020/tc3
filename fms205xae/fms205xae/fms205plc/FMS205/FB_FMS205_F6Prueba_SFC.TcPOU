@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
-  <POU Name="FB_FMS205_Producir_SFC" Id="{a81c472c-1220-4b76-860b-f7f6b111694f}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205_Producir_SFC
+  <POU Name="FB_FMS205_F6Prueba_SFC" Id="{a81c472c-1220-4b76-860b-f7f6b111694f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205_F6Prueba_SFC
 VAR_INPUT
 	IC: BOOL;
 	Execute: BOOL;
@@ -24,9 +24,6 @@ VAR_IN_OUT
 	Desca			: FB_PickAndPlace;
 	Plato			: FB_PlatoDivisor;
 	Cinta			: FB_Cinta;
-END_VAR
-// TODO PENDIENTE TERMINAR EL RESTO DE MÓDULOS
-VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
