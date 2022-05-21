@@ -55,7 +55,8 @@ END_VAR
     <Method Name="ProcessCycle" Id="{8ef223d1-a933-4fe3-87e8-40d9ed750433}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL 
 VAR_INPUT
-	dr	: REFERENCE TO FB_Director;
+	dr			: REFERENCE TO FB_Director;
+	tapas		: REFERENCE TO FB_Tapas;	
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Pause y reset

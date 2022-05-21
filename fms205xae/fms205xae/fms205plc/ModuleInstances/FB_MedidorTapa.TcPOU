@@ -56,9 +56,9 @@ END_VAR
     <Method Name="ProcessCycle" Id="{d76d2d9a-68fd-4928-b9fd-2c031ae14f83}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL 
 VAR_INPUT
-	dr	: REFERENCE TO FB_Director;
-END_VAR
-]]></Declaration>
+	dr			: REFERENCE TO FB_Director;
+	tapas		: REFERENCE TO FB_Tapas;	
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Pause y reset
 IsStopped := NOT fbController.UnsafeStop AND (
@@ -102,6 +102,8 @@ IF fbController.Leyendo AND NOT Lectura_Registrada THEN
 	Lectura_Registrada 	:= TRUE;
 	strUi := TO_STRING(Altura_mm);
 	strUi := concat(strUi, ' mm');
+	tapas.Medido(Done:=Done, Lectura_Registrada:=Lectura_Registrada, Altura_Mm:=Altura_mm, Altura_Pulsos:=Altura_Pulsos);
+
 ELSIF Ready THEN
 	Lectura_Registrada 	:= FALSE; 	// Resetear la lectura para el siguiente ciclo
 	Altura_Pulsos	:= 0;

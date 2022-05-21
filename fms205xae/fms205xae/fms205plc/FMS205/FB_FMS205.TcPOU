@@ -40,6 +40,8 @@ END_VAR
 VAR
 	// controladores de la máquina, la función de producción y la guía GEMMA 
 	dr						: FB_Director;
+	tapas					: FB_Tapas;
+	
 	numGiros 	: DINT := 0;
 	angulo	 	: REAL := 0.0;
 	anguloanim 	: REAL := 0.0; // angulo para animación que gira lentamente
@@ -386,15 +388,15 @@ PosDesca := (NumGiros+1) MOD 8;
 
 
 // ejecutar el ciclo de cada uno de los módulos
-mdAlimentador.ProcessCycle(dr:=dr);
-mdPickAndPlaceCarga.ProcessCycle(dr:=dr);
-mdMedidorTapa.ProcessCycle(dr:=dr);	
-mdDetectorFotoelectrico.ProcessCycle(dr:=dr);
-mdCaptadorInductivo.ProcessCycle(dr:=dr);
-mdEvacuador.ProcessCycle(dr:=dr);
-mdPickAndPlaceDescarga.ProcessCycle(dr:=dr);
-mdPlatoDivisor.ProcessCycle(dr:=dr);
-mdCinta.ProcessCycle(dr:=dr);
+mdAlimentador.ProcessCycle(dr:=dr, tapas:=tapas);
+mdPickAndPlaceCarga.ProcessCycle(dr:=dr, tapas:=tapas);
+mdMedidorTapa.ProcessCycle(dr:=dr, tapas:=tapas);	
+mdDetectorFotoelectrico.ProcessCycle(dr:=dr, tapas:=tapas);
+mdCaptadorInductivo.ProcessCycle(dr:=dr, tapas:=tapas);
+mdEvacuador.ProcessCycle(dr:=dr, tapas:=tapas);
+mdPickAndPlaceDescarga.ProcessCycle(dr:=dr, tapas:=tapas);
+mdPlatoDivisor.ProcessCycle(dr:=dr, tapas:=tapas);
+mdCinta.ProcessCycle(dr:=dr, tapas:=tapas);
 
 
 IF mdPlatoDivisor.Execute THEN

@@ -31,9 +31,9 @@ END_VAR
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL 
 
 VAR_INPUT
-	dr	: REFERENCE TO FB_Director;
-END_VAR
-]]></Declaration>
+	dr			: REFERENCE TO FB_Director;
+	tapas		: REFERENCE TO FB_Tapas;	
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Pause y reset
 IsStopped := NOT fbController.UnsafeStop AND (dr.gmModeActual = E_GEMMA.A3ParadaEstado);
@@ -45,6 +45,9 @@ d0.ProcessCycle(dr:=dr, sfcValue=>fbController.d0);
 IC := InitialConditions();
 fbController(
 	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+	
+// tapas.Girado(Done:=Done);
+
 D_1.ProcessCycle(dr:=dr, sfcValue:=fbController.D_1);
 E_1.ProcessCycle(dr:=dr, sfcValue:=fbController.E_1);
 IsActive:=D_1.uiValue OR E_1.uiValue;]]></ST>

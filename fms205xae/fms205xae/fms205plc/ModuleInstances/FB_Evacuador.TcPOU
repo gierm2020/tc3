@@ -55,7 +55,8 @@ END_VAR
     <Method Name="ProcessCycle" Id="{088423ab-0767-49f6-96df-c713fe6fe249}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL 
 VAR_INPUT
-	dr	: REFERENCE TO FB_Director;
+	dr			: REFERENCE TO FB_Director;
+	tapas		: REFERENCE TO FB_Tapas;	
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Pause y reset
@@ -81,11 +82,14 @@ fbController(
 	Evacuar	:= Evacuar,							// otras entradas específicas
 	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 
+tapas.Evacuado(Done:=Done, Evacuar:=Evacuar);
+	
 F_0.ProcessCycle(dr:=dr, sfcValue:=fbController.F_0);
 F_1.ProcessCycle(dr:=dr, sfcValue:=fbController.F_1);
 G_1.ProcessCycle(dr:=dr, sfcValue:=fbController.G_1);
 V_1.ProcessCycle(dr:=dr, sfcValue:=fbController.V_1);
-IsActive := F_0.uiValue OR F_1.uiValue OR G_1.uiValue OR V_1.uiValue;
+
+// IsActive := F_0.uiValue OR F_1.uiValue OR G_1.uiValue OR V_1.uiValue;
 
 ]]></ST>
       </Implementation>

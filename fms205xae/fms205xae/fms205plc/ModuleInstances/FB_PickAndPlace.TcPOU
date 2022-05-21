@@ -22,10 +22,6 @@ Como puede observarse en la imagen, el manipulador previsto para realizar esta t
 presenta idénticas características que el utilizado para depositar la tapa sobre el plato divisor. 
 Dispone de una pinza de apertura paralela para sujetar la tapa, que es elevada y desplazada 
 realizando un giro hasta el punto de descarga mediante un actuador neumático rotolineal. *)
-VAR_INPUT
-	
-	Mover: BOOL := TRUE; // TODO HAY QUE CARGAR O DESCARGAR EN FUNCIÓN DEL RESTO DE LA MÁQUINA Y LAS CONSIGNAS DEL PANEL
-END_VAR
 
 VAR
 
@@ -42,8 +38,12 @@ VAR
 	HOR : dvActuator := (dr:=dr); // AT %Q*: BOOL; (* Actuador de extension de brazo horizontal *)
 	VER : dvActuator := (dr:=dr); //AT %Q*: BOOL; (* Actuador de movimiento vertical de brazo*)
 	PIN : dvActuator := (dr:=dr); //AT %Q*: BOOL; (*Actuador de pinza de brazo*)
+	
 END_VAR
-]]></Declaration>
+
+VAR_INPUT
+	Mover:BOOL:=TRUE;
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
@@ -57,7 +57,8 @@ END_VAR
     <Method Name="ProcessCycle" Id="{ad50b7d3-ffb1-4d5e-9f1d-9c4b9b9b584c}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL
 VAR_INPUT
-	dr	: REFERENCE TO FB_Director;
+	dr			: REFERENCE TO FB_Director;
+	tapas		: REFERENCE TO FB_Tapas;	
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -81,6 +82,11 @@ fbController(
 		Mover := Mover,							// otras entradas específicas
 		dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 
+IF Name='Carga' THEN
+	tapas.Cargado(Done:=Done, Mover:=Mover);
+ELSE
+	tapas.Descargado(Done:=Done, Mover:=Mover);
+END_IF
 
 HOR.ProcessCycle(dr:=dr, sfcValue:=fbController.HOR);
 VER.ProcessCycle(dr:=dr, sfcValue:=fbController.VER);

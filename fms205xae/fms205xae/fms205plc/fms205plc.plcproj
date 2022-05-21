@@ -60,6 +60,9 @@
     <Compile Include="FMS205\FB_Sector.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FMS205\FB_Tapas.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="GlobalTextList.TcGTLO">
       <SubType>Code</SubType>
     </Compile>

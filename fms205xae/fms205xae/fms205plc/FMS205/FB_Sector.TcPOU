@@ -99,7 +99,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF mdCarga.Done and mdCarga.Mover THEN
+        <ST><![CDATA[(*IF mdCarga.Done and mdCarga.Mover THEN
 	Inicializando	:= FALSE;
 		
 	Tapa_Cargada	:= TRUE;
@@ -114,7 +114,7 @@ END_VAR
 	Materal_Medido	:= FALSE;	
 	Tapa_Metalica 	:= FALSE;
 	Actualizar(pn:=pn);
-END_IF]]></ST>
+END_IF*)]]></ST>
       </Implementation>
     </Method>
     <Method Name="Claridad" Id="{28e58372-3814-4775-9d11-afec4f690ea6}">
@@ -141,9 +141,9 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF mdDesca.Done AND mdDesca.Mover THEN
+        <ST><![CDATA[(*IF mdDesca.Done AND mdDesca.Mover THEN
 	Vaciar(pn:=pn);	
-END_IF]]></ST>
+END_IF*)]]></ST>
       </Implementation>
     </Method>
     <Method Name="Evacuar" Id="{8a5360cd-4241-4566-ae3e-195e2da3ad32}">

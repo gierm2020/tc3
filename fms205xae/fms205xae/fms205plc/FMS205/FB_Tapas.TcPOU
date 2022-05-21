@@ -1,0 +1,290 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_Tapas" Id="{bb89ac45-4910-4319-9986-f6a3e6f8b97b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Tapas
+VAR CONSTANT
+	ColSecIndeterm	: DWORD := 16#80101010; // gris claro
+	ColSecVacio		: DWORD := 16#80808080; // gris oscuro
+	ColSecPendiente : DWORD := 16#80000080; // azul
+	ColSecDescargar	: DWORD := 16#80008000; // verde
+	ColSecEvacuar	: DWORD := 16#80800000; // rojo
+END_VAR
+
+VAR_INPUT
+	ReqNumero	: DINT := 0; 		// requisito de número de tapas deseadas
+	ReqAlta		: REAL := 18.5;  	// requisito de tapa alta
+	ReqVacio	: REAL := 2.0; 		// si mide menos el sector está vacío
+	ReqAluBaja	: BOOL := FALSE;
+	ReqAluAlta	: BOOL := TRUE;
+	ReqBlnBaja  : BOOL := TRUE;
+    ReqBlnAlta  : BOOL := FALSE;
+	ReqNgrBaja  : BOOL := FALSE;
+    ReqNgrAlta  : BOOL := FALSE; 
+END_VAR
+VAR_OUTPUT
+	ResPend	  	: DINT := 0;
+	ResReal		: DINT := 0;
+	ResRech   	: DINT := 0;
+	Tapa_Alimentada : BOOL;
+END_VAR
+
+VAR
+	NumGiros 	: DINT := 0;
+	angulo	 	: REAL := 0.0;
+	anguloanim 	: REAL := 0.0; // angulo para animación que gira lentamente
+	girado		: BOOL := FALSE;
+	
+	vInicializando 		: ARRAY[0..7] OF BOOL;	
+	vCargar_Tapa		: ARRAY[0..7] OF BOOL;
+	vTapa_Cargada 		: ARRAY[0..7] OF BOOL;
+	vAltura_Medida		: ARRAY[0..7] OF BOOL;
+	vAltura_Pulsos 		: ARRAY[0..7] OF DWORD;
+	vAltura_Mm 			: ARRAY[0..7] OF REAL;
+	vTapa_Alta			: ARRAY[0..7] OF BOOL;
+	vClaridad_Medida	: ARRAY[0..7] OF BOOL;
+	vTapa_Clara 		: ARRAY[0..7] OF BOOL;	
+	vMateral_Medido		: ARRAY[0..7] OF BOOL;	
+	vTapa_Metalica 		: ARRAY[0..7] OF BOOL;	
+	vEvacuar_Tapa		: ARRAY[0..7] OF BOOL;
+	vDescargar_Tapa		: ARRAY[0..7] OF BOOL;
+	vstrUi 				: ARRAY[0..7] OF STRING;
+	vColorSector		: ARRAY[0..7] OF DWORD;	
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Actualizar" Id="{76d8c916-080e-414e-a1dc-0f3a274c86ba}">
+      <Declaration><![CDATA[METHOD Actualizar : BOOL
+VAR_INPUT
+END_VAR
+
+VAR
+	i 	: int := 0;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FOR i:=0 TO 7 DO
+	IF vInicializando[i] THEN
+		vAltura_Medida[i]	:= FALSE;
+		vAltura_Pulsos[i]	:= 0;
+		vAltura_Mm[i] 		:= 0;
+	
+		vClaridad_Medida[i]	:= FALSE;
+		vTapa_Clara[i] 		:= FALSE;
+	
+		vMateral_Medido[i]	:= FALSE;	
+		vTapa_Metalica[i] 	:= FALSE;
+	
+		vCargar_Tapa[i]		:= FALSE;
+		vEvacuar_Tapa[i]		:= FALSE;
+		vDescargar_Tapa[i]	:= FALSE;	
+		vColorSector[i] 		:= ColSecIndeterm;
+		vstrUi[i] 			:= '?';
+	
+	ELSIF NOT vTapa_Cargada[i] THEN
+		vCargar_Tapa[i]		:= TRUE;
+		vEvacuar_Tapa[i]		:= FALSE;
+		vDescargar_Tapa[i]	:= FALSE;	
+		vColorSector[i] 		:= ColSecVacio;
+		vstrUi[i] 			:= '___';
+	ELSE
+		vCargar_Tapa[i]		:= FALSE;
+		IF vAltura_Medida[i] AND vClaridad_Medida[i] AND vMateral_Medido[i] THEN
+			vDescargar_Tapa[i] := (
+					(ReqAluAlta AND vTapa_Metalica[i] AND vTapa_Alta[i]) OR
+					(ReqAluBaja AND vTapa_Metalica[i] AND NOT vTapa_Alta[i]) OR
+					(ReqBlnAlta AND NOT vTapa_Metalica[i] AND vTapa_Clara[i]  AND vTapa_Alta[i]) OR
+					(ReqBlnBaja AND NOT vTapa_Metalica[i] AND vTapa_Clara[i]  AND NOT vTapa_Alta[i]) OR
+					(ReqNgrAlta AND NOT vTapa_Metalica[i] AND NOT vTapa_Clara[i]  AND vTapa_Alta[i]) OR
+					(ReqNgrBaja AND NOT vTapa_Metalica[i] AND NOT vTapa_Clara[i]  AND NOT vTapa_Alta[i]));
+			vEvacuar_Tapa[i] := NOT vDescargar_Tapa[i];
+			vColorSector[i] := SEL(vDescargar_Tapa[i],ColSecEvacuar, ColSecDescargar);
+		ELSE
+			vDescargar_Tapa[i]	:= FALSE;
+			vEvacuar_Tapa[i]	:= FALSE;
+			vColorSector[i] := ColSecPendiente; 			
+		END_IF 
+		vstrUi[i] := SEL(vAltura_Medida[i],'?', SEL(vTapa_Alta[i], 'B','A'));
+		vstrUi[i] := CONCAT(vstrUi[i], SEL(vClaridad_Medida[i], '?',SEL(vTapa_Clara[i],'O','C')));
+		vstrUi[i] := CONCAT(vstrUi[i], SEL(vMateral_Medido[i], '?', SEL(vTapa_Metalica[i], 'P','M'))); 		
+	END_IF
+END_FOR ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Alimentado" Id="{68228dc4-db57-4234-af5a-76549516de52}">
+      <Declaration><![CDATA[METHOD Alimentado : BOOL
+VAR_INPUT
+	Done	: BOOL;
+	FM		: BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Done THEN
+	Tapa_Alimentada := NOT FM;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Cargado" Id="{b17e1a0b-f1bf-4df1-8172-1b04521564f1}">
+      <Declaration><![CDATA[METHOD Cargado : BOOL
+VAR_INPUT
+	Done: BOOL; 	// el brazo de carga ha terminado
+	Mover: BOOL; 	// el brazo de carga ha movido la tapa
+END_VAR
+
+VAR
+	PosCarga : DINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Done AND Mover THEN
+	PosCarga := (NumGiros+0) MOD 8;
+	
+	vInicializando[PosCarga]		:= FALSE;
+		
+	vTapa_Cargada[PosCarga]		:= TRUE;
+		
+	vAltura_Medida[PosCarga]		:= FALSE;
+	vAltura_Pulsos[PosCarga]		:= 0;
+	vAltura_Mm[PosCarga] 		:= 0;
+		
+	vClaridad_Medida[PosCarga]	:= FALSE;
+	vTapa_Clara[PosCarga] 		:= FALSE;
+		
+	vMateral_Medido[PosCarga]	:= FALSE;	
+	vTapa_Metalica[PosCarga] 	:= FALSE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Claridad" Id="{afe73e40-fb85-4efe-b906-85a197d79803}">
+      <Declaration><![CDATA[METHOD Claridad : BOOL
+VAR_INPUT
+	Done: BOOL;
+	Lectura_Registrada: BOOL;
+	Tapa_Clara: BOOL;
+END_VAR
+
+VAR
+	PosFotoe: DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Done AND Lectura_Registrada THEN
+	PosFotoe 					:= (NumGiros+5) MOD 8;
+	vClaridad_Medida[PosFotoe]	:= TRUE;
+	vTapa_Clara[PosFotoe]		:= Tapa_Clara;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Descargado" Id="{8738750d-0f53-4448-9145-e43c2aec455f}">
+      <Declaration><![CDATA[METHOD Descargado : BOOL
+VAR_INPUT
+	Done	: BOOL;
+	Mover	: BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Done AND Mover THEN
+	Vaciar(PosVacia := (NumGiros+1) MOD 8);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Evacuado" Id="{5caa088b-866e-4274-a9c7-1d9f312ea165}">
+      <Declaration><![CDATA[METHOD Evacuado : BOOL
+
+VAR_INPUT
+	Done	: BOOL;
+	Evacuar	: BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Done AND Evacuado THEN
+	Vaciar(PosVacia := (NumGiros+2) MOD 8);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Girado" Id="{0ccf35a2-1876-4048-9c8b-4ff29b7fbdc7}">
+      <Declaration><![CDATA[METHOD Girado : BOOL
+VAR_INPUT
+	Done: BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Material" Id="{88973f08-454f-49dc-aa0f-ae73f3546455}">
+      <Declaration><![CDATA[METHOD Material : BOOL
+VAR_INPUT
+	Done: BOOL;
+	Lectura_Registrada: BOOL;
+	Tapa_Metalica: BOOL;
+END_VAR
+
+VAR
+	PosInduc: DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Done AND Lectura_Registrada THEN
+	PosInduc 					:= (NumGiros+4) MOD 8;
+	vMateral_Medido[PosInduc]	:= TRUE;
+	vTapa_Metalica[PosInduc]	:= Tapa_Metalica;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Medido" Id="{e0bd59f6-28b6-48d4-9b89-31b0758ec910}">
+      <Declaration><![CDATA[METHOD Medido : BOOL
+VAR_INPUT
+	Done				: BOOL;
+	Lectura_Registrada	: BOOL;
+	Altura_Mm			: REAL;
+	Altura_Pulsos		: UDINT;	
+END_VAR
+
+VAR
+	PosMedid: DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Done AND Lectura_Registrada THEN
+	PosMedid := (NumGiros+6) MOD 8;
+	IF Altura_Mm < ReqVacio THEN
+		Vaciar(PosVacia:=PosMedid);
+	ELSE
+		vInicializando[PosMedid]	:= FALSE;
+		vTapa_Cargada[PosMedid]		:= TRUE;			
+		vAltura_Medida[PosMedid]	:= TRUE;
+		vAltura_Pulsos[PosMedid]	:= Altura_Pulsos;
+		vAltura_Mm[PosMedid]		:= Altura_mm;
+		vTapa_Alta[PosMedid]		:= Altura_mm > ReqAlta;
+	END_IF	
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Vaciar" Id="{3cc88831-9ad2-4cbf-830e-7f9be896f2fe}">
+      <Declaration><![CDATA[METHOD Vaciar : BOOL
+VAR_INPUT
+	PosVacia: DINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[vInicializando[PosVacia]	:= FALSE;
+	
+vTapa_Cargada[PosVacia]		:= FALSE;
+	
+vAltura_Medida[PosVacia]	:= FALSE;
+vAltura_Pulsos[PosVacia]	:= 0;
+vAltura_Mm [PosVacia]		:= 0;
+	
+vClaridad_Medida[PosVacia]	:= FALSE;
+vTapa_Clara[PosVacia] 		:= FALSE;
+	
+vMateral_Medido[PosVacia]	:= FALSE;	
+vTapa_Metalica[PosVacia] 	:= FALSE;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
