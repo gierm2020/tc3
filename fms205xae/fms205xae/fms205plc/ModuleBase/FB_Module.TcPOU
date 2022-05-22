@@ -7,7 +7,7 @@ VAR_INPUT
 	dr		: REFERENCE TO FB_Director;
 	ID		: BYTE; 		// identificador de la unidad funcional (el módulo)
 	Name	: STRING;		// Nombre del módulo (para erroers)
-	Descr	: STRING; 		// Descripción del módulo (para tooltips)
+	// Descr	: STRING; 		// Descripción del módulo (para tooltips)
 	
 	Execute: BOOL;
 	Ack: BOOL;
@@ -18,8 +18,8 @@ VAR_OUTPUT
 	Ready: BOOL;
 	Failure: BOOL;
 	Done: BOOL;
-	IsActive: BOOL;
-	IsStopped: BOOL := FALSE;
+// IsActive: BOOL;
+	//IsStopped: BOOL := FALSE;
 END_VAR
 
 // TODO AÑADIR UN METODO GEMMA QUE SE INVOQUE DESDE PROCESSCYCLE PARA TRATAMIENTO DE PARADA, PAUSA...

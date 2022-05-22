@@ -38,7 +38,7 @@ fbController(
 // Actuadores y actualización de tapas
 D_1.ProcessCycle(dr:=dr, sfcValue:=fbController.D_1);
 E_1.ProcessCycle(dr:=dr, sfcValue:=fbController.E_1);
-IsActive:=D_1.uiValue OR E_1.uiValue;
+//IsActive:=D_1.uiValue OR E_1.uiValue;
 tapas.Girado(Ready:=Ready, Execute:=Execute, Done:=Done);
 ]]></ST>
       </Implementation>

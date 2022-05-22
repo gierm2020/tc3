@@ -6,7 +6,6 @@
 VAR_INPUT
 	IC		: BOOL := FALSE; 	// todos los módulos están en condiciones iniciales
     Execute	: BOOL;
-	Ack 	: BOOL;
 END_VAR
 
 VAR_OUTPUT
@@ -241,7 +240,8 @@ mdCinta.ProcessCycle					(dr:=dr, tapas:=tapas);
 
 // actualizar la interfaz de usuario
 tapas.Actualizar();
-tapas.Animar(PlatoActivo := not mdPlatoDivisor.fbController.Ready);]]></ST>
+tapas.Animar(PlatoActivo := NOT mdPlatoDivisor.fbController.Ready);
+]]></ST>
       </Implementation>
     </Method>
   </POU>

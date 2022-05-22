@@ -358,7 +358,8 @@ END_CASE]]></ST>
 
 VAR
 	factor : REAL;
-END_VAR]]></Declaration>
+END_VAR
+]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF Speed <= 0 THEN
 	Speed := 1;
