@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_Panel" Id="{514e5db3-ac71-4add-977b-df9fa295436c}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Panel
 VAR_INPUT
@@ -159,7 +159,7 @@ enF4_Planta := ( // sólo se puede entrar o salir del modo desde determinados es
 	gmModeActual = E_GEMMA.D2TratamientoFallos);
 cnF4_Planta := enF4_Planta AND (hwSM_SelecAutoManual OR swF4_Planta);
 
-IF NOT cnF4_Planta AND (hwSM_SelecAutoManual OR swF4_Planta) THEN // consigna no válida
+IF NOT cnF4_Planta AND (hwSM_SelecAutoManual OR swF4_Planta) THEN //IF NOT enF4_Planta// consigna no válida
 	swF4_Planta := FALSE; // Desactivar el botón
 	swMensaje := 'Sólo se puede pasar al modo F4 desde A1, A6, F5, F6 o D2';
 	

@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="dvActuator" Id="{ad7a615f-d37f-4c2d-8af3-51dcf617a49f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK dvActuator
 VAR CONSTANT
+	(* Colores Interfaz*)
 	COLOR_AAct 		: DWORD := 16#0000FF00;
 	COLOR_AIna 		: DWORD := 16#000000FF;
 END_VAR

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="dvSensor" Id="{c4029391-ebd0-4ae7-8ab5-3338cf1cc185}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK dvSensor
 VAR_INPUT
@@ -10,7 +10,7 @@ END_VAR
 VAR	
 	dr				: REFERENCE TO FB_Director;
 	
-	Name			: STRING; 				// Nombre del actuador, p.ej. K_1
+	Name			: STRING; 				// Nombre del sensor, p.ej. k1
 	ModeActual		: E_GEMMA := E_GEMMA.A6Inicializando;
 	prValue			: BOOL := FALSE;		// Valor previo para detectar cambios de estado	
 	uiEnabled		: BOOL := FALSE; 		// Deshabilitar el control cuando hay conexión con el hardware
