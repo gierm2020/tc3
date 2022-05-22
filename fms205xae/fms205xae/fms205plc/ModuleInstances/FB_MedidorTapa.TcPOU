@@ -50,39 +50,17 @@ VAR_INPUT
 	tapas		: REFERENCE TO FB_Tapas;	
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// Pause y reset
-IsStopped := NOT fbController.UnsafeStop AND (dr.gmModeActual = E_GEMMA.A3ParadaEstado);
-fbController.SFCReset := dr.gmModeActual = E_GEMMA.A6Inicializando;
-fbController.SFCPause := IsStopped;
+        <ST><![CDATA[// Sensores y condiciones iniciales
+IC := TRUE;
 
-//----------------------------------- preparar los datos que necesita el controlador
-IC := InitialConditions();
-
-//----------------------------------- ejecutar el controlador
-//fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
+// Controlador
+fbController.PauseAndReset();
 fbController(
-	// TMED := TMED,								// temporizadores específicos
-    dh := dh,									// sensores específicos
-	Lectura_Registrada	:= Lectura_Registrada,			// otras entradas específicas
+    dh := dh, Lectura_Registrada := Lectura_Registrada,
 	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 	
+// Actuadores y actualización de tapas
 L_1.ProcessCycle(dr:=dr, sfcValue:=fbController.L_1);
-IsActive:=L_1.uiValue;
-
-(*//----------------------------------- utilizar los resultados del controlador
-
-// Cambios en actuadores por el modo manual
-IF gm.ModeActual=E_GEMMA.F4VerificacionSinOrden THEN
-	; // TODO AÑADIR AQUI EL MODO MANUAL DEL ALIMENTADOR
-
-// Cambios en actuadores por el resultado del controlador
-ELSE
-	// Actualizar actuadores hardware con lo que indique el controlador
-	L_1 := fbController.L_1;
-END_IF
-*)
-
-// Leer la altura cuando el lector está abajo
 IF fbController.Leyendo AND NOT Lectura_Registrada THEN
 	Altura_Pulsos	:= dh;
 	Altura_mm		:= -0.0257*dh + 52.532;				 // calcular la altura con la ecuación de regresión
@@ -92,8 +70,8 @@ IF fbController.Leyendo AND NOT Lectura_Registrada THEN
 	strUi := concat(strUi, ' mm');
 	tapas.Medido(Altura_Mm:=Altura_mm, Altura_Pulsos:=Altura_Pulsos);
 
-ELSIF Ready THEN
-	Lectura_Registrada 	:= FALSE; 	// Resetear la lectura para el siguiente ciclo
+ELSIF Ready THEN // Resetear la lectura para el siguiente ciclo
+	Lectura_Registrada 	:= FALSE; 	
 	Altura_Pulsos	:= 0;
 	Altura_mm		:= 0;
 	strUi := '?';

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Simple_SFC" Id="{88f7459f-e3cd-4931-a3a9-314c818d385e}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Simple_SFC EXTENDS FB_ControllerBase_SFC
-
+// Grafcet simple para los detectores fotoeléctrico e inductivo
 ]]></Declaration>
     <Implementation>
       <SFC>

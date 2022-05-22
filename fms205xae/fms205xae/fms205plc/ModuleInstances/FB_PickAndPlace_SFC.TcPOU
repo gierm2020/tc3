@@ -2,15 +2,16 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_PickAndPlace_SFC" Id="{5cf52b3a-efe0-4468-b39c-acadeafc1635}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_PickAndPlace_SFC EXTENDS FB_ControllerBase_SFC
-VAR_INPUT
-	Mover: BOOL;
-	//TPIN: TIME; (* Tiempo de cierre y apertura de la pinza de carga *)	
+
+VAR_INPUT 		// Sensores y comandos
 	h0: BOOL; 	(* Final de carrera horizontal retraida *)
 	h1: BOOL; 	(* Final de carrera horizontal extendido *)
 	v1: BOOL; 	(*Final de carrera vertical abajo*)
 	v0: BOOL; 	(*Final de carrera vertical arriba*)
+	Mover: BOOL;
 END_VAR
-VAR_OUTPUT	
+
+VAR_OUTPUT		// Actuadores
 	HOR			: BOOL; (* Actuador de extension de brazo horizontal *)
 	VER			: BOOL; (* Actuador de movimiento vertical de brazo*)
 	PIN			: BOOL; (*Actuador de pinza de brazo*)

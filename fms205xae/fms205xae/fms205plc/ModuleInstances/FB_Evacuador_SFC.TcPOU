@@ -3,16 +3,15 @@
   <POU Name="FB_Evacuador_SFC" Id="{732a5d89-d610-4122-b553-0a1448cdc8d0}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Evacuador_SFC EXTENDS FB_ControllerBase_SFC
 
-
-VAR_INPUT
+VAR_INPUT 		// Sensores y comandos
 	Evacuar		: BOOL; // Hay que evacuar la tapa en la posición del módulo
-	//TSOL		: TIME; // Tiempo esperando después de soltar y antes de subir	
-    f0        	: BOOL; (* gh0 (nombre=f0  c=I22 B=J2 b=22 módulo=EL1008 T=6  C=6 etiqueta=-B10, input) Pick and place de rechazo detrás *)
+	f0        	: BOOL; (* gh0 (nombre=f0  c=I22 B=J2 b=22 módulo=EL1008 T=6  C=6 etiqueta=-B10, input) Pick and place de rechazo detrás *)
     f1        	: BOOL; (* gh1 (nombre=f1  c=I23 B=J2 b=06 módulo=EL1008 T=6  C=6 etiqueta=-B11, input) Pick and place de rechazo delante *)
     g0        	: BOOL; (* gv1 (nombre=g0  c=I24 B=J2 b=31 módulo=EL1008 T=6  C=6 etiqueta=-B12, input) Pick and place de rechazo arriba *)
     v1        	: BOOL; (* ge1 (nombre=v1  c=I25 B=J1 b=25 módulo=EL1008 T=7  C=7 etiqueta=-B13, input) Pick and place de rechazo vacío *)
 END_VAR
-VAR_OUTPUT
+
+VAR_OUTPUT		// Actuadores
 	F_1       	: BOOL; (* gHRA (nombre=F+  c=Q22 B=J2  b=35 módulo=EL2008 T=8 C=8 etiqueta=-Y8,  output) Pick and place de rechazo avanza (afuera) *)
     F_0       	: BOOL; (* gHRR (nombre=F-  c=Q23 B=J2  b=32 módulo=EL2008 T=8 C=8 etiqueta=-Y9,  output) Pick and place de rechazo retrocede *)
     G_1       	: BOOL; (* gVER (nombre=G+  c=Q24 B=J2  b=11 módulo=EL2008 T=8 C=8 etiqueta=-Y10, output) Pick and place de rechazo baja *)

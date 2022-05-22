@@ -3,14 +3,12 @@
   <POU Name="FB_MedidorTapa_SFC" Id="{586537d7-6cab-450b-b2b9-fb1352203f2f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_MedidorTapa_SFC EXTENDS FB_ControllerBase_SFC
 
-// TODO CAMBIAR EL SITIO DE RECOGER LA MEDIDA, NO ESPERAR A QUE SUBA EL MEDIDOR PARA RECOGER EL NÚMERO SINO QUE HACERLO JUSTO CUANDO TERMINE DE BAJAR
-VAR_INPUT
-	//TMED: TIME := T#1S;			// Temporizador medición tapa
+VAR_INPUT 		// Sensores y comandos
 	dh: UINT; 					// Detector valor altura 
 	Lectura_Registrada: BOOL;		// La lectura de la altura ha terminado 	
 END_VAR
 
-VAR_OUTPUT
+VAR_OUTPUT		// Actuadores
 	L_1: BOOL; 					// Medidor de altura baja
 	Leyendo: BOOL;
 END_VAR

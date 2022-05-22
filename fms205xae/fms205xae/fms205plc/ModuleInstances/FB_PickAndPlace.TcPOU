@@ -48,13 +48,6 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="InitialConditions" Id="{1ab95016-3a1b-4dc8-b780-aecabdebcf40}">
-      <Declaration><![CDATA[METHOD InitialConditions : BOOL
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[InitialConditions := v0.uiValue AND h0.uiValue; // el brazo está en condiciones iniciales cuando está arriba y retraído]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="ProcessCycle" Id="{ad50b7d3-ffb1-4d5e-9f1d-9c4b9b9b584c}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL
 VAR_INPUT
@@ -63,36 +56,27 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// Pause y reset
-IsStopped := NOT fbController.UnsafeStop AND (dr.gmModeActual = E_GEMMA.A3ParadaEstado);
-fbController.SFCReset := dr.gmModeActual = E_GEMMA.A6Inicializando;
-fbController.SFCPause := IsStopped;
-
+        <ST><![CDATA[// Sensores y condiciones iniciales
 h0.ProcessCycle(dr:=dr, sfcValue=>fbController.h0);
 h1.ProcessCycle(dr:=dr, sfcValue=>fbController.h1);
 v0.ProcessCycle(dr:=dr, sfcValue=>fbController.v0);
 v1.ProcessCycle(dr:=dr, sfcValue=>fbController.v1);
+IC := v0.uiValue AND h0.uiValue; // el brazo está en condiciones iniciales cuando está arriba y retraído
 
+// Controlador
+fbController.PauseAndReset();
+fbController(Mover := Mover,
+	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 
-//----------------------------------- preparar los datos que necesita el controlador
-IC := InitialConditions();
-
-//----------------------------------- ejecutar el controlador
-//fbModuleController(ctInp:=ctInp, ctOut=>ctOut);
-fbController(
-		Mover := Mover,							// otras entradas específicas
-		dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
-
+// Actuadores y actualización de tapas
+HOR.ProcessCycle(dr:=dr, sfcValue:=fbController.HOR);
+VER.ProcessCycle(dr:=dr, sfcValue:=fbController.VER);
+PIN.ProcessCycle(dr:=dr, sfcValue:=fbController.PIN);
 IF Name='Carga' THEN
 	tapas.Cargado(Done:=Done, Mover:=Mover);
 ELSE
 	tapas.Descargado(Done:=Done, Mover:=Mover);
 END_IF
-
-HOR.ProcessCycle(dr:=dr, sfcValue:=fbController.HOR);
-VER.ProcessCycle(dr:=dr, sfcValue:=fbController.VER);
-PIN.ProcessCycle(dr:=dr, sfcValue:=fbController.PIN);
-IsActive:=HOR.uiValue OR VER.uiValue OR PIN.uiValue;
 ]]></ST>
       </Implementation>
     </Method>

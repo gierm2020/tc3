@@ -35,24 +35,23 @@ VAR_INPUT
 	tapas		: REFERENCE TO FB_Tapas;	
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// Pause y reset
-IsStopped := NOT fbController.UnsafeStop AND (dr.gmModeActual = E_GEMMA.A3ParadaEstado);
-fbController.SFCReset := dr.gmModeActual = E_GEMMA.A6Inicializando;
-fbController.SFCPause := IsStopped;
-
+        <ST><![CDATA[// Sensores y condiciones iniciales
 df.ProcessCycle(dr:=dr);
-IC := InitialConditions();
+IC := TRUE;
+
+// Controlador
+fbController.PauseAndReset();
 fbController(
 	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 
-IF Done AND NOT Lectura_Registrada THEN
-	// si ha terminado de captar: guardar resultado
+// Actuadores y actualización de tapas
+IF Done AND NOT Lectura_Registrada THEN // si ha terminado de captar: guardar resultado
 	Lectura_Registrada	:= TRUE;
 	Tapa_Clara			:= df.uiValue;
-	strUi := SEL(Tapa_Clara, 'Oscura','Clara');
+	strUi 				:= SEL(Tapa_Clara, 'Oscura','Clara');
 	tapas.Claridad(Tapa_Clara:=Tapa_Clara);
-ELSIF Ready THEN
-	// una vez que cambia el ciclo la lectura ya no es fiable
+
+ELSIF Ready THEN // una vez que cambia el ciclo la lectura ya no es fiable	
 	Lectura_Registrada		:= FALSE;
 	strUi := '?';
 END_IF

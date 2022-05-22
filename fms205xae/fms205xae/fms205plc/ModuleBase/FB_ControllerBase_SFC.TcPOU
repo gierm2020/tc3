@@ -565,6 +565,26 @@ END_VAR
         </XmlArchive>
       </SFC>
     </Implementation>
+    <Method Name="IsPaused" Id="{e98f7813-c900-4fd4-9a12-006983f9c884}">
+      <Declaration><![CDATA[METHOD IsPaused : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsPaused := SFCPause;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="PauseAndReset" Id="{c358a4ee-9530-49d3-9f5f-b83d275d2af8}">
+      <Declaration><![CDATA[METHOD PauseAndReset : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SFCReset := dr.gmModeActual = E_GEMMA.A6Inicializando;
+SFCPause := NOT UnsafeStop AND (dr.gmModeActual = E_GEMMA.A3ParadaEstado);
+]]></ST>
+      </Implementation>
+    </Method>
     <ObjectProperties>
       <XmlArchive>
         <Data>

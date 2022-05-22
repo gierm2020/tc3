@@ -9,12 +9,12 @@ VAR_INPUT
 	Name	: STRING;		// Nombre del módulo (para erroers)
 	Descr	: STRING; 		// Descripción del módulo (para tooltips)
 	
-	IC: BOOL;
 	Execute: BOOL;
 	Ack: BOOL;
 
 END_VAR
 VAR_OUTPUT
+	IC: BOOL;
 	Ready: BOOL;
 	Failure: BOOL;
 	Done: BOOL;
@@ -35,14 +35,5 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="InitialConditions" Id="{569290b0-7483-4183-aad6-de676bf056ec}">
-      <Declaration><![CDATA[METHOD InitialConditions : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[InitialConditions := TRUE;]]></ST>
-      </Implementation>
-    </Method>
   </POU>
 </TcPlcObject>

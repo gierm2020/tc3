@@ -18,15 +18,6 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="InitialConditions" Id="{6c6766f3-90b7-4c0e-9ccf-d7be04fb6a0f}">
-      <Declaration><![CDATA[METHOD InitialConditions : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[InitialConditions := d0.uiValue;]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="ProcessCycle" Id="{a7156aed-454d-425e-80f1-664f90d71526}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL 
 
@@ -35,22 +26,21 @@ VAR_INPUT
 	tapas		: REFERENCE TO FB_Tapas;	
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// Pause y reset
-IsStopped := NOT fbController.UnsafeStop AND (dr.gmModeActual = E_GEMMA.A3ParadaEstado);
-fbController.SFCReset := dr.gmModeActual = E_GEMMA.A6Inicializando;
-fbController.SFCPause := IsStopped;
-
-//tm.UpdateSpeed(NewSpeed:= 0.01);
+        <ST><![CDATA[// Sensores y condiciones iniciales
 d0.ProcessCycle(dr:=dr, sfcValue=>fbController.d0);
-IC := InitialConditions();
+IC := d0.uiValue;
+
+// Controlador
+fbController.PauseAndReset();
 fbController(
 	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 	
-tapas.Girado(Ready:=Ready, Execute:=Execute, Done:=Done);
-
+// Actuadores y actualización de tapas
 D_1.ProcessCycle(dr:=dr, sfcValue:=fbController.D_1);
 E_1.ProcessCycle(dr:=dr, sfcValue:=fbController.E_1);
-IsActive:=D_1.uiValue OR E_1.uiValue;]]></ST>
+IsActive:=D_1.uiValue OR E_1.uiValue;
+tapas.Girado(Ready:=Ready, Execute:=Execute, Done:=Done);
+]]></ST>
       </Implementation>
     </Method>
   </POU>

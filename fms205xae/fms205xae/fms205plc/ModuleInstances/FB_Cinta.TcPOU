@@ -50,17 +50,15 @@ VAR_INPUT
 	tapas		: REFERENCE TO FB_Tapas;	
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// Pause y reset
-IsStopped := NOT fbController.UnsafeStop AND (dr.gmModeActual = E_GEMMA.A3ParadaEstado);
-fbController.SFCReset := dr.gmModeActual = E_GEMMA.A6Inicializando;
-fbController.SFCPause := IsStopped;
-
+        <ST><![CDATA[// Sensores y condiciones iniciales
 pp.ProcessCycle(dr:=dr, sfcValue=>fbController.pp);
 cp0.ProcessCycle(dr:=dr, sfcValue=>fbController.cp0);
 cp1.ProcessCycle(dr:=dr, sfcValue=>fbController.cp1);
 cp2.ProcessCycle(dr:=dr, sfcValue=>fbController.cp2);
-IC := InitialConditions();
+IC := TRUE;
 
+// Actuadores y actualización de tapas
+fbController.PauseAndReset();
 fbController(Situar := Situar, Transferir := Transferir,	
 	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 
@@ -68,7 +66,7 @@ RUN.ProcessCycle(dr:=dr, sfcValue:=fbController.RUN);
 REV.ProcessCycle(dr:=dr, sfcValue:=fbController.REV);
 R_1.ProcessCycle(dr:=dr, sfcValue:=fbController.R_1);
 S_1.ProcessCycle(dr:=dr, sfcValue:=fbController.S_1);
-// IsActive := RUN.uiValue OR REV.uiValue OR R_1.uiValue OR S_1.uiValue;]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="Retrocede" Id="{319ef3db-3f91-40fc-bb86-4c3e886a06cc}">

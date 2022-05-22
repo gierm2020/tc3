@@ -148,15 +148,15 @@ END_VAR
       <Implementation>
         <ST><![CDATA[(* La estación está en condiciones iniciales si cada módulo lo está *)
 InitialConditions := (
-		mdAlimentador.InitialConditions() AND
-		mdPickAndPlaceCarga.InitialConditions() AND
-		mdMedidorTapa.InitialConditions() AND 
-		mdCaptadorInductivo.InitialConditions() AND
-		mdDetectorFotoelectrico.InitialConditions() AND
-		mdEvacuador.InitialConditions() AND
-		mdPickAndPlaceDescarga.InitialConditions() AND
-		mdPlatoDivisor.InitialConditions() AND
-		mdCinta.InitialConditions() )  OR dr.gmLocalHost;
+		mdAlimentador.IC AND
+		mdPickAndPlaceCarga.IC AND
+		mdMedidorTapa.IC AND 
+		mdCaptadorInductivo.IC AND
+		mdDetectorFotoelectrico.IC AND
+		mdEvacuador.IC AND
+		mdPickAndPlaceDescarga.IC AND
+		mdPlatoDivisor.IC AND
+		mdCinta.IC )  OR dr.gmLocalHost;
 	 ]]></ST>
       </Implementation>
     </Method>
@@ -167,15 +167,15 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IsPaused := (
-		mdAlimentador.fbController.SFCPause AND
-		mdPickAndPlaceCarga.fbController.SFCPause AND
-		mdMedidorTapa.fbController.SFCPause AND 
-		mdCaptadorInductivo.fbController.SFCPause AND
-		mdDetectorFotoelectrico.fbController.SFCPause AND
-		mdEvacuador.fbController.SFCPause AND
-		mdPickAndPlaceDescarga.fbController.SFCPause AND
-		mdPlatoDivisor.fbController.SFCPause AND
-		mdCinta.fbController.SFCPause);
+		mdAlimentador.fbController.IsPaused() AND
+		mdPickAndPlaceCarga.fbController.IsPaused() AND
+		mdMedidorTapa.fbController.IsPaused() AND 
+		mdCaptadorInductivo.fbController.IsPaused() AND
+		mdDetectorFotoelectrico.fbController.IsPaused() AND
+		mdEvacuador.fbController.isPaused() AND
+		mdPickAndPlaceDescarga.fbController.IsPaused() AND
+		mdPlatoDivisor.fbController.IsPaused() AND
+		mdCinta.fbController.IsPaused());
 ]]></ST>
       </Implementation>
     </Method>
@@ -191,26 +191,26 @@ END_VAR]]></Declaration>
 	E_GEMMA.F6Probando: 
 		IsReady := (
 			mdAlimentador.fbController.Ready AND
-			mdPickAndPlaceCarga.fbController.Done AND
-			mdMedidorTapa.fbController.Done AND 
-			mdCaptadorInductivo.fbController.Done AND
-			mdDetectorFotoelectrico.fbController.Done AND
-			mdEvacuador.fbController.Done AND
-			mdPickAndPlaceDescarga.fbController.Done AND
-			mdPlatoDivisor.fbController.Done AND
-			mdCinta.fbController.Done);
+			mdPickAndPlaceCarga.fbController.Ready AND
+			mdMedidorTapa.fbController.Ready AND 
+			mdCaptadorInductivo.fbController.Ready AND
+			mdDetectorFotoelectrico.fbController.Ready AND
+			mdEvacuador.fbController.Ready AND
+			mdPickAndPlaceDescarga.fbController.Ready AND
+			mdPlatoDivisor.fbController.Ready AND
+			mdCinta.fbController.Ready);
 			
 	 E_GEMMA.F2SecuenciaPreparacion: 
 		IsReady := (
-			mdMedidorTapa.fbController.Done AND 
-			mdCaptadorInductivo.fbController.Done AND
-			mdDetectorFotoelectrico.fbController.Done AND
-			mdPlatoDivisor.fbController.Done);
+			mdMedidorTapa.fbController.Ready AND 
+			mdCaptadorInductivo.fbController.Ready AND
+			mdDetectorFotoelectrico.fbController.Ready AND
+			mdPlatoDivisor.fbController.Ready);
 	
 	E_GEMMA.F3SecuenciaFinalizacion: 
 		IsReady := (
-			mdEvacuador.fbController.Done AND
-			mdPlatoDivisor.fbController.Done);
+			mdEvacuador.fbController.Ready AND
+			mdPlatoDivisor.fbController.Ready);
 END_CASE
 ]]></ST>
       </Implementation>

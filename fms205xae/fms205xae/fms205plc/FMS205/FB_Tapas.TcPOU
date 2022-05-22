@@ -142,7 +142,6 @@ END_VAR
 ELSIF NOT PlatoActivo THEN
 	anguloanim := 0;
 END_IF
-
 ]]></ST>
       </Implementation>
     </Method>
@@ -197,25 +196,27 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[PosCarga := (NumGiros+0) MOD 8;
-DebeCargar := not vInicializando[PosCarga] and not vTapa_Cargada[PosCarga]; ]]></ST>
+DebeCargar := NOT vInicializando[PosCarga] AND NOT vTapa_Cargada[PosCarga]; ]]></ST>
       </Implementation>
     </Method>
     <Method Name="DebeDescargar" Id="{becbf6fd-ea18-4435-b6ab-67ddb434441c}">
       <Declaration><![CDATA[METHOD DebeDescargar : BOOL
-VAR_INPUT
+VAR
+	PosDescarga	: DINT;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[DebeDescargar:=TRUE; // TODO]]></ST>
+        <ST><![CDATA[DebeDescargar := vDescargar_Tapa[(NumGiros+1) MOD 8];]]></ST>
       </Implementation>
     </Method>
     <Method Name="DebeEvacuar" Id="{ef228940-ff3a-4cfc-9754-e0b627d5c993}">
       <Declaration><![CDATA[METHOD DebeEvacuar : BOOL
-VAR_INPUT
+VAR
+	PosEvacu	: DINT;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[DebeEvacuar:=TRUE; // TODO HAY QUE TENER EN CUENTA EL MODO GEMMA F3 PARA FORZAR LA EVACUACIÓN DE TAPAS QUE INCLUSO CUMPLEN]]></ST>
+        <ST><![CDATA[DebeEvacuar := vEvacuar_Tapa[(NumGiros+2) MOD 8];]]></ST>
       </Implementation>
     </Method>
     <Method Name="Descargado" Id="{8738750d-0f53-4448-9145-e43c2aec455f}">
@@ -229,7 +230,8 @@ END_VAR
         <ST><![CDATA[IF Done AND Mover THEN
 	Vaciar(PosVacia := (NumGiros+1) MOD 8);
 	ResReal := ResReal + 1;
-END_IF]]></ST>
+END_IF
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="Evacuado" Id="{5caa088b-866e-4274-a9c7-1d9f312ea165}">

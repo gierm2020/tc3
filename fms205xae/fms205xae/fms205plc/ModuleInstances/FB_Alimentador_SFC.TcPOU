@@ -2,10 +2,12 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Alimentador_SFC" Id="{25ad7b61-92b1-41db-8b65-16e3fd2054f3}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Alimentador_SFC EXTENDS FB_ControllerBase_SFC
-VAR_INPUT
-	k1: BOOL; 					// Sensor de empujador tapa delante
+
+VAR_INPUT 		// Sensores y comandos
+	k1	: BOOL; 					// Sensor de empujador tapa delante
 END_VAR
-VAR_OUTPUT
+
+VAR_OUTPUT		// Actuadores
 	K_1: BOOL; (* Actuador de empujador tapa avanza *)
 	FM : BOOL; 
 END_VAR

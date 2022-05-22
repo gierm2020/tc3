@@ -2,25 +2,19 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_CaptadorInductivo" Id="{2358bbd4-4505-47c4-8c5f-b848f9a2a136}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_CaptadorInductivo EXTENDS FB_Module
-(*
-
-ESTACIONES DE DETECCIÓN DE MATERIAL - Manual de usuario #31/27
+(* ESTACIONES DE DETECCIÓN DE MATERIAL - Manual de usuario #31/27
 
 Para poder diferenciar las tapas del primero de estos tipos, la segunda de 
 las estaciones del plato divisor está dotada con un captador inductivo. Éste 
 proporciona una señal al PLC, únicamente en el caso de que la tapa que el 
-plato sitúa frente a él cada vez que realiza un giro, sea de aluminio.
+plato sitúa frente a él cada vez que realiza un giro, sea de aluminio. *)
 
-*)
-VAR_INPUT
-	tapas				: REFERENCE TO FB_Tapas;	
-END_VAR
 
 VAR_OUTPUT
-	di         			: dvSensor := (dr:=dr); // AT %I*: BOOL; (* ei (nombre=di c=I31 B=J1 b=13 módulo=EL1008 T=7 C=7 etiqueta=-B19, input) Detector inductivo *)
-	fbController		: FB_Simple_SFC:=(dr:=dr);
-	
-	Lectura_Registrada	: BOOL := FALSE; 
+	fbController		: FB_Simple_SFC:=(dr:=dr);		// Controlador
+	di         			: dvSensor := (dr:=dr); 		// Sensores
+														// No hay actuadores
+	Lectura_Registrada	: BOOL := FALSE; 				// Salida a la visualización
 	Tapa_Metalica		: BOOL;
 	strUi				: STRING := '?';
 END_VAR
@@ -35,25 +29,23 @@ VAR_INPUT
 	tapas		: REFERENCE TO FB_Tapas;	
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// Pause y reset
-IsStopped := NOT fbController.UnsafeStop AND (dr.gmModeActual = E_GEMMA.A3ParadaEstado);
-fbController.SFCReset := dr.gmModeActual = E_GEMMA.A6Inicializando;
-fbController.SFCPause := IsStopped;
-
+        <ST><![CDATA[// Sensores y condiciones iniciales
 di.ProcessCycle(dr:=dr);
-IC := InitialConditions();
+IC := TRUE;
 
+// Controlador
+fbController.PauseAndReset();
 fbController(
 	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 
+// Actuadores y actualización de tapas
 IF Done AND NOT Lectura_Registrada THEN
-	// si ha terminado de captar: guardar resultado
 	Lectura_Registrada		:= TRUE;
 	Tapa_Metalica		:= di.uiValue;
 	strUi := SEL(Tapa_Metalica, 'Plástico','Metálica');
 	tapas.Material(Tapa_Metalica:=Tapa_Metalica);
-ELSIF Ready THEN
-	// una vez que cambia el ciclo la lectura ya no es fiable
+	
+ELSIF Ready THEN // una vez que cambia el ciclo la lectura ya no es fiable	
 	Lectura_Registrada		:= FALSE;
 	strUi := '?';
 END_IF
