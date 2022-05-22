@@ -40,7 +40,7 @@ df.ProcessCycle(dr:=dr);
 IC := TRUE;
 
 // Controlador
-fbController.PauseAndReset();
+fbController.PauseAndReset(dr.gmModeActual);
 fbController(
 	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 

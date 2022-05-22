@@ -64,7 +64,7 @@ v1.ProcessCycle(dr:=dr, sfcValue=>fbController.v1);
 IC := v0.uiValue AND h0.uiValue; // el brazo está en condiciones iniciales cuando está arriba y retraído
 
 // Controlador
-fbController.PauseAndReset();
+fbController.PauseAndReset(dr.gmModeActual);
 fbController(Mover := Mover,
 	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 

@@ -52,7 +52,7 @@ v1.ProcessCycle(dr:=dr, sfcValue=>fbController.v1);
 IC := f1.hwValue; // el evacuador está en condiciones iniciales cuando el sensor f1 está activado
 
 // Controlador
-fbController.PauseAndReset();
+fbController.PauseAndReset(dr.gmModeActual);
 fbController(
 	Evacuar	:= Evacuar,
 	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);

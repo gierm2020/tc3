@@ -577,11 +577,12 @@ END_VAR
     <Method Name="PauseAndReset" Id="{c358a4ee-9530-49d3-9f5f-b83d275d2af8}">
       <Declaration><![CDATA[METHOD PauseAndReset : BOOL
 VAR_INPUT
+	gmModeActual : E_GEMMA;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[SFCReset := dr.gmModeActual = E_GEMMA.A6Inicializando;
-SFCPause := NOT UnsafeStop AND (dr.gmModeActual = E_GEMMA.A3ParadaEstado);
+        <ST><![CDATA[SFCReset := gmModeActual = E_GEMMA.A6Inicializando;
+SFCPause := NOT UnsafeStop AND (gmModeActual = E_GEMMA.A3ParadaEstado);
 ]]></ST>
       </Implementation>
     </Method>

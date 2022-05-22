@@ -31,7 +31,7 @@ d0.ProcessCycle(dr:=dr, sfcValue=>fbController.d0);
 IC := d0.uiValue;
 
 // Controlador
-fbController.PauseAndReset();
+fbController.PauseAndReset(dr.gmModeActual);
 fbController(
 	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 	

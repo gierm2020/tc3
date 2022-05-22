@@ -54,7 +54,7 @@ END_VAR]]></Declaration>
 IC := TRUE;
 
 // Controlador
-fbController.PauseAndReset();
+fbController.PauseAndReset(dr.gmModeActual);
 fbController(
     dh := dh, Lectura_Registrada := Lectura_Registrada,
 	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);

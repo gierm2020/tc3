@@ -58,7 +58,7 @@ cp2.ProcessCycle(dr:=dr, sfcValue=>fbController.cp2);
 IC := TRUE;
 
 // Actuadores y actualización de tapas
-fbController.PauseAndReset();
+fbController.PauseAndReset(dr.gmModeActual);
 fbController(Situar := Situar, Transferir := Transferir,	
 	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 
