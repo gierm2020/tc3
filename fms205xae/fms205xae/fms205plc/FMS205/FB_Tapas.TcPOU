@@ -38,7 +38,7 @@ VAR
 	HaGirado	: BOOL := FALSE;
 	
 	vInicializando 		: ARRAY[0..7] OF BOOL;	
-	vCargar_Tapa		: ARRAY[0..7] OF BOOL;
+	//vCargar_Tapa		: ARRAY[0..7] OF BOOL;
 	vTapa_Cargada 		: ARRAY[0..7] OF BOOL;
 	vAltura_Medida		: ARRAY[0..7] OF BOOL;
 	vAltura_Pulsos 		: ARRAY[0..7] OF DWORD;
@@ -79,20 +79,20 @@ END_VAR]]></Declaration>
 		vMateral_Medido[i]	:= FALSE;	
 		vTapa_Metalica[i] 	:= FALSE;
 	
-		vCargar_Tapa[i]		:= FALSE;
+		//vCargar_Tapa[i]		:= FALSE;
 		vEvacuar_Tapa[i]	:= FALSE;
 		vDescargar_Tapa[i]	:= FALSE;	
 		vColorSector[i] 	:= ColSecIndeterm;
 		vstrUi[i] 			:= '?';
 	
 	ELSIF NOT vTapa_Cargada[i] THEN
-		vCargar_Tapa[i]		:= TRUE;
+		//vCargar_Tapa[i]		:= TRUE;
 		vEvacuar_Tapa[i]	:= FALSE;
 		vDescargar_Tapa[i]	:= FALSE;	
 		vColorSector[i] 	:= ColSecVacio;
 		vstrUi[i] 			:= '___';
 	ELSE
-		vCargar_Tapa[i]		:= FALSE;
+		//vCargar_Tapa[i]		:= FALSE;
 		IF vAltura_Medida[i] AND vClaridad_Medida[i] AND vMateral_Medido[i] THEN
 			vDescargar_Tapa[i] := (
 					(ReqAluAlta AND vTapa_Metalica[i] AND vTapa_Alta[i]) OR
@@ -128,6 +128,22 @@ END_VAR
         <ST><![CDATA[IF Done THEN
 	Falta_Material := FM;
 END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Animar" Id="{de346600-d46e-4dc7-b63f-da26d1696097}">
+      <Declaration><![CDATA[METHOD Animar : BOOL
+VAR_INPUT
+	PlatoActivo : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF PlatoActivo AND anguloanim >-35.0 THEN
+	anguloanim := anguloanim - 0.2;
+ELSIF NOT PlatoActivo THEN
+	anguloanim := 0;
+END_IF
+
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="Cargado" Id="{b17e1a0b-f1bf-4df1-8172-1b04521564f1}">
@@ -175,11 +191,13 @@ vTapa_Clara[PosFotoe]		:= Tapa_Clara;
     </Method>
     <Method Name="DebeCargar" Id="{bab766a7-5d91-42d2-90cb-869d831df2e1}">
       <Declaration><![CDATA[METHOD DebeCargar : BOOL
-VAR_INPUT
+VAR
+	PosCarga	: DINT;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[DebeCargar:=TRUE; // TODO PosCarga := (NumGiros+0) MOD 8;]]></ST>
+        <ST><![CDATA[PosCarga := (NumGiros+0) MOD 8;
+DebeCargar := not vInicializando[PosCarga] and not vTapa_Cargada[PosCarga]; ]]></ST>
       </Implementation>
     </Method>
     <Method Name="DebeDescargar" Id="{becbf6fd-ea18-4435-b6ab-67ddb434441c}">
@@ -240,17 +258,10 @@ END_VAR
       <Implementation>
         <ST><![CDATA[IF Execute THEN
 	HaGirado := FALSE;
-	anguloanim := 0;
-	
-ELSIF NOT HaGirado THEN
-	IF Done THEN
-		HaGirado := TRUE;
-		NumGiros := NumGiros + 1;
-		angulo := SEL(angulo =0, angulo-45.0, 315.0); // , angulo+45.0, 0);
-		anguloanim := 0;		
-	END_IF
-ELSIF NOT Ready AND NOT Done AND anguloanim >-44.0 THEN
-	anguloanim := anguloanim - 5;	
+ELSIF NOT HaGirado AND Done THEN
+	HaGirado := TRUE;
+	NumGiros := NumGiros + 1;
+	angulo := SEL(angulo =0, angulo-45.0, 315.0); // , angulo+45.0, 0);
 END_IF]]></ST>
       </Implementation>
     </Method>
@@ -277,7 +288,7 @@ angulo	 	:= 0.0;
 anguloanim 	:= 0.0; // angulo para animación que gira lentamente
 HaGirado	:= FALSE;
 
-FOR i:=1 TO 8 DO
+FOR i:=0 TO 7 DO
 	vInicializando[i] := TRUE;
 END_FOR
 Actualizar();]]></ST>

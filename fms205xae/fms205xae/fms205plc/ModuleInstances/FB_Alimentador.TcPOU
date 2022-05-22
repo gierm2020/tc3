@@ -11,7 +11,7 @@ neumático que realiza la extracción
 
 *)
 
-VAR
+VAR_OUTPUT
 	// Controlador
 	fbController: FB_Alimentador_SFC:=(dr:=dr);
 	

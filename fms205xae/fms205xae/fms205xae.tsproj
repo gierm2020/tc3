@@ -16,6 +16,30 @@
 					<Vars VarGrpType="1">
 						<Name>PlcTask Inputs</Name>
 						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hwPE_Seta</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hwPOC_PulsadorReset</Name>
+							<Comment><![CDATA[ POC Botón azul está pulsado (PO Conectada)]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hwPM_PulsadorMarcha</Name>
+							<Comment><![CDATA[ PM - Pulsador de marcha (verde)]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hwPS_PulsadorStop</Name>
+							<Comment><![CDATA[ PS - Pulsador de parada (rojo)]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hwSM_SelecAutoManual</Name>
+							<Comment><![CDATA[ SM - Selector modo auto/man]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.fbFMS205.mdAlimentador.k1.hwValue</Name>
 							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
 							<Type>BOOL</Type>
@@ -120,33 +144,34 @@
 							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
-						<Var>
-							<Name>MAIN.fbFMS205.fbPanel.hwPE_Seta</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.fbFMS205.fbPanel.hwPOC_PulsadorReset</Name>
-							<Comment><![CDATA[ POC Botón azul está pulsado (PO Conectada)]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.fbFMS205.fbPanel.hwPM_PulsadorMarcha</Name>
-							<Comment><![CDATA[ PM - Pulsador de marcha (verde)]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.fbFMS205.fbPanel.hwPS_PulsadorStop</Name>
-							<Comment><![CDATA[ PS - Pulsador de parada (rojo)]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.fbFMS205.fbPanel.hwSM_SelecAutoManual</Name>
-							<Comment><![CDATA[ SM - Selector modo auto/man]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
 					</Vars>
 					<Vars VarGrpType="2" AreaNo="1">
 						<Name>PlcTask Outputs</Name>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hwLM_LamparaMarcha</Name>
+							<Comment><![CDATA[ LM - Lámpara marcha (verde)]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hwLS_LamparaStop</Name>
+							<Comment><![CDATA[ DUDAS - LA - Lámpara de alarma o lámpara de stop]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hwAS_AvisadorSonoro</Name>
+							<Comment><![CDATA[ AS - Avisador Sonoro]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hwLA_LamparaAlarma</Name>
+							<Comment><![CDATA[ DUDAS - Es lo mismo que falta de material?]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.fbFMS205.fbPanel.hwDPO_DesconectaPO</Name>
+							<Comment><![CDATA[ DPO - Desconecta PO	]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdAlimentador.K_1.hwValue</Name>
 							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
@@ -240,31 +265,6 @@
 						<Var>
 							<Name>MAIN.fbFMS205.mdCinta.S_1.hwValue</Name>
 							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.fbFMS205.fbPanel.hwLM_LamparaMarcha</Name>
-							<Comment><![CDATA[ LM - Lámpara marcha (verde)]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.fbFMS205.fbPanel.hwLS_LamparaStop</Name>
-							<Comment><![CDATA[ DUDAS - LA - Lámpara de alarma o lámpara de stop]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.fbFMS205.fbPanel.hwAS_AvisadorSonoro</Name>
-							<Comment><![CDATA[ AS - Avisador Sonoro]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.fbFMS205.fbPanel.hwLA_LamparaAlarma</Name>
-							<Comment><![CDATA[ DUDAS - Es lo mismo que falta de material?]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.fbFMS205.fbPanel.hwDPO_DesconectaPO</Name>
-							<Comment><![CDATA[ DPO - Desconecta PO	]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 					</Vars>

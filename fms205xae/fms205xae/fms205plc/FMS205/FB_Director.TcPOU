@@ -7,7 +7,7 @@ VAR_INPUT
 	Failure			: BOOL := FALSE;	// hay al menos un módulo que ha fallado
 	EndCycle		: BOOL := FALSE;	// se ha completado un ciclo con/sin rechazo/descarga
 	EndBatch		: BOOL := FALSE; 	// se han completado todas las tapas del lote
-	IsStopped		: BOOL := TRUE; 	// estación en estado estable con todos los módulos detenidos
+	IsPaused		: BOOL := TRUE; 	// estación en estado estable con todos los módulos detenidos
 	IsPrepared		: BOOL := TRUE; 	// secuencia de preparación completada
 	IsFinished		: BOOL := TRUE; 	// secuencia de finalización completada
 END_VAR
@@ -34,7 +34,6 @@ VAR_OUTPUT
 	gmModeDescr		: STRING 	:= 'Inicializando';
 	
 END_VAR	
-
 
 VAR
 	// Velocidad variable de los controladores
@@ -132,7 +131,7 @@ ELSE
         E_GEMMA.A3ParadaEstado: (* Parada solicitada en un estado determinado *)
             IF Failure THEN
                 gmModeActual := E_GEMMA.D2TratamientoFallos;
-			ELSIF IsStopped THEN
+			ELSIF IsPaused THEN
                 gmModeActual := E_GEMMA.A4ParadaObtenida;
             ELSE
                 ; // Seguir produciendo hasta que todos los módulos paren en un estado estable
@@ -167,28 +166,45 @@ ELSE
 			
         (* ------------------------------------------------------------ Procedimientos de funcionamiento *)
         
-        E_GEMMA.F2SecuenciaPreparacion, (* Secuencia de preparacion *)
-		E_GEMMA.F1ProduccionNormal, 	(* Produccion normal *)
-		E_GEMMA.F3SecuenciaFinalizacion:(* Secuencia de finalizacion *)
+        E_GEMMA.F2SecuenciaPreparacion, 	(* Secuencia de preparacion *)
+		E_GEMMA.F1ProduccionNormal, 		(* Produccion normal *)
+		E_GEMMA.F3SecuenciaFinalizacion, 	(* Secuencia de finalizacion *)
+        E_GEMMA.F5VerificacionOrdenada,  	(* Verificacion en orden *)
+		E_GEMMA.F6Probando: 				(* Prueba secuencial de carga de una tapa *)
         
-			gmModePrev := gmModeActual;
+			IF gmModeActual <> E_GEMMA.F5VerificacionOrdenada THEN
+				gmModePrev := gmModeActual;	
+			END_IF			
+			
             IF Failure THEN
                 gmModeActual := E_GEMMA.D2TratamientoFallos;
-            ELSIF gmModeActual=E_GEMMA.F2SecuenciaPreparacion AND IsPrepared THEN // (IsPrepared or not cnF2) 
+
+			// cambiar de modo
+            ELSIF gmModeActual=E_GEMMA.F2SecuenciaPreparacion AND IsPrepared THEN 
                 gmModeActual := E_GEMMA.F1ProduccionNormal;
-            ELSIF gmModeActual=E_GEMMA.F1ProduccionNormal AND pn.cnA2_FinCiclo THEN
-				gmModeActual := E_GEMMA.A3ParadaEstado;
 			ELSIF gmModeActual=E_GEMMA.F1ProduccionNormal AND EndBatch THEN
                 gmModeActual := E_GEMMA.F3SecuenciaFinalizacion;
-			ELSIF gmModeActual=E_GEMMA.F3SecuenciaFinalizacion AND IsFinished THEN // (IsFinished or not cnF3)
-				gmModeActual := E_GEMMA.A1ParadaInicial; // podría ser A6 TODO
-			ELSIF pn.cnA3_Estado THEN 
-                gmModeActual := E_GEMMA.A3ParadaEstado;
+			ELSIF gmModeActual=E_GEMMA.F3SecuenciaFinalizacion AND IsFinished THEN
+				gmModeActual := E_GEMMA.A1ParadaInicial; 
+			ELSIF gmModeActual=E_GEMMA.F5VerificacionOrdenada AND NOT pn.cnF5_Funcion THEN
+				gmModeActual := gmModePrev; // desde el modo función se vuelve a uno de los grafcets a nivel de estación 
+			ELSIF gmModeActual=E_GEMMA.F6Probando AND NOT pn.cnF6_Probar THEN
+				gmModeActual := E_GEMMA.A1ParadaInicial; 
+				
+			// paradas
+            ELSIF gmModeActual=E_GEMMA.F1ProduccionNormal AND pn.cnA2_FinCiclo THEN
+				gmModeActual := E_GEMMA.A2ParaFinCiclo;
+			ELSIF pn.cnA3_Estado THEN				
+				gmModeActual := E_GEMMA.A3ParadaEstado; 			
+				
 			ELSIF pn.cnF4_Planta THEN 				
                 gmModeActual := E_GEMMA.F4VerificacionSinOrden;
             ELSE                
                 ; // continuar con la preparación/producción/finalización
             END_IF
+			
+			
+			
 			
         E_GEMMA.F4VerificacionSinOrden: (* Verificacion sin orden *)
             IF Failure THEN
@@ -199,21 +215,7 @@ ELSE
                 ; // Seguir en modo manual
             END_IF
 			
-        E_GEMMA.F5VerificacionOrdenada,  (* Verificacion en orden *)
-		E_GEMMA.F6Probando: (* Prueba secuencial de carga de una tapa *)
-        	gmModePrev := gmModeActual;
-            IF Failure THEN
-				gmModeActual := E_GEMMA.D2TratamientoFallos;
-			ELSIF pn.cnA3_Estado THEN				
-				gmModeActual := E_GEMMA.A3ParadaEstado; 			
-			ELSIF pn.cnF4_Planta THEN
-				gmModeActual := E_GEMMA.F4VerificacionSinOrden;
-            ELSIF NOT pn.cnF5_Funcion THEN // and not pn.cnF6Prueba TODO // al salir del modo función volver al modo A6				
-				gmModeActual := E_GEMMA.A6Inicializando;
-            ELSE                
-                ; // Seguir en modo F5 / F6
-            END_IF
-			
+        	
 			
         (* ------------------------------------------------------------ Procedimientos de defecto *)
         E_GEMMA.D1ParadaEmergencia: (* Parada de emergencia *)
@@ -247,60 +249,107 @@ gmFamiDefail := (gmModeActual >= E_GEMMA.D1ParadaEmergencia) AND
 				(gmModeActual <= E_GEMMA.D3ProducirConFallos);
 gmModeColor := SEL(gmFamiArret,SEL(gmFamiFonct, gmColorDefail, gmColorFonct), gmColorArret);
 
-// actualizar las consignas del panel TODO REVISAR
-//pn.cnF4_Planta 		:= gmModeActual = E_GEMMA.F4VerificacionSinOrden;
-//pn.cnF5_Funcion 	:= gmModeActual = E_GEMMA.F5VerificacionOrdenada;
+// actualizar qué botones de consignas se habilitan (enABLE) 
+pn.enF4_Planta		:= FALSE;
+pn.enF5_Funcion		:= FALSE;
+pn.enA2_FinCiclo 	:= FALSE;
+pn.enA3_Estado		:= FALSE;
+pn.enF1_Reanduar	:= FALSE;
+pn.enF1_Empezar		:= FALSE;
 
-// actualizar los mensajes
 CASE gmModeActual OF
 	E_GEMMA.A1ParadaInicial:
-		gmModeName	:= 'Mode A1';
-		gmModeDescr	:= 'Parada en estado inicial';
+		gmModeName			:= 'Mode A1';
+		gmModeDescr			:= 'Parada en estado inicial';
+		pn.enF4_Planta		:= TRUE;
+		pn.enF5_Funcion		:= TRUE;
+		pn.enF1_Empezar		:= TRUE;
+		
 	E_GEMMA.A2ParaFinCiclo:
-		gmModeName	:= 'Mode A2';
-		gmModeDescr	:= 'Parada a final de ciclo solicitada';
+		gmModeName			:= 'Mode A2';
+		gmModeDescr			:= 'Parada a final de ciclo solicitada';
+		pn.enA2_FinCiclo 	:= TRUE;
+		pn.enA3_Estado		:= TRUE;
+		
 	E_GEMMA.A3ParadaEstado:
-		gmModeName	:= 'Mode A3';
-		gmModeDescr	:= 'Parada en estado actual solicitada';
+		gmModeName			:= 'Mode A3';
+		gmModeDescr			:= 'Parada en estado actual solicitada';
+		pn.enF4_Planta		:= TRUE;
+		pn.enA3_Estado		:= TRUE;
+		
 	E_GEMMA.A4ParadaObtenida:
-		gmModeName	:= 'Mode A4';
-		gmModeDescr	:= 'Parada obtenida';
+		gmModeName			:= 'Mode A4';
+		gmModeDescr			:= 'Parada obtenida';
+		pn.enF4_Planta		:= TRUE;
+		pn.enF5_Funcion		:= TRUE;
+		pn.enA3_Estado		:= TRUE;
+		pn.enF1_Reanduar	:= TRUE;
+		
 	E_GEMMA.A5PreparandoTrasFallo:
-		gmModeName	:= 'Mode A5';
-		gmModeDescr	:= 'Preparando tras fallo';	
+		gmModeName			:= 'Mode A5';
+		gmModeDescr			:= 'Preparando tras fallo';	
+		pn.enF4_Planta		:= TRUE;
+		pn.enF5_Funcion		:= TRUE;
+		
 	E_GEMMA.A6Inicializando:
-		gmModeName	:= 'Mode A6';
-		gmModeDescr	:= 'Inicializando';
+		gmModeName			:= 'Mode A6';
+		gmModeDescr			:= 'Inicializando';
+		
 	E_GEMMA.A7SituandoEstado:
-		gmModeName	:= 'Mode A7';
-		gmModeDescr	:= 'Situando PO en un estado determinado';
+		gmModeName		:= 'Mode A7';
+		gmModeDescr		:= 'Situando PO en un estado determinado';
+
 	E_GEMMA.F1ProduccionNormal:
-		gmModeName	:= 'Mode F1';
-		gmModeDescr	:= 'Producción normal';
+		gmModeName			:= 'Mode F1';
+		gmModeDescr			:= 'Producción normal';
+		pn.enA2_FinCiclo 	:= TRUE;
+		pn.enA3_Estado		:= TRUE;
+
 	E_GEMMA.F2SecuenciaPreparacion:
-		gmModeName	:= 'Mode F2';
-		gmModeDescr	:= 'Secuencia de preparación';	
+		gmModeName			:= 'Mode F2';
+		gmModeDescr			:= 'Secuencia de preparación';	
+		pn.enA3_Estado		:= TRUE;
+		
 	E_GEMMA.F3SecuenciaFinalizacion:
-		gmModeName	:= 'Mode F3';
-		gmModeDescr	:= 'Secuencia de finalización';
+		gmModeName			:= 'Mode F3';
+		gmModeDescr			:= 'Secuencia de finalización';
+		pn.enA3_Estado		:= TRUE;
+		
 	E_GEMMA.F4VerificacionSinOrden:
-		gmModeName	:= 'Mode F4';
-		gmModeDescr	:= 'Verificación sin orden (Planta)';
+		gmModeName			:= 'Mode F4';
+		gmModeDescr			:= 'Verificación sin orden (Planta)';
+		pn.enF4_Planta		:= TRUE;
+		pn.enF5_Funcion		:= TRUE;
+		
 	E_GEMMA.F5VerificacionOrdenada:
-		gmModeName	:= 'Mode F5';
-		gmModeDescr	:= 'Verificación ordenada (Función)';
+		gmModeName			:= 'Mode F5';
+		gmModeDescr			:= 'Verificación ordenada (Función)';
+		pn.enF4_Planta		:= TRUE;
+		pn.enF5_Funcion		:= TRUE;
+		pn.enA3_Estado		:= TRUE;
+				
 	E_GEMMA.F6Probando:
-		gmModeName	:= 'Mode F6';
-		gmModeDescr	:= 'Probando';
+		gmModeName			:= 'Mode F6';
+		gmModeDescr			:= 'Probando';
+		pn.enF4_Planta		:= TRUE;
+		pn.enA3_Estado		:= TRUE;
+		
 	E_GEMMA.D1ParadaEmergencia:
-		gmModeName	:= 'Mode D1';
-		gmModeDescr	:= 'Parada de emergencia';
+		gmModeName			:= 'Mode D1';
+		gmModeDescr			:= 'Parada de emergencia';
+
 	E_GEMMA.D2TratamientoFallos:
-		gmModeName	:= 'Mode D2';
-		gmModeDescr	:= 'Diagnóstico/tratamiento de fallos';
+		gmModeName			:= 'Mode D2';
+		gmModeDescr			:= 'Diagnóstico/tratamiento de fallos';
+		pn.enF4_Planta		:= TRUE;
+		pn.enF5_Funcion		:= TRUE;
+		
 	E_GEMMA.D3ProducirConFallos:
-		gmModeName	:= 'Mode D3';
-		gmModeDescr	:= 'Producir con fallos';
+		gmModeName			:= 'Mode D3';
+		gmModeDescr			:= 'Producir con fallos';
+		pn.enF4_Planta		:= TRUE;
+		pn.enF5_Funcion		:= TRUE;
+
 END_CASE]]></ST>
       </Implementation>
     </Method>

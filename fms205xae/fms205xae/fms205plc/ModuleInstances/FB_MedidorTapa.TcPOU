@@ -25,13 +25,6 @@ este dato es posible determinar de forma directa la altura de la tapa
 *)
 
 VAR_OUTPUT
-	Lectura_Registrada	: BOOL;
-	Altura_mm		: REAL;
-	Altura_Pulsos	: UINT;
-	strUi : STRING := '?';
-
-END_VAR
-VAR
 	// Controlador
 	fbController: FB_MedidorTapa_SFC:=(dr:=dr);
 
@@ -40,7 +33,13 @@ VAR
 
 	// Actuadores
 	L_1 : dvActuator := (dr:=dr); // AT %Q*: BOOL; (* Medidor de altura baja *)
-END_VAR]]></Declaration>
+
+	Lectura_Registrada	: BOOL;
+	Altura_mm		: REAL;
+	Altura_Pulsos	: UINT;
+	strUi : STRING := '?';
+END_VAR
+]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>

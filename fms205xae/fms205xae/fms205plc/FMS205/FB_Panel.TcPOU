@@ -7,48 +7,36 @@ VAR_INPUT
 END_VAR
 
 VAR
-	hwPE_Seta					AT %I*: BOOL;
-	hwPOC_PulsadorReset			AT %I*: BOOL; // POC Botón azul está pulsado (PO Conectada)
-	hwPM_PulsadorMarcha			AT %I*: BOOL; // PM - Pulsador de marcha (verde)
-	hwLM_LamparaMarcha			AT %Q*: BOOL; // LM - Lámpara marcha (verde)
-	hwPS_PulsadorStop			AT %I*: BOOL; // PS - Pulsador de parada (rojo)
-	hwLS_LamparaStop			AT %Q*: BOOL; // DUDAS - LA - Lámpara de alarma o lámpara de stop
-	hwSM_SelecAutoManual	 	AT %I*: BOOL; // SM - Selector modo auto/man
+	hwPE_Seta					AT %I*	: BOOL;
+	hwPOC_PulsadorReset			AT %I*	: BOOL; // POC Botón azul está pulsado (PO Conectada)
+	hwPM_PulsadorMarcha			AT %I*	: BOOL; // PM - Pulsador de marcha (verde)
+	hwLM_LamparaMarcha			AT %Q*	: BOOL; // LM - Lámpara marcha (verde)
+	hwPS_PulsadorStop			AT %I*	: BOOL; // PS - Pulsador de parada (rojo)
+	hwLS_LamparaStop			AT %Q*	: BOOL; // DUDAS - LA - Lámpara de alarma o lámpara de stop
+	hwSM_SelecAutoManual	 	AT %I*	: BOOL; // SM - Selector modo auto/man
 	
-	hwAS_AvisadorSonoro			AT %Q*: BOOL; // AS - Avisador Sonoro
-	hwLA_LamparaAlarma			AT %Q*: BOOL; // DUDAS - Es lo mismo que falta de material?
-	hwDPO_DesconectaPO			AT %Q*: BOOL; // DPO - Desconecta PO	
+	hwAS_AvisadorSonoro			AT %Q*	: BOOL; // AS - Avisador Sonoro
+	hwLA_LamparaAlarma			AT %Q*	: BOOL; // DUDAS - Es lo mismo que falta de material?
+	hwDPO_DesconectaPO			AT %Q*	: BOOL; // DPO - Desconecta PO	
 	
-	FP_PM					: R_TRIG;
+	FP_PM								: R_TRIG;
 END_VAR
 
 
 VAR_OUTPUT
-	// consignas del panel únicamente en la visualización
-	(*
-	cnUmbralAlta		: REAL := 18.5;
-	cnProdAluBaja		: BOOL := TRUE;
-	cnProdAluAlta		: BOOL := TRUE;
-	cnProdBlaBaja		: BOOL := TRUE;
-	cnProdBlaAlta		: BOOL := TRUE;
-	cnProdNegAlta		: BOOL := TRUE;
-	cnProdNegBaja		: BOOL := FALSE;	
-*)
 
 	// consignas del panel, resultado de integrar la información que viene del hardware, el estado GEMMA, los temporizadores y flancos, y la interfaz de usuario		
-	cnD1_Emergencia		: BOOL; // pulsar la seta
-
+	cnD1_Emergencia					: BOOL; // pulsar la seta
 	cnA2_FinCiclo					: BOOL;
 	cnA3_Estado						: BOOL;
 	cnA6_Inicializar				: BOOL;
-
-	cnF1_Empezar		: BOOL;
+	cnF1_Empezar					: BOOL;
 	cnF1_Reanudar					: BOOL;
-	cnF2_Preparar		: BOOL;
-	cnF3_Finalizar		: BOOL;
-	cnF4_Planta			: BOOL; // modo verificación sin orden
-	cnF5_Funcion		: BOOL; // modo verificación ordenada
-	cnF6_Probar			: BOOL;
+	cnF2_Preparar					: BOOL;
+	cnF3_Finalizar					: BOOL;
+	cnF4_Planta						: BOOL; // modo verificación sin orden
+	cnF5_Funcion					: BOOL; // modo verificación ordenada
+	cnF6_Probar						: BOOL;
 	
 	swF5_Alimentar					: BOOL;
 	swF5_Situar						: BOOL;
@@ -62,34 +50,34 @@ VAR_OUTPUT
 	swF5_Girar						: BOOL;
 	swF5_Ejecutar					: BOOL;
 	swF5_Ack						: BOOL;
-
-
 END_VAR
 
+VAR_INPUT
+	enA2_FinCiclo					: BOOL;
+	enA3_Estado						: BOOL;
+	enF1_Empezar					: BOOL;
+	enF1_Reanduar					: BOOL;
+	enF4_Planta						: BOOL; // consigna F4_Planta habilitada
+	enF5_Funcion					: BOOL; // consigna habilitada	
+END_VAR
 VAR
 	swMensaje		: STRING(255) :='';
 	
 	swPE_Seta						: BOOL;
 	ttPE_Seta						: STRING := '';
 
-	enA2_FinCiclo					: BOOL;
 	swA2_FinCiclo					: BOOL;
-	enA3_Estado						: BOOL;
 	swA3_Estado						: BOOL;
 	swA6_Inicializar				: BOOL;
 
-	enF1_Empezar					: BOOL;
 	swF1_Empezar					: BOOL;
-	enF1_Reanduar					: BOOL;
 	swF1_Reanudar					: BOOL;
 	swF2_Preparar					: BOOL;
 	swF3_Finalizar					: BOOL;	
-	enF4_Planta						: BOOL; // consigna F4_Planta habilitada
 	swF4_Planta						: BOOL; // botón en la visualización
 	ttF4_Planta						: STRING :='';
 	swF4_Avanza						: BOOL := FALSE;
  	swF4_Retroc						: BOOL := FALSE;	
-	enF5_Funcion					: BOOL; // consigna habilitada
 	swF5_Funcion					: BOOL; // botón en la visualización
 	enF6_Probar						: BOOL;
 	swF6_Probar						: BOOL;
@@ -98,28 +86,7 @@ END_VAR
 
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[	
-
-// invoca a temporizadores y flancos
-//TmpReinicio(IN := hw.PM_PulsadorMarcha AND NOT hw.PS_PulsadorStop, PT:= tm.TiempoReinicio);
-//FP_PM(CLk := hw.PM_PulsadorMarcha);
-
-
-// calcula el estado de las consignas
-// DUDAS - No habría que tener en cuenta el modo de GEMMA para informar Reinicia, Restaura, ...?
-
-// Consignas
-//cnManual 			:= hw.SM_SelecAutoManual; 		// ídem
-//cnReinicia			:= TmpReinicio.Q;
-//cnRestablece		:= hw.PM_PulsadorMarcha;
-//cnRestaura			:= hw.PM_PulsadorMarcha;
-//cnMarcha			:= FP_PM.Q;
-//cnPara				:= NOT hw.PS_PulsadorStop;
-//cnPruebas			:= Probando;
-
-// Señales
-
-]]></ST>
+      <ST><![CDATA[]]></ST>
     </Implementation>
     <Method Name="ProcessCycle" Id="{026a1e81-704d-4f95-ae3e-7d143e02920e}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL
@@ -150,13 +117,6 @@ END_IF
 
 
 //----------------------------------------------------------------- F4_Planta
-enF4_Planta := ( // sólo se puede entrar o salir del modo desde determinados estados 
-	gmModeActual = E_GEMMA.A6Inicializando OR 				 
-	gmModeActual = E_GEMMA.A1ParadaInicial OR		
-	gmModeActual = E_GEMMA.F5VerificacionOrdenada OR		
-	gmModeActual = E_GEMMA.F4VerificacionSinOrden OR 
-	gmModeActual = E_GEMMA.F6Probando OR
-	gmModeActual = E_GEMMA.D2TratamientoFallos);
 cnF4_Planta := enF4_Planta AND (hwSM_SelecAutoManual OR swF4_Planta);
 
 IF NOT cnF4_Planta AND (hwSM_SelecAutoManual OR swF4_Planta) THEN // consigna no válida
@@ -190,12 +150,6 @@ END_IF
 
 
 //----------------------------------------------------------------- F5_Funcion
-// sólo se puede entrar o salir del modo desde determinados estados
-enF5_Funcion := (
-	gmModeActual = E_GEMMA.A1ParadaInicial OR				
-	gmModeActual = E_GEMMA.F4VerificacionSinOrden OR
-	gmModeActual = E_GEMMA.F5VerificacionOrdenada);
-
 cnF5_Funcion := enF5_Funcion AND (swF5_Funcion);
 
 IF NOT cnF5_Funcion AND swF5_Funcion THEN // consigna no válida
@@ -224,12 +178,6 @@ ELSIF cnF5_Funcion THEN // reflejar modo plata en la interfaz
 END_IF 
 
 //----------------------------------------------------------------- Consigna A2_ParaFinCiclo
-// sólo se puede entrar o salir del modo desde determinados estados
-enA2_FinCiclo := (
-	gmModeActual = E_GEMMA.F1ProduccionNormal OR
-	gmModeActual = E_GEMMA.A2ParaFinCiclo OR
-	gmModeActual = E_GEMMA.A4ParadaObtenida);
-
 cnA2_FinCiclo := enA2_FinCiclo AND (swA2_FinCiclo OR hwPS_PulsadorStop);
 
 IF NOT cnA2_FinCiclo AND (swA2_FinCiclo OR hwPS_PulsadorStop) THEN // consigna no válida
@@ -247,13 +195,6 @@ END_IF
 
 
 //----------------------------------------------------------------- Consigna A3_Estado
-// sólo se puede entrar o salir del modo desde determinados estados
-enA3_Estado := (
-	gmModeActual = E_GEMMA.F1ProduccionNormal OR
-	gmModeActual = E_GEMMA.F5VerificacionOrdenada OR
-	gmModeActual = E_GEMMA.A2ParaFinCiclo OR
-	gmModeActual = E_GEMMA.A3ParadaEstado OR
-	gmModeActual = E_GEMMA.A4ParadaObtenida);
 cnA3_Estado := enA3_Estado AND (swA3_Estado);
 
 IF NOT cnA3_Estado AND (swA3_Estado) THEN // consigna no válida
@@ -271,10 +212,6 @@ END_IF
 
 
 //----------------------------------------------------------------- Consigna F1_Reanudar
-enF1_Reanduar := (
-	gmModeActual = E_GEMMA.A2ParaFinCiclo OR
-	gmModeActual = E_GEMMA.A3ParadaEstado OR
-	gmModeActual = E_GEMMA.A4ParadaObtenida);
 cnF1_Reanudar := enF1_Reanduar AND (swF1_Reanudar OR hwPM_PulsadorMarcha);
  	
 IF NOT cnF1_Reanudar AND (swF1_Reanudar OR hwPM_PulsadorMarcha) THEN // consigna no válida
@@ -297,11 +234,6 @@ END_IF
 
 //----------------------------------------------------------------- Consigna F1_Empezar
 FP_PM(CLk := hwPM_PulsadorMarcha);
-enF1_Empezar := (
-	gmModeActual = E_GEMMA.A1ParadaInicial OR
-	gmModeActual = E_GEMMA.A2ParaFinCiclo OR
-	gmModeActual = E_GEMMA.A3ParadaEstado OR
-	gmModeActual = E_GEMMA.A4ParadaObtenida);
 cnF1_Empezar := enF1_Empezar AND (swF1_Empezar OR FP_PM.Q);
 IF NOT cnF1_Empezar AND (swF1_Empezar OR FP_PM.Q) THEN // consigna no válida
 	swF1_Empezar := FALSE; // si no se puede entrar en el modo hay que desactivar el botón

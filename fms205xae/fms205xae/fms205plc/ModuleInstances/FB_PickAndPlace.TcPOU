@@ -23,7 +23,11 @@ presenta idénticas características que el utilizado para depositar la tapa sob
 Dispone de una pinza de apertura paralela para sujetar la tapa, que es elevada y desplazada 
 realizando un giro hasta el punto de descarga mediante un actuador neumático rotolineal. *)
 
-VAR
+VAR_INPUT
+	Mover:BOOL:=TRUE;
+END_VAR
+
+VAR_OUTPUT
 
 	// Controlador
 	fbController: FB_PickAndPlace_SFC:=(dr:=dr); // controlador para ejecución normal
@@ -40,10 +44,7 @@ VAR
 	PIN : dvActuator := (dr:=dr); //AT %Q*: BOOL; (*Actuador de pinza de brazo*)
 	
 END_VAR
-
-VAR_INPUT
-	Mover:BOOL:=TRUE;
-END_VAR]]></Declaration>
+]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>

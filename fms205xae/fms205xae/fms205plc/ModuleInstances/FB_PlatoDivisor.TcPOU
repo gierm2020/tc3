@@ -2,8 +2,8 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_PlatoDivisor" Id="{c71a4a01-3eb1-443b-a07e-accb57d2980d}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_PlatoDivisor EXTENDS FB_Module
-VAR
-	
+
+VAR_OUTPUT	
 	// Controlador
 	fbController: FB_PlatoDivisor_SFC:=(dr:=dr);  // controlador para ejecución normal
 

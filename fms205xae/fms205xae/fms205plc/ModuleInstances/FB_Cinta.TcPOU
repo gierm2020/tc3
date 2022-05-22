@@ -12,7 +12,7 @@ VAR_INPUT
 	TT: TIME := T#1S;
 	TX: TIME := T#1S;
 END_VAR
-VAR
+VAR_OUTPUT
 	// Controlador
 	fbController: FB_Cinta_SFC:=(dr:=dr);
 

@@ -21,7 +21,7 @@ VAR_INPUT
 	//TSOL		: TIME := T#100MS; // tiempo después de soltar y antes de subir	    
 END_VAR
 
-VAR
+VAR_OUTPUT
 	// Controlador
 	fbController		: FB_Evacuador_SFC:=(dr:=dr); 		// controlador para ejecución normal
 

@@ -14,20 +14,15 @@ blanco
 *)
 
 VAR_OUTPUT
-	Lectura_Registrada: BOOL := FALSE; 
-	Tapa_Clara: BOOL;
-	strUi : STRING := '?';
-END_VAR
-
-VAR
 	// Controlador
    	fbController: FB_Simple_SFC:=(dr:=dr);
 
 	// Sensores
     df         : dvSensor := (dr:=dr); //AT %I*: BOOL; (* ef  (nombre=df  c=I32 B=J1 b=04 módulo=EL1008 T=7  C=7 etiqueta=-B20, input) Detector fotoeléctrico *)
 
-	// Actuadores
-	
+	Lectura_Registrada: BOOL := FALSE; 
+	Tapa_Clara: BOOL;
+	strUi : STRING := '?';
 END_VAR
 ]]></Declaration>
     <Implementation>
