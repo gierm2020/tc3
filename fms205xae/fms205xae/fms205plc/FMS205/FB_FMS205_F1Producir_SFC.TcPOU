@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_FMS205_F1Producir_SFC" Id="{3765931f-4c2c-4236-9e0f-0066856caec5}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205_F1Producir_SFC EXTENDS FB_ControllerBase_SFC
 VAR_IN_OUT
@@ -2603,7 +2603,7 @@ END_VAR
                                           <o>
                                             <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                             <o n="Value" t="StringValue">
-                                              <v n="Value">"Evacu.Evacuar"</v>
+                                              <v n="Value">"Evacu.Execute"</v>
                                               <v n="DefaultValue">""</v>
                                             </o>
                                             <v n="Id">938L</v>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_Tapas" Id="{bb89ac45-4910-4319-9986-f6a3e6f8b97b}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Tapas
 VAR CONSTANT
@@ -243,7 +243,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF Done AND Evacuado THEN
+        <ST><![CDATA[IF Done AND Evacuar THEN
 	Vaciar(PosVacia := (NumGiros+2) MOD 8);
 	ResRech := ResRech + 1;
 END_IF]]></ST>
@@ -359,5 +359,66 @@ vMateral_Medido[PosVacia]	:= FALSE;
 vTapa_Metalica[PosVacia] 	:= FALSE;]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_Tapas">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Tapas.Actualizar">
+      <LineId Id="3" Count="46" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Tapas.Alimentado">
+      <LineId Id="3" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Tapas.Animar">
+      <LineId Id="3" Count="4" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Tapas.Cargado">
+      <LineId Id="3" Count="11" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Tapas.Claridad">
+      <LineId Id="3" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Tapas.DebeCargar">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Tapas.DebeDescargar">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Tapas.DebeEvacuar">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Tapas.Descargado">
+      <LineId Id="3" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Tapas.Evacuado">
+      <LineId Id="3" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Tapas.Girado">
+      <LineId Id="3" Count="6" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Tapas.Inicializar">
+      <LineId Id="3" Count="17" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Tapas.Material">
+      <LineId Id="3" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Tapas.Medido">
+      <LineId Id="3" Count="11" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Tapas.Vaciar">
+      <LineId Id="3" Count="7" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

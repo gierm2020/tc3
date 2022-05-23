@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_Director" Id="{1485be2f-2009-4092-b7e4-7ed9a9ca4fab}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Director
 VAR_INPUT
@@ -363,7 +363,7 @@ CASE gmModeActual OF
 		pn.enA2_FinCiclo 		:= TRUE;
 		pn.enA3_Estado			:= TRUE;
 		pn.hwLM_LamparaMarcha	:= TRUE;
-		PN.swF1_Empezar			:= TRUE;
+		//PN.swF1_Empezar			:= TRUE;
 
 	E_GEMMA.F2SecuenciaPreparacion:
 		gmModeName				:= 'Mode F2';
@@ -371,7 +371,7 @@ CASE gmModeActual OF
 		pn.enA3_Estado			:= TRUE;
 		PN.hwAS_AvisadorSonoro 	:= Tic;
 		pn.hwLM_LamparaMarcha	:= TRUE;
-		PN.swF1_Empezar			:= TRUE;
+		//PN.swF1_Empezar			:= TRUE;
 		
 	E_GEMMA.F3SecuenciaFinalizacion:
 		gmModeName				:= 'Mode F3';
@@ -379,14 +379,14 @@ CASE gmModeActual OF
 		pn.enA3_Estado			:= TRUE;
 		PN.hwAS_AvisadorSonoro 	:= TRUE;
 		pn.hwLM_LamparaMarcha	:= TRUE;
-		PN.swF1_Empezar			:= TRUE;
+		//PN.swF1_Empezar			:= TRUE;
 		
 	E_GEMMA.F4VerificacionSinOrden:
 		gmModeName				:= 'Mode F4';
 		gmModeDescr				:= 'Verificación sin orden (Planta)';
 		pn.enF4_Planta			:= TRUE;
 		pn.enF5_Funcion			:= TRUE;
-		pn.swF4_Planta			:= TRUE;
+		//pn.swF4_Planta			:= TRUE;
 		
 	E_GEMMA.F5VerificacionOrdenada:
 		gmModeName				:= 'Mode F5';
@@ -394,7 +394,7 @@ CASE gmModeActual OF
 		pn.enF4_Planta			:= TRUE;
 		pn.enF5_Funcion			:= TRUE;
 		pn.enA3_Estado			:= TRUE;
-		pn.swF5_Funcion			:= TRUE;
+		//pn.swF5_Funcion			:= TRUE;
 				
 	E_GEMMA.F6Probando:
 		gmModeName				:= 'Mode F6';
@@ -426,5 +426,20 @@ CASE gmModeActual OF
 END_CASE]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="FB_Director">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Director.ProcessCycle">
+      <LineId Id="3" Count="154" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Director.UpdateSpeed">
+      <LineId Id="3" Count="18" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Director.UpdateUi">
+      <LineId Id="3" Count="137" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>
