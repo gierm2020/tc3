@@ -39,63 +39,6 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="Actuate" Id="{d496f480-0bbb-49a5-92c2-da582186fe3a}">
-      <Declaration><![CDATA[METHOD Actuate : BOOL
-VAR_INPUT
-	dr			: reference to FB_Director;
-	sfcValue 	: BOOL;		// estado del actuador devuelto por el Grafcet
-	HasFinished	: BOOL;     // TRUE o valor del sensor que tiene que activarse para no dar error 	
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF dr.gmModeActual = E_GEMMA.F4VerificacionSinOrden THEN
-	// Actualizar el hardware con la entrada desde la visualización
-	hwValue := uiValue;
-ELSE
-	// Actualizar el hardware y la visualicación con la entrada desde el Grafcet
-	hwValue := sfcValue;
-	uiValue := sfcValue;
-END_IF
-
-Actuate := TRUE; 	
-IF prValue <> hwValue THEN
-	prValue := hwValue;
-	IF hwValue THEN // Acaban de activar
-		ETActive := dr.Clock.ET;
-	(*
-	ELSE	// Acaban de desactivar
-		HasFailed := FALSE;
-		uiUp 			:= 0;
-		UIDown			:= 0;
-		uiLeft			:= 0;
-		uiRight			:= 0;
-		uiClockwise		:= 0;
-		uiUnclockwise	:= 0;*)	
-	END_IF
-END_IF
-
-IF hwValue AND NOT HasFinished AND (dr.Clock.ET-ETActive) > T#30S THEN
-	Actuate := FALSE;
-END_IF
-
-(*
-IF hwValue THEN
-		uiUp 			:= SEL(uiUp 	= +50, uiUp+1, 0);
-		uiRight			:= SEL(uiRight	= +50, uiRight+1, 0);
-		
-		UIDown			:= SEL(uiDown	= -50, uiDown-1, 0);
-		uiLeft			:= SEL(uiLeft	= -50, uiLeft-1, 0);
-		
-		uiClockwise		:= SEL(uiClockwise   =-359, uiClockwise-1, 0);
-		uiUnclockwise	:= SEL(uiUnclockwise =+359, uiUnclockwise+1, 0);
-END_IF
-
-uiInvisible := NOT hwValue;
-*)
-//uiColor := SEL(hwValue, COLOR_AIna, COLOR_AAct);
-]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="ForceValue" Id="{289f89d6-23cc-4097-8d90-f6ae49e4f7e1}">
       <Declaration><![CDATA[METHOD ForceValue : BOOL
 VAR_INPUT

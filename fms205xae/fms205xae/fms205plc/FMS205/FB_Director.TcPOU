@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Director" Id="{1485be2f-2009-4092-b7e4-7ed9a9ca4fab}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Director
 VAR_INPUT
@@ -96,6 +96,10 @@ END_VAR
 ELSIF pn.cnA6_Inicializar THEN 
     gmModeActual := E_GEMMA.A6Inicializando;
 	
+ELSIF Failure THEN
+	gmModePrev 	 := gmModeActual;
+	gmModeActual := E_GEMMA.D2TratamientoFallos;
+	
 ELSE
     CASE gmModeActual OF
 		
@@ -131,14 +135,14 @@ ELSE
             IF Failure THEN
                 gmModeActual := E_GEMMA.D2TratamientoFallos;
 			ELSIF IsPaused THEN
-                gmModeActual := E_GEMMA.A4ParadaObtenida;
+				gmModeActual	:= E_GEMMA.A4ParadaObtenida;
             ELSE
                 ; // Seguir produciendo hasta que todos los módulos paren en un estado estable
             END_IF
             			
         E_GEMMA.A4ParadaObtenida:
 			IF pn.cnF1_Reanudar THEN
-				gmModeActual := gmModePrev; // retomar el estado antes de la parada
+				gmModeActual 	:= gmModePrev; // retomar el estado antes de la parada
 			ELSE
 				; // seguir parada hasta la consigna de reanudar	
 			END_IF
@@ -225,8 +229,8 @@ ELSE
             END_IF
 			
         E_GEMMA.D2TratamientoFallos: (* Diagnostico/tratamiento de los fallos *)
-            IF NOT Failure THEN
-                gmModeActual := E_GEMMA.A5PreparandoTrasFallo;
+            IF pn.cnF1_Reanudar THEN //NOT Failure THEN
+                gmModeActual := gmModePrev; // gmModeActual := E_GEMMA.A5PreparandoTrasFallo;
 			ELSIF pn.cnF4_Planta THEN
 				gmModeActual := E_GEMMA.F4VerificacionSinOrden;
             ELSE                
@@ -426,20 +430,5 @@ CASE gmModeActual OF
 END_CASE]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_Director">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Director.ProcessCycle">
-      <LineId Id="3" Count="154" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Director.UpdateSpeed">
-      <LineId Id="3" Count="18" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Director.UpdateUi">
-      <LineId Id="3" Count="137" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

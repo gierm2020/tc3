@@ -603,14 +603,15 @@ END_FOR]]></ST>
     <Method Name="PauseAndReset" Id="{c358a4ee-9530-49d3-9f5f-b83d275d2af8}">
       <Declaration><![CDATA[METHOD PauseAndReset : BOOL
 VAR_INPUT
-	gmModeActual : E_GEMMA;
+	gmModeActual 	: E_GEMMA;
 END_VAR
 VAR 
+	fp : R_TRIG;
 	i : UINT;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[SFCReset := gmModeActual = E_GEMMA.A6Inicializando;
-SFCPause := NOT UnsafeStop AND (NumError <> 0 OR gmModeActual=E_GEMMA.A3ParadaEstado);
+        <ST><![CDATA[fp(CLK:=(gmModeActual = E_GEMMA.A6Inicializando), Q=> SFCReset);
+SFCPause := NOT UnsafeStop AND (NumError <> 0 OR gmModeActual=E_GEMMA.A3ParadaEstado OR gmModeActual=E_GEMMA.A4ParadaObtenida or gmModeActual=E_GEMMA.D2TratamientoFallos);
 
 //Clocks[1](IN:= Timed[1], PT:=T#5S);
 

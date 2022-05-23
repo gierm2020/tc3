@@ -54,7 +54,7 @@ IC := f1.hwValue; // el evacuador está en condiciones iniciales cuando el senso
 // Controlador
 fbController.PauseAndReset(dr.gmModeActual);
 fbController(
-	Evacuar	:= Evacuar,
+	Evacuar	:= tapas.DebeEvacuar(),
 	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 
 // Actuadores y actualización de tapas		

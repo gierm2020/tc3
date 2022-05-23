@@ -3796,8 +3796,8 @@ END_VAR
               </o>
               <v>Pause</v>
               <o>
-                <v n="Use">false</v>
-                <v n="Declare">true</v>
+                <v n="Use">true</v>
+                <v n="Declare">false</v>
               </o>
               <v>QuitError</v>
               <o>
@@ -3806,8 +3806,8 @@ END_VAR
               </o>
               <v>Reset</v>
               <o>
-                <v n="Use">false</v>
-                <v n="Declare">true</v>
+                <v n="Use">true</v>
+                <v n="Declare">false</v>
               </o>
               <v>Tip</v>
               <o>
@@ -3836,7 +3836,7 @@ END_VAR
               </o>
             </d2>
             <v n="CalcActiveTransOnly">false</v>
-            <v n="UseDefaults">true</v>
+            <v n="UseDefaults">false</v>
           </o>
         </Data>
         <TypeList>

@@ -26,24 +26,5 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="Actuate" Id="{3b6d92a5-fe24-40b4-a9a9-f7c4d33276dc}">
-      <Declaration><![CDATA[METHOD Actuate : BOOL
-VAR_INPUT	
-	Actuator	: REFERENCE TO dvActuator;
-	dr			: REFERENCE TO FB_Director;
-	sfcValue	: BOOL;
-	HasFinished	: BOOL;	
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF NOT Failure THEN
-	Failure := NOT Actuator.Actuate(dr:=dr, sfcValue:=sfcValue, HasFinished:=HasFinished);
-	IF failure THEN
-		FailName := Actuator.Name;
-	END_IF
-END_IF
-]]></ST>
-      </Implementation>
-    </Method>
   </POU>
 </TcPlcObject>

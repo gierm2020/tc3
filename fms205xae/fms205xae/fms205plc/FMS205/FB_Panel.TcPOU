@@ -177,11 +177,11 @@ END_IF
 cnA2_FinCiclo := enA2_FinCiclo AND (swA2_FinCiclo OR hwPS_PulsadorStop);
 
 IF NOT cnA2_FinCiclo AND (swA2_FinCiclo OR hwPS_PulsadorStop) THEN // consigna no válida
-	swA2_FinCiclo := FALSE; // si no se puede entrar en el modo hay que desactivar el botón
+	//swA2_FinCiclo := FALSE; // si no se puede entrar en el modo hay que desactivar el botón
 	swMensaje := 'Sólo se puede pasar a A2 desde el modo F1';
 
 ELSIF cnA2_FinCiclo THEN
-	swA2_FinCiclo := TRUE; 
+	//swA2_FinCiclo := TRUE; 
 	IF gmModeActual = E_GEMMA.F1ProduccionNormal THEN
 		swMensaje := 'Esperando a finalizar el ciclo para parar';
 	ELSIF gmModeActual = E_GEMMA.A4ParadaObtenida THEN

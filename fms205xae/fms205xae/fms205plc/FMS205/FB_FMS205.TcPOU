@@ -62,6 +62,7 @@ END_VAR
 				mdPickAndPlaceCarga.Mover 	:= tapas.DebeCargar();
 				mdEvacuador.Evacuar 		:= tapas.DebeEvacuar(); 
 				mdPickAndPlaceDescarga.Mover:= tapas.DebeDescargar();
+				mdCinta.Transferir			:= tapas.DebeTransferir();
 				ctrlF1Producir.Execute 		:= TRUE;
 			ELSIF ctrlF1Producir.Done THEN
 				ctrlF1Producir.Execute		:= FALSE; 	// no pasar al siguiente ciclo hasta decidir qué hacer con las tapas
