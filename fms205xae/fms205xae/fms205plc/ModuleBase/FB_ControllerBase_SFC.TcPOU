@@ -3,21 +3,18 @@
   <POU Name="FB_ControllerBase_SFC" Id="{b4a568e5-b860-4b97-ba61-d1f48d9d8c8d}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_ControllerBase_SFC
 VAR_INPUT
-	dr: REFERENCE TO FB_Director;
-	
-	IC: BOOL;
-	Execute: BOOL;
-	Ack: BOOL;
-	
-	// SFC_Flags
+	dr			: REFERENCE TO FB_Director;	
+	IC			: BOOL;
+	Execute		: BOOL;
+	Ack			: BOOL;	
 	SFCPause	: BOOL;
 	SFCReset	: BOOL;
 	UnsafeStop 	: BOOL := FALSE;
 END_VAR
 VAR_OUTPUT
-	Ready: BOOL;
-	Failure: BOOL;
-	Done: BOOL;
+	Ready		: BOOL;
+	Failure		: BOOL;
+	Done		: BOOL := FALSE;
 END_VAR
 
 ]]></Declaration>
@@ -567,8 +564,6 @@ END_VAR
     </Implementation>
     <Method Name="IsPaused" Id="{e98f7813-c900-4fd4-9a12-006983f9c884}">
       <Declaration><![CDATA[METHOD IsPaused : BOOL
-VAR_INPUT
-END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IsPaused := SFCPause;]]></ST>
@@ -582,7 +577,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[SFCReset := gmModeActual = E_GEMMA.A6Inicializando;
-SFCPause := NOT UnsafeStop AND (gmModeActual = E_GEMMA.A3ParadaEstado);
+SFCPause := NOT UnsafeStop AND (Failure OR gmModeActual=E_GEMMA.A3ParadaEstado);
 ]]></ST>
       </Implementation>
     </Method>

@@ -7,33 +7,43 @@ VAR_INPUT
 	dr		: REFERENCE TO FB_Director;
 	ID		: BYTE; 		// identificador de la unidad funcional (el módulo)
 	Name	: STRING;		// Nombre del módulo (para erroers)
+	Execute	: BOOL;
+	Ack		: BOOL;
 	// Descr	: STRING; 		// Descripción del módulo (para tooltips)
+END_VAR
+
+VAR_OUTPUT
+	IC			: BOOL;
+	Ready		: BOOL;
+	Failure		: BOOL;
+	FailName 	: STRING;
+	Done		: BOOL;
 	
-	Execute: BOOL;
-	Ack: BOOL;
-
-END_VAR
-VAR_OUTPUT
-	IC: BOOL;
-	Ready: BOOL;
-	Failure: BOOL;
-	Done: BOOL;
-// IsActive: BOOL;
+	// IsActive: BOOL;
 	//IsStopped: BOOL := FALSE;
-END_VAR
-
-// TODO AÑADIR UN METODO GEMMA QUE SE INVOQUE DESDE PROCESSCYCLE PARA TRATAMIENTO DE PARADA, PAUSA...
-VAR_INPUT
-END_VAR
-
-VAR_OUTPUT
-	//ctOut: S_ControllerOutput;
-//	IC: BOOL;
-//	Done: BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="Actuate" Id="{3b6d92a5-fe24-40b4-a9a9-f7c4d33276dc}">
+      <Declaration><![CDATA[METHOD Actuate : BOOL
+VAR_INPUT	
+	Actuator	: REFERENCE TO dvActuator;
+	dr			: REFERENCE TO FB_Director;
+	sfcValue	: BOOL;
+	HasFinished	: BOOL;	
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT Failure THEN
+	Failure := NOT Actuator.Actuate(dr:=dr, sfcValue:=sfcValue, HasFinished:=HasFinished);
+	IF failure THEN
+		FailName := Actuator.Name;
+	END_IF
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>

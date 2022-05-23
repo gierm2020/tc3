@@ -66,6 +66,11 @@ RUN.ProcessCycle(dr:=dr, sfcValue:=fbController.RUN);
 REV.ProcessCycle(dr:=dr, sfcValue:=fbController.REV);
 R_1.ProcessCycle(dr:=dr, sfcValue:=fbController.R_1);
 S_1.ProcessCycle(dr:=dr, sfcValue:=fbController.S_1);
+
+//Actuate(Actuator:=RUN, dr:=dr, sfcValue:=fbController.RUN, HasFinished:=TRUE);
+//Actuate(Actuator:=REV, dr:=dr, sfcValue:=fbController.REV, HasFinished:=TRUE);
+//Actuate(Actuator:=R_1, dr:=dr, sfcValue:=fbController.R_1, HasFinished:=TRUE);
+//Actuate(Actuator:=S_1, dr:=dr, sfcValue:=fbController.S_1, HasFinished:=TRUE);
 ]]></ST>
       </Implementation>
     </Method>

@@ -21,18 +21,20 @@ END_VAR
 
 
 VAR_OUTPUT
-	gmLocalHost		: BOOL 		:= TRUE; // TODO - SUSTITUIR ESTO POR LA CONDICIÓN DE LOCALHOST
+	gmLocalHost		: BOOL 		:= FALSE; 	// TODO - SUSTITUIR ESTO POR LA CONDICIÓN DE LOCALHOST
 	
-	gmFamiArret		: BOOL 		:= TRUE; 			// Familia de parada
-	gmFamiFonct		: BOOL 		:= FALSE; 			// Familia de funcionamiento
-	gmFamiDefail	: BOOL 		:= FALSE; 			// Familia de salida de fallos
+	gmFamiArret		: BOOL 		:= TRUE; 	// Familia de parada
+	gmFamiFonct		: BOOL 		:= FALSE; 	// Familia de funcionamiento
+	gmFamiDefail	: BOOL 		:= FALSE; 	// Familia de salida de fallos
 	
 	gmModeActual	: E_GEMMA 	:= E_GEMMA.A6Inicializando; 		// Modo GEMMA actual
-	gmModePrev		: E_GEMMA; 		// Modo GEMMA anterior al actual
+	gmModePrev		: E_GEMMA; 				// Modo GEMMA anterior al actual
 	gmModeColor		: DWORD 	:= gmColorArret;
 	gmModeName		: STRING 	:= 'Mode A6';
 	gmModeDescr		: STRING 	:= 'Inicializando';
 	
+	Tic				: BOOL		:= FALSE; 	// Se activa y desactiva cada 500 ms
+	Clock			: TON;					// Temporizador para activar/desactivar Tic
 END_VAR	
 
 VAR
@@ -88,10 +90,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[UpdateSpeed();
-
-//IF bot_Emerg THEN
-IF pn.cnD1_Emergencia THEN
+        <ST><![CDATA[IF pn.cnD1_Emergencia THEN
     gmModeActual := E_GEMMA.D1ParadaEmergencia;
 	
 ELSIF pn.cnA6_Inicializar THEN 
@@ -241,116 +240,12 @@ ELSE
 END_IF
 
 (* PARAMETROS DE SALIDA *)
-gmFamiArret  := (gmModeActual >= E_GEMMA.A1ParadaInicial) AND 
-				(gmModeActual <= E_GEMMA.A7SituandoEstado);
-gmFamiFonct  := (gmModeActual >= E_GEMMA.F1ProduccionNormal) AND 
-				(gmModeActual <= E_GEMMA.F6Probando);
-gmFamiDefail := (gmModeActual >= E_GEMMA.D1ParadaEmergencia) AND 
-				(gmModeActual <= E_GEMMA.D3ProducirConFallos);
-gmModeColor := SEL(gmFamiArret,SEL(gmFamiFonct, gmColorDefail, gmColorFonct), gmColorArret);
+gmFamiArret  := (gmModeActual >= E_GEMMA.A1ParadaInicial) AND (gmModeActual <= E_GEMMA.A7SituandoEstado);
+gmFamiFonct  := (gmModeActual >= E_GEMMA.F1ProduccionNormal) AND (gmModeActual <= E_GEMMA.F6Probando);
+gmFamiDefail := (gmModeActual >= E_GEMMA.D1ParadaEmergencia) AND (gmModeActual <= E_GEMMA.D3ProducirConFallos);
 
-// actualizar qué botones de consignas se habilitan (enABLE) 
-pn.enF4_Planta		:= FALSE;
-pn.enF5_Funcion		:= FALSE;
-pn.enA2_FinCiclo 	:= FALSE;
-pn.enA3_Estado		:= FALSE;
-pn.enF1_Reanduar	:= FALSE;
-pn.enF1_Empezar		:= FALSE;
-
-CASE gmModeActual OF
-	E_GEMMA.A1ParadaInicial:
-		gmModeName			:= 'Mode A1';
-		gmModeDescr			:= 'Parada en estado inicial';
-		pn.enF4_Planta		:= TRUE;
-		pn.enF5_Funcion		:= TRUE;
-		pn.enF1_Empezar		:= TRUE;
-		
-	E_GEMMA.A2ParaFinCiclo:
-		gmModeName			:= 'Mode A2';
-		gmModeDescr			:= 'Parada a final de ciclo solicitada';
-		pn.enA2_FinCiclo 	:= TRUE;
-		pn.enA3_Estado		:= TRUE;
-		
-	E_GEMMA.A3ParadaEstado:
-		gmModeName			:= 'Mode A3';
-		gmModeDescr			:= 'Parada en estado actual solicitada';
-		pn.enF4_Planta		:= TRUE;
-		pn.enA3_Estado		:= TRUE;
-		
-	E_GEMMA.A4ParadaObtenida:
-		gmModeName			:= 'Mode A4';
-		gmModeDescr			:= 'Parada obtenida';
-		pn.enF4_Planta		:= TRUE;
-		pn.enF5_Funcion		:= TRUE;
-		pn.enA3_Estado		:= TRUE;
-		pn.enF1_Reanduar	:= TRUE;
-		
-	E_GEMMA.A5PreparandoTrasFallo:
-		gmModeName			:= 'Mode A5';
-		gmModeDescr			:= 'Preparando tras fallo';	
-		pn.enF4_Planta		:= TRUE;
-		pn.enF5_Funcion		:= TRUE;
-		
-	E_GEMMA.A6Inicializando:
-		gmModeName			:= 'Mode A6';
-		gmModeDescr			:= 'Inicializando';
-		
-	E_GEMMA.A7SituandoEstado:
-		gmModeName		:= 'Mode A7';
-		gmModeDescr		:= 'Situando PO en un estado determinado';
-
-	E_GEMMA.F1ProduccionNormal:
-		gmModeName			:= 'Mode F1';
-		gmModeDescr			:= 'Producción normal';
-		pn.enA2_FinCiclo 	:= TRUE;
-		pn.enA3_Estado		:= TRUE;
-
-	E_GEMMA.F2SecuenciaPreparacion:
-		gmModeName			:= 'Mode F2';
-		gmModeDescr			:= 'Secuencia de preparación';	
-		pn.enA3_Estado		:= TRUE;
-		
-	E_GEMMA.F3SecuenciaFinalizacion:
-		gmModeName			:= 'Mode F3';
-		gmModeDescr			:= 'Secuencia de finalización';
-		pn.enA3_Estado		:= TRUE;
-		
-	E_GEMMA.F4VerificacionSinOrden:
-		gmModeName			:= 'Mode F4';
-		gmModeDescr			:= 'Verificación sin orden (Planta)';
-		pn.enF4_Planta		:= TRUE;
-		pn.enF5_Funcion		:= TRUE;
-		
-	E_GEMMA.F5VerificacionOrdenada:
-		gmModeName			:= 'Mode F5';
-		gmModeDescr			:= 'Verificación ordenada (Función)';
-		pn.enF4_Planta		:= TRUE;
-		pn.enF5_Funcion		:= TRUE;
-		pn.enA3_Estado		:= TRUE;
-				
-	E_GEMMA.F6Probando:
-		gmModeName			:= 'Mode F6';
-		gmModeDescr			:= 'Probando';
-		pn.enF4_Planta		:= TRUE;
-		pn.enA3_Estado		:= TRUE;
-		
-	E_GEMMA.D1ParadaEmergencia:
-		gmModeName			:= 'Mode D1';
-		gmModeDescr			:= 'Parada de emergencia';
-
-	E_GEMMA.D2TratamientoFallos:
-		gmModeName			:= 'Mode D2';
-		gmModeDescr			:= 'Diagnóstico/tratamiento de fallos';
-		pn.enF4_Planta		:= TRUE;
-		pn.enF5_Funcion		:= TRUE;
-		
-	E_GEMMA.D3ProducirConFallos:
-		gmModeName			:= 'Mode D3';
-		gmModeDescr			:= 'Producir con fallos';
-		pn.enF4_Planta		:= TRUE;
-		pn.enF5_Funcion		:= TRUE;
-
-END_CASE]]></ST>
+UpdateUi(pn:=pn);
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="UpdateSpeed" Id="{294b2399-b561-4a6c-95ce-bc201f079bc3}">
@@ -381,6 +276,154 @@ tmPIN 						:= TO_TIME(TO_REAL(dt_PIN) * factor);					// tiempo para pinzar una 
 tmE_1						:= TO_TIME(TO_REAL(dt_E_1) * factor);					// tiempo para que el retenedor bloquee el plato
 tmD_1 						:= TO_TIME(TO_REAL(dt_D_1) * factor);					// tiempo para girar el plato a la siguiente posición
 ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="UpdateUi" Id="{2f7a7a64-69c4-4b55-9d9b-f8c62855d55d}">
+      <Declaration><![CDATA[METHOD UpdateUi : BOOL
+VAR_INPUT
+	pn				: REFERENCE TO FB_Panel;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Actualiza el reloj y la veloidad cada medio segundo
+IF Clock.Q THEN
+	Tic := NOT Tic;
+	UpdateSpeed();
+END_IF
+Clock(IN := Tic AND NOT Clock.Q, PT:=T#500MS);
+
+gmModeColor := SEL(gmFamiArret,SEL(gmFamiFonct, gmColorDefail, gmColorFonct), gmColorArret);
+
+// actualizar qué botones de consignas se habilitan (enABLE) 
+pn.enF4_Planta		:= FALSE;
+pn.enF5_Funcion		:= FALSE;
+pn.enA2_FinCiclo 	:= FALSE;
+pn.enA3_Estado		:= FALSE;
+pn.enF1_Reanduar	:= FALSE;
+pn.enF1_Empezar		:= FALSE;
+
+// actualizar actuadores del panel
+pn.hwAS_AvisadorSonoro 	:= FALSE;
+pn.hwLA_LamparaAlarma	:= FALSE;
+pn.hwLM_LamparaMarcha	:= FALSE;
+pn.swF1_Empezar			:= FALSE;
+pn.swF1_Reanudar		:= FALSE;
+pn.swF4_Planta			:= FALSE;
+pn.swF5_Funcion			:= FALSE;	
+
+
+CASE gmModeActual OF
+	E_GEMMA.A1ParadaInicial:
+		gmModeName				:= 'Mode A1';
+		gmModeDescr				:= 'Parada en estado inicial';
+		pn.enF4_Planta			:= TRUE;
+		pn.enF5_Funcion			:= TRUE;
+		pn.enF1_Empezar			:= TRUE;
+		pn.hwLM_LamparaMarcha	:= Tic;
+		
+	E_GEMMA.A2ParaFinCiclo:
+		gmModeName				:= 'Mode A2';
+		gmModeDescr				:= 'Parada a final de ciclo solicitada';
+		pn.enA2_FinCiclo 		:= TRUE;
+		pn.enA3_Estado			:= TRUE;
+		pn.hwLM_LamparaMarcha	:= TRUE;
+		
+	E_GEMMA.A3ParadaEstado:
+		gmModeName				:= 'Mode A3';
+		gmModeDescr				:= 'Parada en estado actual solicitada';
+		pn.enF4_Planta			:= TRUE;
+		pn.enA3_Estado			:= TRUE;
+		
+	E_GEMMA.A4ParadaObtenida:
+		gmModeName				:= 'Mode A4';
+		gmModeDescr				:= 'Parada obtenida';
+		pn.enF4_Planta			:= TRUE;
+		pn.enF5_Funcion			:= TRUE;
+		pn.enA3_Estado			:= TRUE;
+		pn.enF1_Reanduar		:= TRUE;
+		
+	E_GEMMA.A5PreparandoTrasFallo:
+		gmModeName				:= 'Mode A5';
+		gmModeDescr				:= 'Preparando tras fallo';	
+		pn.enF4_Planta			:= TRUE;
+		pn.enF5_Funcion			:= TRUE;
+		
+	E_GEMMA.A6Inicializando:
+		gmModeName				:= 'Mode A6';
+		gmModeDescr				:= 'Inicializando';
+		pn.hwLA_LamparaAlarma	:= Tic;
+		
+	E_GEMMA.A7SituandoEstado:
+		gmModeName				:= 'Mode A7';
+		gmModeDescr				:= 'Situando PO en un estado determinado';
+
+	E_GEMMA.F1ProduccionNormal:
+		gmModeName				:= 'Mode F1';
+		gmModeDescr				:= 'Producción normal';
+		pn.enA2_FinCiclo 		:= TRUE;
+		pn.enA3_Estado			:= TRUE;
+		pn.hwLM_LamparaMarcha	:= TRUE;
+		PN.swF1_Empezar			:= TRUE;
+
+	E_GEMMA.F2SecuenciaPreparacion:
+		gmModeName				:= 'Mode F2';
+		gmModeDescr				:= 'Secuencia de preparación';	
+		pn.enA3_Estado			:= TRUE;
+		PN.hwAS_AvisadorSonoro 	:= Tic;
+		pn.hwLM_LamparaMarcha	:= TRUE;
+		PN.swF1_Empezar			:= TRUE;
+		
+	E_GEMMA.F3SecuenciaFinalizacion:
+		gmModeName				:= 'Mode F3';
+		gmModeDescr				:= 'Secuencia de finalización';
+		pn.enA3_Estado			:= TRUE;
+		PN.hwAS_AvisadorSonoro 	:= TRUE;
+		pn.hwLM_LamparaMarcha	:= TRUE;
+		PN.swF1_Empezar			:= TRUE;
+		
+	E_GEMMA.F4VerificacionSinOrden:
+		gmModeName				:= 'Mode F4';
+		gmModeDescr				:= 'Verificación sin orden (Planta)';
+		pn.enF4_Planta			:= TRUE;
+		pn.enF5_Funcion			:= TRUE;
+		pn.swF4_Planta			:= TRUE;
+		
+	E_GEMMA.F5VerificacionOrdenada:
+		gmModeName				:= 'Mode F5';
+		gmModeDescr				:= 'Verificación ordenada (Función)';
+		pn.enF4_Planta			:= TRUE;
+		pn.enF5_Funcion			:= TRUE;
+		pn.enA3_Estado			:= TRUE;
+		pn.swF5_Funcion			:= TRUE;
+				
+	E_GEMMA.F6Probando:
+		gmModeName				:= 'Mode F6';
+		gmModeDescr				:= 'Probando';
+		pn.enA3_Estado			:= TRUE;
+		pn.enF4_Planta			:= TRUE;
+		pn.enA3_Estado			:= TRUE;
+		
+	E_GEMMA.D1ParadaEmergencia:
+		gmModeName				:= 'Mode D1';
+		gmModeDescr				:= 'Parada de emergencia';
+		PN.hwAS_AvisadorSonoro 	:= Tic;
+		pn.hwLA_LamparaAlarma	:= Tic;
+
+	E_GEMMA.D2TratamientoFallos:
+		gmModeName				:= 'Mode D2';
+		gmModeDescr				:= 'Diagnóstico/tratamiento de fallos';
+		pn.enF4_Planta			:= TRUE;
+		pn.enF5_Funcion			:= TRUE;
+		PN.hwAS_AvisadorSonoro 	:= Tic;
+		pn.hwLA_LamparaAlarma	:= Tic;
+		
+	E_GEMMA.D3ProducirConFallos:
+		gmModeName				:= 'Mode D3';
+		gmModeDescr				:= 'Producir con fallos';
+		pn.enF4_Planta			:= TRUE;
+		pn.enF5_Funcion			:= TRUE;
+
+END_CASE]]></ST>
       </Implementation>
     </Method>
   </POU>

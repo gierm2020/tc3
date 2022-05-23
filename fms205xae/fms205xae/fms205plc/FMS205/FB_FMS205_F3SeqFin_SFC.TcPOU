@@ -1,20 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_FMS205_F3SeqFin_SFC" Id="{22407fab-8c54-4f66-ad2d-4fd58091b013}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205_F3SeqFin_SFC
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FMS205_F3SeqFin_SFC EXTENDS FB_ControllerBase_SFC
 // Girar 8 veces el plato para determinar qué tipo de tapa hay en cada sector del plato
 
-VAR_INPUT
-	Evacu		 	: REFERENCE TO FB_Evacuador;
-	Plato			: REFERENCE TO FB_PlatoDivisor;
-	Execute		: BOOL;
-	Ack			: BOOL;
-END_VAR
-
-VAR_OUTPUT
-	Ready		: BOOL;
-	Failure		: BOOL;
-	Done		: BOOL;
+VAR_IN_OUT
+	Evacu		 	: FB_Evacuador;
+	Plato			: FB_PlatoDivisor;
 END_VAR
 
 VAR

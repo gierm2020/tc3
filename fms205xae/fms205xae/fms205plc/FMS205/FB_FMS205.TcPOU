@@ -85,7 +85,7 @@ END_VAR
 
 	E_GEMMA.F2SecuenciaPreparacion:
 		dr.IsPrepared 						:= NOT fbPanel.cnF2_Preparar OR ctrlF2SeqPrep.Done;
-		ctrlF2SeqPrep.Execute 				:= fbPanel.cnF2_Preparar AND ctrlF2SeqPrep.Done;
+		ctrlF2SeqPrep.Execute 				:= fbPanel.cnF2_Preparar AND NOT ctrlF2SeqPrep.Done;
 		ctrlF2SeqPrep.Ack					:= IsReady(gmModeActual := E_GEMMA.F2SecuenciaPreparacion);  
 		ctrlF2SeqPrep(Medid:=mdMedidorTapa, Fotoe:=mdDetectorFotoelectrico,	Induc:=mdCaptadorInductivo, Plato:=mdPlatoDivisor);
 				
@@ -225,7 +225,10 @@ dr.ProcessCycle(pn:=fbPanel);
 
 // controlar el flujo a nivel de la estación
 FlowControl();
-
+ctrlF1Producir.PauseAndReset(dr.gmModeActual);
+ctrlF2SeqPrep.PauseAndReset(dr.gmModeActual);
+ctrlF3SeqFin.PauseAndReset(dr.gmModeActual);
+ctrlF6Prueba.PauseAndReset(dr.gmModeActual);
 
 // ejecutar el ciclo de cada uno de los módulos
 mdAlimentador.ProcessCycle				(dr:=dr, tapas:=tapas);

@@ -36,8 +36,10 @@ fbController(
 
 // Actuadores y actualización de tapas
 K_1.ProcessCycle(dr:=dr, sfcValue:=fbController.K_1);
-FM.ProcessCycle (dr:=dr, sfcValue:=fbController.FM);
+FM.ProcessCycle(dr:=dr, sfcValue:=fbController.FM);
 tapas.Alimentado(Done:=Done, FM:=FM.uiValue);
+//Actuate(Actuator:=K_1, dr:=dr, sfcValue:=fbController.K_1, HasFinished:=TRUE);
+//Actuate(Actuator:=FM,  dr:=dr, sfcValue:=fbController.FM, HasFinished:=TRUE);
 ]]></ST>
       </Implementation>
     </Method>

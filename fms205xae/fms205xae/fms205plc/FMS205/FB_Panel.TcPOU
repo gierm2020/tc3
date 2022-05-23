@@ -4,22 +4,25 @@
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Panel
 VAR_INPUT
 	dr: REFERENCE TO FB_Director;
+	hwAS_AvisadorSonoro			AT %Q*	: BOOL; // AS - Avisador Sonoro
+	hwLA_LamparaAlarma			AT %Q*	: BOOL; // DUDAS - Es lo mismo que falta de material?
+	hwDPO_DesconectaPO			AT %Q*	: BOOL; // DPO - Desconecta PO	
+	hwLM_LamparaMarcha			AT %Q*	: BOOL; // LM - Lámpara marcha (verde)
+	swF1_Empezar					: BOOL;
+	swF1_Reanudar					: BOOL;
+	swF4_Planta							: BOOL; // botón en la visualización
+	swF5_Funcion						: BOOL; // botón en la visualización
 END_VAR
 
 VAR
 	hwPE_Seta					AT %I*	: BOOL;
 	hwPOC_PulsadorReset			AT %I*	: BOOL; // POC Botón azul está pulsado (PO Conectada)
 	hwPM_PulsadorMarcha			AT %I*	: BOOL; // PM - Pulsador de marcha (verde)
-	hwLM_LamparaMarcha			AT %Q*	: BOOL; // LM - Lámpara marcha (verde)
 	hwPS_PulsadorStop			AT %I*	: BOOL; // PS - Pulsador de parada (rojo)
 	hwLS_LamparaStop			AT %Q*	: BOOL; // DUDAS - LA - Lámpara de alarma o lámpara de stop
-	hwSM_SelecAutoManual	 	AT %I*	: BOOL; // SM - Selector modo auto/man
-	
-	hwAS_AvisadorSonoro			AT %Q*	: BOOL; // AS - Avisador Sonoro
-	hwLA_LamparaAlarma			AT %Q*	: BOOL; // DUDAS - Es lo mismo que falta de material?
-	hwDPO_DesconectaPO			AT %Q*	: BOOL; // DPO - Desconecta PO	
-	
+	hwSM_SelecAutoManual	 	AT %I*	: BOOL; // SM - Selector modo auto/man	
 	FP_PM								: R_TRIG;
+	swMensaje							: STRING(255) :='';
 END_VAR
 
 
@@ -61,7 +64,6 @@ VAR_INPUT
 	enF5_Funcion					: BOOL; // consigna habilitada	
 END_VAR
 VAR
-	swMensaje		: STRING(255) :='';
 	
 	swPE_Seta						: BOOL;
 	ttPE_Seta						: STRING := '';
@@ -70,15 +72,11 @@ VAR
 	swA3_Estado						: BOOL;
 	swA6_Inicializar				: BOOL;
 
-	swF1_Empezar					: BOOL;
-	swF1_Reanudar					: BOOL;
-	swF2_Preparar					: BOOL;
-	swF3_Finalizar					: BOOL;	
-	swF4_Planta						: BOOL; // botón en la visualización
+//	swF2_Preparar					: BOOL;
+	//swF3_Finalizar					: BOOL;	
 	ttF4_Planta						: STRING :='';
 	swF4_Avanza						: BOOL := FALSE;
  	swF4_Retroc						: BOOL := FALSE;	
-	swF5_Funcion					: BOOL; // botón en la visualización
 	enF6_Probar						: BOOL;
 	swF6_Probar						: BOOL;
 	// TmpReinicio						: TON; 	
@@ -97,9 +95,7 @@ END_VAR
 
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
-
-//----------------------------------------------------------------- Consiga cnD1_Emergencia
+        <ST><![CDATA[//----------------------------------------------------------------- Consiga cnD1_Emergencia
 cnD1_Emergencia := hwPE_Seta OR swPE_Seta; 
 IF hwPE_Seta THEN
 	IF swPE_Seta THEN
@@ -120,13 +116,13 @@ END_IF
 cnF4_Planta := enF4_Planta AND (hwSM_SelecAutoManual OR swF4_Planta);
 
 IF NOT cnF4_Planta AND (hwSM_SelecAutoManual OR swF4_Planta) THEN // consigna no válida
-	swF4_Planta := FALSE; // Desactivar el botón
+//	swF4_Planta := FALSE; // Desactivar el botón
 	swMensaje := 'Sólo se puede pasar al modo F4 desde A1, A6, F5, F6 o D2';
 	
 ELSIF cnF4_Planta THEN // reflejar modo plata en la interfaz		
 	swA6_Inicializar := FALSE; // TODO HACER ESTO AL PRINCIPIO PORQUE ASÍ NO SE PUEDE
-	swF5_Funcion := FALSE; 
-	swF1_Empezar := FALSE; 
+	//swF5_Funcion := FALSE; 
+	//swF1_Empezar := FALSE; 
 	//swMensaje := ''; 
 		
 	IF hwSM_SelecAutoManual AND swF4_Planta THEN
@@ -136,7 +132,7 @@ ELSIF cnF4_Planta THEN // reflejar modo plata en la interfaz
 	ELSIF swF4_Planta THEN
 		ttF4_Planta := 'Mandos directos ativados desde visualización';
 	END_IF	
-	swF4_Planta  := TRUE;
+//	swF4_Planta  := TRUE;
 					
 	// avanza y retrocede son mandos directos excluyentes
 	IF swF4_Avanza THEN 
@@ -153,13 +149,13 @@ END_IF
 cnF5_Funcion := enF5_Funcion AND (swF5_Funcion);
 
 IF NOT cnF5_Funcion AND swF5_Funcion THEN // consigna no válida
-	swF5_Funcion := FALSE; 
+//	swF5_Funcion := FALSE; 
 	swMensaje := 'Sólo se puede pasar al modo función desde A1, o F4';
 		
 ELSIF cnF5_Funcion THEN // reflejar modo plata en la interfaz		
 	swF1_Empezar := FALSE; 
-	swF4_Planta  := FALSE;
-	swF5_Funcion := TRUE;
+	//swF4_Planta  := FALSE;
+	//swF5_Funcion := TRUE;
 	//swMensaje := ''; 
 		
 	// funciones incompatibles
@@ -240,10 +236,11 @@ IF NOT cnF1_Empezar AND (swF1_Empezar OR FP_PM.Q) THEN // consigna no válida
 	swMensaje := 'Sólo se puede empezar desde una parada';
 END_IF
 
-cnF2_Preparar:= swF2_Preparar;
-cnF3_Finalizar:= swF3_Finalizar;
+//cnF2_Preparar:= swF2_Preparar;
+//cnF3_Finalizar:= swF3_Finalizar;
 
 //----------------------------------------------------------------- Señales
+(*
 hwAS_AvisadorSonoro := 
 	gmModeActual = E_GEMMA.F3SecuenciaFinalizacion OR
 	(
@@ -272,7 +269,7 @@ hwLM_LamparaMarcha :=
 	(
 		gmModeActual = E_GEMMA.A1ParadaInicial AND TRUE 
 	);  //  TODO - TERMINAR LA IMPLENTACIÓN CON EL RELOJ - CLK.Q; 
-]]></ST>
+*)]]></ST>
       </Implementation>
     </Method>
   </POU>
