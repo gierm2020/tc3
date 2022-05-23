@@ -2,6 +2,10 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_ControllerBase_SFC" Id="{b4a568e5-b860-4b97-ba61-d1f48d9d8c8d}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_ControllerBase_SFC
+VAR CONSTANT
+	MAX_ERRORS	: UINT := 10;
+	MAX_TIMEOUT	: TIME := T#30S;
+END_VAR
 VAR_INPUT
 	dr			: REFERENCE TO FB_Director;	
 	IC			: BOOL;
@@ -10,11 +14,16 @@ VAR_INPUT
 	SFCPause	: BOOL;
 	SFCReset	: BOOL;
 	UnsafeStop 	: BOOL := FALSE;
+	Clocks		: ARRAY[1..MAX_ERRORS]	OF TON; // max_errors
 END_VAR
 VAR_OUTPUT
 	Ready		: BOOL;
-	Failure		: BOOL;
+	//Failure		: BOOL;
+	NumError	: UINT := 0;
 	Done		: BOOL := FALSE;
+	Timed		: ARRAY[1..MAX_ERRORS]	OF BOOL; // 
+	//RTrigs		: ARRAY[1..MAX_ERRORS]	OF R_TRIG;
+	//Timeouts	: ARRAY[1...MAX_ERRORS]	OF TIME;
 END_VAR
 
 ]]></Declaration>
@@ -562,6 +571,28 @@ END_VAR
         </XmlArchive>
       </SFC>
     </Implementation>
+    <Method Name="FB_init" Id="{0d874f96-f55f-4d86-871c-77c076024b66}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+
+VAR 
+	I: UINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FOR I:=1 TO MAX_ERRORS DO
+	Timed[i] 		:= FALSE;
+	//RTrigs[i].CLK 	:= Timed[i];
+	// Timeouts[I] 	:= MAX_TIMEOUT;
+	Clocks[i].IN	:= Timed[i]; // := MAX_TIMEOUT;
+	Clocks[i].PT	:= MAX_TIMEOUT;
+	//RTrigs[i].CLK	:= FALSE;
+	//Clocks[i].Q
+END_FOR]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="IsPaused" Id="{e98f7813-c900-4fd4-9a12-006983f9c884}">
       <Declaration><![CDATA[METHOD IsPaused : BOOL
 ]]></Declaration>
@@ -574,11 +605,35 @@ END_VAR
 VAR_INPUT
 	gmModeActual : E_GEMMA;
 END_VAR
-]]></Declaration>
+VAR 
+	i : UINT;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[SFCReset := gmModeActual = E_GEMMA.A6Inicializando;
-SFCPause := NOT UnsafeStop AND (Failure OR gmModeActual=E_GEMMA.A3ParadaEstado);
-]]></ST>
+SFCPause := NOT UnsafeStop AND (NumError <> 0 OR gmModeActual=E_GEMMA.A3ParadaEstado);
+
+//Clocks[1](IN:= Timed[1], PT:=T#5S);
+
+//Clocks[1].PT := t#5s; // MAX_TIMEOUT;
+FOR i:= 1 TO MAX_ERRORS DO
+	//Clocks[i].PT := MAX_TIMEOUT;
+//	Clocks[i].IN := Timed[i];
+	//IF Timed[i] THEN
+		 // := TRUE;
+		
+	Clocks[i](IN:= Timed[i], PT:=MAX_TIMEOUT);
+	//RTrigs[I].CLK:=  Timed[i];
+	//IF RTrigs[I].Q THEN 
+	//Clocks[i].IN := TRUE;
+	//ELSIF NOT Timed[I] THEN
+	//ELSE
+		//Clocks[I].IN := FALSE;
+	// END_IF
+	IF Clocks[i].Q THEN
+		NumError := i;
+	END_IF
+END_FOR
+//*)]]></ST>
       </Implementation>
     </Method>
     <ObjectProperties>
