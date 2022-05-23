@@ -14,16 +14,14 @@ VAR_INPUT
 	SFCPause	: BOOL;
 	SFCReset	: BOOL;
 	UnsafeStop 	: BOOL := FALSE;
-	Clocks		: ARRAY[1..MAX_ERRORS]	OF TON; // max_errors
+	Clocks		: ARRAY[1..MAX_ERRORS]	OF TON;
 END_VAR
 VAR_OUTPUT
 	Ready		: BOOL;
-	//Failure		: BOOL;
-	NumError	: UINT := 0;
 	Done		: BOOL := FALSE;
+	NumError	: UINT := 0;
 	Timed		: ARRAY[1..MAX_ERRORS]	OF BOOL; // 
-	//RTrigs		: ARRAY[1..MAX_ERRORS]	OF R_TRIG;
-	//Timeouts	: ARRAY[1...MAX_ERRORS]	OF TIME;
+	gmModePrev	: E_GEMMA:=E_GEMMA.A6Inicializando;
 END_VAR
 
 ]]></Declaration>
@@ -582,14 +580,10 @@ VAR
 	I: UINT;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[FOR I:=1 TO MAX_ERRORS DO
+        <ST><![CDATA[gmModePrev:=E_GEMMA.A6Inicializando;
+
+FOR I:=1 TO MAX_ERRORS DO
 	Timed[i] 		:= FALSE;
-	//RTrigs[i].CLK 	:= Timed[i];
-	// Timeouts[I] 	:= MAX_TIMEOUT;
-	Clocks[i].IN	:= Timed[i]; // := MAX_TIMEOUT;
-	Clocks[i].PT	:= MAX_TIMEOUT;
-	//RTrigs[i].CLK	:= FALSE;
-	//Clocks[i].Q
 END_FOR]]></ST>
       </Implementation>
     </Method>
@@ -610,31 +604,23 @@ VAR
 	i : UINT;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[fp(CLK:=(gmModeActual = E_GEMMA.A6Inicializando), Q=> SFCReset);
-SFCPause := NOT UnsafeStop AND (NumError <> 0 OR gmModeActual=E_GEMMA.A3ParadaEstado OR gmModeActual=E_GEMMA.A4ParadaObtenida or gmModeActual=E_GEMMA.D2TratamientoFallos);
+        <ST><![CDATA[//fp(CLK:=(gmModeActual = E_GEMMA.A6Inicializando), Q=> SFCReset);
+//SFCReset := (gmModeActual = E_GEMMA.A6Inicializando)
+IF (gmModePrev<>E_GEMMA.A6Inicializando) AND (gmModeActual=E_GEMMA.A6Inicializando) THEN
+	gmModePrev	:=E_GEMMA.A6Inicializando;
+	SFCReset 	:= TRUE;
+END_IF
+gmModePrev := gmModeActual;
 
-//Clocks[1](IN:= Timed[1], PT:=T#5S);
+SFCPause := NOT UnsafeStop AND (NumError <> 0 OR gmModeActual=E_GEMMA.A3ParadaEstado OR gmModeActual=E_GEMMA.A4ParadaObtenida OR gmModeActual=E_GEMMA.D2TratamientoFallos);
 
-//Clocks[1].PT := t#5s; // MAX_TIMEOUT;
 FOR i:= 1 TO MAX_ERRORS DO
-	//Clocks[i].PT := MAX_TIMEOUT;
-//	Clocks[i].IN := Timed[i];
-	//IF Timed[i] THEN
-		 // := TRUE;
-		
 	Clocks[i](IN:= Timed[i], PT:=MAX_TIMEOUT);
-	//RTrigs[I].CLK:=  Timed[i];
-	//IF RTrigs[I].Q THEN 
-	//Clocks[i].IN := TRUE;
-	//ELSIF NOT Timed[I] THEN
-	//ELSE
-		//Clocks[I].IN := FALSE;
-	// END_IF
 	IF Clocks[i].Q THEN
 		NumError := i;
 	END_IF
 END_FOR
-//*)]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <ObjectProperties>
