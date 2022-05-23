@@ -580,7 +580,7 @@ VAR
 	I: UINT;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[gmModePrev:=E_GEMMA.A6Inicializando;
+        <ST><![CDATA[// gmModePrev:=E_GEMMA.A6Inicializando;
 
 FOR I:=1 TO MAX_ERRORS DO
 	Timed[i] 		:= FALSE;
@@ -606,11 +606,11 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[//fp(CLK:=(gmModeActual = E_GEMMA.A6Inicializando), Q=> SFCReset);
 //SFCReset := (gmModeActual = E_GEMMA.A6Inicializando)
-IF (gmModePrev<>E_GEMMA.A6Inicializando) AND (gmModeActual=E_GEMMA.A6Inicializando) THEN
-	gmModePrev	:=E_GEMMA.A6Inicializando;
-	SFCReset 	:= TRUE;
-END_IF
-gmModePrev := gmModeActual;
+//IF (gmModePrev<>E_GEMMA.A6Inicializando) AND (gmModeActual=E_GEMMA.A6Inicializando) THEN
+//	gmModePrev	:=E_GEMMA.A6Inicializando;
+//	SFCReset 	:= TRUE;
+//END_IF
+//gmModePrev := gmModeActual;
 
 SFCPause := NOT UnsafeStop AND (NumError <> 0 OR gmModeActual=E_GEMMA.A3ParadaEstado OR gmModeActual=E_GEMMA.A4ParadaObtenida OR gmModeActual=E_GEMMA.D2TratamientoFallos);
 

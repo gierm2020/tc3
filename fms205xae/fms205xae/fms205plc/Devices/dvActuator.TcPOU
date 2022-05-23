@@ -16,12 +16,12 @@ END_VAR
 VAR
 	dr				: REFERENCE TO FB_Director;
 	
-	ETActive		: TIME;					// Valor de Clock.ET en el momento de la última activación
+	//ETActive		: TIME;					// Valor de Clock.ET en el momento de la última activación
 	//FPReloj			: R_TRIG;				// 
 	prValue			: BOOL := FALSE;		// Valor previo para detectar cambios de estado	
 	hwValue AT %Q*	: BOOL;					// Vinculación al hardware de la estación
 	uiToolTip		: STRING;				// Tooltip en la visualización
-	HasFailed		: BOOL := FALSE;		// El actuador ha fallado porque no ha terminado en tiempo
+	//HasFailed		: BOOL := FALSE;		// El actuador ha fallado porque no ha terminado en tiempo
 	(*
 	uiEnabled		: BOOL := FALSE; 		// Deshabilitar el control cuando no está en modo manual
 	uiColor			: DWORD := COLOR_AAct;	// Color por defecto rojo pálido
@@ -70,8 +70,8 @@ END_IF
 ProcessCycle := TRUE; 	
 IF prValue <> hwValue THEN
 	prValue := hwValue;
-	IF hwValue THEN // Acaban de activar
-		ETActive := dr.Clock.ET;
+	//IF hwValue THEN // Acaban de activar
+	//	ETActive := dr.Clock.ET;
 	(*
 	ELSE	// Acaban de desactivar
 		HasFailed := FALSE;
@@ -81,7 +81,7 @@ IF prValue <> hwValue THEN
 		uiRight			:= 0;
 		uiClockwise		:= 0;
 		uiUnclockwise	:= 0;*)	
-	END_IF
+	//END_IF
 END_IF
 
 
