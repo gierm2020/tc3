@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="L3_CaptadorInductivo" Id="{2358bbd4-4505-47c4-8c5f-b848f9a2a136}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK L3_CaptadorInductivo EXTENDS L1_ModuleBase
+(* ESTACIONES DE DETECCIÓN DE MATERIAL - Manual de usuario #31/27
+
+Para poder diferenciar las tapas del primero de estos tipos, la segunda de 
+las estaciones del plato divisor está dotada con un captador inductivo. Éste 
+proporciona una señal al PLC, únicamente en el caso de que la tapa que el 
+plato sitúa frente a él cada vez que realiza un giro, sea de aluminio. *)
+
+VAR_OUTPUT
+	fbController		: L2_Simple_SFC:=(dr:=dr);		
+	di         			: L1_Sensor;					
+	
+	Lectura_Registrada	: BOOL := FALSE; 				// Salida a la visualización
+	Tapa_Metalica		: BOOL;
+	strUi				: STRING := '?';
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="ProcessCycle" Id="{92b62e2d-235a-4064-b6db-fd2bfc42a191}">
+      <Declaration><![CDATA[METHOD ProcessCycle : BOOL
+VAR_INPUT
+	dr			: REFERENCE TO L1_Director;
+	tapas		: REFERENCE TO L6_Tapas;	
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Sensores y condiciones iniciales
+di.ProcessCycle(LocalHost:=dr.gmLocalHost,);
+IC := TRUE;
+
+// Controlador
+fbController.ProcessCycle(dr.gmModeActual);
+fbController(
+	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+
+// Actuadores y actualización de tapas
+IF Done AND NOT Lectura_Registrada THEN
+	Lectura_Registrada		:= TRUE;
+	Tapa_Metalica		:= di.uiValue;
+	strUi := SEL(Tapa_Metalica, 'Plástico','Metálica');
+	tapas.Material(Tapa_Metalica:=Tapa_Metalica);
+	
+ELSIF Ready THEN // una vez que cambia el ciclo la lectura ya no es fiable	
+	Lectura_Registrada		:= FALSE;
+	strUi := '?';
+END_IF
+
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

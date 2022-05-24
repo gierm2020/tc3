@@ -1,0 +1,296 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="L6_FMS205" Id="{a261f573-1402-443e-9bab-e88e0bf02070}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK L6_FMS205 // EXTENDS L1_ModuleBase;
+
+
+VAR_INPUT
+	//IC		: BOOL := FALSE; 	// todos los módulos están en condiciones iniciales
+//    Execute	: BOOL;
+	fbPanel					: L5_Panel := (dr := dr);	
+END_VAR
+
+VAR_OUTPUT
+//	Ready	: BOOL;
+	//Failure	: BOOL;
+	//Done	: BOOL;	
+END_VAR	
+VAR
+	// Director, panel y tapas
+	dr						: L1_Director;
+	tapas					: L6_Tapas;
+	
+	// módulos de la FMS205
+	mdAlimentador			: L3_Alimentador			:= (dr:=dr, ID := 1, Name := 'Alimentador');
+	mdPickAndPlaceCarga 	: L3_PickAndPlace			:= (dr:=dr, ID := 2, Name := 'Carga');
+	mdMedidorTapa			: L3_MedidorTapa			:= (dr:=dr, ID := 3, Name := 'Medidor');
+	mdCaptadorInductivo 	: L3_CaptadorInductivo		:= (dr:=dr, ID := 4, Name := 'Inductivo');
+	mdDetectorFotoelectrico : L3_DetectorFotoelectrico	:= (dr:=dr, ID := 5, Name := 'Fotoeléctrico');
+	mdEvacuador			 	: L3_Evacuador				:= (dr:=dr, ID := 6, Name := 'Evacuador');
+	mdPickAndPlaceDescarga 	: L3_PickAndPlace			:= (dr:=dr, ID := 7, Name := 'Descarga');
+	mdPlatoDivisor			: L3_PlatoDivisor			:= (dr:=dr, ID := 8, Name := 'Plato');
+	mdCinta					: L3_Cinta					:= (dr:=dr, ID := 9, Name := 'Cinta');
+	
+	// controladores a nivel estación
+	ctrlF1Producir			: L4_FMS205_F1Producir_SFC; 
+	ctrlF2SeqPrep			: L4_FMS205_F2SeqPrep_SFC;		
+	ctrlF3SeqFin			: L4_FMS205_F3SeqFin_SFC;		
+	ctrlF6Prueba			: L4_FMS205_F6Prueba_SFC;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="InitialConditions" Id="{6c17034c-aab7-41fb-b0b6-e85a6db67498}">
+      <Declaration><![CDATA[METHOD InitialConditions : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(* La estación está en condiciones iniciales si cada módulo lo está *)
+InitialConditions := (
+		mdAlimentador.IC AND
+		mdPickAndPlaceCarga.IC AND
+		mdMedidorTapa.IC AND 
+		mdCaptadorInductivo.IC AND
+		mdDetectorFotoelectrico.IC AND
+		mdEvacuador.IC AND
+		mdPickAndPlaceDescarga.IC AND
+		mdPlatoDivisor.IC AND
+		mdCinta.IC )  OR dr.gmLocalHost;
+	 ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsFailied" Id="{c00d0657-d8cd-4b4b-a9ee-6be440092cb6}">
+      <Declaration><![CDATA[METHOD IsFailied : BOOL
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsFailied:=
+	mdAlimentador.fbController.NumError <> 0 OR
+	mdPickAndPlaceCarga.fbController.NumError <> 0 OR
+	mdMedidorTapa.fbController.NumError <> 0 OR 
+	mdCaptadorInductivo.fbController.NumError <> 0 OR
+	mdDetectorFotoelectrico.fbController.NumError <> 0 OR
+	mdEvacuador.fbController.NumError <> 0 OR
+	mdPickAndPlaceDescarga.fbController.NumError <> 0 OR
+	mdPlatoDivisor.fbController.NumError <> 0 OR
+	mdCinta.fbController.NumError <> 0 OR
+	ctrlF1Producir.NumError <> 0 OR
+	ctrlF2SeqPrep.NumError <> 0 OR
+	ctrlF3SeqFin.NumError <> 0 OR
+	ctrlF6Prueba.NumError <> 0;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsPaused" Id="{63c7f49b-23e4-43c3-ac69-584bc16d9aec}">
+      <Declaration><![CDATA[METHOD IsPaused : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsPaused := 
+		mdAlimentador.fbController.IsPaused() AND
+		mdPickAndPlaceCarga.fbController.IsPaused() AND
+		mdMedidorTapa.fbController.IsPaused() AND 
+		mdCaptadorInductivo.fbController.IsPaused() AND
+		mdDetectorFotoelectrico.fbController.IsPaused() AND
+		mdEvacuador.fbController.isPaused() AND
+		mdPickAndPlaceDescarga.fbController.IsPaused() AND
+		mdPlatoDivisor.fbController.IsPaused() AND
+		mdCinta.fbController.IsPaused() AND
+		ctrlF1Producir.IsPaused() AND
+		ctrlF2SeqPrep.IsPaused() AND
+		ctrlF3SeqFin.IsPaused() AND
+		ctrlF6Prueba.IsPaused();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsReady" Id="{22492767-8d7d-4c2f-892d-876b7dde965e}">
+      <Declaration><![CDATA[METHOD IsReady : BOOL
+VAR_INPUT
+	gmMode	: L1_GEMMA;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE gmMode OF
+	
+	L1_GEMMA.F1ProduccionNormal,
+	L1_GEMMA.F6Probando: 
+		IsReady := (
+			mdAlimentador.fbController.Ready AND
+			mdPickAndPlaceCarga.fbController.Ready AND
+			mdMedidorTapa.fbController.Ready AND 
+			mdCaptadorInductivo.fbController.Ready AND
+			mdDetectorFotoelectrico.fbController.Ready AND
+			mdEvacuador.fbController.Ready AND
+			mdPickAndPlaceDescarga.fbController.Ready AND
+			mdPlatoDivisor.fbController.Ready AND
+			mdCinta.fbController.Ready);
+			
+	 L1_GEMMA.F2SecuenciaPreparacion: 
+		IsReady := (
+			mdMedidorTapa.fbController.Ready AND 
+			mdCaptadorInductivo.fbController.Ready AND
+			mdDetectorFotoelectrico.fbController.Ready AND
+			mdPlatoDivisor.fbController.Ready);
+	
+	L1_GEMMA.F3SecuenciaFinalizacion: 
+		IsReady := (
+			mdEvacuador.fbController.Ready AND
+			mdPlatoDivisor.fbController.Ready);
+END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ManageErrors" Id="{fa49f856-5c55-4bc1-adc6-7253af1cd7df}">
+      <Declaration><![CDATA[METHOD ManageErrors : BOOL
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[mdAlimentador.fbController.ResetError();
+mdAlimentador.fbController.ResetError();
+mdPickAndPlaceCarga.fbController.ResetError();
+mdMedidorTapa.fbController.ResetError();
+mdCaptadorInductivo.fbController.ResetError();
+mdDetectorFotoelectrico.fbController.ResetError();
+mdEvacuador.fbController.ResetError();
+mdPickAndPlaceDescarga.fbController.ResetError();
+mdPlatoDivisor.fbController.ResetError();
+mdCinta.fbController.ResetError();
+ctrlF1Producir.ResetError();
+ctrlF2SeqPrep.ResetError();
+ctrlF3SeqFin.ResetError();
+ctrlF6Prueba.ResetError();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ProcessCycle" Id="{02e4c75f-69e3-444f-8a2e-ecad65532e26}">
+      <Declaration><![CDATA[METHOD ProcessCycle : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// calcular consignas en función del panel y del modo Gemma
+
+fbPanel.ProcessCycle(dr:=dr, gmModeActual := dr.gmModeActual, tmReinicio := dr.tmTiempoReinicio); 
+
+// controlar el flujo a nivel de la estación
+CASE dr.gmModeActual OF
+	L1_GEMMA.A6Inicializando:
+		tapas.Inicializar();
+		
+	L1_GEMMA.A1ParadaInicial:
+		; // esperar a que se pida hacer altgo
+		
+	L1_GEMMA.F4VerificacionSinOrden: 
+		IF fbPanel.swF4_Avanza THEN		
+			mdCinta.Avanza();				// si se pulsa avanzar activar RUN y desactivar REV
+		ELSIF fbPanel.swF4_Retroc THEN
+			mdCinta.Retrocede();			// si se pulsa retrocede activar RUN y REV
+		END_IF
+
+	L1_GEMMA.A2ParaFinCiclo,
+	L1_GEMMA.F1ProduccionNormal:
+		ctrlF1Producir.Execute  		:= ctrlF1Producir.Ready AND NOT dr.EndBatch;
+		ctrlF1Producir.Ack				:= ctrlF1Producir.Done;
+		ctrlF1Producir.IC 				:= InitialConditions();
+		IF ctrlF1Producir.Execute THEN 	// al principio de cada ciclo decidir qué hacer con cada tapa antes del giro
+			mdPickAndPlaceCarga.Mover 	:= tapas.DebeCargar();
+			mdEvacuador.Evacuar 		:= tapas.DebeEvacuar(); 
+			mdPickAndPlaceDescarga.Mover:= tapas.DebeDescargar();		
+		END_IF
+		ctrlF1Producir(Alime:=mdAlimentador, Carga:=mdPickAndPlaceCarga, Medid:=mdMedidorTapa, Fotoe:=mdDetectorFotoelectrico, 
+			Induc:=mdCaptadorInductivo, Evacu:=mdEvacuador,	Desca:=mdPickAndPlaceDescarga, Plato:=mdPlatoDivisor, Cinta:=mdCinta);
+
+	L1_GEMMA.F2SecuenciaPreparacion:
+		ctrlF2SeqPrep.Execute 			:= ctrlF2SeqPrep.Ready;
+		ctrlF2SeqPrep.cnF2_Preparar		:= dr.cnF2_Preparar;
+		IF ctrlF2SeqPrep.Done THEN
+			dr.cnF2_Preparar := FALSE;
+		END_IF
+		ctrlF2SeqPrep.Ack				:= ctrlF2SeqPrep.Done;
+		ctrlF2SeqPrep.IC				:= InitialConditions();
+		ctrlF2SeqPrep(Medid:=mdMedidorTapa, Fotoe:=mdDetectorFotoelectrico,	Induc:=mdCaptadorInductivo, Plato:=mdPlatoDivisor);		
+
+	L1_GEMMA.F3SecuenciaFinalizacion:
+		ctrlF3SeqFin.Execute 			:= ctrlF3SeqFin.Ready;
+		ctrlF3SeqFin.cnF3_Finalizar		:= dr.cnF3_Finalizar;
+		ctrlF3SeqFin.Ack				:= ctrlF3SeqFin.Done;
+		ctrlF3SeqFin.IC					:= InitialConditions();		
+		ctrlF3SeqFin(Evacu:=mdEvacuador, Plato:=mdPlatoDivisor);
+
+	L1_GEMMA.F6Probando:
+		ctrlF6Prueba.Execute 			:= ctrlF6Prueba.Ready;
+		ctrlF6Prueba.Ack				:= ctrlF6Prueba.Done;  //IsReady(gmMode:=L1_GEMMA.F6Probando);
+ 		ctrlF6Prueba(Alime:=mdAlimentador, Carga:=mdPickAndPlaceCarga, Medid:=mdMedidorTapa, Fotoe:=mdDetectorFotoelectrico, 
+			Induc:=mdCaptadorInductivo, Evacu:=mdEvacuador,	Desca:=mdPickAndPlaceDescarga, Plato:=mdPlatoDivisor, Cinta:=mdCinta);
+
+	L1_GEMMA.F5VerificacionOrdenada: 		// tener en cuenta las consignas relacionadas con F5 		
+		mdAlimentador.Execute          		:= fbPanel.swF5_Ejecutar AND fbPanel.swF5_Alimentar;
+		mdPickAndPlaceCarga.Execute    		:= fbPanel.swF5_Ejecutar AND fbPanel.swF5_Cargar;
+		mdMedidorTapa.Execute          		:= fbPanel.swF5_Ejecutar AND fbPanel.swF5_Medir;
+		mdDetectorFotoelectrico.Execute		:= fbPanel.swF5_Ejecutar AND fbPanel.swF5_Claridad;
+		mdCaptadorInductivo.Execute    		:= fbPanel.swF5_Ejecutar AND fbPanel.swF5_Material;
+		mdEvacuador.Execute            		:= fbPanel.swF5_Ejecutar AND fbPanel.swF5_Evacuar;
+		mdPickAndPlaceDescarga.Execute		:= fbPanel.swF5_Ejecutar AND fbPanel.swF5_Descargar;
+		mdPlatoDivisor.Execute       		:= fbPanel.swF5_Ejecutar AND fbPanel.swF5_Girar;
+		mdCinta.Situar						:= fbPanel.swF5_Situar;
+		mdCinta.Transferir					:= fbPanel.swF5_Transferir;
+		mdCinta.Execute						:= fbPanel.swF5_Ejecutar AND (fbPanel.swF5_Situar OR fbPanel.swF5_Transferir);		
+		mdPickAndPlaceCarga.Mover	    	:= TRUE; 
+		mdEvacuador.Evacuar 				:= TRUE; 
+		mdPickAndPlaceDescarga.Mover		:= TRUE; 
+		mdAlimentador.Ack               	:= fbPanel.swF5_Ack AND fbPanel.swF5_Alimentar;
+		mdPickAndPlaceCarga.Ack         	:= fbPanel.swF5_Ack AND fbPanel.swF5_Cargar;
+		mdMedidorTapa.Ack               	:= fbPanel.swF5_Ack AND fbPanel.swF5_Medir;
+		mdDetectorFotoelectrico.Ack			:= fbPanel.swF5_Ack AND fbPanel.swF5_Claridad;
+		mdCaptadorInductivo.Ack         	:= fbPanel.swF5_Ack AND fbPanel.swF5_Material;
+		mdEvacuador.Ack                 	:= fbPanel.swF5_Ack AND fbPanel.swF5_Evacuar;
+		mdPickAndPlaceDescarga.Ack      	:= fbPanel.swF5_Ack AND fbPanel.swF5_Descargar;
+		mdPlatoDivisor.Ack              	:= fbPanel.swF5_Ack AND fbPanel.swF5_Girar;
+		mdCinta.Ack							:= fbPanel.swF5_Ack AND (fbPanel.swF5_Situar OR fbPanel.swF5_Transferir);
+		
+						
+	L1_GEMMA.A3ParadaEstado, 
+	L1_GEMMA.A4ParadaObtenida:
+		dr.IsPaused := IsPaused(); // esperar la puesta en marcha o reanudar tras parada
+
+	L1_GEMMA.D2TratamientoFallos:
+		dr.Failure 		:= IsFailied(); // redundante. ManageErrors(); // esperar a que el usuario arregle el error
+		
+	L1_GEMMA.A5PreparandoTrasFallo:
+		ManageErrors();;
+		
+ 
+END_CASE
+
+
+
+
+ctrlF1Producir.ProcessCycle(dr.gmModeActual);
+ctrlF2SeqPrep.ProcessCycle(dr.gmModeActual);
+ctrlF3SeqFin.ProcessCycle(dr.gmModeActual);
+ctrlF6Prueba.ProcessCycle(dr.gmModeActual);
+
+// ejecutar el ciclo de cada uno de los módulos
+mdAlimentador.ProcessCycle				(dr:=dr, tapas:=tapas);
+mdPickAndPlaceCarga.ProcessCycle		(dr:=dr, tapas:=tapas);
+mdMedidorTapa.ProcessCycle				(dr:=dr, tapas:=tapas);	
+mdDetectorFotoelectrico.ProcessCycle	(dr:=dr, tapas:=tapas);
+mdCaptadorInductivo.ProcessCycle		(dr:=dr, tapas:=tapas);
+mdEvacuador.ProcessCycle				(dr:=dr, tapas:=tapas);
+mdPickAndPlaceDescarga.ProcessCycle		(dr:=dr, tapas:=tapas);
+mdPlatoDivisor.ProcessCycle				(dr:=dr, tapas:=tapas);
+mdCinta.ProcessCycle					(dr:=dr, tapas:=tapas);
+
+// actualizar la interfaz de usuario
+tapas.Actualizar();
+tapas.Animar(PlatoActivo := NOT mdPlatoDivisor.fbController.Ready);
+
+
+dr.IC			:= InitialConditions();
+dr.Failure 		:= IsFailied();
+dr.EndCycle 	:= ctrlF1Producir.Done;
+dr.EndBatch 	:= tapas.ResReal >= tapas.ReqNumero;
+dr.ProcessCycle();
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="L3_DetectorFotoelectrico" Id="{9c6b326b-8120-4a79-942a-3ee0b68cb66a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK L3_DetectorFotoelectrico EXTENDS L1_ModuleBase
+(*
+
+ESTACIONES DE DETECCIÓN DE MATERIAL - Manual de usuario #32/28
+
+Con el fin de diferenciar finalmente las tapas de nylon blanco de las de
+color negro, se ha incluido un detector fotoeléctrico. Dicho componente 
+proporciona una señal de detección únicamente, de las tapas de color 
+blanco
+ 
+*)
+
+VAR_OUTPUT
+	fbController		: L2_Simple_SFC:=(dr:=dr);
+	df 		        	: L1_Sensor;
+
+	Lectura_Registrada	: BOOL := FALSE; 
+	Tapa_Clara			: BOOL;
+	strUi 				: STRING := '?';
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="ProcessCycle" Id="{357ca19b-a2f2-4f95-9ae5-44e396b69f2c}">
+      <Declaration><![CDATA[METHOD ProcessCycle : BOOL
+VAR_INPUT
+	dr			: REFERENCE TO L1_Director;
+	tapas		: REFERENCE TO L6_Tapas;	
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Sensores y condiciones iniciales
+df.ProcessCycle(LocalHost:=dr.gmLocalHost);
+IC := TRUE;
+
+// Controlador
+fbController.ProcessCycle(dr.gmModeActual);
+fbController(
+	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+
+// Actuadores y actualización de tapas
+IF Done AND NOT Lectura_Registrada THEN // si ha terminado de captar: guardar resultado
+	Lectura_Registrada	:= TRUE;
+	Tapa_Clara			:= df.uiValue;
+	strUi 				:= SEL(Tapa_Clara, 'Oscura','Clara');
+	tapas.Claridad(Tapa_Clara:=Tapa_Clara);
+
+ELSIF Ready THEN // una vez que cambia el ciclo la lectura ya no es fiable	
+	Lectura_Registrada		:= FALSE;
+	strUi := '?';
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

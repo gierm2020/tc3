@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="L1_Sensor" Id="{c4029391-ebd0-4ae7-8ab5-3338cf1cc185}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK L1_Sensor
+
+VAR_OUTPUT
+	uiValue			: BOOL;					
+END_VAR
+
+VAR	
+	hwValue AT %I*	: BOOL;					// Vinculación al hardware de la estación
+	uiToolTip		: STRING;				// Tooltip en la visualización
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="ProcessCycle" Id="{71ee41d9-0d14-4d00-a8c7-99dc223f0a9d}">
+      <Declaration><![CDATA[METHOD ProcessCycle : BOOL
+VAR_INPUT
+	LocalHost	: BOOL;
+END_VAR
+VAR_OUTPUT
+	sfcValue 	: BOOL;		// estado del sensor que se entregará al Grafcet
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF LocalHost THEN	
+	hwValue := uiValue; 	// simulando la estación, el valor del sensor depende de la interfaz	
+ELSE	
+	uiValue := hwValue; 	// ejecutando en la estación, el valor de la visualización depende del hardware
+END_IF
+sfcValue := hwValue;		// estado del sensor que se entregará al Grafcet	
+
+
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

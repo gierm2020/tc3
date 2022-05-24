@@ -1,0 +1,423 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="L5_Panel" Id="{514e5db3-ac71-4add-977b-df9fa295436c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK L5_Panel
+VAR_INPUT
+	mdF1Producir					: BOOL;
+	mdF6Probar						: BOOL;
+	mdF5Funcion						: BOOL;
+	mdF4Planta						: BOOL;
+
+	dr: REFERENCE TO L1_Director;
+	hwAS_AvisadorSonoro			AT %Q*	: BOOL; // AS - Avisador Sonoro
+	hwLA_LamparaAlarma			AT %Q*	: BOOL; // DUDAS - Es lo mismo que falta de material?
+	hwDPO_DesconectaPO			AT %Q*	: BOOL; // DPO - Desconecta PO	
+	hwLM_LamparaMarcha			AT %Q*	: BOOL; // LM - Lámpara marcha (verde)
+	swF0_Empezar						: BOOL;
+	//swF1_Reanudar						: BOOL;
+	swF4_Planta							: BOOL; // botón en la visualización
+	//swF5_Funcion						: BOOL; // botón en la visualización
+END_VAR
+
+VAR
+	hwPE_Seta					AT %I*	: BOOL;
+	hwPOC_PulsadorReset			AT %I*	: BOOL; // POC Botón azul está pulsado (PO Conectada)
+	hwPM_PulsadorMarcha			AT %I*	: BOOL; // PM - Pulsador de marcha (verde)
+	hwPS_PulsadorStop			AT %I*	: BOOL; // PS - Pulsador de parada (rojo)
+	hwLS_LamparaStop			AT %Q*	: BOOL; // DUDAS - LA - Lámpara de alarma o lámpara de stop
+	hwSM_SelecAutoManual	 	AT %I*	: BOOL; // SM - Selector modo auto/man	
+	FP_PM								: R_TRIG;
+	swMensaje							: STRING(255) :='';
+END_VAR
+
+
+VAR_OUTPUT
+	// modos excluyentes de la interfaz de usuario
+	// consignas del panel, resultado de integrar la información que viene del hardware, el estado GEMMA, los temporizadores y flancos, y la interfaz de usuario		
+	
+	swF5_Alimentar					: BOOL;
+	swF5_Situar						: BOOL;
+	swF5_Transferir					: BOOL;
+	swF5_Cargar						: BOOL;
+	swF5_Evacuar					: BOOL;
+	swF5_Descargar					: BOOL;
+	swF5_Medir						: BOOL;
+	swF5_Claridad					: BOOL;
+	swF5_Material					: BOOL;
+	swF5_Girar						: BOOL;
+	swF5_Ejecutar					: BOOL;
+	swF5_Ack						: BOOL;
+END_VAR
+(*
+VAR_INPUT
+	enA2_FinCiclo					: BOOL;
+	enA3_Estado						: BOOL;
+	enF1_Empezar					: BOOL;
+	enF1_Reanduar					: BOOL;
+	enF4_Planta						: BOOL; // consigna F4_Planta habilitada
+	enF5_Funcion					: BOOL; // consigna habilitada	
+END_VAR
+*)
+VAR
+	gmModeName		: STRING 	:= 'Mode A6';
+	gmModeDescr		: STRING 	:= 'Inicializando';	
+	
+	swPE_Seta						: BOOL;
+	ttPE_Seta						: STRING := '';
+
+	swA2_FinCiclo					: BOOL;
+	swA3_Estado						: BOOL;
+	swA6_Inicializar				: BOOL;
+
+	//swF2_Preparar					: BOOL;
+	//swF3_Finalizar				: BOOL;	
+	ttF4_Planta						: STRING :='';
+	swF4_Avanza						: BOOL := FALSE;
+ 	swF4_Retroc						: BOOL := FALSE;	
+	enF6_Probar						: BOOL;
+	swF6_Probar						: BOOL;
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="ProcessCycle" Id="{026a1e81-704d-4f95-ae3e-7d143e02920e}">
+      <Declaration><![CDATA[METHOD ProcessCycle : BOOL
+VAR_INPUT
+	dr				: REFEREnce to L1_Director;
+	gmModeActual	: L1_GEMMA;
+	tmReinicio 		: TIME; // = dr.tmTiempoReinicio
+END_VAR
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ttPE_Seta := 'Pulsar la seta o el botón para parada de emergencia';	
+ttF4_Planta := 'Mandos directos desactivados';
+FP_PM(CLk := hwPM_PulsadorMarcha);
+
+dr.cnA1_ParadaIni := FALSE;
+	dr.cnA6_Inicializar := FALSE; 
+	dr.cnF4_Planta 		:= FALSE;
+	dr.cnF5_Funcion 	:= FALSE;
+	dr.cnF6_Probar 		:= FALSE;
+	dr.cnF1_Producir	:= FALSE;
+
+//----------------------------------------------------------------- Consiga cnD1_Emergencia
+dr.cnD1_Emergencia := hwPE_Seta OR swPE_Seta; 
+IF dr.cnD1_Emergencia THEN
+	IF hwPE_Seta THEN
+		IF swPE_Seta THEN
+			ttPE_Seta := 'Desarmar la seta y desactivar el botón para reinicializar';
+		ELSE
+			ttPE_Seta := 'Desarmar la seta para reinicializar';		
+		END_IF
+	ELSE
+		IF swPE_Seta THEN
+			ttPE_Seta := 'Desactivar el botón para reinicializar';
+		END_IF
+	END_IF
+
+//----------------------------------------------------------------- Consigna A6_Inicializar
+ELSIF swA6_Inicializar THEN //  OR TmpReinicio.Q);
+	// TmpReinicio(IN := hwPM_PulsadorMarcha AND NOT hwPS_PulsadorStop, PT:= tmReinicio);
+	dr.cnA6_Inicializar := TRUE; 
+	//mdF1Producir := FALSE;
+	//mdF4Planta := FALSE;
+	//mdF5Funcion := FALSE;
+	//mdF6Probar := FALSE;
+ 
+	
+//----------------------------------------------------------------- Modo F4_Planta
+ELSIF (hwSM_SelecAutoManual OR mdF4Planta) THEN 
+	//mdF1Producir 	:= FALSE;
+	dr.cnF4_Planta 	:= TRUE;
+	//dr.cnF5_Funcion := TRUE;
+	//mdF5Funcion 	:= FALSE;
+	//mdF6Probar 		:= FALSE;
+	IF hwSM_SelecAutoManual AND swF4_Planta THEN
+		ttF4_Planta := 'Mandos directos ativados desde panel físico y visualización';
+	ELSIF hwSM_SelecAutoManual THEN	
+		ttF4_Planta := 'Mandos directos ativados desde panel físico';
+	ELSIF swF4_Planta THEN
+		ttF4_Planta := 'Mandos directos ativados desde visualización';
+	END_IF	
+
+	IF swF4_Avanza THEN 
+		swF4_Retroc := FALSE;
+	ELSIF swF4_Retroc THEN		
+		swF4_Avanza := FALSE;
+	END_IF		
+
+	
+
+//----------------------------------------------------------------- F5_Funcion
+ELSIF mdF5Funcion THEN  
+	//mdF1Producir 	:= FALSE;
+	//mdF4Planta 		:= FALSE;
+	dr.cnF5_Funcion := TRUE;
+	//mdF6Probar 		:= FALSE;
+
+	IF swF5_Girar AND (swF5_Cargar OR swF5_Evacuar OR swF5_Descargar OR swF5_Medir) THEN 
+		swF5_Girar := FALSE;
+		swMensaje := 'No se puede girar a la vez que cargar, evacuar, descargar o medir por riesgo de avería';
+	END_IF
+	IF swF5_Alimentar AND swF5_Cargar THEN // funciones incompatibles
+		swF5_Cargar := FALSE;
+		swMensaje := 'No se puede cargar a la vez que alimentar por riesgo de avería';
+	END_IF
+	IF swF5_Transferir AND swF5_Descargar THEN
+		swF5_Transferir := FALSE;
+		swMensaje := 'No se puede descargar a la vez que transferer por riesgo de avería';
+	END_IF
+
+
+	
+//----------------------------------------------------------------- F6_Probar
+ELSIF mdF6Probar THEN  
+	//mdF1Producir	:= FALSE;
+	//mdF4Planta 		:= FALSE;
+	//mdF5Funcion 	:= FALSE;
+	dr.cnA1_ParadaIni := NOT dr.cnF0_Empezar;
+	dr.cnF6_Probar 	:= TRUE;
+	IF (swF0_Empezar OR FP_PM.Q) THEN
+		dr.cnF0_Empezar := TRUE;
+	END_IF
+
+	
+//----------------------------------------------------------------- F1_Producir
+ELSIF (mdF1Producir OR FP_PM.Q) THEN
+	dr.cnF1_Producir:= TRUE;
+	IF (swF0_Empezar OR FP_PM.Q) THEN
+		dr.cnF0_Empezar := TRUE;
+	END_IF
+	//dr.cnF0_Empezar := (swF0_Empezar OR FP_PM.Q);  
+	dr.cnA1_ParadaIni := NOT dr.cnF0_Empezar;
+	//mdF4Planta 		:= FALSE;
+	//mdF5Funcion 	:= FALSE;
+	//mdF6Probar	 	:= FALSE;
+
+	dr.cnA2_FinCiclo:= (swA2_FinCiclo OR hwPS_PulsadorStop); // enA2_FinCiclo AND (swA2_FinCiclo OR hwPS_PulsadorStop);
+	dr.cnA3_Estado 	:= swA3_Estado;
+
+ELSE
+	dr.cnA1_ParadaIni 	:= TRUE;
+	dr.cnA6_Inicializar := FALSE; 
+	dr.cnF4_Planta 		:= FALSE;
+	dr.cnF5_Funcion 	:= FALSE;
+	dr.cnF6_Probar 		:= FALSE;
+	dr.cnF1_Producir	:= FALSE;
+END_IF 
+
+IF dr.Failure OR dr.gmModeActual=L1_GEMMA.A4ParadaObtenida OR dr.gmModeActual=L1_GEMMA.D2TratamientoFallos THEN
+	dr.cnF0_Empezar := FALSE;
+	IF (swF0_Empezar OR FP_PM.Q) THEN
+		dr.cnF0_Empezar := TRUE;
+	END_IF	
+END_IF
+
+(*
+dr.cnF1_Empezar := enF1_Empezar AND (swF1_Empezar OR FP_PM.Q);
+IF NOT dr.cnF1_Empezar AND (swF1_Empezar OR FP_PM.Q) THEN // consigna no válida
+	swF1_Empezar := FALSE; // si no se puede entrar en el modo hay que desactivar el botón
+	swMensaje := 'Sólo se puede empezar desde una parada';
+END_IF
+
+//----------------------------------------------------------------- Consigna A2_ParaFinCiclo
+
+IF NOT dr.cnA2_FinCiclo AND (swA2_FinCiclo OR hwPS_PulsadorStop) THEN // consigna no válida
+	swA2_FinCiclo := FALSE; // si no se puede entrar en el modo hay que desactivar el botón
+	swMensaje := 'Sólo se puede pasar a A2 desde el modo F1';
+
+ELS 
+IF dr.cnA2_FinCiclo THEN
+	// swA2_FinCiclo := TRUE; 
+	IF gmModeActual = L1_GEMMA.F1ProduccionNormal THEN
+		swMensaje := 'Esperando a finalizar el ciclo para parar';
+	ELSIF gmModeActual = L1_GEMMA.A4ParadaObtenida THEN
+		swMensaje := 'Parada obtenida después de acabar el ciclo';
+	END_IF
+END_IF 
+dr.cnA3_Estado := enA3_Estado AND (swA3_Estado);
+IF NOT dr.cnA3_Estado AND (swA3_Estado) THEN // consigna no válida
+	swA3_Estado := FALSE; // si no se puede entrar en el modo hay que desactivar el botón
+	swMensaje := 'Sólo se puede pasar a A3 desde el modo F1, F5 o A2';
+
+ELSIF dr.cnA3_Estado THEN
+	swA3_Estado := TRUE; 
+	IF gmModeActual = L1_GEMMA.A4ParadaObtenida THEN
+		swMensaje := 'Parada obtenida después de alcanzar un estado estable';
+	ELSE
+		swMensaje := 'Esperando a un estado estable para parar';
+	END_IF
+END_IF
+
+//----------------------------------------------------------------- Consigna F1_Reanudar
+dr.cnF1_Reanudar := enF1_Reanduar AND (swF1_Reanudar OR hwPM_PulsadorMarcha);
+ 	
+IF NOT dr.cnF1_Reanudar AND (swF1_Reanudar OR hwPM_PulsadorMarcha) THEN // consigna no válida
+	swF1_Reanudar := FALSE; // si no se puede entrar en el modo hay que desactivar el botón
+	swMensaje := 'Sólo se puede reanudar desde una parada';
+
+ELSIF dr.cnF1_Reanudar THEN
+	swMensaje := 'Reanundando tras la parada';
+END_IF
+
+//----------------------------------------------------------------- Consigna A3_Estado
+	
+*)
+
+
+
+
+
+
+
+
+
+//----------------------------------------------------------------- Consigna F1_Empezar
+UpdateUI(gmMode := dr.gmModeActual);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="UpdateUi" Id="{2f7a7a64-69c4-4b55-9d9b-f8c62855d55d}">
+      <Declaration><![CDATA[METHOD UpdateUi : BOOL
+VAR_INPUT
+	// pn				: REFERENCE TO L5_Panel;
+	gmMode				: L1_GEMMA;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(*
+// actualizar qué botones de consignas se habilitan (enABLE) 
+enF1_Empezar					:= FALSE;
+enF1_Reanduar					:= FALSE;
+enF4_Planta						:= FALSE;
+enF5_Funcion					:= FALSE;
+
+enA2_FinCiclo 					:= FALSE;
+enA3_Estado						:= FALSE;
+*)
+
+// actualizar actuadores del panel
+hwAS_AvisadorSonoro 			:= FALSE;
+hwLA_LamparaAlarma				:= FALSE;
+hwLM_LamparaMarcha				:= FALSE;
+//swF1_Empezar					:= FALSE;
+//swF1_Reanudar					:= FALSE;
+//swF4_Planta					:= FALSE;
+//swF5_Funcion					:= FALSE;	
+
+
+CASE gmMode OF
+	L1_GEMMA.A1ParadaInicial:
+		gmModeName				:= 'Mode A1';
+		gmModeDescr				:= 'Parada en estado inicial';
+		//enF1_Empezar			:= TRUE;
+		//enF4_Planta				:= TRUE;
+		//enF5_Funcion			:= TRUE;
+		hwLM_LamparaMarcha		:= dr.Tic;
+		
+	L1_GEMMA.A2ParaFinCiclo:
+		gmModeName				:= 'Mode A2';
+		gmModeDescr				:= 'Parada a final de ciclo solicitada';
+		//enF4_Planta				:= TRUE;
+		//enA2_FinCiclo 			:= TRUE;
+		//enA3_Estado				:= TRUE;
+		hwLM_LamparaMarcha		:= TRUE;
+		
+	L1_GEMMA.A3ParadaEstado:
+		gmModeName				:= 'Mode A3';
+		gmModeDescr				:= 'Parada en estado actual solicitada';
+		//enA3_Estado				:= TRUE;
+		//enF4_Planta				:= TRUE;
+		
+	L1_GEMMA.A4ParadaObtenida:
+		gmModeName				:= 'Mode A4';
+		gmModeDescr				:= 'Parada obtenida';
+		//enF1_Reanduar			:= TRUE;
+		//enF4_Planta				:= TRUE;
+		//enF5_Funcion			:= TRUE;
+		//enA3_Estado				:= TRUE;
+		
+	L1_GEMMA.A5PreparandoTrasFallo:
+		gmModeName				:= 'Mode A5';
+		gmModeDescr				:= 'Preparando tras fallo';	
+		//enF4_Planta				:= TRUE;
+		//enF5_Funcion			:= TRUE;
+		
+	L1_GEMMA.A6Inicializando:
+		gmModeName				:= 'Mode A6';
+		gmModeDescr				:= 'Inicializando';
+		hwLA_LamparaAlarma		:= dr.Tic;
+		
+	L1_GEMMA.A7SituandoEstado:
+		gmModeName				:= 'Mode A7';
+		gmModeDescr				:= 'Situando PO en un estado determinado';
+
+	L1_GEMMA.F1ProduccionNormal:
+		gmModeName				:= 'Mode F1';
+		gmModeDescr				:= 'Producción normal';
+		//enA2_FinCiclo 			:= TRUE;
+		//enA3_Estado				:= TRUE;
+		hwLM_LamparaMarcha		:= TRUE;
+
+	L1_GEMMA.F2SecuenciaPreparacion:
+		gmModeName				:= 'Mode F2';
+		gmModeDescr				:= 'Secuencia de preparación';	
+		//enA3_Estado				:= TRUE;
+		hwAS_AvisadorSonoro 	:= dr.Tic;
+		hwLM_LamparaMarcha		:= TRUE;
+		
+	L1_GEMMA.F3SecuenciaFinalizacion:
+		gmModeName				:= 'Mode F3';
+		gmModeDescr				:= 'Secuencia de finalización';
+		//enA3_Estado				:= TRUE;
+		hwAS_AvisadorSonoro 	:= TRUE;
+		hwLM_LamparaMarcha		:= TRUE;
+		
+	L1_GEMMA.F4VerificacionSinOrden:
+		gmModeName				:= 'Mode F4';
+		gmModeDescr				:= 'Verificación sin orden (Planta)';
+		//enF4_Planta				:= TRUE;
+		//enF5_Funcion			:= TRUE;
+		//swF4_Planta			:= TRUE;
+		
+	L1_GEMMA.F5VerificacionOrdenada:
+		gmModeName				:= 'Mode F5';
+		gmModeDescr				:= 'Verificación ordenada (Función)';
+		//enF4_Planta				:= TRUE;
+		//enF5_Funcion			:= TRUE;
+		//enA3_Estado				:= TRUE;
+				
+	L1_GEMMA.F6Probando:
+		gmModeName				:= 'Mode F6';
+		gmModeDescr				:= 'Probando';
+		//enF4_Planta				:= TRUE;
+		//enA3_Estado				:= TRUE;
+		
+	L1_GEMMA.D1ParadaEmergencia:
+		gmModeName				:= 'Mode D1';
+		gmModeDescr				:= 'Parada de emergencia';
+		hwAS_AvisadorSonoro 	:= dr.Tic;
+		hwLA_LamparaAlarma	:= dr.Tic;
+
+	L1_GEMMA.D2TratamientoFallos:
+		gmModeName				:= 'Mode D2';
+		gmModeDescr				:= 'Diagnósdr.tico/tratamiento de fallos';
+		//enF4_Planta			:= TRUE;
+		//enF5_Funcion			:= TRUE;
+		hwAS_AvisadorSonoro 	:= dr.Tic;
+		hwLA_LamparaAlarma	:= dr.Tic;
+		
+	L1_GEMMA.D3ProducirConFallos:
+		gmModeName				:= 'Mode D3';
+		gmModeDescr				:= 'Producir con fallos';
+		//enF4_Planta			:= TRUE;
+		//enF5_Funcion			:= TRUE;
+
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

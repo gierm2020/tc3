@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="L3_PlatoDivisor" Id="{c71a4a01-3eb1-443b-a07e-accb57d2980d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK L3_PlatoDivisor EXTENDS L1_ModuleBase
+
+VAR_OUTPUT	
+	fbController	: L2_PlatoDivisor_SFC:=(dr:=dr);  
+	d0 				: L1_Sensor;
+    D_1       		: L1_Actuator;
+    E_1       		: L1_Actuator;	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="ProcessCycle" Id="{a7156aed-454d-425e-80f1-664f90d71526}">
+      <Declaration><![CDATA[METHOD ProcessCycle : BOOL 
+
+VAR_INPUT
+	dr			: REFERENCE TO L1_Director;
+	tapas		: REFERENCE TO L6_Tapas;	
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Sensores y condiciones iniciales
+d0.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.d0);
+IC := d0.uiValue;
+
+// Controlador
+fbController.ProcessCycle(dr.gmModeActual);
+fbController(
+	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+	
+// Actuadores y actualización de tapas
+D_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.D_1);
+E_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.E_1);
+//IsActive:=D_1.uiValue OR E_1.uiValue;
+tapas.Girado(Ready:=Ready, Execute:=Execute, Done:=Done);
+
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

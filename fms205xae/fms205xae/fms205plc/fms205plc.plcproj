@@ -18,119 +18,117 @@
     <Released>false</Released>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Devices\dvActuator.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Devices\dvSensor.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\E_GEMMA.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FMS205\FB_Director.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FMS205\FB_FMS205.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FMS205\FB_FMS205_F3SeqFin_SFC.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FMS205\FB_FMS205_F6Prueba_SFC.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FMS205\FB_FMS205_F2SeqPrep_SFC.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FMS205\FB_FMS205_F1Producir_SFC.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FMS205\FB_Panel.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FMS205\FB_Tapas.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="GlobalTextList.TcGTLO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ModuleBase\FB_ControllerBase_SFC.TcPOU">
+    <Compile Include="L1 Architecture\L1_ModuleBase.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ModuleBase\FB_Module.TcPOU">
+    <Compile Include="L1 Architecture\L1_Actuator.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ModuleInstances\FB_Alimentador.TcPOU">
+    <Compile Include="L1 Architecture\L1_ControllerBase_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ModuleInstances\FB_Alimentador_SFC.TcPOU">
+    <Compile Include="L1 Architecture\L1_Director.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ModuleInstances\FB_CaptadorInductivo.TcPOU">
+    <Compile Include="L1 Architecture\L1_GEMMA.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ModuleInstances\FB_Cinta.TcPOU">
+    <Compile Include="L1 Architecture\L1_Sensor.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ModuleInstances\FB_Cinta_SFC.TcPOU">
+    <Compile Include="L2 Module Controllers\L2_Alimentador_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ModuleInstances\FB_DetectorFotoelectrico.TcPOU">
+    <Compile Include="L2 Module Controllers\L2_Cinta_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ModuleInstances\FB_Evacuador.TcPOU">
+    <Compile Include="L2 Module Controllers\L2_Evacuador_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ModuleInstances\FB_Evacuador_SFC.TcPOU">
+    <Compile Include="L2 Module Controllers\L2_MedidorTapa_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ModuleInstances\FB_MedidorTapa.TcPOU">
+    <Compile Include="L2 Module Controllers\L2_PickAndPlace_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ModuleInstances\FB_MedidorTapa_SFC.TcPOU">
+    <Compile Include="L2 Module Controllers\L2_PlatoDivisor_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ModuleInstances\FB_Simple_SFC.TcPOU">
+    <Compile Include="L2 Module Controllers\L2_Simple_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ModuleInstances\FB_PickAndPlace.TcPOU">
+    <Compile Include="L3 Modules\L3_Alimentador.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ModuleInstances\FB_PickAndPlace_SFC.TcPOU">
+    <Compile Include="L3 Modules\L3_CaptadorInductivo.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ModuleInstances\FB_PlatoDivisor.TcPOU">
+    <Compile Include="L3 Modules\L3_Cinta.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ModuleInstances\FB_PlatoDivisor_SFC.TcPOU">
+    <Compile Include="L3 Modules\L3_DetectorFotoelectrico.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="L3 Modules\L3_Evacuador.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="L3 Modules\L3_MedidorTapa.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="L3 Modules\L3_PickAndPlace.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="L3 Modules\L3_PlatoDivisor.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="L4 Station Controllers\L4_FMS205_F1Producir_SFC.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="L4 Station Controllers\L4_FMS205_F2SeqPrep_SFC.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="L4 Station Controllers\L4_FMS205_F3SeqFin_SFC.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="L4 Station Controllers\L4_FMS205_F6Prueba_SFC.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="L5 Station User Interfaces\L5_Panel.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="L5 Station User Interfaces\L5_FMS205VISU.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="L5 Station User Interfaces\L5_ImagePool.TcIPO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="L6 Station\L6_FMS205.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="L6 Station\L6_Tapas.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="L6 Station\MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\MAIN.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Visualization Manager.TcVMO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="VISUs\fms205visu.TcVIS">
-      <SubType>Code</SubType>
-      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
-    </Compile>
-    <Compile Include="VISUs\ImagePool.TcIPO">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DUTs" />
-    <Folder Include="GVLs" />
-    <Folder Include="ModuleBase" />
-    <Folder Include="ModuleInstances" />
-    <Folder Include="FMS205" />
-    <Folder Include="Devices" />
-    <Folder Include="VISUs" />
-    <Folder Include="POUs" />
+    <Folder Include="L1 Architecture" />
+    <Folder Include="L2 Module Controllers" />
+    <Folder Include="L3 Modules" />
+    <Folder Include="L4 Station Controllers" />
+    <Folder Include="L5 Station User Interfaces" />
+    <Folder Include="L6 Station" />
   </ItemGroup>
   <ItemGroup>
     <PlaceholderReference Include="CmpBitmapPool">
@@ -209,8 +207,8 @@
   <ProjectExtensions>
     <PlcProjectOptions>
       <XmlArchive>
-  <Data>
-    <o xml:space="preserve" t="OptionKey">
+        <Data>
+          <o xml:space="preserve" t="OptionKey">
       <v n="Name">"&lt;ProjectRoot&gt;"</v>
       <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
         <v>{8F99A816-E488-41E4-9FA3-846536012284}</v>
@@ -325,14 +323,14 @@
       </d>
       <d n="Values" t="Hashtable" />
     </o>
-  </Data>
-  <TypeList>
-    <Type n="Boolean">System.Boolean</Type>
-    <Type n="Hashtable">System.Collections.Hashtable</Type>
-    <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
-    <Type n="String">System.String</Type>
-  </TypeList>
-</XmlArchive>
+        </Data>
+        <TypeList>
+          <Type n="Boolean">System.Boolean</Type>
+          <Type n="Hashtable">System.Collections.Hashtable</Type>
+          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+          <Type n="String">System.String</Type>
+        </TypeList>
+      </XmlArchive>
     </PlcProjectOptions>
   </ProjectExtensions>
 </Project>

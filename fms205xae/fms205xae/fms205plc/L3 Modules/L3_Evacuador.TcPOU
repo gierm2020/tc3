@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="L3_Evacuador" Id="{50116491-c91a-4b60-887b-578d95c086cb}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK L3_Evacuador EXTENDS L1_ModuleBase
+(* 
+ESTACIÓN DE EVACUACIÓN DE TAPA INCORRECTA - Manual de usuario #33/29
+
+En caso de que la tapa que llegue a la penúltima de las estaciones del plato divisor, tras haber pasado por 
+los diferentes sensores encargados de determinar su material y su altura, no coincida con lo indicado por el 
+controlador central encargado de planificar la producción, ha de ser rechazada. Para ello se ha dispuesto en esta 
+estación un manipulador de dos ejes que en caso de recibir la orden correspondiente, recoge la tapa del plato 
+divisor y la deposita sobre una rampa de evacuación.
+
+Los componentes que forman parte de este manipulador son dos cilindros neumáticos de vástagos paralelos a modo de ejes, 
+sobre los que se ha fijado como elemento terminal una placa con tres ventosas para sujeción por vacío
+
+*)
+
+VAR_INPUT
+	Evacuar			: BOOL;	
+END_VAR
+
+VAR_OUTPUT
+	fbController	: L2_Evacuador_SFC:=(dr:=dr);
+	f0 				: L1_Sensor;
+	f1 				: L1_Sensor;
+	g0 				: L1_Sensor;
+	v1 				: L1_Sensor;	
+	F_0				: L1_Actuator;
+	F_1				: L1_Actuator;
+	G_1				: L1_Actuator;
+	V_1				: L1_Actuator;
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+]]></ST>
+    </Implementation>
+    <Method Name="ProcessCycle" Id="{088423ab-0767-49f6-96df-c713fe6fe249}">
+      <Declaration><![CDATA[METHOD ProcessCycle : BOOL 
+VAR_INPUT
+	dr			: REFERENCE TO L1_Director;
+	tapas		: REFERENCE TO L6_Tapas;	
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Sensores y condiciones iniciales
+f0.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.f0);
+f1.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.f1);
+g0.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.g0);
+v1.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.v1);
+IC := f1.hwValue; // el evacuador está en condiciones iniciales cuando el sensor f1 está activado
+
+// Controlador
+fbController.ProcessCycle(dr.gmModeActual);
+fbController(
+	Evacuar	:= Evacuar,
+	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+
+// Actuadores y actualización de tapas		
+F_0.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.F_0);
+F_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.F_1);
+G_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.G_1);
+V_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.V_1);
+tapas.Evacuado(Done:=Done, Evacuar:=Evacuar);
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

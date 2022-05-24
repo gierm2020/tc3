@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="L3_Cinta" Id="{f4de692b-96c6-493e-9b33-3a90e20acfad}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK L3_Cinta EXTENDS L1_ModuleBase
+
+VAR_INPUT
+	Situar: BOOL;
+	Transferir: BOOL;
+END_VAR
+
+VAR_OUTPUT
+	fbController	: L2_Cinta_SFC:=(dr:=dr);
+	pp				: L1_Sensor;
+	cp0				: L1_Sensor;
+	cp1				: L1_Sensor;
+	cp2				: L1_Sensor;
+	RUN				: L1_Actuator;
+	REV				: L1_Actuator;
+	R_1				: L1_Actuator;
+	S_1				: L1_Actuator;	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Avanza" Id="{962ac213-4605-4eb0-b4f2-71abfc5eecac}">
+      <Declaration><![CDATA[METHOD Avanza : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[RUN.ForceValue(NewValue := TRUE);
+REV.ForceValue(NewValue := FALSE);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ProcessCycle" Id="{8ef223d1-a933-4fe3-87e8-40d9ed750433}">
+      <Declaration><![CDATA[METHOD ProcessCycle : BOOL 
+VAR_INPUT
+	dr			: REFERENCE TO L1_Director;
+	tapas		: REFERENCE TO L6_Tapas;	
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Sensores y condiciones iniciales
+pp.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.pp);
+cp0.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.cp0);
+cp1.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.cp1);
+cp2.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.cp2);
+IC := TRUE;
+
+// Actuadores y actualización de tapas
+fbController.ProcessCycle(dr.gmModeActual);
+fbController(Situar := Situar, Transferir := Transferir,	
+	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+
+RUN.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.RUN);
+REV.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.REV);
+R_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.R_1);
+S_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.S_1);
+
+//Actuate(Actuator:=RUN, dr:=dr, sfcValue:=fbController.RUN, HasFinished:=TRUE);
+//Actuate(Actuator:=REV, dr:=dr, sfcValue:=fbController.REV, HasFinished:=TRUE);
+//Actuate(Actuator:=R_1, dr:=dr, sfcValue:=fbController.R_1, HasFinished:=TRUE);
+//Actuate(Actuator:=S_1, dr:=dr, sfcValue:=fbController.S_1, HasFinished:=TRUE);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Retrocede" Id="{319ef3db-3f91-40fc-bb86-4c3e886a06cc}">
+      <Declaration><![CDATA[METHOD Retrocede : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[RUN.ForceValue(NewValue := TRUE);
+REV.ForceValue(NewValue := TRUE);]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
