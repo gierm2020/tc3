@@ -63,7 +63,7 @@ IF fbController.Leyendo AND NOT Lectura_Registrada THEN
 	Lectura_Registrada 	:= TRUE;
 	strUi := TO_STRING(Altura_mm);
 	strUi := concat(strUi, ' mm');
-	tapas.Medido(Altura_Mm:=Altura_mm, Altura_Pulsos:=Altura_Pulsos);
+	tapas.B3PostMedid(Altura_Mm:=Altura_mm, Altura_Pulsos:=Altura_Pulsos);
 
 ELSIF Ready THEN // Resetear la lectura para el siguiente ciclo
 	Lectura_Registrada 	:= FALSE; 	

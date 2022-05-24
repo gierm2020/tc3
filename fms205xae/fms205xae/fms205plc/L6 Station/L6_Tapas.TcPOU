@@ -28,12 +28,12 @@ VAR_INPUT
 END_VAR
 
 VAR_OUTPUT
-	//PosCarga	: DINT;
-	PosFotoe	: DINT;
-	PosMedid	: DINT;
-	PosInduc	: DINT;
-	PosEvacu	: DINT;
-	PosDesca	: DINT;
+	FaltaMat	: BOOL; 
+	ExeAlime	: BOOL;
+	ExeCarga	: BOOL;
+	ExeEvacu	: BOOL;
+	ExeDesca	: BOOL;
+	ExePlato	: BOOL;
 END_VAR
 
 VAR
@@ -41,9 +41,16 @@ END_VAR
 
 VAR
 	NumGiros 	: DINT := 0;
+	PosCarga	: DINT;
+	PosFotoe	: DINT;
+	PosMedid	: DINT;
+	PosInduc	: DINT;
+	PosEvacu	: DINT;
+	PosDesca	: DINT;
+
 	angulo	 	: REAL := 0.0;
 	anguloanim 	: REAL := 0.0; // angulo para animación que gira lentamente
-	HaGirado	: BOOL := FALSE;
+	//HaGirado	: BOOL := FALSE;
 
 	vEvacuar_Tapa		: ARRAY[0..7] OF BOOL;
 	vDescargar_Tapa		: ARRAY[0..7] OF BOOL;
@@ -67,6 +74,70 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="A1Inicializar" Id="{4758c6c6-4ea4-433c-a79f-8e413ab5f879}">
+      <Declaration><![CDATA[METHOD A1Inicializar : BOOL
+
+VAR_INPUT
+	DebePreparar 	: BOOL := TRUE;
+END_VAR
+
+VAR
+	i : DINT;
+END_VAR
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ReqAluBaja		:= TRUE;
+ReqAluAlta		:= TRUE;
+ReqBlnBaja  	:= TRUE;
+ReqBlnAlta  	:= TRUE;
+ReqNgrBaja  	:= TRUE;
+ReqNgrAlta  	:= TRUE; 
+
+ResPend	  		:= 0;
+ResReal			:= 0;
+ResRech   		:= 0;
+
+NumGiros	 	:= 0;
+FaltaMat		:= FALSE;
+PosMedid 		:= (NumGiros+6) MOD 8;
+PosFotoe 		:= (NumGiros+5) MOD 8;
+PosInduc 		:= (NumGiros+4) MOD 8;
+PosEvacu 		:= (NumGiros+2) MOD 8;
+PosDesca		:= (NumGiros+1) MOD 8;
+PosCarga		:= (NumGiros+0) MOD 8;
+
+angulo	 		:= 0.0;
+anguloanim 		:= 0.0; // angulo para animación que gira lentamente
+//HaGirado		:= FALSE;
+ExePlato		:= FALSE;
+
+
+FOR i:=0 TO 7 DO
+	IF DebePreparar THEN
+		vInicializando[i] 	:= TRUE;
+	ELSE
+		Vaciar(i);
+	END_IF
+END_FOR
+Actualizar();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="A2InicioCiclo" Id="{8319a516-a09e-4e02-8848-93e12a8ca075}">
+      <Declaration><![CDATA[METHOD A2InicioCiclo : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ResPend 	:= ReqNumero - ResReal;
+ExeAlime 	:= ResPend > 0;
+ExeCarga	:= ExeAlime AND 
+				NOT vInicializando[PosCarga] AND
+				NOT vTapa_Cargada[PosCarga] AND
+				NOT FaltaMat;
+ExeEvacu	:= vEvacuar_Tapa[PosEvacu];
+ExeDesca    := vDescargar_Tapa[PosDesca];
+ExePlato	:= TRUE;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="Actualizar" Id="{76d8c916-080e-414e-a1dc-0f3a274c86ba}">
       <Declaration><![CDATA[METHOD Actualizar : BOOL
 VAR_INPUT
@@ -76,13 +147,7 @@ VAR
 	i 	: int := 0;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
-PosMedid 					:= (NumGiros+6) MOD 8;
-PosFotoe 					:= (NumGiros+5) MOD 8;
-PosInduc 					:= (NumGiros+4) MOD 8;
-PosEvacu 					:= (NumGiros+2) MOD 8;
-PosDesca					:= (NumGiros+1) MOD 8;
-	
+        <ST><![CDATA[	
 FOR i:=0 TO 7 DO
 	IF vInicializando[i] THEN
 		vAltura_Medida[i]	:= FALSE;
@@ -133,8 +198,23 @@ ResPend := ReqNumero - ResReal;
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Alimentado" Id="{68228dc4-db57-4234-af5a-76549516de52}">
-      <Declaration><![CDATA[METHOD Alimentado : BOOL
+    <Method Name="Animar" Id="{de346600-d46e-4dc7-b63f-da26d1696097}">
+      <Declaration><![CDATA[METHOD Animar : BOOL
+VAR_INPUT
+	PlatoActivo : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF ExePlato AND PlatoActivo AND anguloanim >-35.0 THEN
+	anguloanim := anguloanim - 0.2;
+ELSIF NOT PlatoActivo THEN
+	anguloanim := 0;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="B1PostAlime" Id="{68228dc4-db57-4234-af5a-76549516de52}">
+      <Declaration><![CDATA[METHOD B1PostAlime : BOOL
 VAR_INPUT
 	Done	: BOOL;
 	FM		: BOOL;
@@ -143,29 +223,14 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF Done THEN
-	Actualizar();
-	vTapa_Cargada[PosCarga] := NOT FM; 
+	FaltaMat := FM;
+	ExeAlime := FALSE;
 END_IF
  ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Animar" Id="{de346600-d46e-4dc7-b63f-da26d1696097}">
-      <Declaration><![CDATA[METHOD Animar : BOOL
-VAR_INPUT
-	PlatoActivo : BOOL;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF PlatoActivo AND anguloanim >-35.0 and not HaGirado THEN
-	anguloanim := anguloanim - 0.2;
-ELSIF NOT PlatoActivo THEN
-	anguloanim := 0;
-END_IF
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="Cargado" Id="{b17e1a0b-f1bf-4df1-8172-1b04521564f1}">
-      <Declaration><![CDATA[METHOD Cargado : BOOL
+    <Method Name="B2PostCarga" Id="{b17e1a0b-f1bf-4df1-8172-1b04521564f1}">
+      <Declaration><![CDATA[METHOD B2PostCarga : BOOL
 VAR_INPUT
 	Done: BOOL; 	// el brazo de carga ha terminado
 	Mover: BOOL; 	// el brazo de carga ha movido la tapa
@@ -174,8 +239,8 @@ END_VAR
 VAR
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF Done AND Mover THEN
-	Actualizar();
+        <ST><![CDATA[IF Done AND ExeCarga THEN // Mover THEN
+	ExeCarga					:= FALSE;
 	vInicializando[PosCarga]	:= FALSE;		
 	vTapa_Cargada[PosCarga]		:= TRUE;
 	vAltura_Medida[PosCarga]	:= FALSE;
@@ -188,153 +253,15 @@ END_VAR]]></Declaration>
 END_IF]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Claridad" Id="{afe73e40-fb85-4efe-b906-85a197d79803}">
-      <Declaration><![CDATA[METHOD Claridad : BOOL
-VAR_INPUT
-	Tapa_Clara: BOOL;
-END_VAR
-
-VAR
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[Actualizar();
-vClaridad_Medida[PosFotoe]	:= TRUE;
-vTapa_Clara[PosFotoe]		:= Tapa_Clara;
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="DebeCargar" Id="{bab766a7-5d91-42d2-90cb-869d831df2e1}">
-      <Declaration><![CDATA[METHOD DebeCargar : BOOL
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[PosCarga := (NumGiros+0) MOD 8;
-DebeCargar := NOT vInicializando[PosCarga] AND NOT vTapa_Cargada[PosCarga]; ]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="DebeDescargar" Id="{becbf6fd-ea18-4435-b6ab-67ddb434441c}">
-      <Declaration><![CDATA[METHOD DebeDescargar : BOOL
-VAR
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[DebeDescargar := vDescargar_Tapa[(NumGiros+1) MOD 8];]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="DebeEvacuar" Id="{ef228940-ff3a-4cfc-9754-e0b627d5c993}">
-      <Declaration><![CDATA[METHOD DebeEvacuar : BOOL
-VAR
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[DebeEvacuar := vEvacuar_Tapa[(NumGiros+2) MOD 8];]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="Descargado" Id="{8738750d-0f53-4448-9145-e43c2aec455f}">
-      <Declaration><![CDATA[METHOD Descargado : BOOL
-VAR_INPUT
-	Done	: BOOL;
-	Mover	: BOOL;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[Descargado := Done AND Mover; 
-IF Descargado THEN
-	Vaciar(PosVacia := (NumGiros+1) MOD 8);
-	ResReal := ResReal + 1;
-END_IF
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="Evacuado" Id="{5caa088b-866e-4274-a9c7-1d9f312ea165}">
-      <Declaration><![CDATA[METHOD Evacuado : BOOL
-
-VAR_INPUT
-	Done	: BOOL;
-	Evacuar	: BOOL;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF Done AND Evacuado THEN
-	Actualizar();
-	Vaciar(PosVacia := PosEvacu);
-	ResRech := ResRech + 1;
-END_IF]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="Girado" Id="{0ccf35a2-1876-4048-9c8b-4ff29b7fbdc7}">
-      <Declaration><![CDATA[METHOD Girado : BOOL
-VAR_INPUT
-	Ready : BOOL;
-	Execute: BOOL;
-	Done: BOOL;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF Execute THEN
-	HaGirado := FALSE;
-ELSIF NOT HaGirado AND Done THEN
-	HaGirado := TRUE;
-	NumGiros := NumGiros + 1;
-	anguloanim := 0;
-	angulo := SEL(angulo =0, angulo-45.0, 315.0); // , angulo+45.0, 0);
-END_IF]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="Inicializar" Id="{4758c6c6-4ea4-433c-a79f-8e413ab5f879}">
-      <Declaration><![CDATA[METHOD Inicializar : BOOL
-VAR
-	i : DINT;
-END_VAR
-
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[ReqAluBaja	:= TRUE;
-ReqAluAlta	:= TRUE;
-ReqBlnBaja  := TRUE;
-ReqBlnAlta  := TRUE;
-ReqNgrBaja  := TRUE;
-ReqNgrAlta  := TRUE; 
-ResPend	  	:= 0;
-ResReal		:= 0;
-ResRech   	:= 0;
-//Falta_Material := FALSE; 
-NumGiros 	:= 0;
-angulo	 	:= 0.0;
-anguloanim 	:= 0.0; // angulo para animación que gira lentamente
-HaGirado	:= FALSE;
-
-FOR i:=0 TO 7 DO
-	vInicializando[i] := TRUE;
-END_FOR
-Actualizar();]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="Material" Id="{88973f08-454f-49dc-aa0f-ae73f3546455}">
-      <Declaration><![CDATA[METHOD Material : BOOL
-VAR_INPUT
-	Tapa_Metalica: BOOL;
-END_VAR
-
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[Actualizar();
-vMateral_Medido[PosInduc]	:= TRUE;
-vTapa_Metalica[PosInduc]	:= Tapa_Metalica;
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="Medido" Id="{e0bd59f6-28b6-48d4-9b89-31b0758ec910}">
-      <Declaration><![CDATA[METHOD Medido : BOOL
+    <Method Name="B3PostMedid" Id="{e0bd59f6-28b6-48d4-9b89-31b0758ec910}">
+      <Declaration><![CDATA[METHOD B3PostMedid : BOOL
 VAR_INPUT
 	Altura_Mm			: REAL;
 	Altura_Pulsos		: UDINT;	
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Actualizar();
-
-IF Altura_Mm < ReqVacio THEN
+        <ST><![CDATA[IF Altura_Mm < ReqVacio THEN
 	Vaciar(PosVacia:=PosMedid);
 ELSE
 	vInicializando[PosMedid]	:= FALSE;
@@ -347,23 +274,90 @@ END_IF
 ]]></ST>
       </Implementation>
     </Method>
-    <Property Name="PosCarga" Id="{5363e22b-d794-4b9b-bd67-06e557dd4570}">
-      <Declaration><![CDATA[PROPERTY PosCarga : DINT]]></Declaration>
-      <Get Name="Get" Id="{5d3d51b1-eccf-4482-a052-b21b4ffebb44}">
-        <Declaration><![CDATA[]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[PosCarga := (NumGiros+0) MOD 8;]]></ST>
-        </Implementation>
-      </Get>
-      <Set Name="Set" Id="{307f395e-113e-4bb0-aab2-192cadb5f19a}">
-        <Declaration><![CDATA[VAR
+    <Method Name="B4PostFotoe" Id="{afe73e40-fb85-4efe-b906-85a197d79803}">
+      <Declaration><![CDATA[METHOD B4PostFotoe : BOOL
+VAR_INPUT
+	Tapa_Clara: BOOL;
+END_VAR
+
+VAR
 END_VAR
 ]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
+      <Implementation>
+        <ST><![CDATA[vClaridad_Medida[PosFotoe]	:= TRUE;
+vTapa_Clara[PosFotoe]		:= Tapa_Clara;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="B5PostInduc" Id="{88973f08-454f-49dc-aa0f-ae73f3546455}">
+      <Declaration><![CDATA[METHOD B5PostInduc : BOOL
+VAR_INPUT
+	Tapa_Metalica: BOOL;
+END_VAR
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[vMateral_Medido[PosInduc]	:= TRUE;
+vTapa_Metalica[PosInduc]	:= Tapa_Metalica;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="B6PostEvacu" Id="{5caa088b-866e-4274-a9c7-1d9f312ea165}">
+      <Declaration><![CDATA[METHOD B6PostEvacu : BOOL
+
+VAR_INPUT
+	Done	: BOOL;
+	Evacuar	: BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Done AND ExeEvacu THEN
+	ExeEvacu 		:= FALSE;
+	ResRech 		:= ResRech + 1;
+	Vaciar(PosVacia := PosEvacu);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="B7PosDesca" Id="{8738750d-0f53-4448-9145-e43c2aec455f}">
+      <Declaration><![CDATA[METHOD B7PosDesca : BOOL
+VAR_INPUT
+	Done	: BOOL;
+	Mover	: BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF done AND ExeDesca THEN
+	ExeDesca 		:= FALSE;
+	ResReal 		:= ResReal + 1;
+	ResPend			:= ReqNumero - ResReal;
+	Vaciar(PosVacia	:= PosDesca);	
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="B8PostPlato" Id="{0ccf35a2-1876-4048-9c8b-4ff29b7fbdc7}">
+      <Declaration><![CDATA[METHOD B8PostPlato : BOOL
+VAR_INPUT
+	Ready : BOOL;
+	Execute: BOOL;
+	Done: BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF ExePlato AND Done THEN
+	ExePlato := FALSE;
+	NumGiros 	:= NumGiros + 1;
+	PosMedid 	:= (NumGiros+6) MOD 8;
+	PosFotoe 	:= (NumGiros+5) MOD 8;
+	PosInduc 	:= (NumGiros+4) MOD 8;
+	PosEvacu 	:= (NumGiros+2) MOD 8;
+	PosDesca	:= (NumGiros+1) MOD 8;
+	PosCarga	:= (NumGiros+0) MOD 8;
+	anguloanim 	:= 0;
+	angulo 		:= SEL(angulo=0, angulo-45.0, 315.0); // , angulo+45.0, 0);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="Vaciar" Id="{3cc88831-9ad2-4cbf-830e-7f9be896f2fe}">
       <Declaration><![CDATA[METHOD Vaciar : BOOL
 VAR_INPUT

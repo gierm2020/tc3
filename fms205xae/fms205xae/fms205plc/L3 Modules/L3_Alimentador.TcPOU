@@ -34,7 +34,7 @@ K_1.ForceValue(NewValue:=k1.uiValue);
 
 K_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.K_1);
 FM.ProcessCycle (gmMode:=dr.gmModeActual, sfcValue:=fbController.FM);
-tapas.Alimentado(Done:=Done, FM:=FM.uiValue);
+tapas.B1PostAlime(Done:=Done, FM:=FM.uiValue);
 ]]></ST>
       </Implementation>
     </Method>

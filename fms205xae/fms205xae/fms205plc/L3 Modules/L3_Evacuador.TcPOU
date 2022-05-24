@@ -62,7 +62,7 @@ F_0.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.F_0);
 F_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.F_1);
 G_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.G_1);
 V_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.V_1);
-tapas.Evacuado(Done:=Done, Evacuar:=Evacuar);
+tapas.B6PostEvacu(Done:=Done, Evacuar:=Evacuar);
 ]]></ST>
       </Implementation>
     </Method>

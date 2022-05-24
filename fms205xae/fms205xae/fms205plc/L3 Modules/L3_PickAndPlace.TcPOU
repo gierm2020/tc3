@@ -66,9 +66,9 @@ HOR.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.HOR);
 VER.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.VER);
 PIN.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.PIN);
 IF Name='Carga' THEN
-	tapas.Cargado(Done:=Done, Mover:=Mover);
+	tapas.B2PostCarga(Done:=Done, Mover:=Mover);
 ELSE
-	tapas.Descargado(Done:=Done, Mover:=Mover);
+	tapas.B7PosDesca(Done:=Done, Mover:=Mover);
 END_IF
 ]]></ST>
       </Implementation>

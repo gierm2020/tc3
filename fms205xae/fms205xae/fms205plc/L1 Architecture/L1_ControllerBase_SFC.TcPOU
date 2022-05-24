@@ -614,6 +614,8 @@ END_VAR]]></Declaration>
 IF gmModePrev<>gmMode AND gmMode=L1_GEMMA.A6Inicializando THEN
 	gmModePrev	:= gmMode;
 	SFCReset 	:= TRUE;
+ELSE
+	SFCReset 	:= FALSE;
 END_IF
 gmModePrev := gmMode;
 

@@ -5,6 +5,7 @@
 // Girar 8 veces el plato para determinar qué tipo de tapa hay en cada sector del plato
 VAR_INPUT
 	cnF2_Preparar	: BOOL;
+	TapasOk			: BOOL;
 END_VAR
 
 VAR_IN_OUT
@@ -14,7 +15,8 @@ VAR_IN_OUT
 	Plato			: L3_PlatoDivisor;
 END_VAR
 
-VAR
+VAR_OUTPUT
+	InitTapas	 	: BOOL;	
 	Giros 			: INT := 0;
 END_VAR
 ]]></Declaration>
@@ -514,7 +516,61 @@ END_VAR
                                   <l2 n="EmbeddedEntryActionProperties" />
                                   <l2 n="EmbeddedExitActionProperties" />
                                   <o n="ElementList" t="SFCElementList">
-                                    <l2 n="InnerList" />
+                                    <l2 n="InnerList" cet="SFCActionAssociation">
+                                      <o>
+                                        <l2 n="Attributes" cet="SFCAttribute">
+                                          <o>
+                                            <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
+                                            <o n="Value" t="StringValue">
+                                              <v n="Value">"InitTapas"</v>
+                                              <v n="DefaultValue">""</v>
+                                            </o>
+                                            <v n="Id">1036L</v>
+                                            <v n="IdParent">1035L</v>
+                                          </o>
+                                          <o>
+                                            <v n="AttributeId">{7d894980-aeea-405c-a0f6-e2b26429c58f}</v>
+                                            <o n="Value" t="StringValue">
+                                              <v n="Value">""</v>
+                                              <v n="DefaultValue">""</v>
+                                            </o>
+                                            <v n="Id">1037L</v>
+                                            <v n="IdParent">1035L</v>
+                                          </o>
+                                          <o>
+                                            <v n="AttributeId">{01580b27-6378-448b-8ecb-0e4b795b58d6}</v>
+                                            <o n="Value" t="BoolValue">
+                                              <v n="Value">"FALSE"</v>
+                                              <v n="DefaultValue">"FALSE"</v>
+                                            </o>
+                                            <v n="Id">1038L</v>
+                                            <v n="IdParent">1035L</v>
+                                          </o>
+                                          <o>
+                                            <v n="AttributeId">{bc882c11-1e91-4dd8-a6b8-2075724ed18b}</v>
+                                            <o n="Value" t="EnumValue">
+                                              <v n="TemplateGuid">{79a4fdd5-c859-4de4-aa8d-c03372c880c2}</v>
+                                              <n n="BaseType" />
+                                              <v n="Value">"0"</v>
+                                              <v n="DefaultValue">"0"</v>
+                                            </o>
+                                            <v n="Id">1039L</v>
+                                            <v n="IdParent">1035L</v>
+                                          </o>
+                                          <o>
+                                            <v n="AttributeId">{e174fc0d-80b0-4a9e-a530-ca239c249a50}</v>
+                                            <o n="Value" t="StringValue">
+                                              <v n="Value">"N"</v>
+                                              <v n="DefaultValue">""</v>
+                                            </o>
+                                            <v n="Id">1040L</v>
+                                            <v n="IdParent">1035L</v>
+                                          </o>
+                                        </l2>
+                                        <v n="Id">1035L</v>
+                                        <v n="IdParent">806L</v>
+                                      </o>
+                                    </l2>
                                   </o>
                                   <l2 n="Attributes" cet="SFCAttribute">
                                     <o>
@@ -630,7 +686,7 @@ END_VAR
                                     <o>
                                       <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                                       <o n="Value" t="StringValue">
-                                        <v n="Value">"TRUE"</v>
+                                        <v n="Value">"TapasOk"</v>
                                         <v n="DefaultValue">""</v>
                                       </o>
                                       <v n="Id">819L</v>

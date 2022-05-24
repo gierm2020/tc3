@@ -188,7 +188,8 @@ ELSE
 			ELSIF gmModeActual=L1_GEMMA.F1ProduccionNormal AND EndBatch THEN 			// F1-> F3
                 gmModeActual:= L1_GEMMA.F3SecuenciaFinalizacion;
 			ELSIF gmModeActual=L1_GEMMA.F3SecuenciaFinalizacion AND NOT cnF3_Finalizar THEN // F3 -> A1
-				gmModeActual:= L1_GEMMA.A1ParadaInicial; 
+				gmModeActual:= L1_GEMMA.A1ParadaInicial;
+				cnF0_Empezar :=FALSE; 
 			ELSIF gmModeActual=L1_GEMMA.F5VerificacionOrdenada AND NOT cnF5_Funcion THEN // F5 -> A1
 				gmModeActual:= L1_GEMMA.A1ParadaInicial;				
 			ELSIF gmModeActual=L1_GEMMA.F6Probando AND NOT cnF6_Probar THEN 			// F6 -> A1

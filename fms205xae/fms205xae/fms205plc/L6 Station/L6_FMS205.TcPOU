@@ -173,7 +173,7 @@ fbPanel.ProcessCycle(dr:=dr, gmModeActual := dr.gmModeActual, tmReinicio := dr.t
 // controlar el flujo a nivel de la estación
 CASE dr.gmModeActual OF
 	L1_GEMMA.A6Inicializando:
-		tapas.Inicializar();
+		tapas.A1Inicializar(DebePreparar:=dr.cnF2_Preparar);		
 		
 	L1_GEMMA.A1ParadaInicial:
 		; // esperar a que se pida hacer altgo
@@ -187,38 +187,73 @@ CASE dr.gmModeActual OF
 
 	L1_GEMMA.A2ParaFinCiclo,
 	L1_GEMMA.F1ProduccionNormal:
-		ctrlF1Producir.Execute  		:= ctrlF1Producir.Ready AND NOT dr.EndBatch;
-		ctrlF1Producir.Ack				:= ctrlF1Producir.Done;
 		ctrlF1Producir.IC 				:= InitialConditions();
-		IF ctrlF1Producir.Execute THEN 	// al principio de cada ciclo decidir qué hacer con cada tapa antes del giro
-			mdPickAndPlaceCarga.Mover 	:= tapas.DebeCargar();
-			mdEvacuador.Evacuar 		:= tapas.DebeEvacuar(); 
-			mdPickAndPlaceDescarga.Mover:= tapas.DebeDescargar();		
+		IF ctrlF1Producir.Ready AND NOT dr.EndBatch THEN
+			ctrlF1Producir.Execute		:= TRUE;
+			ctrlF1Producir.Ack			:= FALSE;
+			tapas.A2InicioCiclo();
+			mdPickAndPlaceCarga.Mover 	:= tapas.ExeCarga;
+			mdEvacuador.Evacuar 		:= tapas.ExeEvacu;
+			mdPickAndPlaceDescarga.Mover:= tapas.ExeDesca;
+		ELSIF ctrlF1Producir.Done THEN
+			ctrlF1Producir.Execute		:= FALSE;
+			ctrlF1Producir.Ack			:= TRUE;			
 		END_IF
 		ctrlF1Producir(Alime:=mdAlimentador, Carga:=mdPickAndPlaceCarga, Medid:=mdMedidorTapa, Fotoe:=mdDetectorFotoelectrico, 
 			Induc:=mdCaptadorInductivo, Evacu:=mdEvacuador,	Desca:=mdPickAndPlaceDescarga, Plato:=mdPlatoDivisor, Cinta:=mdCinta);
 
-	L1_GEMMA.F2SecuenciaPreparacion:
-		ctrlF2SeqPrep.Execute 			:= ctrlF2SeqPrep.Ready;
-		ctrlF2SeqPrep.cnF2_Preparar		:= dr.cnF2_Preparar;
-		IF ctrlF2SeqPrep.Done THEN
-			dr.cnF2_Preparar := FALSE;
+	L1_GEMMA.F2SecuenciaPreparacion:		
+		IF ctrlF2SeqPrep.Ready THEN
+			ctrlF2SeqPrep.Execute 			:= TRUE; // ctrlF2SeqPrep.Ready;
+			ctrlF2SeqPrep.Ack				:= FALSE;
+			ctrlF2SeqPrep.cnF2_Preparar		:= dr.cnF2_Preparar;
+			ctrlF2SeqPrep.TapasOk 			:= FALSE;
+		ELSIF ctrlF2SeqPrep.InitTapas THEN
+			tapas.A2InicioCiclo();		
+			ctrlF2SeqPrep.TapasOk 			:= TRUE;	
+		ELSIF ctrlF2SeqPrep.Done THEN
+			dr.cnF2_Preparar 				:= FALSE;
+			ctrlF2SeqPrep.Execute 			:= FALSE;
+			ctrlF2SeqPrep.Ack				:= TRUE;
+		ELSE
+			ctrlF2SeqPrep.IC				:= InitialConditions();
 		END_IF
-		ctrlF2SeqPrep.Ack				:= ctrlF2SeqPrep.Done;
-		ctrlF2SeqPrep.IC				:= InitialConditions();
 		ctrlF2SeqPrep(Medid:=mdMedidorTapa, Fotoe:=mdDetectorFotoelectrico,	Induc:=mdCaptadorInductivo, Plato:=mdPlatoDivisor);		
 
 	L1_GEMMA.F3SecuenciaFinalizacion:
-		ctrlF3SeqFin.Execute 			:= ctrlF3SeqFin.Ready;
-		ctrlF3SeqFin.cnF3_Finalizar		:= dr.cnF3_Finalizar;
-		ctrlF3SeqFin.Ack				:= ctrlF3SeqFin.Done;
-		ctrlF3SeqFin.IC					:= InitialConditions();		
+		IF ctrlF3SeqFin.Ready THEN
+			ctrlF3SeqFin.Execute 			:= TRUE; // ctrlF3SeqFin.Ready;
+			ctrlF3SeqFin.Ack				:= FALSE;
+			ctrlF3SeqFin.cnF3_Finalizar		:= dr.cnF3_Finalizar;
+			ctrlF3SeqFin.TapasOk			:= FALSE;
+		ELSIF ctrlF3SeqFin.InitTapas THEN
+			tapas.A2InicioCiclo();		
+			mdEvacuador.Evacuar				:= tapas.ExeEvacu;
+			ctrlF3SeqFin.TapasOk 			:= TRUE;
+		ELSIF ctrlF3SeqFin.Done THEN
+			dr.cnF3_Finalizar 				:= FALSE;
+			ctrlF3SeqFin.Execute 			:= FALSE;
+			ctrlF3SeqFin.Ack				:= TRUE;
+		ELSE
+			ctrlF3SeqFin.IC					:= InitialConditions();
+		END_IF
 		ctrlF3SeqFin(Evacu:=mdEvacuador, Plato:=mdPlatoDivisor);
 
 	L1_GEMMA.F6Probando:
-		ctrlF6Prueba.Execute 			:= ctrlF6Prueba.Ready;
-		ctrlF6Prueba.Ack				:= ctrlF6Prueba.Done;  //IsReady(gmMode:=L1_GEMMA.F6Probando);
- 		ctrlF6Prueba(Alime:=mdAlimentador, Carga:=mdPickAndPlaceCarga, Medid:=mdMedidorTapa, Fotoe:=mdDetectorFotoelectrico, 
+		IF ctrlF6Prueba.Ready THEN
+			ctrlF6Prueba.Execute 			:= TRUE;
+			ctrlF6Prueba.Ack				:= FALSE; // ctrlF6Prueba.Done;  //IsReady(gmMode:=L1_GEMMA.F6Probando);
+			tapas.A2InicioCiclo();		
+			mdPickAndPlaceCarga.Mover 		:= tapas.ExeCarga;
+			mdEvacuador.Evacuar 			:= tapas.ExeEvacu;
+			mdPickAndPlaceDescarga.Mover	:= tapas.ExeDesca;
+		ELSIF ctrlF6Prueba.Done THEN
+			ctrlF6Prueba.Ack				:= TRUE; // ctrlF6Prueba.Done;  //IsReady(gmMode:=L1_GEMMA.F6Probando);
+			ctrlF6Prueba.Execute 			:= FALSE;			
+		ELSE
+			ctrlF6Prueba.IC					:= InitialConditions();
+		END_IF			
+		ctrlF6Prueba(Alime:=mdAlimentador, Carga:=mdPickAndPlaceCarga, Medid:=mdMedidorTapa, Fotoe:=mdDetectorFotoelectrico, 
 			Induc:=mdCaptadorInductivo, Evacu:=mdEvacuador,	Desca:=mdPickAndPlaceDescarga, Plato:=mdPlatoDivisor, Cinta:=mdCinta);
 
 	L1_GEMMA.F5VerificacionOrdenada: 		// tener en cuenta las consignas relacionadas con F5 		
