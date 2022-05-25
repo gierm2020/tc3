@@ -67,6 +67,7 @@ VAR
 	vMateral_Medido		: ARRAY[0..7] OF BOOL;	
 	vTapa_Metalica 		: ARRAY[0..7] OF BOOL;	
 	vstrUi 				: ARRAY[0..7] OF STRING;
+	vstrToolTip			: ARRAY[0..7] OF STRING;
 	vColorSector		: ARRAY[0..7] OF DWORD;	
 
 END_VAR
@@ -147,8 +148,10 @@ VAR
 	i 	: int := 0;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[	
+        <ST><![CDATA[
 FOR i:=0 TO 7 DO
+	vstrTooltip[i] := CONCAT('Sector ', TO_STRING(i));
+	vstrTooltip[i] := CONCAT(vstrTooltip[i], ' :');
 	IF vInicializando[i] THEN
 		vAltura_Medida[i]	:= FALSE;
 		vAltura_Pulsos[i]	:= 0;
@@ -165,15 +168,36 @@ FOR i:=0 TO 7 DO
 		vDescargar_Tapa[i]	:= FALSE;	
 		vColorSector[i] 	:= ColSecIndeterm;
 		vstrUi[i] 			:= '?';
-	
+		vstrTooltip[i] 		:= CONCAT(vstrTooltip[i], ' Contenido desconocido => Medir');
+		
 	ELSIF NOT vTapa_Cargada[i] THEN
 		//vCargar_Tapa[i]		:= TRUE;
 		vEvacuar_Tapa[i]	:= FALSE;
 		vDescargar_Tapa[i]	:= FALSE;	
 		vColorSector[i] 	:= ColSecVacio;
 		vstrUi[i] 			:= '___';
+		vstrTooltip[i] 	:= CONCAT(vstrTooltip[i], ' Sector vacío => Cargar');
 	ELSE
-		//vCargar_Tapa[i]		:= FALSE;
+		IF vAltura_Medida[i] THEN //  AND vTapa_Cargada[i] redundante porque se cumple
+			vstrTooltip[i] 	:= CONCAT(vstrTooltip[i], SEL(vTapa_Alta[i], ' Baja (', ' Alta ('));
+			vstrTooltip[i] 	:= CONCAT(vstrTooltip[i], TO_STRING(vAltura_Pulsos[i]));
+			vstrTooltip[i] 	:= CONCAT(vstrTooltip[i], ' pulsos, ');
+			vstrTooltip[i]	:= CONCAT(vstrTooltip[i], TO_STRING(vAltura_Mm[i]));
+			vstrTooltip[i] 	:= CONCAT(vstrTooltip[i], ' mm);');
+		ELSE
+			vstrTooltip[i] := CONCAT(vstrTooltip[i], ' ¿altura?;');				
+		END_IF
+		IF vClaridad_Medida[i] THEN
+			vstrTooltip[i] 	:= CONCAT(vstrTooltip[i], SEL(vTapa_Clara[i], ' oscura;', ' clara;'));
+		ELSE
+			vstrTooltip[i] 	:= CONCAT(vstrTooltip[i], ' ¿claridad?;');							
+		END_IF
+		IF vMateral_Medido[i] THEN
+			vstrTooltip[i] 	:= CONCAT(vstrTooltip[i], SEL(vTapa_Metalica[i], ' plástico;', ' metal;'));
+		ELSE
+			vstrTooltip[i] 	:= CONCAT(vstrTooltip[i], ' ¿material?;');							
+		END_IF
+		
 		IF vAltura_Medida[i] AND vClaridad_Medida[i] AND vMateral_Medido[i] THEN
 			vDescargar_Tapa[i] := (
 					(ReqAluAlta AND vTapa_Metalica[i] AND vTapa_Alta[i]) OR
@@ -184,10 +208,12 @@ FOR i:=0 TO 7 DO
 					(ReqNgrBaja AND NOT vTapa_Metalica[i] AND NOT vTapa_Clara[i]  AND NOT vTapa_Alta[i]));
 			vEvacuar_Tapa[i] := NOT vDescargar_Tapa[i];
 			vColorSector[i] := SEL(vDescargar_Tapa[i],ColSecEvacuar, ColSecDescargar);
+			vstrTooltip[i] := CONCAT(vstrTooltip[i], SEL(vDescargar_Tapa[i], ' => Evacuar', '=> Descargar'));
 		ELSE
 			vDescargar_Tapa[i]	:= FALSE;
 			vEvacuar_Tapa[i]	:= FALSE;
-			vColorSector[i] := ColSecPendiente; 			
+			vColorSector[i] 	:= ColSecPendiente; 			
+			vstrTooltip[i] 		:= CONCAT(vstrTooltip[i], '=> Esperar');
 		END_IF 
 		vstrUi[i] := SEL(vAltura_Medida[i],'?', SEL(vTapa_Alta[i], 'B','A'));
 		vstrUi[i] := CONCAT(vstrUi[i], SEL(vClaridad_Medida[i], '?',SEL(vTapa_Clara[i],'O','C')));
@@ -225,6 +251,7 @@ END_VAR
         <ST><![CDATA[IF Done THEN
 	FaltaMat := FM;
 	ExeAlime := FALSE;
+	//Actualizar();
 END_IF
  ]]></ST>
       </Implementation>
@@ -250,6 +277,7 @@ END_VAR]]></Declaration>
 	vTapa_Clara[PosCarga] 		:= FALSE;		
 	vMateral_Medido[PosCarga]	:= FALSE;	
 	vTapa_Metalica[PosCarga] 	:= FALSE;
+	//Actualizar();
 END_IF]]></ST>
       </Implementation>
     </Method>
@@ -270,6 +298,7 @@ ELSE
 	vAltura_Pulsos[PosMedid]	:= Altura_Pulsos;
 	vAltura_Mm[PosMedid]		:= Altura_mm;
 	vTapa_Alta[PosMedid]		:= Altura_mm > ReqAlta;
+	//Actualizar();
 END_IF	
 ]]></ST>
       </Implementation>
@@ -286,6 +315,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[vClaridad_Medida[PosFotoe]	:= TRUE;
 vTapa_Clara[PosFotoe]		:= Tapa_Clara;
+//Actualizar();
 ]]></ST>
       </Implementation>
     </Method>
@@ -299,6 +329,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[vMateral_Medido[PosInduc]	:= TRUE;
 vTapa_Metalica[PosInduc]	:= Tapa_Metalica;
+//Actualizar();
 ]]></ST>
       </Implementation>
     </Method>
@@ -315,6 +346,7 @@ END_VAR
 	ExeEvacu 		:= FALSE;
 	ResRech 		:= ResRech + 1;
 	Vaciar(PosVacia := PosEvacu);
+	//Actualizar();
 END_IF]]></ST>
       </Implementation>
     </Method>
@@ -331,6 +363,7 @@ END_VAR
 	ResReal 		:= ResReal + 1;
 	ResPend			:= ReqNumero - ResReal;
 	Vaciar(PosVacia	:= PosDesca);	
+	//Actualizar();
 END_IF
 ]]></ST>
       </Implementation>
@@ -355,6 +388,7 @@ END_VAR
 	PosCarga	:= (NumGiros+0) MOD 8;
 	anguloanim 	:= 0;
 	angulo 		:= SEL(angulo=0, angulo-45.0, 315.0); // , angulo+45.0, 0);
+	Actualizar();	
 END_IF]]></ST>
       </Implementation>
     </Method>

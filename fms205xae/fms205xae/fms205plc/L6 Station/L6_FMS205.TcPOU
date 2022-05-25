@@ -62,23 +62,63 @@ InitialConditions := (
     <Method Name="IsFailied" Id="{c00d0657-d8cd-4b4b-a9ee-6be440092cb6}">
       <Declaration><![CDATA[METHOD IsFailied : BOOL
 
-]]></Declaration>
+VAR
+	NumError	: UDINT;
+	Mensaje		: string;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IsFailied:=
-	mdAlimentador.fbController.NumError <> 0 OR
-	mdPickAndPlaceCarga.fbController.NumError <> 0 OR
-	mdMedidorTapa.fbController.NumError <> 0 OR 
-	mdCaptadorInductivo.fbController.NumError <> 0 OR
-	mdDetectorFotoelectrico.fbController.NumError <> 0 OR
-	mdEvacuador.fbController.NumError <> 0 OR
-	mdPickAndPlaceDescarga.fbController.NumError <> 0 OR
-	mdPlatoDivisor.fbController.NumError <> 0 OR
-	mdCinta.fbController.NumError <> 0 OR
+        <ST><![CDATA[IsFailied:=TRUE;
+
+IF mdAlimentador.fbController.NumError <> 0 THEN
+	Mensaje := 'Fallo en alimentador, error=';
+	NumError :=	mdAlimentador.fbController.NumError;
+	
+ELSIF mdPickAndPlaceCarga.fbController.NumError <> 0 THEN
+	Mensaje := 'Fallo en brazo de carga, error=';
+	NumError := mdPickAndPlaceCarga.fbController.NumError; 
+	
+ELSIF mdMedidorTapa.fbController.NumError <> 0 THEN
+	Mensaje := 'Fallo en medidor de altura, error=';
+	NumError := mdMedidorTapa.fbController.NumError;
+	
+ELSIF mdDetectorFotoelectrico.fbController.NumError <> 0 THEN
+	Mensaje := 'Fallo en detector fotoeléctrico, error=';
+	NumError := mdDetectorFotoelectrico.fbController.NumError;
+	
+ELSIF mdCaptadorInductivo.fbController.NumError<>0 THEN
+	Mensaje := 'Fallo en captador inductivo, error=';
+	NumError := mdCaptadorInductivo.fbController.NumError;
+
+ELSIF mdEvacuador.fbController.NumError <> 0 THEN
+	Mensaje := 'Fallo en evacuador, error=';
+	NumError := mdEvacuador.fbController.NumError;
+	
+ELSIF  mdPickAndPlaceDescarga.fbController.NumError <> 0 THEN
+	Mensaje := 'Fallo en brazo de descarga, error=';
+	NumError := mdPickAndPlaceDescarga.fbController.NumError;
+	
+ELSIF mdPlatoDivisor.fbController.NumError <> 0 THEN
+	Mensaje := 'Fallo en plato giratorio, error=';
+	NumError := mdPlatoDivisor.fbController.NumError;
+	
+ELSIF mdCinta.fbController.NumError <> 0 THEN
+	Mensaje := 'Fallo en cinta, error=';
+	NumError := mdCinta.fbController.NumError;
+
+ELSE
+	fbPanel.swMensaje := '';
+	IsFailied := FALSE;
+END_IF
+
+IF IsFailied THEN
+	fbPanel.swMensaje := CONCAT(Mensaje, TO_STRING(NumError));
+END_IF
+(*
 	ctrlF1Producir.NumError <> 0 OR
 	ctrlF2SeqPrep.NumError <> 0 OR
 	ctrlF3SeqFin.NumError <> 0 OR
 	ctrlF6Prueba.NumError <> 0;
-]]></ST>
+*)]]></ST>
       </Implementation>
     </Method>
     <Method Name="IsPaused" Id="{63c7f49b-23e4-43c3-ac69-584bc16d9aec}">
@@ -187,17 +227,20 @@ CASE dr.gmModeActual OF
 
 	L1_GEMMA.A2ParaFinCiclo,
 	L1_GEMMA.F1ProduccionNormal:
-		ctrlF1Producir.IC 				:= InitialConditions();
+		ctrlF1Producir.IC 					:= InitialConditions();
 		IF ctrlF1Producir.Ready AND NOT dr.EndBatch THEN
-			ctrlF1Producir.Execute		:= TRUE;
-			ctrlF1Producir.Ack			:= FALSE;
+			ctrlF1Producir.Execute			:= TRUE;
+			ctrlF1Producir.Ack				:= FALSE;
+			mdCinta.Situar					:= tapas.ExeDesca; // situar un nuevo carro si en el último ciclo se transfirió
 			tapas.A2InicioCiclo();
-			mdPickAndPlaceCarga.Mover 	:= tapas.ExeCarga;
-			mdEvacuador.Evacuar 		:= tapas.ExeEvacu;
-			mdPickAndPlaceDescarga.Mover:= tapas.ExeDesca;
+			mdPickAndPlaceCarga.Mover 		:= tapas.ExeCarga;
+			mdEvacuador.Evacuar 			:= tapas.ExeEvacu;
+			mdPickAndPlaceDescarga.Mover	:= tapas.ExeDesca;
+			mdCinta.Transferir				:= tapas.ExeDesca;
+			
 		ELSIF ctrlF1Producir.Done THEN
-			ctrlF1Producir.Execute		:= FALSE;
-			ctrlF1Producir.Ack			:= TRUE;			
+			ctrlF1Producir.Execute			:= FALSE;
+			ctrlF1Producir.Ack				:= TRUE;			
 		END_IF
 		ctrlF1Producir(Alime:=mdAlimentador, Carga:=mdPickAndPlaceCarga, Medid:=mdMedidorTapa, Fotoe:=mdDetectorFotoelectrico, 
 			Induc:=mdCaptadorInductivo, Evacu:=mdEvacuador,	Desca:=mdPickAndPlaceDescarga, Plato:=mdPlatoDivisor, Cinta:=mdCinta);
@@ -243,10 +286,12 @@ CASE dr.gmModeActual OF
 		IF ctrlF6Prueba.Ready THEN
 			ctrlF6Prueba.Execute 			:= TRUE;
 			ctrlF6Prueba.Ack				:= FALSE; // ctrlF6Prueba.Done;  //IsReady(gmMode:=L1_GEMMA.F6Probando);
+			mdCinta.Situar					:= tapas.ExeDesca; // situar un nuevo carro si en el último ciclo se transfirió
 			tapas.A2InicioCiclo();		
 			mdPickAndPlaceCarga.Mover 		:= tapas.ExeCarga;
 			mdEvacuador.Evacuar 			:= tapas.ExeEvacu;
 			mdPickAndPlaceDescarga.Mover	:= tapas.ExeDesca;
+			mdCinta.Transferir				:= tapas.ExeDesca;
 		ELSIF ctrlF6Prueba.Done THEN
 			ctrlF6Prueba.Ack				:= TRUE; // ctrlF6Prueba.Done;  //IsReady(gmMode:=L1_GEMMA.F6Probando);
 			ctrlF6Prueba.Execute 			:= FALSE;			

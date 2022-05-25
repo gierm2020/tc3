@@ -16,6 +16,7 @@ VAR_INPUT
 	swF0_Empezar						: BOOL;
 	//swF1_Reanudar						: BOOL;
 	swF4_Planta							: BOOL; // botón en la visualización
+	swMensaje							: STRING(255) :='';
 	//swF5_Funcion						: BOOL; // botón en la visualización
 END_VAR
 
@@ -27,7 +28,6 @@ VAR
 	hwLS_LamparaStop			AT %Q*	: BOOL; // DUDAS - LA - Lámpara de alarma o lámpara de stop
 	hwSM_SelecAutoManual	 	AT %I*	: BOOL; // SM - Selector modo auto/man	
 	FP_PM								: R_TRIG;
-	swMensaje							: STRING(255) :='';
 END_VAR
 
 
