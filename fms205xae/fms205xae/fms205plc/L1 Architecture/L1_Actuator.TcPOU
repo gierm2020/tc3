@@ -2,6 +2,20 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="L1_Actuator" Id="{ad7a615f-d37f-4c2d-8af3-51dcf617a49f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK L1_Actuator
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 VAR CONSTANT
 	COLOR_AAct 		: DWORD := 16#0000FF00;
 	//COLOR_AIna 		: DWORD := 16#000000FF;

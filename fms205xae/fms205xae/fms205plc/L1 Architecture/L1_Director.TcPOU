@@ -6,7 +6,7 @@
 VAR CONSTANT
 	gmColorArret 	: DWORD := 16#FF808080;
 	gmColorFonct 	: DWORD := 16#FF000080;
-	gmColorDefail 	: DWORD := 16#ff800000;
+	gmColorDefail 	: DWORD := 16#FF800000;
 END_VAR
 
 VAR_INPUT
@@ -54,6 +54,7 @@ VAR
 	gmFamiDefail	: BOOL 		:= FALSE; 		// Familia de salida de fallos
 	
 	Speed			: REAL := 100.0;			// Velocidad variable de los controladores
+	LastSpeed		: real := 0;			// para calcular sólo si hay cambio de velocidad
 	
 	
 	//---------------------------------- dt_ Defalut Times	
@@ -261,6 +262,7 @@ gmFamiFonct  := (gmModeActual >= L1_GEMMA.F1ProduccionNormal) AND (gmModeActual 
 gmFamiDefail := (gmModeActual >= L1_GEMMA.D1ParadaEmergencia) AND (gmModeActual <= L1_GEMMA.D3ProducirConFallos);
 gmModeColor := SEL(gmFamiArret,SEL(gmFamiFonct, gmColorDefail, gmColorFonct), gmColorArret);
 
+UpdateSpeed();
 //UpdateUi(pn:=pn);
 ]]></ST>
       </Implementation>
@@ -275,23 +277,27 @@ END_VAR
       <Implementation>
         <ST><![CDATA[IF Speed <= 0 THEN
 	Speed := 1;
+ELSIF Speed<>LastSpeed THEN
+	LastSpeed := Speed; // sólo se ejecuta el código la primera vez que cambia la velocidad
+	
+	factor := 100.0/Speed;
+	
+	tmMaximoTiempoRespuesta		:= TO_TIME(TO_REAL(dt_MaximoTiempoRespuesta) * factor);
+	tmTiempoReinicio			:= TO_TIME(TO_REAL(dt_TiempoReinicio) * factor);
+	tmK_1 						:= TO_TIME(TO_REAL(dt_K_1) * factor);					// Temporizador empujador tapa
+	tmR_1						:= TO_TIME(TO_REAL(dt_R_1) * factor);					// Temporizador retenedor de la cinta
+	tmS_1						:= TO_TIME(TO_REAL(dt_S_1) * factor);					// Temporizador separador de la cinta
+	tmEP						:= TO_TIME(TO_REAL(dt_EP) * factor);					// Tiempo de entrada del pale
+	tmTP						:= TO_TIME(TO_REAL(dt_TP) * factor);					// Tiempo de transferencia del pale
+	tmXP						:= TO_TIME(TO_REAL(dt_XP) * factor);					// Tiempo de salida del pale
+	tmSOL 						:= TO_TIME(TO_REAL(dt_SOL) * factor); 					// tiempo después de soltar y antes de subir
+	tmV_1						:= TO_TIME(TO_REAL(dt_V_1) * factor);					// tiempo máximo succionando sin que se active el sensor v1
+	tmL_1						:= TO_TIME(TO_REAL(dt_L_1) * factor);					// tiempo máximo de bajada del medidor de tapas
+	tmPIN 						:= TO_TIME(TO_REAL(dt_PIN) * factor);					// tiempo para pinzar una tapa antes de subir el brazo
+	tmE_1						:= TO_TIME(TO_REAL(dt_E_1) * factor);					// tiempo para que el retenedor bloquee el plato
+	tmD_1 						:= TO_TIME(TO_REAL(dt_D_1) * factor);					// tiempo para girar el plato a la siguiente posición
+	
 END_IF
-factor := 100.0/Speed;
-
-tmMaximoTiempoRespuesta		:= TO_TIME(TO_REAL(dt_MaximoTiempoRespuesta) * factor);
-tmTiempoReinicio			:= TO_TIME(TO_REAL(dt_TiempoReinicio) * factor);
-tmK_1 						:= TO_TIME(TO_REAL(dt_K_1) * factor);					// Temporizador empujador tapa
-tmR_1						:= TO_TIME(TO_REAL(dt_R_1) * factor);					// Temporizador retenedor de la cinta
-tmS_1						:= TO_TIME(TO_REAL(dt_S_1) * factor);					// Temporizador separador de la cinta
-tmEP						:= TO_TIME(TO_REAL(dt_EP) * factor);					// Tiempo de entrada del pale
-tmTP						:= TO_TIME(TO_REAL(dt_TP) * factor);					// Tiempo de transferencia del pale
-tmXP						:= TO_TIME(TO_REAL(dt_XP) * factor);					// Tiempo de salida del pale
-tmSOL 						:= TO_TIME(TO_REAL(dt_SOL) * factor); 					// tiempo después de soltar y antes de subir
-tmV_1						:= TO_TIME(TO_REAL(dt_V_1) * factor);					// tiempo máximo succionando sin que se active el sensor v1
-tmL_1						:= TO_TIME(TO_REAL(dt_L_1) * factor);					// tiempo máximo de bajada del medidor de tapas
-tmPIN 						:= TO_TIME(TO_REAL(dt_PIN) * factor);					// tiempo para pinzar una tapa antes de subir el brazo
-tmE_1						:= TO_TIME(TO_REAL(dt_E_1) * factor);					// tiempo para que el retenedor bloquee el plato
-tmD_1 						:= TO_TIME(TO_REAL(dt_D_1) * factor);					// tiempo para girar el plato a la siguiente posición
 ]]></ST>
       </Implementation>
     </Method>

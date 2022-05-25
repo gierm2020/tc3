@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <GVL Name="L5_Colores" Id="{dd77effe-8e00-4347-a9aa-4d870947a08d}" ParameterList="True">
+    <Declaration><![CDATA[// {attribute 'qualified_only'}
+VAR_GLOBAL CONSTANT
+	clModeAFill : DWORD := 16#FF808080;;
+	clModeFFill : DWORD := 16#FFFF0000;
+	clModeDFill : DWORD := 16#FF800000;
+	
+	colDesFill		 : DWORD :=16#FFFF0000;	
+	colDesFont		 : DWORD :=16#FFFFFFFF;	
+	colDesFrameSin	 : DWORD :=16#FFFF0000;		
+	colVacFill		 : DWORD :=16#FFF2F2F2;	
+	colVacFont		 : DWORD :=16#FF000000;	
+	colVacFrameSin	 : DWORD :=16#FFF2F2F2;		
+	colTapFill		 : DWORD :=16#FFFFFF00;	
+	colTapFont		 : DWORD :=16#FF000000;	
+	colTapFrameSin	 : DWORD :=16#FF000000;		
+	colClaFill		 : DWORD :=16#FFFFFF00;	
+	colClaFont		 : DWORD :=16#FF000000;	
+	colClaFrameSin	 : DWORD :=16#FF000000;		
+	colOscFill		 : DWORD :=16#FFFFFF00;	
+	colOscFont		 : DWORD :=16#FF000000;	
+	colOscFrameSin	 : DWORD :=16#FF000000;		
+	colAluFill		 : DWORD :=16#FF808080;	
+	colAluFont		 : DWORD :=16#FFFFFFFF;	
+	colAluFrameSin	 : DWORD :=16#FF000000;	
+	colAluFrameOk	 : DWORD :=16#FF00B050;	
+	colAluFrameKo	 : DWORD :=16#FFFF0000;
+	colBlnFill		 : DWORD :=16#FFFFFFFF;	
+	colBlnFont		 : DWORD :=16#FF000000;	
+	colBlnFrameSin	 : DWORD :=16#FF000000;	
+	colBlnFrameOk	 : DWORD :=16#FF00B050;	
+	colBlnFrameKo	 : DWORD :=16#FFFF0000;
+	colNgrFill		 : DWORD :=16#FF0D0D0D;	
+	colNgrFont		 : DWORD :=16#FFFFFFFF;	
+	colNgrFrameSin	 : DWORD :=16#FF000000;	
+	colNgrFrameOk	 : DWORD :=16#FF00B050;	
+	colNgrFrameKo	 : DWORD :=16#FFFF0000;
+	colErrFill		 : DWORD :=16#FFFF0000;	
+	colErrFont		 : DWORD :=16#FFFFFFFF;	
+	colErrFrameSin	 : DWORD :=16#FF000000;		
+
+	// aparte el grosor de la línea debe establecerse a 3
+	colModFillExec	 : DWORD :=16#50FFFF00; // amarillo
+	colModFramExec	 : DWORD :=16#FFFFA500; // naranja
+	colModFillDone	 : DWORD :=16#5000C000; // verde
+	colModFramDone	 : DWORD :=16#FF004000; // verde oscuro
+	colModFillReady	 : DWORD :=16#00FFFF00; // amarillo transparente
+	colModFramReady	 : DWORD :=16#00FFA500; // naranja transparente
+	
+	
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

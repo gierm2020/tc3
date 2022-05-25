@@ -25,6 +25,9 @@ VAR_OUTPUT
 	Timed		: ARRAY[1..MAX_ERRORS]	OF BOOL; 
 	NumError	: UINT := 0;
 	gmModePrev	: L1_GEMMA := L1_GEMMA.A6Inicializando;
+	
+	colPicFill	: DWORD; // color para destacar en la foto según esté Ready (tranparente), Ejecutando (amarillo) o Esperando Ack (verde) 
+	colPicFram	: DWORD; // color del marco  	
 END_VAR
 
 ]]></Declaration>
@@ -630,7 +633,19 @@ FOR i:= 1 TO MAX_ERRORS DO
 		EXIT;
 	END_IF
 END_FOR
-]]></ST>
+
+
+// Tratamiento del color en la foto
+IF Ready THEN
+	colPicFill	:= colModFillReady;
+	colPicFram	:= colModFramReady;
+ELSIF Done THEN 
+	colPicFill	:= colModFillDone;
+	colPicFram	:= colModFramDone;	
+ELSE
+	colPicFill	:= colModFillExec;
+	colPicFram	:= colModFramExec;	
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="ResetError" Id="{ca1cc05a-c1aa-4e32-b999-d986fdd3d9f7}">

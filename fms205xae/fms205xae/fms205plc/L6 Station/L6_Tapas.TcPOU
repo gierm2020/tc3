@@ -68,8 +68,12 @@ VAR
 	vTapa_Metalica 		: ARRAY[0..7] OF BOOL;	
 	vstrUi 				: ARRAY[0..7] OF STRING;
 	vstrToolTip			: ARRAY[0..7] OF STRING;
-	vColorSector		: ARRAY[0..7] OF DWORD;	
-
+	vColorSector		: ARRAY[0..7] OF DWORD;
+	
+	vColorFill			: ARRAY[0..7] OF DWORD;
+	vColorFont			: ARRAY[0..7] OF DWORD;	
+	vColorFrame			: ARRAY[0..7] OF DWORD;
+	
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -145,7 +149,7 @@ VAR_INPUT
 END_VAR
 
 VAR
-	i 	: int := 0;
+	i 	: INT := 0;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[
@@ -177,6 +181,7 @@ FOR i:=0 TO 7 DO
 		vColorSector[i] 	:= ColSecVacio;
 		vstrUi[i] 			:= '___';
 		vstrTooltip[i] 	:= CONCAT(vstrTooltip[i], ' Sector vacío => Cargar');
+
 	ELSE
 		IF vAltura_Medida[i] THEN //  AND vTapa_Cargada[i] redundante porque se cumple
 			vstrTooltip[i] 	:= CONCAT(vstrTooltip[i], SEL(vTapa_Alta[i], ' Baja (', ' Alta ('));
@@ -185,8 +190,9 @@ FOR i:=0 TO 7 DO
 			vstrTooltip[i]	:= CONCAT(vstrTooltip[i], TO_STRING(vAltura_Mm[i]));
 			vstrTooltip[i] 	:= CONCAT(vstrTooltip[i], ' mm);');
 		ELSE
-			vstrTooltip[i] := CONCAT(vstrTooltip[i], ' ¿altura?;');				
+			vstrTooltip[i] 	:= CONCAT(vstrTooltip[i], ' ¿altura?;');
 		END_IF
+		
 		IF vClaridad_Medida[i] THEN
 			vstrTooltip[i] 	:= CONCAT(vstrTooltip[i], SEL(vTapa_Clara[i], ' oscura;', ' clara;'));
 		ELSE
@@ -218,6 +224,50 @@ FOR i:=0 TO 7 DO
 		vstrUi[i] := SEL(vAltura_Medida[i],'?', SEL(vTapa_Alta[i], 'B','A'));
 		vstrUi[i] := CONCAT(vstrUi[i], SEL(vClaridad_Medida[i], '?',SEL(vTapa_Clara[i],'O','C')));
 		vstrUi[i] := CONCAT(vstrUi[i], SEL(vMateral_Medido[i], '?', SEL(vTapa_Metalica[i], 'P','M'))); 		
+	END_IF
+	
+	IF vInicializando[i] THEN								// caso A ?
+		vColorFill[i]		:= colDesFill;
+		vColorFont[i]		:= colDesFont;
+		vColorFrame[i]		:= colDesFrameSin;
+	ELSIF NOT vTapa_Cargada[i] THEN							// Caso B ___
+		vColorFill[i]		:= colVacFill;
+		vColorFont[i]		:= colVacFont;
+		vColorFrame[i]		:= colVacFrameSin;
+	ELSIF NOT vClaridad_Medida[i] THEN						// Caso C A??
+		vColorFill[i]		:= colTapFill;
+		vColorFont[i]		:= colTapFont;
+		vColorFrame[i]		:= colTapFrameSin;
+	ELSIF vTapa_Clara[i] AND NOT vMateral_Medido[i] THEN	// Caso D AC?
+		vColorFill[i]		:= colClaFill;
+		vColorFont[i]		:= colClaFont;
+		vColorFrame[i]		:= colClaFrameSin;
+	ELSIF NOT vTapa_Clara[i] AND NOT vMateral_Medido[i] THEN // Caso E AO?
+		vColorFill[i]		:= colClaFill;
+		vColorFont[i]		:= colClaFont;
+		vColorFrame[i]		:= colClaFrameSin;
+	ELSIF vTapa_Clara[i] AND vTapa_Metalica[i] THEN 		// Caso F ACM
+		vColorFill[i]		:= colClaFill;
+		vColorFont[i]		:= colClaFont;
+		vColorFrame[i]		:= colClaFrameSin;
+	ELSIF vTapa_Clara[i] AND NOT vTapa_Metalica[i] THEN 	// Caso G ACP
+		vColorFill[i]		:= colBlnFill;
+		vColorFont[i]		:= colBlnFont;
+		vColorFrame[i]		:= colBlnFrameSin;
+	ELSIF NOT vTapa_Clara[i] AND NOT vTapa_Metalica[i] THEN // Caso G AOP
+		vColorFill[i]		:= colNgrFill;
+		vColorFont[i]		:= colNgrFont;
+		vColorFrame[i]		:= colNgrFrameSin;
+	ELSE
+		vColorFill[i]		:= colErrFill;
+		vColorFont[i]		:= colErrFont;
+		vColorFrame[i]		:= colErrFrameSin;		
+	END_IF
+	IF vDescargar_Tapa[i] THEN
+		vColorFrame[i]		:= colAluFrameOk; // se aplica el mismo independientemente del tipo de tapa!	
+	END_IF
+	IF vEvacuar_Tapa[i] THEN
+		vColorFrame[i]		:= colAluFrameKo; // se aplica el mismo independientemente del tipo de tapa!			
 	END_IF
 END_FOR 
 ResPend := ReqNumero - ResReal;
@@ -289,10 +339,10 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF Altura_Mm < ReqVacio THEN
+        <ST><![CDATA[vInicializando[PosMedid]	:= FALSE;	
+IF Altura_Mm < ReqVacio THEN
 	Vaciar(PosVacia:=PosMedid);
 ELSE
-	vInicializando[PosMedid]	:= FALSE;
 	vTapa_Cargada[PosMedid]		:= TRUE;			
 	vAltura_Medida[PosMedid]	:= TRUE;
 	vAltura_Pulsos[PosMedid]	:= Altura_Pulsos;

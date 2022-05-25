@@ -17,7 +17,15 @@ VAR_OUTPUT
 	RUN				: L1_Actuator;
 	REV				: L1_Actuator;
 	R_1				: L1_Actuator;
-	S_1				: L1_Actuator;	
+	S_1				: L1_Actuator;
+
+	// colores para distingur cuándo situa y cuándo transfiere	
+	colPicFramTransferir : DWORD;
+	colPicFillTransferir : DWORD;
+
+	colPicFramSituar : DWORD;
+	colPicFillSituar : DWORD;
+	
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -57,11 +65,12 @@ REV.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.REV);
 R_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.R_1);
 S_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.S_1);
 
-//Actuate(Actuator:=RUN, dr:=dr, sfcValue:=fbController.RUN, HasFinished:=TRUE);
-//Actuate(Actuator:=REV, dr:=dr, sfcValue:=fbController.REV, HasFinished:=TRUE);
-//Actuate(Actuator:=R_1, dr:=dr, sfcValue:=fbController.R_1, HasFinished:=TRUE);
-//Actuate(Actuator:=S_1, dr:=dr, sfcValue:=fbController.S_1, HasFinished:=TRUE);
-]]></ST>
+// Actualizar las flechas de la cinta dependiendo de si sitúa o transfiere
+colPicFramTransferir := SEL(Transferir, colModFramReady, fbController.colPicFram);
+colPicFillTransferir := SEL(Transferir, colModFillReady, fbController.colPicFill);
+colPicFramSituar	 := SEL(Situar, 	colModFramReady, fbController.colPicFram);
+colPicFillSituar	 := SEL(Situar, 	colModFillReady, fbController.colPicFill);
+	]]></ST>
       </Implementation>
     </Method>
     <Method Name="Retrocede" Id="{319ef3db-3f91-40fc-bb86-4c3e886a06cc}">
