@@ -455,6 +455,9 @@
 				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdCinta.R_1.hwValue" VarB="Channel 7^R+"/>
 				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.mdCinta.S_1.hwValue" VarB="Channel 8^S+"/>
 			</OwnerB>
+			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 5 (EL2008)">
+				<Link VarA="PlcTask Outputs^MAIN.fbFMS205.fbPanel.hwAS_AvisadorSonoro" VarB="Channel 1^AS"/>
+			</OwnerB>
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 6 (EL1008)">
 				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdEvacuador.f0.hwValue" VarB="Channel 6^f0"/>
 				<Link VarA="PlcTask Inputs^MAIN.fbFMS205.mdEvacuador.f1.hwValue" VarB="Channel 7^f1"/>
