@@ -34,6 +34,8 @@ END_VAR
 VAR_OUTPUT
 	// modos excluyentes de la interfaz de usuario
 	// consignas del panel, resultado de integrar la información que viene del hardware, el estado GEMMA, los temporizadores y flancos, y la interfaz de usuario		
+	swF4_Avanza						: BOOL := FALSE;
+ 	swF4_Retroc						: BOOL := FALSE;	
 	
 	swF5_Alimentar					: BOOL;
 	swF5_Situar						: BOOL;
@@ -72,8 +74,6 @@ VAR
 	//swF2_Preparar					: BOOL;
 	//swF3_Finalizar				: BOOL;	
 	ttF4_Planta						: STRING :='';
-	swF4_Avanza						: BOOL := FALSE;
- 	swF4_Retroc						: BOOL := FALSE;	
 	enF6_Probar						: BOOL;
 	swF6_Probar						: BOOL;
 END_VAR
@@ -143,12 +143,7 @@ ELSIF (hwSM_SelecAutoManual OR mdF4Planta) THEN
 		ttF4_Planta := 'Mandos directos ativados desde visualización';
 	END_IF	
 
-	IF swF4_Avanza THEN 
-		swF4_Retroc := FALSE;
-	ELSIF swF4_Retroc THEN		
-		swF4_Avanza := FALSE;
-	END_IF		
-
+	
 	
 
 //----------------------------------------------------------------- F5_Funcion
@@ -279,6 +274,7 @@ END_IF
 
 //----------------------------------------------------------------- Consigna F1_Empezar
 UpdateUI(gmMode := dr.gmModeActual);
+
 ]]></ST>
       </Implementation>
     </Method>

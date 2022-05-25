@@ -220,9 +220,11 @@ CASE dr.gmModeActual OF
 		
 	L1_GEMMA.F4VerificacionSinOrden: 
 		IF fbPanel.swF4_Avanza THEN		
-			mdCinta.Avanza();				// si se pulsa avanzar activar RUN y desactivar REV
+			mdCinta.RUN.ForceValue(NewValue:=TRUE);
+			mdCinta.REV.ForceValue(NewValue:=FALSE);
 		ELSIF fbPanel.swF4_Retroc THEN
-			mdCinta.Retrocede();			// si se pulsa retrocede activar RUN y REV
+			mdCinta.RUN.ForceValue(NewValue:=TRUE);
+			mdCinta.REV.ForceValue(NewValue:=TRUE);
 		END_IF
 
 	L1_GEMMA.A2ParaFinCiclo,

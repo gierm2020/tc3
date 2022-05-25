@@ -31,16 +31,6 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="Avanza" Id="{962ac213-4605-4eb0-b4f2-71abfc5eecac}">
-      <Declaration><![CDATA[METHOD Avanza : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[RUN.ForceValue(NewValue := TRUE);
-REV.ForceValue(NewValue := FALSE);]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="ProcessCycle" Id="{8ef223d1-a933-4fe3-87e8-40d9ed750433}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL 
 VAR_INPUT
@@ -71,16 +61,6 @@ colPicFillTransferir := SEL(Transferir, colModFillReady, fbController.colPicFill
 colPicFramSituar	 := SEL(Situar, 	colModFramReady, fbController.colPicFram);
 colPicFillSituar	 := SEL(Situar, 	colModFillReady, fbController.colPicFill);
 	]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="Retrocede" Id="{319ef3db-3f91-40fc-bb86-4c3e886a06cc}">
-      <Declaration><![CDATA[METHOD Retrocede : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[RUN.ForceValue(NewValue := TRUE);
-REV.ForceValue(NewValue := TRUE);]]></ST>
       </Implementation>
     </Method>
   </POU>
