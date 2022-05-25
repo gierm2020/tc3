@@ -104,8 +104,8 @@ dr.cnA1_ParadaIni := FALSE;
 	dr.cnF1_Producir	:= FALSE;
 
 //----------------------------------------------------------------- Consiga cnD1_Emergencia
-dr.cnD1_Emergencia := hwPE_Seta OR swPE_Seta; 
-IF dr.cnD1_Emergencia THEN
+dr.cnA1_Emergencia := hwPE_Seta OR swPE_Seta; 
+IF dr.cnA1_Emergencia THEN
 	IF hwPE_Seta THEN
 		IF swPE_Seta THEN
 			ttPE_Seta := 'Desarmar la seta y desactivar el botón para reinicializar';
@@ -188,6 +188,7 @@ ELSIF mdF6Probar THEN
 //----------------------------------------------------------------- F1_Producir
 ELSIF (mdF1Producir OR FP_PM.Q) THEN
 	dr.cnF1_Producir:= TRUE;
+
 	IF (swF0_Empezar OR FP_PM.Q) THEN
 		dr.cnF0_Empezar := TRUE;
 	END_IF
@@ -201,7 +202,8 @@ ELSIF (mdF1Producir OR FP_PM.Q) THEN
 	dr.cnA3_Estado 	:= swA3_Estado;
 
 ELSE
-	dr.cnA1_ParadaIni 	:= TRUE;
+	dr.cnF0_Empezar :=FALSE; 
+	//dr.cnA1_ParadaIni 	:= TRUE;
 	dr.cnA6_Inicializar := FALSE; 
 	dr.cnF4_Planta 		:= FALSE;
 	dr.cnF5_Funcion 	:= FALSE;

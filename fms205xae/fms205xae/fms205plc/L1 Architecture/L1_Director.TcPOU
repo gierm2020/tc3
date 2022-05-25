@@ -2,6 +2,59 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="L1_Director" Id="{1485be2f-2009-4092-b7e4-7ed9a9ca4fab}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK L1_Director
+(*
+
+Módulo L1_Director
+
+Entrada: consignas generadas a partir del panel físico, la interfaz de usuario y el estado de la estación
+Salida: nuevo estado de Gemma
+
+1. Consignas
+
+	!!!!cnD1_Emergencia: 		Solicitud de parada de emergencia
+	cnA2_FinCiclo:			Solicitud de que la estación se detenga cuando acabe el ciclo
+	cnA3_Estado:			Solicitud de que la estación se detenga lo antes posible
+	cnA6_Inicializar: 		Solicitud de inicialización de la estación
+	
+	cnF0_Empezar: 			Solicitud de empezar a Producir/Pobar o continuar después de una parada/fallo
+	cnF1_Producir:			Solicitud de producción, incluyendo secuencias de preparación=F2/finalización=F3
+	cnF2_Preparar:			Solicitud de que la estación ejecute la secuencia de praparación antes de empezar el lote
+	cnF3_Finalizar:			Solicitud de que se ejecute la secuencia de finalización después de acabar el lote
+	cnF4_Planta:			Solicitud de paso al modo manual
+	cnF5_Funcion:			Solicitud de prueba de grafcets a nivel de módulo
+	cnF6_Probar				Solicitud de prueba secuencial de la estación (monolítico)
+
+
+2. Estado de la estación
+
+	IC:						La estación cumple las condiciones iniciales
+	Failure:				Alguno de los módulos de la estación ha fallado
+	EndCycle:				La estación ha terminado un ciclo de producción
+	EndBatch:				La estación ha terminado de producir el lote
+	IsPaused:				Todos los módulos de la estación se han detenido
+
+3. Modos GEMMA
+	A1ParadaInicial:		La estación está parada esperando instrucciones
+	A2ParaFinCiclo:			Estación produciendo pero se detendrá cuando se termine el ciclo actual
+	A3ParadaEstado:			Estación en marcha pero se detendrá en cuanto alcance un estado estable (IsSafe)
+	A4ParadaObtenida: 		La estación está detenida después de alcanzar un estado estable
+	A5PreparandoTrasFallo:	La estación está cambiando al modo anterior a que se produjera el fallo
+	A6Inicializadndo:		Estación inicializando esperando a que se cumplan las condiciones iniciales
+	A7SituandoEstado:		Modo no tratado 
+	
+	F1ProduccionNormal:		Estación produciendo el lote piezas
+	F2SecuenciaPreparacion:	Estación preparándose para producir (evaluando qué hay en cada sector del plato)
+	F3SecuenciaFinalizacion:Estación finalizando la producción (vaciando las tapas que quedan en el plato)	
+	F4VerificacionSinOrden:	Estación en modo manual
+	F5VerificacionOrdenada: Estación ejecutando un Grafcet a nivel de módulo
+	F6Probando:				Estación ejecutando el Grafcet secuencial (monolítico)
+
+	D1ParadaEmergencia: 	Estación ha entrado en parada de emergencia
+	D2TratamientoFallos:	Estación detenida (o en modo F4) para corregir el fallo que se ha producido
+	D3ProducirConFallos:	Estado no tratado
+
+	
+*)
 
 VAR CONSTANT
 	gmColorArret 	: DWORD := 16#FF808080;
@@ -33,7 +86,7 @@ VAR_INPUT
 	cnF6_Probar		: BOOL;
 
 	cnF4_Planta		: BOOL; 					// modo verificación sin orden	
-	cnD1_Emergencia	: BOOL; 					// pulsar la seta
+	cnA1_Emergencia	: BOOL; 					// pulsar la seta
 	cnA6_Inicializar: BOOL;
 	//cnF1_Reanudar	: BOOL;
 
@@ -107,7 +160,7 @@ END_IF
 Clock(IN := Tic AND NOT Clock.Q, PT:=T#500MS);
 
 
-IF cnD1_Emergencia THEN
+IF cnA1_Emergencia THEN
     gmModeActual := L1_GEMMA.D1ParadaEmergencia;
 	
 ELSIF cnA6_Inicializar THEN 
@@ -190,7 +243,6 @@ ELSE
                 gmModeActual:= L1_GEMMA.F3SecuenciaFinalizacion;
 			ELSIF gmModeActual=L1_GEMMA.F3SecuenciaFinalizacion AND NOT cnF3_Finalizar THEN // F3 -> A1
 				gmModeActual:= L1_GEMMA.A1ParadaInicial;
-				cnF0_Empezar :=FALSE; 
 			ELSIF gmModeActual=L1_GEMMA.F5VerificacionOrdenada AND NOT cnF5_Funcion THEN // F5 -> A1
 				gmModeActual:= L1_GEMMA.A1ParadaInicial;				
 			ELSIF gmModeActual=L1_GEMMA.F6Probando AND NOT cnF6_Probar THEN 			// F6 -> A1
@@ -235,7 +287,7 @@ ELSE
 			
         (* ------------------------------------------------------------ Procedimientos de defecto *)
         L1_GEMMA.D1ParadaEmergencia: (* Parada de emergencia *)
-            IF NOT cnD1_Emergencia THEN //  TODO CONSIGNA DE EMERGENCIA DEBE TENER ENCUENTA LA POC
+            IF NOT cnA1_Emergencia THEN //  TODO CONSIGNA DE EMERGENCIA DEBE TENER ENCUENTA LA POC
                 gmModeActual := L1_GEMMA.A6Inicializando; // Al quitar la parada de emergencia hay que reinicializar la estación
             ELSE                
                 ; // Esperar a que se quite la parada de emergencia

@@ -247,9 +247,9 @@ FOR i:=0 TO 7 DO
 		vColorFont[i]		:= colClaFont;
 		vColorFrame[i]		:= colClaFrameSin;
 	ELSIF vTapa_Clara[i] AND vTapa_Metalica[i] THEN 		// Caso F ACM
-		vColorFill[i]		:= colClaFill;
-		vColorFont[i]		:= colClaFont;
-		vColorFrame[i]		:= colClaFrameSin;
+		vColorFill[i]		:= colAluFill;
+		vColorFont[i]		:= colAluFont;
+		vColorFrame[i]		:= colAluFrameSin;
 	ELSIF vTapa_Clara[i] AND NOT vTapa_Metalica[i] THEN 	// Caso G ACP
 		vColorFill[i]		:= colBlnFill;
 		vColorFont[i]		:= colBlnFont;
