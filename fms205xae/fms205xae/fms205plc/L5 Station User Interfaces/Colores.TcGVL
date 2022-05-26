@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
-  <GVL Name="Colores" Id="{b7ba41c5-92a0-4a22-a791-1d943b2b3a4c}">
-    <Declaration><![CDATA[{attribute 'qualified_only'}
-VAR_GLOBAL
-	
-END_VAR]]></Declaration>
-  </GVL>
-</TcPlcObject>

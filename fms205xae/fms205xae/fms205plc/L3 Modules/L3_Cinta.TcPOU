@@ -60,7 +60,8 @@ colPicFramTransferir := SEL(Transferir, colModFramReady, fbController.colPicFram
 colPicFillTransferir := SEL(Transferir, colModFillReady, fbController.colPicFill);
 colPicFramSituar	 := SEL(Situar, 	colModFramReady, fbController.colPicFram);
 colPicFillSituar	 := SEL(Situar, 	colModFillReady, fbController.colPicFill);
-	]]></ST>
+
+tapas.PostCinta(Done := Done, Situa:=Situar, Trans:=Transferir);	]]></ST>
       </Implementation>
     </Method>
   </POU>

@@ -34,7 +34,7 @@ fbController(dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Don
 
 K_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.K_1);
 FM.ProcessCycle (gmMode:=dr.gmModeActual, sfcValue:=fbController.FM);
-tapas.B1PostAlime(Done:=Done, FM:=FM.uiValue);
+tapas.PostAlime(Ready:=Ready, Done:=Done, FM:=FM.uiValue);
 ]]></ST>
       </Implementation>
     </Method>
