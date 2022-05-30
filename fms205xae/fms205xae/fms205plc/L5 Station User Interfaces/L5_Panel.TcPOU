@@ -17,6 +17,9 @@ VAR_INPUT
 	hwLS_LamparaStop			AT %Q*	: BOOL; // DUDAS - LA - Lámpara de alarma o lámpara de stop
 
 	swF0_Empezar						: BOOL;
+	swF1_Producir						: BOOL;
+	swF2_Preparar						: BOOL;
+	swF3_Finalizar						: bool;
 	//swF1_Reanudar						: BOOL;
 	swF4_Planta							: BOOL; // botón en la visualización
 	swMensaje							: STRING(255) :='';
@@ -31,7 +34,8 @@ VAR
 	swPOC_PulsadorReset					: BOOL; 
 	
 	hwPM_PulsadorMarcha			AT %I*	: BOOL; // PM - Pulsador de marcha (verde)
-	SwPM_PulsadorMarcha					: BOOL;
+	swPM_PulsadorMarcha					: BOOL;
+	fpPM_PulsadorMarcha					: R_TRIG;
 	
 	hwPS_PulsadorStop			AT %I*	: BOOL; // PS - Pulsador de parada (rojo)
 	swPS_PulsadorStop					: BOOL; 
@@ -40,7 +44,7 @@ VAR
 	swSM_SelecAutoManual	 			: BOOL; 	
 
 	
-	FP_PM								: R_TRIG;
+	//FP_PM								: R_TRIG;
 END_VAR
 
 
@@ -130,7 +134,16 @@ ELSIF dr.cnD1_Emergencia AND NOT (hwPE_Seta OR swPE_Seta) THEN
 	END_IF
 
 ELSIF gmModeActual=L1_GEMMA.A1ParadaInicial THEN
-	IF  (hwSM_SelecAutoManual OR swSM_SelecAutoManual) AND NOT DR.cnF4_Planta THEN
+	fpPM_PulsadorMarcha(CLK:=hwPM_PulsadorMarcha OR swPM_PulsadorMarcha);
+	IF fpPM_PulsadorMarcha.Q THEN
+		dr.cnF0_Empezar 			:= TRUE;
+		dr.cnF1_Producir			:= TRUE;
+		IF swF2_Preparar AND mdF1Producir THEN
+			dr.cnF2_Preparar 		:= TRUE;
+		END_IF
+		
+		
+	ELSIF (hwSM_SelecAutoManual OR swSM_SelecAutoManual) AND NOT DR.cnF4_Planta THEN
 		dr.cnF4_Planta				:= TRUE;
 		dr.cnF5_Funcion				:= FALSE;
 		mdF5Funcion					:= FALSE;

@@ -223,7 +223,7 @@ fbPanel.ProcessCycle(dr:=dr, gmModeActual := dr.gmModeActual, tmReinicio := dr.t
 dr.ProcessCycle(); 
 
 ctrlF1Producir.ProcessCycle(dr.gmModeActual);					// ejecutar el ciclo de cada Grafcet a nivel estación
-ctrlF2SeqPrep.ProcessCycle(dr.gmModeActual);
+//ctrlF2SeqPrep.ProcessCycle(dr.gmModeActual);
 ctrlF3SeqFin.ProcessCycle(dr.gmModeActual);
 ctrlF6Prueba.ProcessCycle(dr.gmModeActual);
 
@@ -303,10 +303,22 @@ CASE dr.gmModeActual OF
 	L1_GEMMA.A5PreparandoTrasFallo:
 		ManageErrors();
 		
-
+	L1_GEMMA.F2SecuenciaPreparacion:		
+		ctrlF2SeqPrep.IC				:= InitialConditions();			
+		IF ctrlF2SeqPrep.Ready THEN
+			ctrlF2SeqPrep.Execute		:= TRUE; // ctrlF2SeqPrep.Ready;
+			ctrlF2SeqPrep.Ack			:= FALSE;
+			ctrlF2SeqPrep.cnF2_Preparar	:= dr.cnF2_Preparar;
+			ELSIF ctrlF2SeqPrep.Done THEN
+				dr.cnF2_Preparar			:= FALSE;
+				ctrlF2SeqPrep.Execute 		:= FALSE;
+				ctrlF2SeqPrep.Ack			:= TRUE;
+			END_IF
+			ctrlF2SeqPrep(	Medid:=mdMedidorTapa, Fotoe:=mdDetectorFotoelectrico,	
+							Induc:=mdCaptadorInductivo, Plato:=mdPlatoDivisor);
 	//L1_GEMMA.F1ProduccionNormal,
+			
 	//L1_GEMMA.A2ParaFinCiclo,
-	//L1_GEMMA.F2SecuenciaPreparacion,		
 	//L1_GEMMA.F3SecuenciaFinalizacion,
 	//L1_GEMMA.F6Probando,
 	L1_GEMMA.F5VerificacionOrdenada:

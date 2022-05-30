@@ -5661,7 +5661,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.cnF2_Preparar"</v>
+                          <v n="Value">"MAIN.fbFMS205.fbPanel.swF2_Preparar"</v>
                         </o>
                       </l>
                     </o>
@@ -5808,7 +5808,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.cnF1_Producir"</v>
+                          <v n="Value">"MAIN.fbFMS205.fbPanel.swF1_Producir"</v>
                         </o>
                       </l>
                     </o>
@@ -20389,7 +20389,7 @@
                     </o>
                     <o>
                       <v n="Id">3719097617L</v>
-                      <v n="Value">0</v>
+                      <v n="Value">359</v>
                     </o>
                     <o>
                       <v n="Id">571893170L</v>
@@ -20431,7 +20431,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.fbFMS205.dr.cnF3_Finalizar"</v>
+                          <v n="Value">"MAIN.fbFMS205.fbPanel.swF3_Finalizar"</v>
                         </o>
                       </l>
                     </o>
