@@ -222,7 +222,7 @@ dr.EndBatch 								:= tapas.ResReal >= tapas.ReqNumero;
 fbPanel.ProcessCycle(dr:=dr, gmModeActual := dr.gmModeActual, tmReinicio := dr.tmTiempoReinicio);
 dr.ProcessCycle(); 
 
-ctrlF1Producir.ProcessCycle(dr.gmModeActual);					// ejecutar el ciclo de cada Grafcet a nivel estación
+//ctrlF1Producir.ProcessCycle(dr.gmModeActual);					// ejecutar el ciclo de cada Grafcet a nivel estación
 //ctrlF2SeqPrep.ProcessCycle(dr.gmModeActual);
 ctrlF3SeqFin.ProcessCycle(dr.gmModeActual);
 ctrlF6Prueba.ProcessCycle(dr.gmModeActual);
@@ -235,6 +235,7 @@ IF mdPickAndPlaceCarga.TapaMovida THEN
 	mdPickAndPlaceCarga.TapaMovida		:= FALSE;	
 END_IF
 
+mdMedidorTapa.Medir						:= tapas.DebeMedir();
 mdEvacuador.Evacuar						:= tapas.PuedeEvacuar(gmMode:=dr.gmModeActual);
 
 mdPickAndPlaceDescarga.Mover			:= NOT dr.EndBatch AND mdCinta.Carro_Situado AND tapas.PuedeDescargar();
@@ -310,13 +311,26 @@ CASE dr.gmModeActual OF
 			ctrlF2SeqPrep.Ack			:= FALSE;
 			ctrlF2SeqPrep.cnF2_Preparar	:= dr.cnF2_Preparar;
 			ELSIF ctrlF2SeqPrep.Done THEN
-				dr.cnF2_Preparar			:= FALSE;
-				ctrlF2SeqPrep.Execute 		:= FALSE;
-				ctrlF2SeqPrep.Ack			:= TRUE;
+				dr.cnF2_Preparar		:= FALSE;
+				ctrlF2SeqPrep.Execute 	:= FALSE;
+				ctrlF2SeqPrep.Ack		:= TRUE;
 			END_IF
 			ctrlF2SeqPrep(	Medid:=mdMedidorTapa, Fotoe:=mdDetectorFotoelectrico,	
 							Induc:=mdCaptadorInductivo, Plato:=mdPlatoDivisor);
-	//L1_GEMMA.F1ProduccionNormal,
+							
+	L1_GEMMA.F1ProduccionNormal:
+		ctrlF1Producir.IC 				:= InitialConditions();
+		dr.EndCycle 					:= ctrlF1Producir.Done;
+		IF ctrlF1Producir.Ready AND NOT dr.EndBatch THEN
+			ctrlF1Producir.Execute		:= TRUE;
+			ctrlF1Producir.Ack			:= FALSE;
+		ELSIF ctrlF1Producir.Done THEN
+			ctrlF1Producir.Execute		:= FALSE;
+			ctrlF1Producir.Ack			:= TRUE;			
+		END_IF
+		ctrlF1Producir(	Alime:=mdAlimentador, Carga:=mdPickAndPlaceCarga, Medid:=mdMedidorTapa, 
+						Fotoe:=mdDetectorFotoelectrico, Induc:=mdCaptadorInductivo, Evacu:=mdEvacuador,	
+						Desca:=mdPickAndPlaceDescarga, Plato:=mdPlatoDivisor, Cinta:=mdCinta);
 			
 	//L1_GEMMA.A2ParaFinCiclo,
 	//L1_GEMMA.F3SecuenciaFinalizacion,
@@ -358,25 +372,6 @@ CASE dr.gmModeActual OF
 							Desca:=mdPickAndPlaceDescarga, Plato:=mdPlatoDivisor, Cinta:=mdCinta);
 
 					
-		ELSIF dr.gmModeActual=L1_GEMMA.F2SecuenciaPreparacion THEN
-			ctrlF2SeqPrep.IC				:= InitialConditions();			
-			IF ctrlF2SeqPrep.Ready THEN
-				ctrlF2SeqPrep.Execute		:= TRUE; // ctrlF2SeqPrep.Ready;
-				ctrlF2SeqPrep.Ack			:= FALSE;
-				ctrlF2SeqPrep.cnF2_Preparar	:= dr.cnF2_Preparar;
-				ctrlF2SeqPrep.Siguiente		:= FALSE;
-			ELSIF ctrlF2SeqPrep.Seguir THEN
-				//tapas.ProcessCycle	(dr:=dr, pn:=fbPanel, NumGiros:=mdPlatoDivisor.NumGiros, Falta_Material:=mdAlimentador.FM.uiValue, Hay_Pale:=mdCinta.pp.uiValue,
-					// ctrlF1:=ctrlF1Producir, ctrlF2:=ctrlF2SeqPrep, ctrlF3:=ctrlF3SeqFin, ctrlF6:=ctrlF6Prueba);
-				tapas.Actualizar(); // tapas.A2InicioCiclo();		
-				ctrlF2SeqPrep.Siguiente 	:= tapas.AckPlato; //ctrlF2SeqPrep.TapasOk 			:= TRUE;	
-			ELSIF ctrlF2SeqPrep.Done THEN
-				dr.cnF2_Preparar			:= FALSE;
-				ctrlF2SeqPrep.Execute 		:= FALSE;
-				ctrlF2SeqPrep.Ack			:= TRUE;
-			END_IF
-			ctrlF2SeqPrep(	Medid:=mdMedidorTapa, Fotoe:=mdDetectorFotoelectrico,	
-							Induc:=mdCaptadorInductivo, Plato:=mdPlatoDivisor);
 				
 		ELSIF dr.gmModeActual=L1_GEMMA.F3SecuenciaFinalizacion THEN
 			ctrlF3SeqFin.IC					:= InitialConditions();

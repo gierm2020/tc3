@@ -133,7 +133,11 @@ ELSIF dr.cnD1_Emergencia AND NOT (hwPE_Seta OR swPE_Seta) THEN
 		dr.cnF4_Planta				:= hwSM_SelecAutoManual OR swSM_SelecAutoManual;		
 	END_IF
 
-ELSIF gmModeActual=L1_GEMMA.A1ParadaInicial THEN
+ELSIF gmModeActual=L1_GEMMA.A1ParadaInicial OR
+	  gmModeActual=L1_GEMMA.F2SecuenciaPreparacion OR
+	  gmModeActual=L1_GEMMA.F1ProduccionNormal OR 
+	  gmModeActual=L1_GEMMA.F3SecuenciaFinalizacion  THEN
+	  
 	fpPM_PulsadorMarcha(CLK:=hwPM_PulsadorMarcha OR swPM_PulsadorMarcha);
 	IF fpPM_PulsadorMarcha.Q THEN
 		dr.cnF0_Empezar 			:= TRUE;
@@ -141,14 +145,26 @@ ELSIF gmModeActual=L1_GEMMA.A1ParadaInicial THEN
 		IF swF2_Preparar AND mdF1Producir THEN
 			dr.cnF2_Preparar 		:= TRUE;
 		END_IF
+		IF swF3_Finalizar AND mdF1Producir THEN
+			dr.cnF3_Finalizar 		:= TRUE;
+		END_IF
 		
 		
 	ELSIF (hwSM_SelecAutoManual OR swSM_SelecAutoManual) AND NOT DR.cnF4_Planta THEN
 		dr.cnF4_Planta				:= TRUE;
+		dr.cnF1_Producir			:= FALSE;
 		dr.cnF5_Funcion				:= FALSE;
+		mdF1Producir				:= FALSE;
 		mdF5Funcion					:= FALSE;
 		swMensaje					:= 'Modo mando directo activado';
-	ELSIF mdF5Funcion AND NOT DR.cnF5_Funcion THEN
+
+	ELSIF mdF1Producir AND NOT dr.cnF1_Producir THEN
+		dr.cnF4_Planta				:= FALSE;
+		swF4_Planta					:= FALSE;
+		dr.cnF1_Producir			:= TRUE;
+		swMensaje					:= 'Modo producción activado';
+		
+	ELSIF mdF5Funcion AND NOT dr.cnF5_Funcion THEN
 		dr.cnF4_Planta				:= FALSE;
 		swF4_Planta					:= FALSE;
 		dr.cnF5_Funcion				:= TRUE;

@@ -101,7 +101,7 @@ ELSE
 		Position_Carro := Position_Carro + 2;													
 	ELSIF fbController.Executing AND Transferir AND Position_Carro < MaxPosCarro THEN
 		Position_Carro 			:= Position_Carro + 2;
-		Position_Tapa			:= sel(_TapaDescargada,0, Position_Carro); // al transferir el carro y la tapa se mueven al unísiono
+		Position_Tapa			:= SEL(_TapaDescargada,0, Position_Carro); // al transferir el carro y la tapa se mueven al unísiono
 		PosTapaY				:= MaxPosTapaY;									
 	END_IF	
 	RUN.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.RUN);

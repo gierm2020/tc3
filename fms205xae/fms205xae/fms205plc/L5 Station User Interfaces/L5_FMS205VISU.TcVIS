@@ -14768,8 +14768,11 @@
                     </o>
                     <o>
                       <v n="Id">2812299069L</v>
-                      <l n="Value" t="ArrayList" cet="UInt32">
-                        <v>4286611584</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-8355712</v>
+                          <v n="CanonicalName">"Darkgray"</v>
+                        </o>
                       </l>
                     </o>
                     <o>
@@ -14828,23 +14831,20 @@
                     </o>
                     <o>
                       <v n="Id">2597686782L</v>
-                      <v n="Value">false</v>
+                      <v n="Value">true</v>
                     </o>
                     <o>
                       <v n="Id">494542316L</v>
                       <l n="Value" t="ArrayList">
-                        <o t="NamedStyleColor">
-                          <v n="Color">-5658199</v>
-                          <v n="CanonicalName">"Gray"</v>
-                        </o>
+                        <v>4285558896U</v>
                         <o t="NamedStyleColor">
                           <v n="Color">-2830136</v>
                           <v n="CanonicalName">"Lightgray"</v>
                         </o>
                         <v>0</v>
-                        <v>0</v>
-                        <v>0</v>
-                        <v>0</v>
+                        <v>63</v>
+                        <v>63</v>
+                        <v>1</v>
                         <v>0</v>
                         <v>0</v>
                         <v>4278190080U</v>
@@ -14852,11 +14852,11 @@
                     </o>
                     <o>
                       <v n="Id">3450524324L</v>
-                      <v n="Value">"colVacFill"</v>
+                      <v n="Value">""</v>
                     </o>
                     <o>
                       <v n="Id">401380312L</v>
-                      <v n="Value">"colVacFrameSin"</v>
+                      <v n="Value">""</v>
                     </o>
                     <o>
                       <v n="Id">1375557818L</v>
@@ -21623,10 +21623,10 @@
                                 <v>TL_ElementProperties.Points</v>
                                 <v>DescriptionUseFromParent</v>
                                 <v></v>
-                                <v>DefaultArraySize</v>
-                                <v>500</v>
                                 <v>''NORMAL__COMMENT</v>
                                 <v> There is no more information than the parent provides</v>
+                                <v>DefaultArraySize</v>
+                                <v>500</v>
                               </d>
                               <v n="ConvDone">true</v>
                             </o>
@@ -21679,8 +21679,6 @@
                         <o n="TypeNodeAttributes" t="TypeNodeAttributes2">
                           <v n="AttrFlags">81920UL</v>
                           <d n="TypeNodeAttributesData" t="CaseInsensitiveHashtable" ckt="String" cvt="String">
-                            <v>PolygonPoints</v>
-                            <v></v>
                             <v>DescriptionTextId</v>
                             <v>TL_ElementProperties.Desc_StaticPolygonPos</v>
                             <v>DisplayTextId</v>
@@ -21697,6 +21695,8 @@
                             <v>visu_elemdev</v>
                             <v>Storable</v>
                             <v>True</v>
+                            <v>PolygonPoints</v>
+                            <v></v>
                           </d>
                           <v n="ConvDone">true</v>
                         </o>
@@ -22713,10 +22713,10 @@
                                 <v>TL_ElementProperties.Points</v>
                                 <v>DescriptionUseFromParent</v>
                                 <v></v>
-                                <v>''NORMAL__COMMENT</v>
-                                <v> There is no more information than the parent provides</v>
                                 <v>DefaultArraySize</v>
                                 <v>500</v>
+                                <v>''NORMAL__COMMENT</v>
+                                <v> There is no more information than the parent provides</v>
                               </d>
                               <v n="ConvDone">true</v>
                             </o>
@@ -22769,6 +22769,8 @@
                         <o n="TypeNodeAttributes" t="TypeNodeAttributes2">
                           <v n="AttrFlags">81920UL</v>
                           <d n="TypeNodeAttributesData" t="CaseInsensitiveHashtable" ckt="String" cvt="String">
+                            <v>PolygonPoints</v>
+                            <v></v>
                             <v>DescriptionTextId</v>
                             <v>TL_ElementProperties.Desc_StaticPolygonPos</v>
                             <v>DisplayTextId</v>
@@ -22785,8 +22787,6 @@
                             <v>visu_elemdev</v>
                             <v>Storable</v>
                             <v>True</v>
-                            <v>PolygonPoints</v>
-                            <v></v>
                           </d>
                           <v n="ConvDone">true</v>
                         </o>
@@ -25508,18 +25508,16 @@
           <o n="GeneratedLMMDescriptions" t="GeneratedLanguageModelEntriesData">
             <o n="GeneratedVisuFbDescription" t="GenericFbDescription">
               <d n="FbMethods" t="CaseInsensitiveHashtable_1" ckt="String" cvt="Guid">
-                <v>HasVisibilityAccess</v>
-                <v>afa60003-4053-44a5-9fa3-7ce7e04d900d</v>
+                <v>GetUpdateRects</v>
+                <v>c0803fe8-ce24-49f8-832b-730aee9ef71c</v>
                 <v>ContainsPoint</v>
                 <v>f872e0f8-f9b0-4c0d-974d-da354c45809b</v>
-                <v>HasInputAccess</v>
-                <v>15d80562-8c3e-440d-b470-d161f29c861d</v>
+                <v>SetStaticState</v>
+                <v>1c0d39cf-1835-4281-9fa4-a2186314e9f8</v>
                 <v>HasInputAccessIntern</v>
                 <v>d84d4f12-fb26-4f14-9c93-0204962b196a</v>
                 <v>GetTooltip</v>
                 <v>691df828-cdd5-414e-a0be-66763db6b63d</v>
-                <v>GetUpdateRects</v>
-                <v>c0803fe8-ce24-49f8-832b-730aee9ef71c</v>
                 <v>GetNamespace</v>
                 <v>7afd6603-1159-44dd-9b1b-c6f8bc9b5527</v>
                 <v>GetTranslator</v>
@@ -25532,6 +25530,8 @@
                 <v>9b605501-53df-48eb-bae7-37c9bb760dfe</v>
                 <v>Paint</v>
                 <v>6f67b9c1-b377-4bb2-af5b-cf4dc0f03418</v>
+                <v>HasVisibilityAccess</v>
+                <v>afa60003-4053-44a5-9fa3-7ce7e04d900d</v>
                 <v>GetElementArray</v>
                 <v>7e24ba21-e702-477c-8700-4d9cc57495e2</v>
                 <v>SetVisuFlagsInternal</v>
@@ -25544,14 +25544,14 @@
                 <v>b71e48a1-3bfe-4f04-aebf-409044db8d8e</v>
                 <v>Initialize</v>
                 <v>dfeb1032-57a3-4d9a-8fda-ba110a2ff475</v>
+                <v>HasInputAccess</v>
+                <v>15d80562-8c3e-440d-b470-d161f29c861d</v>
                 <v>HasVisibilityAccessIntern</v>
                 <v>ad62f209-586a-4ae4-8ba8-058e0066ba60</v>
                 <v>GetSurroundingRect</v>
                 <v>550f31c7-2f13-4797-9f6f-1b64a444255a</v>
                 <v>ElementInfo</v>
                 <v>0f29d595-ad71-4564-b983-0334dc8f3bee</v>
-                <v>SetStaticState</v>
-                <v>1c0d39cf-1835-4281-9fa4-a2186314e9f8</v>
                 <v>GetLocalUsergroup</v>
                 <v>770274cc-9607-4869-8c96-5226df8d86e8</v>
                 <v>GetName</v>

@@ -24,6 +24,10 @@ este dato es posible determinar de forma directa la altura de la tapa
 
 *)
 
+VAR_INPUT
+	Medir			: BOOL;	
+END_VAR
+
 VAR_OUTPUT
 	fbController		: L2_MedidorTapa_SFC:=(dr:=dr);
 	dh 			AT %I*	: UINT := 3000; (*Detector valor altura *)
@@ -54,8 +58,7 @@ IC := TRUE;
 
 // Controlador
 fbController.ProcessCycle(dr.gmModeActual);
-fbController(
-    dh := dh, // Lectura_Registrada := Lectura_Registrada,
+fbController(Medir:=Medir, dh := dh, 
 	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 	
 // Actuadores y actualización de tapas
