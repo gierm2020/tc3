@@ -26,15 +26,19 @@ este dato es posible determinar de forma directa la altura de la tapa
 
 VAR_OUTPUT
 	fbController		: L2_MedidorTapa_SFC:=(dr:=dr);
-	dh 			AT %I*	: UINT; (*Detector valor altura *)
+	dh 			AT %I*	: UINT := 3000; (*Detector valor altura *)
 	L_1 				: L1_Actuator;
 
-	Lectura_Registrada	: BOOL;
+	//Lectura_Registrada	: BOOL;
 	Altura_mm			: REAL;
 	Altura_Pulsos		: UINT;
-	strUi : STRING 		:= '?';
+	strUi : STRING 		:= '?';	
+
 END_VAR
-]]></Declaration>
+
+VAR
+	simula		: DRAND := (Seed:=1);
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
@@ -51,22 +55,33 @@ IC := TRUE;
 // Controlador
 fbController.ProcessCycle(dr.gmModeActual);
 fbController(
-    dh := dh, Lectura_Registrada := Lectura_Registrada,
+    dh := dh, // Lectura_Registrada := Lectura_Registrada,
 	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 	
 // Actuadores y actualización de tapas
 L_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.L_1);
-IF fbController.Leyendo AND NOT Lectura_Registrada THEN
-	Altura_Pulsos	:= dh;
-	Altura_mm		:= -0.0257*dh + 52.532;				 // calcular la altura con la ecuación de regresión
-	Altura_mm 		:= SEL(Altura_mm < 0, Altura_mm, 0); // si la altura es negativa dejar cero
-	Lectura_Registrada 	:= TRUE;
+//IF fbController.Leyendo AND NOT Lectura_Registrada THEN
+IF fbController.Leyendo AND NOT fbController.Performed THEN
+	fbController.Performed 	 		:= TRUE;
+	IF dr.gmLocalHost THEN // en pruebas sin estación, la altura es un número aleatorio
+		simula();
+		dh := TO_UINT(simula.Num*2000);
+		Altura_mm		:= -0.0257*dh + 52.532;				  // calcular la altura con la ecuación de regresión
+		Altura_mm 		:= SEL(Altura_mm < 0, Altura_mm, 10); // simulando siempre hay tapa
+	ELSE
+		Altura_Pulsos	:= dh;
+		Altura_mm		:= -0.0257*dh + 52.532;				 // calcular la altura con la ecuación de regresión
+		Altura_mm 		:= SEL(Altura_mm < 0, Altura_mm, 0); // si la altura es negativa dejar cero
+	END_IF	
+
+	Altura_mm		:= TO_INT(100*Altura_mm)/100.0; 		// dejar sólo 2 decimales
+	//Lectura_Registrada 	:= TRUE;
 	strUi := TO_STRING(Altura_mm);
 	strUi := concat(strUi, ' mm');
 	tapas.PostMedid(Altura_Mm:=Altura_mm, Altura_Pulsos:=Altura_Pulsos);
 
 ELSIF Ready THEN // Resetear la lectura para el siguiente ciclo
-	Lectura_Registrada 	:= FALSE; 	
+	//Lectura_Registrada 	:= FALSE; 	
 	Altura_Pulsos	:= 0;
 	Altura_mm		:= 0;
 	strUi := '?';

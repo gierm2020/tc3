@@ -4,30 +4,42 @@
     <Declaration><![CDATA[FUNCTION_BLOCK L3_Cinta EXTENDS L1_ModuleBase
 
 VAR_INPUT
-	Situar: BOOL;
-	Transferir: BOOL;
+	Situar			: BOOL;
+	Transferir		: BOOL;
 END_VAR
 
 VAR_OUTPUT
-	fbController	: L2_Cinta_SFC:=(dr:=dr);
-	pp				: L1_Sensor;
-	cp0				: L1_Sensor;
-	cp1				: L1_Sensor;
-	cp2				: L1_Sensor;
-	RUN				: L1_Actuator;
-	REV				: L1_Actuator;
-	R_1				: L1_Actuator;
-	S_1				: L1_Actuator;
+	fbController		: L2_Cinta_SFC:=(dr:=dr);
+	pp					: L1_Sensor;
+	cp0					: L1_Sensor;
+	cp1					: L1_Sensor;
+	cp2					: L1_Sensor;
+	RUN					: L1_Actuator;
+	REV					: L1_Actuator;
+	R_1					: L1_Actuator;
+	S_1					: L1_Actuator;
+	Carro_Situado		: BOOL;
+	Carro_Transfer		: BOOL;
+	Pos_Situa  			: REAL := 0;
+	Pos_Trans			: REAL := 0;
+	_TapaDescargada		: BOOL;
+	// tipo de tapa descargada
+	
 
 	// colores para distingur cuándo situa y cuándo transfiere	
-	colPicFramTransferir : DWORD;
-	colPicFillTransferir : DWORD;
+	colPicFramTransferir 	: DWORD;
+	colPicFillTransferir 	: DWORD;
 
 	colPicFramSituar : DWORD;
 	colPicFillSituar : DWORD;
 	
 END_VAR
-]]></Declaration>
+
+
+VAR CONSTANT
+	MaxPosSitua		: REAL := 150;
+	MaxPosTrans		: REAL := 300;
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
@@ -38,31 +50,78 @@ VAR_INPUT
 	tapas		: REFERENCE TO L6_Tapas;	
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// Sensores y condiciones iniciales
-pp.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.pp);
-cp0.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.cp0);
-cp1.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.cp1);
-cp2.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.cp2);
-IC := TRUE;
+        <ST><![CDATA[IF dr.gmModeActual = L1_GEMMA.A6Inicializando THEN
+	Carro_Situado	 			:= FALSE;
+	Carro_Transfer				:= FALSE;
+ELSE
+	// Sensores y condiciones iniciales
+	pp.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.pp);
+	cp0.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.cp0);
+	cp1.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.cp1);
+	cp2.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.cp2);
+	IC := TRUE;
+	
+	// Controlador
+	fbController.ProcessCycle(dr.gmModeActual);
+	fbController(Situar := Situar, Transferir := Transferir,	
+		dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+	
+	// Actuadores y actualización de tapas
+	IF Ready THEN
+		Pos_Situa				:= SEL(Carro_Situado,-MaxPosSitua, 0);
+		Pos_Trans				:= SEL(Carro_Transfer, 0, MaxPosTrans); 
+	ELSIF Done AND NOT fbController.Performed AND Situar THEN
+		fbController.Performed 	:= TRUE;
+		Carro_Situado			:= TRUE;
+		Carro_Transfer			:= FALSE;
+		_TapaDescargada			:= FALSE;
+		Pos_Situa				:= 0;
+	ELSIF Done AND NOT fbController.Performed AND Transferir THEN
+		fbController.Performed 	:= TRUE;
+		Carro_Transfer			:= TRUE;
+		Carro_Situado			:= FALSE;
+		Pos_Trans				:= MaxPosTrans;
+		_TapaDescargada		:= FALSE;
+	ELSIF fbController.Executing AND Situar AND Pos_Situa <0 THEN
+		Pos_Situa := Pos_Situa + 2;											
+	ELSIF fbController.Executing AND Transferir AND Pos_Trans < MaxPosTrans THEN
+		Pos_Trans := Pos_Trans + 2;											
+	END_IF	
+	RUN.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.RUN);
+	REV.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.REV);
+	R_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.R_1);
+	S_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.S_1);
 
-// Actuadores y actualización de tapas
-fbController.ProcessCycle(dr.gmModeActual);
-fbController(Situar := Situar, Transferir := Transferir,	
-	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+	// Actualizar las flechas de la cinta dependiendo de si sitúa o transfiere
+	colPicFramTransferir := SEL(Transferir, colModFramReady, fbController.colPicFram);
+	colPicFillTransferir := SEL(Transferir, colModFillReady, fbController.colPicFill);
+	colPicFramSituar	 := SEL(Situar, 	colModFramReady, fbController.colPicFram);
+	colPicFillSituar	 := SEL(Situar, 	colModFillReady, fbController.colPicFill);
+	
+END_IF
 
-RUN.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.RUN);
-REV.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.REV);
-R_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.R_1);
-S_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.S_1);
 
-// Actualizar las flechas de la cinta dependiendo de si sitúa o transfiere
-colPicFramTransferir := SEL(Transferir, colModFramReady, fbController.colPicFram);
-colPicFillTransferir := SEL(Transferir, colModFillReady, fbController.colPicFill);
-colPicFramSituar	 := SEL(Situar, 	colModFramReady, fbController.colPicFram);
-colPicFillSituar	 := SEL(Situar, 	colModFillReady, fbController.colPicFill);
-
-tapas.PostCinta(Done := Done, Situa:=Situar, Trans:=Transferir);	]]></ST>
+// tapas.PostCinta(Done := Done, Situa:=Situar, Trans:=Transferir);	]]></ST>
       </Implementation>
     </Method>
+    <Property Name="TapaDescargada" Id="{87bc64c7-3a04-489a-bdd9-5d2ae8163dda}">
+      <Declaration><![CDATA[PROPERTY TapaDescargada : bool]]></Declaration>
+      <Get Name="Get" Id="{a972cf1d-5337-407c-b337-0e38ace7f437}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[TapaDescargada := _TapaDescargada;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{a6ca71db-5116-4587-9528-aebed7647e4d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_TapaDescargada := TapaDescargada;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
   </POU>
 </TcPlcObject>

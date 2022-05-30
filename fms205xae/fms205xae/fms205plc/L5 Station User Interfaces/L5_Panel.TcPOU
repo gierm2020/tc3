@@ -9,10 +9,13 @@ VAR_INPUT
 	mdF4Planta						: BOOL;
 
 	dr: REFERENCE TO L1_Director;
+
 	hwAS_AvisadorSonoro			AT %Q*	: BOOL; // AS - Avisador Sonoro
 	hwLA_LamparaAlarma			AT %Q*	: BOOL; // DUDAS - Es lo mismo que falta de material?
 	hwDPO_DesconectaPO			AT %Q*	: BOOL; // DPO - Desconecta PO	
 	hwLM_LamparaMarcha			AT %Q*	: BOOL; // LM - Lámpara marcha (verde)
+	hwLS_LamparaStop			AT %Q*	: BOOL; // DUDAS - LA - Lámpara de alarma o lámpara de stop
+
 	swF0_Empezar						: BOOL;
 	//swF1_Reanudar						: BOOL;
 	swF4_Planta							: BOOL; // botón en la visualización
@@ -22,11 +25,21 @@ END_VAR
 
 VAR
 	hwPE_Seta					AT %I*	: BOOL;
+	swPE_Seta							: BOOL;
+	
 	hwPOC_PulsadorReset			AT %I*	: BOOL; // POC Botón azul está pulsado (PO Conectada)
+	swPOC_PulsadorReset					: BOOL; 
+	
 	hwPM_PulsadorMarcha			AT %I*	: BOOL; // PM - Pulsador de marcha (verde)
+	SwPM_PulsadorMarcha					: BOOL;
+	
 	hwPS_PulsadorStop			AT %I*	: BOOL; // PS - Pulsador de parada (rojo)
-	hwLS_LamparaStop			AT %Q*	: BOOL; // DUDAS - LA - Lámpara de alarma o lámpara de stop
-	hwSM_SelecAutoManual	 	AT %I*	: BOOL; // SM - Selector modo auto/man	
+	swPS_PulsadorStop					: BOOL; 
+	
+	hwSM_SelecAutoManual	 	AT %I*	: BOOL; // SM - Selector modo auto/man
+	swSM_SelecAutoManual	 			: BOOL; 	
+
+	
 	FP_PM								: R_TRIG;
 END_VAR
 
@@ -38,17 +51,25 @@ VAR_OUTPUT
  	swF4_Retroc						: BOOL := FALSE;	
 	
 	swF5_Alimentar					: BOOL;
+	fpF5_Alimentar					: R_TRIG;  // cuando se pulsa alimentar hay que quitar cargar
 	swF5_Situar						: BOOL;
 	swF5_Transferir					: BOOL;
+	fpF5_Transferir					: R_TRIG; // cuando se pulsa transferir hay que quitar descargar
 	swF5_Cargar						: BOOL;
+	fpF5_Cargar						: R_TRIG; // cuando se pulsa cargar hay que quitar girar y alimentar
 	swF5_Evacuar					: BOOL;
+	fpF5_Evacuar					: R_TRIG; // cuando se pulsa evacuar hay que quitar girar
 	swF5_Descargar					: BOOL;
+	fpF5_Descargar					: R_TRIG; // cuando se pulsa descargar hay que quitar girar y transferir
 	swF5_Medir						: BOOL;
+	fpF5_Medir						: R_TRIG; // cuano se pulsa medir hay que quitar girar
 	swF5_Claridad					: BOOL;
 	swF5_Material					: BOOL;
 	swF5_Girar						: BOOL;
+	fpF5_Girar						: R_TRIG; // cuando se pulsa girar hay que quitar medir, cargar, descargar y evacuar
 	swF5_Ejecutar					: BOOL;
 	swF5_Ack						: BOOL;
+	
 END_VAR
 (*
 VAR_INPUT
@@ -64,12 +85,11 @@ VAR
 	gmModeName		: STRING 	:= 'Mode A6';
 	gmModeDescr		: STRING 	:= 'Inicializando';	
 	
-	swPE_Seta						: BOOL;
 	ttPE_Seta						: STRING := '';
 
-	swA2_FinCiclo					: BOOL;
+	swA2_FinCiclo					: BOOL := TRUE;
 	swA3_Estado						: BOOL;
-	swA6_Inicializar				: BOOL;
+	swA6_Inicializar				: BOOL := TRUE;
 
 	//swF2_Preparar					: BOOL;
 	//swF3_Finalizar				: BOOL;	
@@ -90,9 +110,97 @@ VAR_INPUT
 	tmReinicio 		: TIME; // = dr.tmTiempoReinicio
 END_VAR
 
-]]></Declaration>
+
+	]]></Declaration>
       <Implementation>
-        <ST><![CDATA[ttPE_Seta := 'Pulsar la seta o el botón para parada de emergencia';	
+        <ST><![CDATA[IF hwPE_Seta OR swPE_Seta THEN
+	dr.cnD1_Emergencia 				:= TRUE;
+	dr.cnF4_Planta					:= FALSE; // CON LA SETA NO SE PUEDE ENTRAR EN MODO F4
+	dr.cnA6_Inicializar 			:= FALSE; 
+	swMensaje 						:= 'Parada de emergencia. Desactive la seta y pulse Reset';
+
+ELSIF dr.cnD1_Emergencia AND NOT (hwPE_Seta OR swPE_Seta) THEN	
+	IF hwPOC_PulsadorReset OR swPOC_PulsadorReset THEN
+		dr.cnD1_Emergencia 			:= FALSE;
+		dr.cnA6_Inicializar 		:= TRUE;
+		swMensaje 					:= 'Inicializando...';
+	ELSE	
+		swMensaje 					:= 'Pulse Reset para reinicializar o entre en modo manual';
+		dr.cnF4_Planta				:= hwSM_SelecAutoManual OR swSM_SelecAutoManual;		
+	END_IF
+
+ELSIF gmModeActual=L1_GEMMA.A1ParadaInicial THEN
+	IF  (hwSM_SelecAutoManual OR swSM_SelecAutoManual) AND NOT DR.cnF4_Planta THEN
+		dr.cnF4_Planta				:= TRUE;
+		dr.cnF5_Funcion				:= FALSE;
+		mdF5Funcion					:= FALSE;
+		swMensaje					:= 'Modo mando directo activado';
+	ELSIF mdF5Funcion AND NOT DR.cnF5_Funcion THEN
+		dr.cnF4_Planta				:= FALSE;
+		swF4_Planta					:= FALSE;
+		dr.cnF5_Funcion				:= TRUE;
+		swMensaje					:= 'Modo función activado';
+	END_IF
+
+ELSIF gmModeActual=L1_GEMMA.F4VerificacionSinOrden THEN
+	IF NOT (hwSM_SelecAutoManual OR swSM_SelecAutoManual) THEN
+		dr.cnF4_Planta				:= FALSE;
+		swMensaje					:= 'Modo F4 desactivado';
+	END_IF
+
+ELSIF gmModeActual=L1_GEMMA.F5VerificacionOrdenada THEN
+	IF NOT mdF5Funcion OR NOT mdF5Funcion OR hwSM_SelecAutoManual OR swSM_SelecAutoManual THEN
+		dr.cnF5_Funcion				:= FALSE;
+		mdF5Funcion					:= FALSE;
+		IF hwSM_SelecAutoManual OR swSM_SelecAutoManual THEN
+			dr.cnF4_Planta			:= TRUE;
+			swMensaje					:= 'Modo F4 activado';
+		ELSE
+			swMensaje					:= 'Modo F5 desactivado';			
+		END_IF
+		
+	ELSE
+ 		fpF5_Alimentar				(CLK := swF5_Alimentar);
+		fpF5_Cargar					(CLK := swF5_Cargar);
+		fpF5_Medir					(CLK := swF5_Medir);
+		fpF5_Evacuar				(CLK := swF5_Evacuar);
+		fpF5_Descargar				(CLK := swF5_Descargar);
+		fpF5_Girar					(CLK :=swF5_Girar);
+		fpF5_Transferir				(CLK :=swF5_Transferir);
+		IF fpF5_Alimentar.Q AND swF5_Cargar THEN
+			swF5_Cargar				:= FALSE; 
+			swMensaje				:= 'No se puede cargar si se alimenta';
+		ELSIF fpF5_Cargar.Q AND (swF5_Alimentar OR swF5_Girar)THEN
+			swF5_Alimentar			:= FALSE; 
+			swF5_Girar				:= FALSE;
+			swMensaje				:= 'No se puede alimentar ni girar si se carga';		
+		ELSIF fpF5_Medir.Q AND swF5_Girar THEN
+			swF5_Girar				:= FALSE; 
+			swMensaje				:= 'No se puede girar si se mide';
+		ELSIF fpF5_Evacuar.Q AND swF5_Girar THEN	
+			swF5_Girar				:= FALSE; 
+			swMensaje				:= 'No se puede girar si se evacúa';
+		ELSIF fpF5_Descargar.Q AND (swF5_Girar OR swF5_Transferir) THEN
+			swF5_Girar				:= FALSE; 
+			swF5_Transferir			:= FALSE;
+			swMensaje				:= 'No se puede girar ni transferir si se descarga';
+		ELSIF fpF5_Girar.Q AND (swF5_Cargar OR swF5_Medir OR swF5_Evacuar OR swF5_Descargar) THEN
+			swF5_Cargar				:= FALSE;
+			swF5_Medir				:= FALSE;
+			swF5_Evacuar			:= FALSE;
+			swF5_Descargar			:= FALSE;
+			swMensaje				:= 'No se puede cargar, medir, evacuar ni descargar si se gira';
+		ELSIF fpF5_Transferir.Q AND swF5_Descargar THEN
+			swF5_Descargar			:= FALSE; 
+			swMensaje				:= 'No se puede descargar si se transfiere';
+		END_IF		
+	END_IF
+
+	 
+ELSE
+	(*
+
+ttPE_Seta := 'Pulsar la seta o el botón para parada de emergencia';	
 ttF4_Planta := 'Mandos directos desactivados';
 FP_PM(CLk := hwPM_PulsadorMarcha);
 
@@ -104,8 +212,8 @@ dr.cnA1_ParadaIni := FALSE;
 	dr.cnF1_Producir	:= FALSE;
 
 //----------------------------------------------------------------- Consiga cnD1_Emergencia
-dr.cnA1_Emergencia := hwPE_Seta OR swPE_Seta; 
-IF dr.cnA1_Emergencia THEN
+dr.cnD1_Emergencia := hwPE_Seta OR swPE_Seta; 
+IF dr.cnD1_Emergencia THEN
 	IF hwPE_Seta THEN
 		IF swPE_Seta THEN
 			ttPE_Seta := 'Desarmar la seta y desactivar el botón para reinicializar';
@@ -154,7 +262,11 @@ ELSIF mdF5Funcion THEN
 	//mdF6Probar 		:= FALSE;
 
 	IF swF5_Girar AND (swF5_Cargar OR swF5_Evacuar OR swF5_Descargar OR swF5_Medir) THEN 
-		swF5_Girar := FALSE;
+		//swF5_Girar := FALSE;
+		swF5_Cargar := FALSE;
+		swF5_Evacuar := FALSE;
+		swF5_Descargar := FALSE;
+		swF5_Medir := FALSE;
 		swMensaje := 'No se puede girar a la vez que cargar, evacuar, descargar o medir por riesgo de avería';
 	END_IF
 	IF swF5_Alimentar AND swF5_Cargar THEN // funciones incompatibles
@@ -270,11 +382,13 @@ END_IF
 
 
 
-
+*)
 
 //----------------------------------------------------------------- Consigna F1_Empezar
-UpdateUI(gmMode := dr.gmModeActual);
 
+END_IF
+
+UpdateUI(gmMode := dr.gmModeActual);
 ]]></ST>
       </Implementation>
     </Method>

@@ -24,20 +24,25 @@ Dispone de una pinza de apertura paralela para sujetar la tapa, que es elevada y
 realizando un giro hasta el punto de descarga mediante un actuador neumático rotolineal. *)
 
 VAR_INPUT
-	Mover:BOOL:=TRUE;
+	Mover			:BOOL;
 END_VAR
 
 VAR_OUTPUT
 	fbController	: L2_PickAndPlace_SFC:=(dr:=dr); 
-	h0 				: L1_Sensor;
-	h1 				: L1_Sensor;
-	v1 				: L1_Sensor;
-	v0 				: L1_Sensor;
+	h0 				: L1_Sensor := (uiValue:= TRUE);
+	h1 				: L1_Sensor := (uiValue:= TRUE);
+	v1 				: L1_Sensor := (uiValue:= TRUE);
+	v0 				: L1_Sensor := (uiValue:=TRUE);
 	HOR 			: L1_Actuator;
 	VER 			: L1_Actuator;
-	PIN 			: L1_Actuator;	
+	PIN 			: L1_Actuator;
+	_TapaMovida		: BOOL;
+	Position		: REAL:= 0;	
 END_VAR
-]]></Declaration>
+
+VAR CONSTANT
+	MaxPosition		: REAL := 100;
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
@@ -49,29 +54,58 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// Sensores y condiciones iniciales
-h0.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.h0);
-h1.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.h1);
-v0.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.v0);
-v1.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.v1);
-IC := v0.uiValue AND h0.uiValue; // el brazo está en condiciones iniciales cuando está arriba y retraído
-
-// Controlador
-fbController.ProcessCycle(dr.gmModeActual);
-fbController(Mover := Mover,
-	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
-
-// Actuadores y actualización de tapas
-HOR.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.HOR);
-VER.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.VER);
-PIN.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.PIN);
-IF Name='Carga' THEN
-	tapas.PostCarga(Ready:=Ready, Done:=Done, Mover:=Mover);
+        <ST><![CDATA[IF dr.gmModeActual = L1_GEMMA.A6Inicializando THEN
+	_TapaMovida	 				:= FALSE;
 ELSE
-	tapas.PostDesca(Ready:=Ready, Done:=Done, Mover:=Mover);
+	// Sensores y condiciones iniciales
+	h0.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.h0);
+	h1.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.h1);
+	v0.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.v0);
+	v1.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.v1);
+	IC := v0.uiValue AND h0.uiValue; // el brazo está en condiciones iniciales cuando está arriba y retraído
+
+	// Controlador
+	fbController.ProcessCycle(dr.gmModeActual);
+	fbController(Mover := Mover,
+		dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+		
+	// Actuadores y actualización de tapas		
+	IF Ready AND NOT _TapaMovida THEN 
+		Position := 0;												// Inicialmente la posición es arriba
+	ELSIF Done AND NOT fbController.Performed AND Mover THEN
+		fbController.Performed	:= TRUE;
+		_TapaMovida				:= TRUE;
+		Position				:= MaxPosition;
+	ELSIF fbController.Executing AND position < MaxPosition AND Mover THEN
+		Position				:= Position+1;		
+	END_IF
+	HOR.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.HOR);
+	VER.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.VER);
+	PIN.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.PIN);
+	//IF Name='Carga' THEN
+	// tapas.PostCarga(Ready:=Ready, Done:=Done, Mover:=Mover);
+	// ELSE
+	//tapas.PostDesca(Ready:=Ready, Done:=Done, Mover:=Mover);
 END_IF
 ]]></ST>
       </Implementation>
     </Method>
+    <Property Name="TapaMovida" Id="{3082fd5e-2813-4c11-918d-ebe5b11dd833}">
+      <Declaration><![CDATA[PROPERTY TapaMovida : bool]]></Declaration>
+      <Get Name="Get" Id="{b61a4fbf-7c0e-42f1-91b0-1838828aef02}">
+        <Declaration><![CDATA[
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[TapaMovida := _TapaMovida;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{903a403d-6849-497f-9575-36e7dc5abe41}">
+        <Declaration><![CDATA[
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_TapaMovida := TapaMovida;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
   </POU>
 </TcPlcObject>

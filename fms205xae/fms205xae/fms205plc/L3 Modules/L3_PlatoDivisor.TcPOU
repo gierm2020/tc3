@@ -5,11 +5,16 @@
 
 VAR_OUTPUT	
 	fbController	: L2_PlatoDivisor_SFC:=(dr:=dr);  
-	d0 				: L1_Sensor;
+	d0 				: L1_Sensor := (uiValue:= TRUE);
     D_1       		: L1_Actuator;
-    E_1       		: L1_Actuator;	
+    E_1       		: L1_Actuator;
+	NumGiros 		: DINT := 0;
+	Angulo			: REAL := 0;
 END_VAR
-]]></Declaration>
+
+VAR
+	AnguloAnim		: REAL := 0;
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
@@ -21,21 +26,30 @@ VAR_INPUT
 	tapas		: REFERENCE TO L6_Tapas;	
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// Sensores y condiciones iniciales
-d0.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.d0);
-IC := d0.uiValue;
-
-// Controlador
-fbController.ProcessCycle(dr.gmModeActual);
-fbController(
-	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+        <ST><![CDATA[IF dr.gmModeActual = L1_GEMMA.A6Inicializando THEN
+	NumGiros := 0;
+	Angulo	 := 0; // -45.0;
+ELSE
+	// Sensores y condiciones iniciales
+	d0.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.d0);
+	IC := d0.uiValue;
 	
-// Actuadores y actualización de tapas
-D_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.D_1);
-E_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.E_1);
-//IsActive:=D_1.uiValue OR E_1.uiValue;
-tapas.PostPlato(Ready:=Ready, Execute:=Execute, Done:=Done);
-
+	// Controlador
+	fbController.ProcessCycle(dr.gmModeActual);
+	fbController(
+		dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+	IF fbController.Done AND NOT fbController.Performed THEN
+		fbController.Performed 	:= TRUE;
+		NumGiros 				:= NumGiros + 1;
+		AnguloAnim				:= 0;		
+	ELSIF fbController.Executing AND anguloanim >-35.0 THEN  
+		AnguloAnim 	:= anguloanim - 0.2;	
+	END_IF	
+	Angulo 					:= AnguloAnim -45.0 * (NumGiros MOD 8); // 
+	// Actuadores y actualización de tapas
+	D_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.D_1);
+	E_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.E_1);
+END_IF
 ]]></ST>
       </Implementation>
     </Method>

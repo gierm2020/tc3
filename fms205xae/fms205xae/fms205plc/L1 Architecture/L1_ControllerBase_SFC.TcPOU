@@ -21,6 +21,8 @@ END_VAR
 
 VAR_OUTPUT
 	Ready		: BOOL;
+	Executing	: BOOL;
+	_Performed	: BOOL := FALSE;				// Para poner la primera vez que se leen los sensores o se gira el plato
 	Done		: BOOL := FALSE;
 	Timed		: ARRAY[1..MAX_ERRORS]	OF BOOL; 
 	NumError	: UINT := 0;
@@ -587,6 +589,7 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[NumError		:= 0;					// Inicializar el estado a 0 (no hay error)
+_Performed		:= FALSE;
 
 FOR I:=1 TO MAX_ERRORS DO				// Inicializar todos los flags de etapas temporizadas
 	Timed[i] 		:= FALSE;
@@ -602,6 +605,24 @@ END_FOR]]></ST>
         <ST><![CDATA[IsPaused := SFCPause;]]></ST>
       </Implementation>
     </Method>
+    <Property Name="Performed" Id="{b9e6cab5-1f67-4509-9f8d-000e246a379a}">
+      <Declaration><![CDATA[PROPERTY Performed : BOOL]]></Declaration>
+      <Get Name="Get" Id="{5eeaf013-c1e9-4c94-b5ec-9b5c789fbd11}">
+        <Declaration><![CDATA[
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Performed := _Performed;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{354b6517-96fc-447b-943c-61d6bf724b7d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_Performed := Performed;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="ProcessCycle" Id="{c358a4ee-9530-49d3-9f5f-b83d275d2af8}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL
 
@@ -637,15 +658,20 @@ END_FOR
 
 // Tratamiento del color en la foto
 IF Ready THEN
+	Executing 	:= FALSE;
+	Performed 	:= FALSE;
 	colPicFill	:= colModFillReady;
 	colPicFram	:= colModFramReady;
-ELSIF Done THEN 
+ELSIF Done THEN
+	Executing 	:= FALSE;
 	colPicFill	:= colModFillDone;
 	colPicFram	:= colModFramDone;	
 ELSE
+	Executing 	:= TRUE;
 	colPicFill	:= colModFillExec;
 	colPicFram	:= colModFramExec;	
-END_IF]]></ST>
+END_IF
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="ResetError" Id="{ca1cc05a-c1aa-4e32-b999-d986fdd3d9f7}">

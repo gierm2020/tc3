@@ -181,6 +181,11 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"421"</v>
+              <v n="TextDefault">"Avisador sonoro"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"206"</v>
               <v n="TextDefault">"A_1"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -253,6 +258,11 @@
             <o>
               <v n="TextID">"566"</v>
               <v n="TextDefault">"ColorOut"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"1494"</v>
+              <v n="TextDefault">"Conmutador encendido/apagado"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -591,6 +601,21 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"888"</v>
+              <v n="TextDefault">"Lámpara de alarma"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"791"</v>
+              <v n="TextDefault">"Lámpara de marcha"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"78"</v>
+              <v n="TextDefault">"MAIN.fbFMS205.fbPanel.ttPE_Seta"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"1352"</v>
               <v n="TextDefault">"Marcha"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -696,6 +721,11 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"228"</v>
+              <v n="TextDefault">"Panel"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"377"</v>
               <v n="TextDefault">"Panel de pruebas"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -723,6 +753,11 @@
             <o>
               <v n="TextID">"1709"</v>
               <v n="TextDefault">"Parada ciclo A2"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"2043"</v>
+              <v n="TextDefault">"Parada de emergencia (A1)"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -881,6 +916,21 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"1094"</v>
+              <v n="TextDefault">"Pulsador de inicializar (A6)"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"764"</v>
+              <v n="TextDefault">"Pulsador de marcha"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"445"</v>
+              <v n="TextDefault">"Pulsador de parada"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"852"</v>
               <v n="TextDefault">"Realizadas"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -968,6 +1018,11 @@
             <o>
               <v n="TextID">"479"</v>
               <v n="TextDefault">"R_1"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"263"</v>
+              <v n="TextDefault">"Selector manual (F4) automático"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>

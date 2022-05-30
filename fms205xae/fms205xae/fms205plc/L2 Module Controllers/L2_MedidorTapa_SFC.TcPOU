@@ -5,7 +5,7 @@
 
 VAR_INPUT 							// Sensores y comandos
 	dh					: UINT; 	// Detector valor altura 
-	Lectura_Registrada	: BOOL;		// La lectura de la altura ha terminado 	
+	// Lectura_Registrada	: BOOL;		// La lectura de la altura ha terminado 	
 END_VAR
 
 VAR_OUTPUT							// Actuadores
@@ -910,7 +910,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"Lectura_Registrada"</v>
+                            <v n="Value">"Performed"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">240L</v>

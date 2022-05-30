@@ -23,7 +23,7 @@ END_VAR
 VAR_OUTPUT
 	fbController	: L2_Evacuador_SFC:=(dr:=dr);
 	f0 				: L1_Sensor;
-	f1 				: L1_Sensor;
+	f1 				: L1_Sensor := (uiValue:=TRUE);
 	g0 				: L1_Sensor;
 	v1 				: L1_Sensor;	
 	F_0				: L1_Actuator;

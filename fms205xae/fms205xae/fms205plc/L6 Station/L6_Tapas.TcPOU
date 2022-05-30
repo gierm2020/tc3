@@ -48,7 +48,7 @@ VAR_OUTPUT
 END_VAR
 
 VAR
-	NumGiros 	: DINT := 0;
+	//NumGiros 	: DINT := 0;
 	PosCarga	: DINT;
 	PosFotoe	: DINT;
 	PosMedid	: DINT;
@@ -84,6 +84,12 @@ VAR
 	vColorFont			: ARRAY[0..7] OF DWORD;	
 	vColorFrame			: ARRAY[0..7] OF DWORD;
 	
+	Desca_strUi			: STRING;
+	Desca_strToolTip	: STRING;	
+	desca_ColorFont		: DWORD;
+	desca_ColorFrame	: DWORD;
+	desca_ColorFill		: DWORD;
+
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -245,14 +251,14 @@ ResPend	  		:= 0;
 ResReal			:= 0;
 ResRech   		:= 0;
 
-NumGiros	 	:= 0;
+//NumGiros	 	:= 0;
 FaltaMat		:= FALSE;
-PosMedid 		:= (NumGiros+6) MOD 8;
-PosFotoe 		:= (NumGiros+5) MOD 8;
-PosInduc 		:= (NumGiros+4) MOD 8;
-PosEvacu 		:= (NumGiros+2) MOD 8;
-PosDesca		:= (NumGiros+1) MOD 8;
-PosCarga		:= (NumGiros+0) MOD 8;
+PosMedid 		:= 6; // (NumGiros+6) MOD 8;
+PosFotoe 		:= 5; // (NumGiros+5) MOD 8;
+PosInduc 		:= 4; // (NumGiros+4) MOD 8;
+PosEvacu 		:= 2; // (NumGiros+2) MOD 8;
+PosDesca		:= 1; // (NumGiros+1) MOD 8;
+PosCarga		:= 0; //(NumGiros+0) MOD 8;
 
 angulo	 		:= 0.0;
 anguloanim 		:= 0.0; // angulo para animación que gira lentamente
@@ -270,27 +276,6 @@ END_FOR
 Actualizar();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="PostAlime" Id="{68228dc4-db57-4234-af5a-76549516de52}">
-      <Declaration><![CDATA[METHOD PostAlime : BOOL
-VAR_INPUT
-	Ready	: BOOL;
-	Done	: BOOL;
-	FM		: BOOL;
-END_VAR
-
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF Ready THEN
-	AckAlime := FALSE;
-ELSIF Done AND NOT AckAlime AND NOT Alimentada THEN	
-	AckAlime					:= FALSE;
-	ExeAlime 	:= FALSE;
-	Alimentada 	:= NOT FM;
-	Actualizar();
-END_IF
- ]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="PostCarga" Id="{b17e1a0b-f1bf-4df1-8172-1b04521564f1}">
       <Declaration><![CDATA[METHOD PostCarga : BOOL
 VAR_INPUT
@@ -302,7 +287,7 @@ END_VAR
 VAR
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF Ready THEN
+        <ST><![CDATA[(*IF Ready THEN
 	AckCarga := FALSE;
 ELSIF Done AND NOT AckCarga THEN	
 	AckCarga					:= FALSE;
@@ -320,7 +305,8 @@ ELSIF Done AND NOT AckCarga THEN
 		vTapa_Metalica[PosCarga] 	:= FALSE;
 		Actualizar();
 	END_IF
-END_IF]]></ST>
+END_IF
+*)]]></ST>
       </Implementation>
     </Method>
     <Method Name="PostCinta" Id="{af65c0fc-010d-4a14-8511-80e621f07f72}">
@@ -332,14 +318,14 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF Done THEN 
+        <ST><![CDATA[(*IF Done THEN 
 	IF Situa THEN
 		ExeSitua := FALSE;
 	ELSIF Trans THEN
 		ExeTrans := FALSE;
 	END_IF
 	Actualizar();
-END_IF
+END_IF*)
 ]]></ST>
       </Implementation>
     </Method>
@@ -352,7 +338,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF Ready THEN
+        <ST><![CDATA[(*IF Ready THEN
 	AckDesca := FALSE;
 ELSIF Done AND NOT AckDesca THEN
 	AckDesca		:= TRUE;	
@@ -364,7 +350,7 @@ ELSIF Done AND NOT AckDesca THEN
 		Actualizar();
 	END_IF
 END_IF
-]]></ST>
+*)]]></ST>
       </Implementation>
     </Method>
     <Method Name="PostEvacu" Id="{5caa088b-866e-4274-a9c7-1d9f312ea165}">
@@ -445,39 +431,19 @@ END_IF
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="PostPlato" Id="{0ccf35a2-1876-4048-9c8b-4ff29b7fbdc7}">
-      <Declaration><![CDATA[METHOD PostPlato : BOOL
-VAR_INPUT
-	Ready : BOOL;
-	Execute: BOOL;
-	Done: BOOL;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF Ready THEN
-	AckPlato := FALSE;
-ELSIF Done AND NOT AckPlato THEN
-	NumGiros 	:= NumGiros + 1;
-	PosMedid 	:= (NumGiros+6) MOD 8;
-	PosFotoe 	:= (NumGiros+5) MOD 8;
-	PosInduc 	:= (NumGiros+4) MOD 8;
-	PosEvacu 	:= (NumGiros+2) MOD 8;
-	PosDesca	:= (NumGiros+1) MOD 8;
-	PosCarga	:= (NumGiros+0) MOD 8;
-	anguloanim 	:= 0;
-	angulo 		:= SEL(angulo=0, angulo-45.0, 315.0); // , angulo+45.0, 0);
-	Actualizar();
-	AckPlato 	:= TRUE;	
-END_IF]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="ProcessCycle" Id="{44f6408c-3ad5-45e0-8b3e-a46b21623d3f}">
       <Declaration><![CDATA[METHOD ProcessCycle : BOOL
 VAR_INPUT
 	dr				: REFERENCE TO L1_Director;
 	pn				: REFERENCE TO L5_Panel;
-	Falta_Material	: BOOL;
-	Hay_Pale		: BOOL;
+	NumGiros 		: DINT;
+	//TapaDisponible	: BOOL;
+	//TapaAlimentada	: BOOL; // El alimentador ha dejado una tapa junto al brazo de carga
+	TapaCargada		: BOOL; // El brazo de carga ha movido la tapa cargada al plato
+	TapaDescargada	: BOOL;
+	
+	// Falta_Material	: BOOL;
+	//Hay_Pale		: BOOL;
 	ctrlF1			: REFERENCE TO L4_FMS205_F1Producir_SFC;
 	ctrlF2			: REFERENCE TO L4_FMS205_F2SeqPrep_SFC;
 	ctrlF3			: REFERENCE TO L4_FMS205_F3SeqFin_SFC;
@@ -511,8 +477,8 @@ END_VAR]]></Declaration>
 	ResReal			:= 0;
 	ResRech   		:= 0;
 
-	NumGiros	 	:= 0;
-	FaltaMat		:= FALSE;
+	//NumGiros	 	:= 0;
+	//FaltaMat		:= FALSE;
 
 	angulo	 		:= 0.0;
 	anguloanim 		:= 0.0; // angulo para animación que gira lentamente
@@ -527,12 +493,12 @@ END_VAR]]></Declaration>
 	ExeDescaAnt 	:= FALSE; // guarda si se descargó en el paso anterior
 END_IF
 
-PosMedid 			:= (NumGiros+7) MOD 8;					// -------------- Actualizar posiciones
-PosFotoe 			:= (NumGiros+6) MOD 8;
-PosInduc 			:= (NumGiros+5) MOD 8;
-PosEvacu 			:= (NumGiros+3) MOD 8;
-PosDesca			:= (NumGiros+2) MOD 8;
-PosCarga			:= (NumGiros+1) MOD 8;
+PosMedid 			:= (NumGiros+6) MOD 8;					// -------------- Actualizar posiciones
+PosFotoe 			:= (NumGiros+5) MOD 8;
+PosInduc 			:= (NumGiros+4) MOD 8;
+PosEvacu 			:= (NumGiros+2) MOD 8;
+PosDesca			:= (NumGiros+1) MOD 8;
+PosCarga			:= (NumGiros+0) MOD 8;
 
 F1					:= ctrlf1.Ready AND dr.gmModeActual=L1_GEMMA.F1ProduccionNormal AND NOT dr.EndBatch;
 A2					:= ctrlf1.Ready AND dr.gmModeActual=L1_GEMMA.A2ParaFinCiclo AND NOT dr.EndBatch;
@@ -541,13 +507,32 @@ F3					:= ctrlF3.Ready AND dr.gmModeActual=L1_GEMMA.F3SecuenciaFinalizacion;
 F6					:= ctrlF6.Ready AND dr.gmModeActual=L1_GEMMA.F6Probando;
 F5					:= pn.swF5_Ejecutar AND dr.gmModeActual=L1_GEMMA.F5VerificacionOrdenada;
 
+IF TapaCargada THEN
+	vInicializando[PosCarga]	:= FALSE;		
+	vTapa_Cargada[PosCarga]		:= TRUE;
+	vAltura_Medida[PosCarga]	:= FALSE;
+	vAltura_Pulsos[PosCarga]	:= 0;
+	vAltura_Mm[PosCarga] 		:= 0;		
+	vClaridad_Medida[PosCarga]	:= FALSE;
+	vTapa_Clara[PosCarga] 		:= FALSE;		
+	vMateral_Medido[PosCarga]	:= FALSE;	
+	vTapa_Metalica[PosCarga] 	:= FALSE;
+END_IF
+
+IF TapaDescargada THEN
+	ResReal 		:= ResReal + 1;
+	ResPend			:= ReqNumero - ResReal;
+	Vaciar(PosVacia	:= PosDesca);	
+	TapaDescargada	:= FALSE;
+END_IF
+
 Actualizar();		// calcula qué posiciones hay que descargar o evacuar
 
 IF F1 OR A2 OR F2 OR F3 OR F6 OR F5 THEN
-	ExeSitua			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Situar)) AND NOT Hay_Pale;
-	ExeAlime			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Alimentar) AND NOT Alimentada);
-	ExeCarga			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Cargar)) AND NOT Falta_Material AND Alimentada AND
-							NOT vInicializando[PosCarga] AND NOT vTapa_Cargada[PosCarga];
+	//ExeSitua			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Situar)) AND NOT Hay_Pale;
+	//ExeAlime			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Alimentar) AND NOT TapaAlimentada);  // Alimentada);
+	//ExeCarga			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Cargar)) AND TapaAlimentada AND  //NOT Falta_Material AND Alimentada AND
+	//						NOT vInicializando[PosCarga] AND NOT vTapa_Cargada[PosCarga];
 	ExeMedid			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Medir) OR F2);
 	ExeFotoe			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Claridad) OR F2);
 	ExeInduc			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Material) OR F2);
@@ -560,12 +545,57 @@ IF F1 OR A2 OR F2 OR F3 OR F6 OR F5 THEN
 	IF ctrlf1.Ready AND ctrlF6.Ready THEN // guarda la decisión de descarga para la transferencia del siguiente ciclo
 		ExeDescaAnt		:= ExeDesca; 	
 	END_IF
+ELSE
+	ExeSitua			:= FALSE;
+	ExeAlime			:= FALSE;
+	ExeCarga			:= FALSE;
+	ExeMedid			:= FALSE;
+	ExeFotoe			:= FALSE;
+	ExeInduc			:= FALSE;
+	ExeEvacu			:= FALSE;
+	ExeDesca			:= FALSE;
+	ExePlato			:= FALSE;
+	ExeTrans			:= FALSE;
 END_IF
 
+angulo 					:= -45.0 * (NumGiros MOD 8); //  SEL(angulo=0, angulo-45.0, 315.0); // , angulo+45.0, 0);
 	
 IF ExePlato AND anguloanim >-35.0 THEN
 	anguloanim 	:= anguloanim - 0.2;	
 END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="PuedeCargar" Id="{ba066ebf-3b60-4cfe-b26b-d2ac0a5a26a5}">
+      <Declaration><![CDATA[METHOD PuedeCargar : BOOL // TRUE SI EL SECTOR DE CARGA ESTÁ VACÍO
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[PuedeCargar := NOT vInicializando[PosCarga] AND not vTapa_Cargada[PosCarga];	
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="PuedeDescargar" Id="{db7b6cde-892e-4a63-a4c2-2e5c4d612ebf}">
+      <Declaration><![CDATA[METHOD PuedeDescargar : BOOL // TRUE SI EL SECTOR CONTIENE UNA TAPA VÁLIDA EN LA POSICIÓN DE DESCARGA
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[PuedeDescargar 		:= vDescargar_Tapa[PosDesca];
+IF PuedeDescargar THEN
+	Desca_strUi			:= vstrUi[PosDesca];
+	Desca_strToolTip	:= vstrToolTip[PosDesca];
+	desca_ColorFont		:= vColorFont[PosDesca];
+	desca_ColorFrame	:= vColorFrame[PosDesca];
+	desca_ColorFill		:= vColorFill[PosDesca];
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="PuedeEvacuar" Id="{47537ed4-bf8a-43ed-8692-953ee9cb9e1f}">
+      <Declaration><![CDATA[METHOD PuedeEvacuar : BOOL // TRUE SI EL SECTOR CONTIENE UNA TAPA INVÁLIDAD EN LA POSICIÓN DE EVACUACIÓN
+VAR_INPUT
+	gmMode		: L1_GEMMA;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[PuedeEvacuar := vEvacuar_Tapa[PosEvacu]  OR (gmMode=L1_GEMMA.F3SecuenciaFinalizacion AND vTapa_Cargada[PosEvacu]);
 ]]></ST>
       </Implementation>
     </Method>
@@ -585,36 +615,6 @@ vClaridad_Medida[PosVacia]	:= FALSE;
 vTapa_Clara[PosVacia] 		:= FALSE;
 vMateral_Medido[PosVacia]	:= FALSE;	
 vTapa_Metalica[PosVacia] 	:= FALSE;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="zzA2InicioCiclo" Id="{8319a516-a09e-4e02-8848-93e12a8ca075}">
-      <Declaration><![CDATA[METHOD zzA2InicioCiclo : BOOL
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[ResPend 	:= ReqNumero - ResReal;
-ExeAlime 	:= ResPend > 0;
-ExeCarga	:= ExeAlime AND 
-				NOT vInicializando[PosCarga] AND
-				NOT vTapa_Cargada[PosCarga] AND
-				NOT FaltaMat;
-ExeEvacu	:= vEvacuar_Tapa[PosEvacu];
-ExeDesca    := vDescargar_Tapa[PosDesca];
-ExePlato	:= TRUE;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="zzAnimar" Id="{de346600-d46e-4dc7-b63f-da26d1696097}">
-      <Declaration><![CDATA[METHOD zzAnimar : BOOL
-VAR_INPUT
-	PlatoActivo : BOOL;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF ExePlato AND PlatoActivo AND anguloanim >-35.0 THEN
-	anguloanim := anguloanim - 0.2;
-ELSIF NOT PlatoActivo THEN
-	anguloanim := 0;
-END_IF
-]]></ST>
       </Implementation>
     </Method>
   </POU>

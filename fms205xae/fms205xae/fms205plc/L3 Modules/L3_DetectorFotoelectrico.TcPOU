@@ -17,11 +17,14 @@ VAR_OUTPUT
 	fbController		: L2_Simple_SFC:=(dr:=dr);
 	df 		        	: L1_Sensor;
 
-	Lectura_Registrada	: BOOL := FALSE; 
+	//Lectura_Registrada	: BOOL := FALSE; 
 	Tapa_Clara			: BOOL;
 	strUi 				: STRING := '?';
 END_VAR
-]]></Declaration>
+
+VAR
+	simula		: DRAND := (Seed:=1);
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
@@ -42,14 +45,22 @@ fbController(
 	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 
 // Actuadores y actualización de tapas
-IF Done AND NOT Lectura_Registrada THEN // si ha terminado de captar: guardar resultado
-	Lectura_Registrada	:= TRUE;
-	Tapa_Clara			:= df.uiValue;
+IF Done AND NOT fbController.Performed THEN //  Lectura_Registrada THEN // si ha terminado de captar: guardar resultado
+	//Lectura_Registrada	:= TRUE;
+	fbController.Performed	:= TRUE;
+	IF dr.gmLocalHost THEN
+		simula();
+		Tapa_Clara 			:= SEL (simula.Num < 0.40, TRUE, FALSE); // 40/60% simuladas oscuras/claras
+	ELSE
+		Tapa_Clara			:= df.uiValue;	
+	END_IF
+
+	
 	strUi 				:= SEL(Tapa_Clara, 'Oscura','Clara');
 	tapas.PostFotoe(Tapa_Clara:=Tapa_Clara);
 
 ELSIF Ready THEN // una vez que cambia el ciclo la lectura ya no es fiable	
-	Lectura_Registrada		:= FALSE;
+	//Lectura_Registrada		:= FALSE;
 	strUi := '?';
 END_IF
 ]]></ST>

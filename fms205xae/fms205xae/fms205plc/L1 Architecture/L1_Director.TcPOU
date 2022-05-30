@@ -11,7 +11,6 @@ Salida: nuevo estado de Gemma
 
 1. Consignas
 
-	!!!!cnD1_Emergencia: 		Solicitud de parada de emergencia
 	cnA2_FinCiclo:			Solicitud de que la estación se detenga cuando acabe el ciclo
 	cnA3_Estado:			Solicitud de que la estación se detenga lo antes posible
 	cnA6_Inicializar: 		Solicitud de inicialización de la estación
@@ -23,6 +22,8 @@ Salida: nuevo estado de Gemma
 	cnF4_Planta:			Solicitud de paso al modo manual
 	cnF5_Funcion:			Solicitud de prueba de grafcets a nivel de módulo
 	cnF6_Probar				Solicitud de prueba secuencial de la estación (monolítico)
+
+	cnD1_Emergencia: 		Solicitud de parada de emergencia
 
 
 2. Estado de la estación
@@ -86,7 +87,7 @@ VAR_INPUT
 	cnF6_Probar		: BOOL;
 
 	cnF4_Planta		: BOOL; 					// modo verificación sin orden	
-	cnA1_Emergencia	: BOOL; 					// pulsar la seta
+	cnD1_Emergencia	: BOOL; 					// pulsar la seta
 	cnA6_Inicializar: BOOL;
 	//cnF1_Reanudar	: BOOL;
 
@@ -153,20 +154,30 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Actualiza el reloj y la veloidad cada medio segundo
+Clock(IN := NOT Clock.Q, PT:=T#500MS);
 IF Clock.Q THEN
 	Tic := NOT Tic;
 	UpdateSpeed();
 END_IF
-Clock(IN := Tic AND NOT Clock.Q, PT:=T#500MS);
 
 
-IF cnA1_Emergencia THEN
-    gmModeActual := L1_GEMMA.D1ParadaEmergencia;
+IF cnD1_Emergencia AND NOT cnF4_Planta THEN
+    gmModeActual 		:= L1_GEMMA.D1ParadaEmergencia;
+//	gmModePrev 			:= L1_GEMMA.D1ParadaEmergencia;
+//	IF cnF4_Planta THEN 				
+//		gmModePrev := L1_GEMMA.D1ParadaEmergencia
+//		gmModeActual := L1_GEMMA.F4VerificacionSinOrden;
+//	ELSE
+//		; // desde emergencia se puede pasar a F4 (desarmando la seta)				
+//	END_IF
+//		
 	
-ELSIF cnA6_Inicializar THEN 
-    gmModeActual := L1_GEMMA.A6Inicializando;
+ELSIF cnA6_Inicializar and not cnF4_Planta THEN 
+    gmModeActual 		:= L1_GEMMA.A6Inicializando;
+	// gmModePrev 			:= L1_GEMMA.L1_GEMMA.A6Inicializando;	
+
+END_IF
 	
-ELSE
     CASE gmModeActual OF
 		
 	
@@ -287,8 +298,11 @@ ELSE
 			
         (* ------------------------------------------------------------ Procedimientos de defecto *)
         L1_GEMMA.D1ParadaEmergencia: (* Parada de emergencia *)
-            IF NOT cnA1_Emergencia THEN //  TODO CONSIGNA DE EMERGENCIA DEBE TENER ENCUENTA LA POC
+            IF NOT cnD1_Emergencia THEN //  TODO CONSIGNA DE EMERGENCIA DEBE TENER ENCUENTA LA POC
                 gmModeActual := L1_GEMMA.A6Inicializando; // Al quitar la parada de emergencia hay que reinicializar la estación
+			ELSIF cnF4_Planta then							// desde A1 se puede entrar F4 para arreglar el problema
+				gmModePrev := L1_GEMMA.D1ParadaEmergencia;
+				gmModeActual := L1_GEMMA.F4VerificacionSinOrden;
             ELSE                
                 ; // Esperar a que se quite la parada de emergencia
             END_IF
@@ -306,7 +320,7 @@ ELSE
             ; // estado no tratado en la FMS205
 
     END_CASE
-END_IF
+// END_IF
 
 (* PARAMETROS DE SALIDA *)
 gmFamiArret  := (gmModeActual >= L1_GEMMA.A1ParadaInicial) AND (gmModeActual <= L1_GEMMA.A7SituandoEstado);
