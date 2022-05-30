@@ -76,16 +76,17 @@ ELSE
 		fbController.Performed	:= TRUE;
 		_TapaMovida				:= TRUE;
 		Position				:= MaxPosition;
+		IF Name='Carga' THEN
+			tapas.PostCarga();
+		ELSE // descarga
+			tapas.PostDesca();
+		END_IF
 	ELSIF fbController.Executing AND position < MaxPosition AND Mover THEN
 		Position				:= Position+1;		
 	END_IF
 	HOR.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.HOR);
 	VER.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.VER);
 	PIN.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.PIN);
-	//IF Name='Carga' THEN
-	// tapas.PostCarga(Ready:=Ready, Done:=Done, Mover:=Mover);
-	// ELSE
-	//tapas.PostDesca(Ready:=Ready, Done:=Done, Mover:=Mover);
 END_IF
 ]]></ST>
       </Implementation>

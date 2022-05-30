@@ -23,7 +23,8 @@ END_VAR
 
 VAR CONSTANT
 	MaxPosition		: REAL := 100;
-END_VAR]]></Declaration>
+END_VAR
+]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
@@ -48,12 +49,12 @@ ELSE
 	fbController(Alimentar:=Alimentar, dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 	
 	// Actuadores y actualización de tapas
-	IF Ready AND NOT TapaAlimentada THEN 
+	IF Ready AND NOT _TapaAlimentada THEN 
 		Position := 0;												// Inicialmente la posición es arriba
 	ELSIF Done AND NOT fbController.Performed AND Alimentar THEN
 		fbController.Performed 	:= TRUE;
 		FaltaMaterial			:= k1.uiValue;
-		TapaAlimentada 			:= NOT FaltaMaterial;
+		_TapaAlimentada 		:= NOT FaltaMaterial;
 		Position				:= MaxPosition;						// Posición final junto al brazo de carga 
 	ELSIF fbController.Executing AND Position < MaxPosition AND Alimentar THEN
 		Position := Position + 1;									// animación de tapa moviendo hacia abajo		

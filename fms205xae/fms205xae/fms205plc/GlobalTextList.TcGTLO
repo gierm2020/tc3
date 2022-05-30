@@ -1026,6 +1026,11 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"995"</v>
+              <v n="TextDefault">"Selector manual automático (F4)"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"443"</v>
               <v n="TextDefault">"Situar"</v>
               <l n="LanguageTexts" t="ArrayList" />

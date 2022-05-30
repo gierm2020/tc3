@@ -228,28 +228,31 @@ ctrlF3SeqFin.ProcessCycle(dr.gmModeActual);
 ctrlF6Prueba.ProcessCycle(dr.gmModeActual);
 
 mdAlimentador.Alimentar					:= NOT dr.EndBatch AND NOT mdAlimentador.TapaAlimentada;
+
 mdPickAndPlaceCarga.Mover				:= NOT dr.EndBatch AND mdAlimentador.TapaAlimentada AND tapas.PuedeCargar();
 IF mdPickAndPlaceCarga.TapaMovida THEN
 	mdAlimentador.TapaAlimentada		:= FALSE;
 	mdPickAndPlaceCarga.TapaMovida		:= FALSE;	
 END_IF
-mdPickAndPlaceDescarga.Mover				:= NOT dr.EndBatch AND mdCinta.Carro_Situado AND tapas.PuedeDescargar();
+
+mdEvacuador.Evacuar						:= tapas.PuedeEvacuar(gmMode:=dr.gmModeActual);
+
+mdPickAndPlaceDescarga.Mover			:= NOT dr.EndBatch AND mdCinta.Carro_Situado AND tapas.PuedeDescargar();
 IF mdPickAndPlaceDescarga.TapaMovida THEN
-	//mdAlimentador.TapaAlimentada		:= FALSE;
 	mdCinta.TapaDescargada				:= TRUE;
-	mdPickAndPlaceCarga.TapaMovida		:= FALSE;
+	mdPickAndPlaceDescarga.TapaMovida	:= FALSE;
 END_IF
 	
-IF NOT mdCinta.Carro_Situado THEN // AND mdCinta.Carro_Transfer THEN
+IF NOT mdCinta.Carro_Situado AND fbPanel.swF5_Situar THEN
 	mdCinta.Situar						:= TRUE;
-	// mdCinta.Transferir					:= FALSE;
-ELSIF mdCinta.Carro_Situado AND NOT mdCinta.Carro_Transfer THEN
+	mdCinta.Transferir					:= FALSE;
+	
+ELSIF mdCinta.Carro_Situado AND NOT mdCinta.Carro_Transfer AND fbPanel.swF5_Transferir THEN
 	mdCinta.Situar						:= FALSE;
 	mdCinta.Transferir					:= TRUE; 
 END_IF
 
-mdEvacuador.Evacuar						:= tapas.PuedeEvacuar(gmMode:=dr.gmModeActual);
-mdPickAndPlaceDescarga.Mover			:= tapas.PuedeDescargar() AND mdCinta.Carro_Situado;
+//mdPickAndPlaceDescarga.Mover			:= tapas.PuedeDescargar() AND mdCinta.Carro_Situado;
 
 mdAlimentador.ProcessCycle				(dr:=dr, tapas:=tapas); // ejecutar el ciclo de cada uno de los módulos
 mdPickAndPlaceCarga.ProcessCycle		(dr:=dr, tapas:=tapas);
@@ -263,8 +266,8 @@ mdCinta.ProcessCycle					(dr:=dr, tapas:=tapas);
 
 tapas.ProcessCycle(dr:=dr, pn:=fbPanel, 
 		NumGiros		:= mdPlatoDivisor.NumGiros, 
-		//TapaAlimentada 	:= mdAlimentador.TapaAlimentada, 		 
 		TapaCargada		:= mdPickAndPlaceCarga.TapaMovida, 
+		TapaEvacuada	:= mdEvacuador.TapaEvacuada,
 		TapaDescargada	:= mdPickAndPlaceDescarga.TapaMovida,
 		//	Hay_Pale:=mdCinta.pp.uiValue,
 					 ctrlF1:=ctrlF1Producir, ctrlF2:=ctrlF2SeqPrep, ctrlF3:=ctrlF3SeqFin, ctrlF6:=ctrlF6Prueba);

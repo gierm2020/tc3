@@ -30,6 +30,12 @@ VAR_OUTPUT
 	F_1				: L1_Actuator;
 	G_1				: L1_Actuator;
 	V_1				: L1_Actuator;
+	_TapaEvacuada	: BOOL;
+	Position		: REAL:= 0;
+END_VAR
+
+VAR CONSTANT
+	MaxPosition		: REAL := 800;
 END_VAR
 
 ]]></Declaration>
@@ -44,27 +50,59 @@ VAR_INPUT
 	tapas		: REFERENCE TO L6_Tapas;	
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// Sensores y condiciones iniciales
-f0.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.f0);
-f1.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.f1);
-g0.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.g0);
-v1.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.v1);
-IC := f1.hwValue; // el evacuador está en condiciones iniciales cuando el sensor f1 está activado
+        <ST><![CDATA[IF dr.gmModeActual = L1_GEMMA.A6Inicializando THEN
+	_TapaEvacuada	 			:= FALSE;
+ELSE
+	// Sensores y condiciones iniciales
+	f0.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.f0);
+	f1.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.f1);
+	g0.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.g0);
+	v1.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.v1);
+	IC := f1.hwValue; // el evacuador está en condiciones iniciales cuando el sensor f1 está activado
 
-// Controlador
-fbController.ProcessCycle(dr.gmModeActual);
-fbController(
-	Evacuar	:= Evacuar,
-	dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+	// Controlador
+	fbController.ProcessCycle(dr.gmModeActual);
+	fbController(Evacuar:=Evacuar, dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+	IF Ready AND NOT _TapaEvacuada THEN 
+		Position := 0;											
+	ELSIF Done AND NOT fbController.Performed AND Evacuar THEN
+		fbController.Performed 	:= TRUE;
+		_TapaEvacuada	 		:= TRUE;
+		Position				:= MaxPosition;
+		tapas.PostEvacu(Ready:=Ready, Done:=Done, Evacuar:=Evacuar);						 
+	ELSIF fbController.Executing AND Position < MaxPosition AND Evacuar THEN
+		Position := Position + 1;											
+	END_IF		
+	
+	// Actuadores y actualización de tapas		
+	F_0.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.F_0);
+	F_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.F_1);
+	G_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.G_1);
+	V_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.V_1);
 
-// Actuadores y actualización de tapas		
-F_0.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.F_0);
-F_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.F_1);
-G_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.G_1);
-V_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.V_1);
-tapas.PostEvacu(Ready:=Ready, Done:=Done, Evacuar:=Evacuar);
+
+END_IF
+
+
 ]]></ST>
       </Implementation>
     </Method>
+    <Property Name="TapaEvacuada" Id="{c7762371-2c9a-4fe2-954b-697fb12ee744}">
+      <Declaration><![CDATA[PROPERTY TapaEvacuada : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{61951560-9758-4483-813c-b721ffdcbab6}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[TapaEvacuada := _TapaEvacuada;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{dabff54f-6585-4fbf-a965-b1a82cca6e59}">
+        <Declaration><![CDATA[
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_TapaEvacuada := TapaEvacuada;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
   </POU>
 </TcPlcObject>
