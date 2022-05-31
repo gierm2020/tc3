@@ -3,49 +3,16 @@
   <POU Name="L1_Actuator" Id="{ad7a615f-d37f-4c2d-8af3-51dcf617a49f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK L1_Actuator
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 VAR CONSTANT
-	COLOR_AAct 		: DWORD := 16#0000FF00;
-	//COLOR_AIna 		: DWORD := 16#000000FF;
 END_VAR
 
 VAR_OUTPUT
 	uiValue			: BOOL;					// Vinculación a la visualización
-//	Name			: STRING; 				// Nombre del actuador, p.ej. K_1
 	uiToolTip		: STRING;				// Tooltip en la visualización
 END_VAR
+
 VAR
-	hwValue AT %Q*	: BOOL;					// Vinculación al hardware de la estación
-	//dr				: REFERENCE TO L1_Director;
-	
-	//ETActive		: TIME;					// Valor de Clock.ET en el momento de la última activación
-	//FPReloj			: R_TRIG;				// 
-	//prValue			: BOOL := FALSE;		// Valor previo para detectar cambios de estado	
-	//HasFailed		: BOOL := FALSE;		// El actuador ha fallado porque no ha terminado en tiempo
-	(*
-	uiEnabled		: BOOL := FALSE; 		// Deshabilitar el control cuando no está en modo manual
-	uiColor			: DWORD := COLOR_AAct;	// Color por defecto rojo pálido
-	uiInvisible		: BOOL := TRUE;			// Actuador gráfico invisible si no está pulsado
-	uiUp			: REAL := 0;
-	UIDown			: REAL := 0;
-	uiLeft			: REAL := 0;
-	uiRight			: REAL := 0;
-	uiClockwise		: REAL := 0;
-	uiUnclockwise	: REAL := 0; 
-*)
-	
+	hwValue AT %Q*	: BOOL;					// Vinculación al hardware de la estación	
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -59,7 +26,8 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[uiValue := NewValue;
-hwValue := NewValue;]]></ST>
+hwValue := NewValue;
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="ProcessCycle" Id="{ecf71777-ee3c-4e39-a4e9-a6f0d14f2603}">

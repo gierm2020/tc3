@@ -3,13 +3,19 @@
   <GVL Name="L5_Constantes" Id="{dd77effe-8e00-4347-a9aa-4d870947a08d}" ParameterList="True">
     <Declaration><![CDATA[// {attribute 'qualified_only'}
 VAR_GLOBAL CONSTANT
+	
+	COLOR_AAct 		: DWORD := 16#0000FF00;
+	MAX_ERRORS	: UINT := 10;
+	MAX_TIMEOUT	: TIME := T#30S;
+
+	
 	clModeAFill : DWORD := 16#FF808080;;
 	clModeFFill : DWORD := 16#FFFF0000;
 	clModeDFill : DWORD := 16#FF800000;
 	
-	colDesFill		 : DWORD :=16#FFFF0000;	
+	colDesFill		 : DWORD :=16#FF820000;	
 	colDesFont		 : DWORD :=16#FFFFFFFF;	
-	colDesFrameSin	 : DWORD :=16#FFFF0000;		
+	colDesFrameSin	 : DWORD :=16#FF820000;		
 	colVacFill		 : DWORD :=16#FFF2F2F2;	
 	colVacFont		 : DWORD :=16#FF000000;	
 	colVacFrameSin	 : DWORD :=16#FFF2F2F2;		

@@ -166,97 +166,97 @@
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdAlimentador.K_1.hwValue</Name>
-							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Comment><![CDATA[ Vinculación al hardware de la estación	]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdAlimentador.FM.hwValue</Name>
-							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Comment><![CDATA[ Vinculación al hardware de la estación	]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdPickAndPlaceCarga.HOR.hwValue</Name>
-							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Comment><![CDATA[ Vinculación al hardware de la estación	]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdPickAndPlaceCarga.VER.hwValue</Name>
-							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Comment><![CDATA[ Vinculación al hardware de la estación	]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdPickAndPlaceCarga.PIN.hwValue</Name>
-							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Comment><![CDATA[ Vinculación al hardware de la estación	]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdMedidorTapa.L_1.hwValue</Name>
-							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Comment><![CDATA[ Vinculación al hardware de la estación	]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdEvacuador.F_0.hwValue</Name>
-							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Comment><![CDATA[ Vinculación al hardware de la estación	]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdEvacuador.F_1.hwValue</Name>
-							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Comment><![CDATA[ Vinculación al hardware de la estación	]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdEvacuador.G_1.hwValue</Name>
-							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Comment><![CDATA[ Vinculación al hardware de la estación	]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdEvacuador.V_1.hwValue</Name>
-							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Comment><![CDATA[ Vinculación al hardware de la estación	]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdPickAndPlaceDescarga.HOR.hwValue</Name>
-							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Comment><![CDATA[ Vinculación al hardware de la estación	]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdPickAndPlaceDescarga.VER.hwValue</Name>
-							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Comment><![CDATA[ Vinculación al hardware de la estación	]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdPickAndPlaceDescarga.PIN.hwValue</Name>
-							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Comment><![CDATA[ Vinculación al hardware de la estación	]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdPlatoDivisor.D_1.hwValue</Name>
-							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Comment><![CDATA[ Vinculación al hardware de la estación	]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdPlatoDivisor.E_1.hwValue</Name>
-							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Comment><![CDATA[ Vinculación al hardware de la estación	]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdCinta.RUN.hwValue</Name>
-							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Comment><![CDATA[ Vinculación al hardware de la estación	]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdCinta.REV.hwValue</Name>
-							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Comment><![CDATA[ Vinculación al hardware de la estación	]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdCinta.R_1.hwValue</Name>
-							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Comment><![CDATA[ Vinculación al hardware de la estación	]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.mdCinta.S_1.hwValue</Name>
-							<Comment><![CDATA[ Vinculación al hardware de la estación]]></Comment>
+							<Comment><![CDATA[ Vinculación al hardware de la estación	]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 					</Vars>

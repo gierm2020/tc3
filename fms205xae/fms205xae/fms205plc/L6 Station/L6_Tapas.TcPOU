@@ -264,6 +264,16 @@ END_VAR
         <ST><![CDATA[DebeMedir := not vAltura_Medida[PosMedid];]]></ST>
       </Implementation>
     </Method>
+    <Method Name="DebePreparar" Id="{188f6ee4-43c8-45b0-bd60-a0bf9f527c08}">
+      <Declaration><![CDATA[METHOD DebePreparar : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[DebePreparar := vInicializando[0] OR vInicializando[1]  OR vInicializando[2]  OR vInicializando[3]  OR 
+				vInicializando[4] or vInicializando[5]  or vInicializando[6]  or vInicializando[7];]]></ST>
+      </Implementation>
+    </Method>
     <Property Name="EstaAlimentada" Id="{93f5dfb9-8844-41db-84d2-0fe100f55b19}">
       <Declaration><![CDATA[PROPERTY EstaAlimentada : BOOL]]></Declaration>
       <Get Name="Get" Id="{7d0cf919-f711-4f5c-b78e-6caf320d82c9}">
@@ -349,6 +359,17 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
+    <Method Name="FB_init" Id="{c95ce043-2d61-4c05-acd7-dcd13ff95512}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Inicializar();]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="Inicializar" Id="{4758c6c6-4ea4-433c-a79f-8e413ab5f879}">
       <Declaration><![CDATA[METHOD Inicializar : BOOL
 
@@ -365,7 +386,7 @@ AlimeY			:= 0;
 CargaX			:= 0;
 DescaX			:= MaxCintaX; // oculta como después de transferir
 DescaY			:= MaxDescaY;
-EvacuX			:=
+// EvacuX			:=
 CintaX			:= MaxCintaX;
 
 

@@ -130,11 +130,11 @@ END_VAR
 		mdEvacuador.fbController.isPaused() AND
 		mdPickAndPlaceDescarga.fbController.IsPaused() AND
 		mdPlatoDivisor.fbController.IsPaused() AND
-		mdCinta.fbController.IsPaused(); (* AND
+		mdCinta.fbController.IsPaused()AND
 		ctrlF1Producir.IsPaused() AND
 		ctrlF2SeqPrep.IsPaused() AND
 		ctrlF3SeqFin.IsPaused() AND
-		ctrlF6Prueba.IsPaused();*)
+		ctrlF6Prueba.IsPaused();
 ]]></ST>
       </Implementation>
     </Method>
@@ -190,7 +190,7 @@ mdPickAndPlaceDescarga.Mover			:= NOT dr.EndBatch AND // mdCinta.Carro_Situado A
 	tapas.EstaSituada AND tapas.PuedeDescargar();
 
 mdCinta.Situar							:= NOT tapas.EstaSituada;
-mdCinta.Transferir						:= tapas.EstaSituada AND NOT tapas.EstaTransferida;
+mdCinta.Transferir						:= tapas.EstaSituada AND tapas.EstaDescargada and NOT tapas.EstaTransferida;
 	
 //IF mdPickAndPlaceDescarga.TapaMovida THEN
 	//mdCinta.TapaDescargada				:= TRUE;
@@ -205,9 +205,9 @@ CASE dr.gmModeActual OF
 		dr.EndCycle	:= FALSE;
 		dr.EndBatch	:= FALSE;		
 
-	//L1_GEMMA.A3ParadaEstado: 						// esperar la puesta en marcha o reanudar tras parada		
-	//L1_GEMMA.A4ParadaObtenida:
-	//	dr.IsPaused := IsPaused(); 
+	L1_GEMMA.A3ParadaEstado: 						// esperar la puesta en marcha o reanudar tras parada		
+	L1_GEMMA.A4ParadaObtenida:
+		dr.IsPaused := IsPaused(); 
 
 	L1_GEMMA.A5PreparandoTrasFallo:
 		ManageErrors();		
@@ -216,6 +216,7 @@ CASE dr.gmModeActual OF
 		dr.Failure						:= FALSE;
 		dr.IsPaused						:= FALSE;
 		dr.IC							:= InitialConditions();
+		ManageErrors();
 		tapas.Inicializar();		
 		
 	L1_GEMMA.D1ParadaEmergencia:
@@ -245,16 +246,20 @@ CASE dr.gmModeActual OF
 	
 	L1_GEMMA.F2SecuenciaPreparacion:		
 		//ctrlF2SeqPrep.IC				:= InitialConditions();			
-		IF ctrlF2SeqPrep.Ready THEN
+		IF ctrlF2SeqPrep.Ready AND dr.cnF2_Preparar THEN
 			ctrlF2SeqPrep.Execute		:= TRUE; // ctrlF2SeqPrep.Ready;
 			ctrlF2SeqPrep.Ack			:= FALSE;
 			//ctrlF2SeqPrep.cnF2_Preparar	:= dr.cnF2_Preparar;
 		ELSIF ctrlF2SeqPrep.Done THEN
-			dr.cnF2_Preparar		:= FALSE;
-			ctrlF2SeqPrep.Execute 	:= FALSE;
-			ctrlF2SeqPrep.Ack		:= TRUE;
+			dr.cnF2_Preparar			:= FALSE;
+			ctrlF2SeqPrep.Execute 		:= FALSE;
+			ctrlF2SeqPrep.Ack			:= TRUE;
+			dr.cnF1_Producir			:= TRUE;
+		ELSE
+			ctrlF2SeqPrep.Execute		:= FALSE; // ctrlF2SeqPrep.Ready;
 		END_IF
-		ctrlF2SeqPrep(Medid:=mdMedidorTapa, Fotoe:=mdDetectorFotoelectrico, Induc:=mdCaptadorInductivo, Plato:=mdPlatoDivisor);
+		ctrlF2SeqPrep(Medid:=mdMedidorTapa, Fotoe:=mdDetectorFotoelectrico, 
+						Induc:=mdCaptadorInductivo, Plato:=mdPlatoDivisor, Tapas:=tapas);
 
 	L1_GEMMA.F3SecuenciaFinalizacion:
 		//ctrlF3SeqFin.IC					:= InitialConditions();

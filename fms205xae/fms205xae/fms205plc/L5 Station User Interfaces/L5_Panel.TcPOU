@@ -133,120 +133,117 @@ ELSIF clPM_PulsadorMarcha.Q THEN			// 1o salta el empezar, si tardas más de 1s 
 	dr.cnA3_Estado					:= TRUE;
 	dr.cnF0_Empezar					:= FALSE;
 	
+ELSIF dr.cnF1_Producir AND fnPS_PulsadorStop.Q THEN
+	dr.cnA2_FinCiclo				:= TRUE;
+	
 ELSIF dr.cnA3_Estado AND dr.gmModeActual=L1_GEMMA.A4ParadaObtenida THEN
 	dr.cnA3_Estado 					:= FALSE;
 
 ELSIF fpPM_PulsadorMarcha.Q THEN
 	dr.cnF0_Empezar 				:= TRUE;
 	
-ELSIF (hwSM_SelecAutoManual OR swSM_SelecAutoManual) AND NOT DR.cnF4_Planta THEN // paso al modo F4
-	dr.cnF4_Planta				:= TRUE;
-	dr.cnF1_Producir			:= FALSE;
-	dr.cnF6_Probar				:= FALSE;
-	dr.cnF5_Funcion				:= FALSE;
-	mdF1Producir				:= FALSE;
+ELSIF gmModeActual=L1_GEMMA.A1ParadaInicial THEN
+	dr.cnF1_Producir			:= swF1_Producir AND NOT swF6_Probar;
+	dr.cnF2_Preparar 			:= swF2_Preparar AND NOT swF6_Probar;
+	dr.cnF3_Finalizar			:= swF3_Finalizar AND NOT swF6_Probar;
+	dr.cnF6_Probar				:= swF6_Probar AND NOT (swF1_Producir OR swF2_Preparar OR swF3_Finalizar);
+
+ELSIF mdF1Producir AND NOT dr.cnF1_Producir THEN								
+	mdF1Producir				:= TRUE;
+	mdF4Planta					:= FALSE;
 	mdF5Funcion					:= FALSE;
+	dr.cnF1_Producir			:= TRUE;
+	dr.cnF4_Planta				:= FALSE;	
+	dr.cnF5_Funcion				:= FALSE;
+	swMensaje					:= 'Modo producción activado';
+			
+//	dr.cnF1_Producir			:= swF1_Producir AND NOT swF6_Probar;
+	//dr.cnF2_Preparar 			:= swF2_Preparar AND NOT swF6_Probar;
+	//dr.cnF3_Finalizar			:= swF3_Finalizar AND NOT swF6_Probar;
+	//dr.cnF6_Probar				:= swF6_Probar AND NOT (swF1_Producir OR swF2_Preparar OR swF3_Finalizar);		
+
+ELSIF (hwSM_SelecAutoManual OR swSM_SelecAutoManual) AND NOT DR.cnF4_Planta THEN // paso al modo F4
+	mdF1Producir				:= FALSE;
+	mdF4Planta					:= TRUE;
+	mdF5Funcion					:= FALSE;
+	dr.cnF1_Producir			:= FALSE;
+	dr.cnF4_Planta				:= TRUE;	
+	dr.cnF5_Funcion				:= FALSE;
 	swMensaje					:= 'Modo mando directo activado';
 
-ELSIF mdF5Funcion AND NOT dr.cnF5_Funcion THEN
+ELSIF gmModeActual=L1_GEMMA.F4VerificacionSinOrden AND 
+	NOT (hwSM_SelecAutoManual OR swSM_SelecAutoManual) THEN
 	dr.cnF4_Planta				:= FALSE;
-	dr.cnF1_Producir			:= FALSE;
-	dr.cnF6_Probar				:= FALSE;
-	dr.cnF5_Funcion				:= TRUE;
-	swF4_Planta					:= FALSE;
+	swSM_SelecAutoManual		:= FALSE;
+	swMensaje					:= 'Modo F4 desactivado';
+
+ELSIF mdF5Funcion AND NOT dr.cnF5_Funcion THEN
 	mdF1Producir				:= FALSE;
+	mdF4Planta					:= FALSE;
 	mdF5Funcion					:= TRUE;
+	dr.cnF1_Producir			:= FALSE;
+	dr.cnF4_Planta				:= FALSE;	
+	dr.cnF5_Funcion				:= TRUE;
 	swMensaje					:= 'Modo función activado';
+
 END_IF
             
 
 
 
-	
-IF gmModeActual=L1_GEMMA.A1ParadaInicial OR
-	  gmModeActual=L1_GEMMA.F2SecuenciaPreparacion OR
-	  gmModeActual=L1_GEMMA.F1ProduccionNormal OR 
-	  gmModeActual=L1_GEMMA.F3SecuenciaFinalizacion OR
-	  gmModeActual=L1_GEMMA.A2ParaFinCiclo OR	  
-	  gmModeActual=L1_GEMMA.F6Probando THEN
-	  
-	
-	dr.cnF1_Producir			:= swF1_Producir AND NOT swF6_Probar;
-	dr.cnF2_Preparar 			:= swF2_Preparar AND NOT swF6_Probar;
-	dr.cnF3_Finalizar			:= swF3_Finalizar AND NOT swF6_Probar;
-	dr.cnF6_Probar				:= swF6_Probar AND NOT (swF1_Producir OR swF2_Preparar OR swF3_Finalizar);
-	
 
-	ELSIF mdF1Producir AND NOT dr.cnF1_Producir THEN								// vuelta del modo F4
-		dr.cnF4_Planta				:= FALSE;
-		swF4_Planta					:= FALSE;
-		//dr.cnA2_FinCiclo			:= fnPS_PulsadorStop.Q AND dr.cnF1_Producir AND NOT dr.cnF2_Preparar AND NOT dr.cnF3_Finalizar;
-				
-		dr.cnF1_Producir			:= swF1_Producir AND NOT swF6_Probar;
-		dr.cnF2_Preparar 			:= swF2_Preparar AND NOT swF6_Probar;
-		dr.cnF3_Finalizar			:= swF3_Finalizar AND NOT swF6_Probar;
-		dr.cnF6_Probar				:= swF6_Probar AND NOT (swF1_Producir OR swF2_Preparar OR swF3_Finalizar);		
-		swMensaje					:= 'Modo producción activado';
+IF gmModeActual=L1_GEMMA.F5VerificacionOrdenada THEN
+	
+	//IF NOT mdF5Funcion OR NOT mdF5Funcion OR hwSM_SelecAutoManual OR swSM_SelecAutoManual THEN
+	//	dr.cnF5_Funcion				:= FALSE;
+	//	mdF5Funcion					:= FALSE;
+	//	IF hwSM_SelecAutoManual OR swSM_SelecAutoManual THEN
+	//		dr.cnF4_Planta			:= TRUE;
+	//		swMensaje					:= 'Modo F4 activado';
+	//	ELSE
+		//	swMensaje					:= 'Modo F5 desactivado';			
+		//END_IF
 		
-	
-		
+	//ELSE
+	fpF5_Alimentar				(CLK := swF5_Alimentar);
+	fpF5_Cargar					(CLK := swF5_Cargar);
+	fpF5_Medir					(CLK := swF5_Medir);
+	fpF5_Evacuar				(CLK := swF5_Evacuar);
+	fpF5_Descargar				(CLK := swF5_Descargar);
+	fpF5_Girar					(CLK :=swF5_Girar);
+	fpF5_Transferir				(CLK :=swF5_Transferir);
+	IF fpF5_Alimentar.Q AND swF5_Cargar THEN
+		swF5_Cargar				:= FALSE; 
+		swMensaje				:= 'No se puede cargar si se alimenta';
+	ELSIF fpF5_Cargar.Q AND (swF5_Alimentar OR swF5_Girar)THEN
+		swF5_Alimentar			:= FALSE; 
+		swF5_Girar				:= FALSE;
+		swMensaje				:= 'No se puede alimentar ni girar si se carga';		
+	ELSIF fpF5_Medir.Q AND swF5_Girar THEN
+		swF5_Girar				:= FALSE; 
+		swMensaje				:= 'No se puede girar si se mide';
+	ELSIF fpF5_Evacuar.Q AND swF5_Girar THEN	
+		swF5_Girar				:= FALSE; 
+		swMensaje				:= 'No se puede girar si se evacúa';
+	ELSIF fpF5_Descargar.Q AND (swF5_Girar OR swF5_Transferir) THEN
+		swF5_Girar				:= FALSE; 
+		swF5_Transferir			:= FALSE;
+		swMensaje				:= 'No se puede girar ni transferir si se descarga';
+	ELSIF fpF5_Girar.Q AND (swF5_Cargar OR swF5_Medir OR swF5_Evacuar OR swF5_Descargar) THEN
+		swF5_Cargar				:= FALSE;
+		swF5_Medir				:= FALSE;
+		swF5_Evacuar			:= FALSE;
+		swF5_Descargar			:= FALSE;
+		swMensaje				:= 'No se puede cargar, medir, evacuar ni descargar si se gira';
+	ELSIF fpF5_Transferir.Q AND swF5_Descargar THEN
+		swF5_Descargar			:= FALSE; 
+		swMensaje				:= 'No se puede descargar si se transfiere';
+	END_IF		
+END_IF
+UpdateUI(gmMode := dr.gmModeActual);
 
-ELSIF gmModeActual=L1_GEMMA.F4VerificacionSinOrden THEN
-	IF NOT (hwSM_SelecAutoManual OR swSM_SelecAutoManual) THEN
-		dr.cnF4_Planta				:= FALSE;
-		swMensaje					:= 'Modo F4 desactivado';
-	END_IF
-
-ELSIF gmModeActual=L1_GEMMA.F5VerificacionOrdenada THEN
-	IF NOT mdF5Funcion OR NOT mdF5Funcion OR hwSM_SelecAutoManual OR swSM_SelecAutoManual THEN
-		dr.cnF5_Funcion				:= FALSE;
-		mdF5Funcion					:= FALSE;
-		IF hwSM_SelecAutoManual OR swSM_SelecAutoManual THEN
-			dr.cnF4_Planta			:= TRUE;
-			swMensaje					:= 'Modo F4 activado';
-		ELSE
-			swMensaje					:= 'Modo F5 desactivado';			
-		END_IF
-		
-	ELSE
- 		fpF5_Alimentar				(CLK := swF5_Alimentar);
-		fpF5_Cargar					(CLK := swF5_Cargar);
-		fpF5_Medir					(CLK := swF5_Medir);
-		fpF5_Evacuar				(CLK := swF5_Evacuar);
-		fpF5_Descargar				(CLK := swF5_Descargar);
-		fpF5_Girar					(CLK :=swF5_Girar);
-		fpF5_Transferir				(CLK :=swF5_Transferir);
-		IF fpF5_Alimentar.Q AND swF5_Cargar THEN
-			swF5_Cargar				:= FALSE; 
-			swMensaje				:= 'No se puede cargar si se alimenta';
-		ELSIF fpF5_Cargar.Q AND (swF5_Alimentar OR swF5_Girar)THEN
-			swF5_Alimentar			:= FALSE; 
-			swF5_Girar				:= FALSE;
-			swMensaje				:= 'No se puede alimentar ni girar si se carga';		
-		ELSIF fpF5_Medir.Q AND swF5_Girar THEN
-			swF5_Girar				:= FALSE; 
-			swMensaje				:= 'No se puede girar si se mide';
-		ELSIF fpF5_Evacuar.Q AND swF5_Girar THEN	
-			swF5_Girar				:= FALSE; 
-			swMensaje				:= 'No se puede girar si se evacúa';
-		ELSIF fpF5_Descargar.Q AND (swF5_Girar OR swF5_Transferir) THEN
-			swF5_Girar				:= FALSE; 
-			swF5_Transferir			:= FALSE;
-			swMensaje				:= 'No se puede girar ni transferir si se descarga';
-		ELSIF fpF5_Girar.Q AND (swF5_Cargar OR swF5_Medir OR swF5_Evacuar OR swF5_Descargar) THEN
-			swF5_Cargar				:= FALSE;
-			swF5_Medir				:= FALSE;
-			swF5_Evacuar			:= FALSE;
-			swF5_Descargar			:= FALSE;
-			swMensaje				:= 'No se puede cargar, medir, evacuar ni descargar si se gira';
-		ELSIF fpF5_Transferir.Q AND swF5_Descargar THEN
-			swF5_Descargar			:= FALSE; 
-			swMensaje				:= 'No se puede descargar si se transfiere';
-		END_IF		
-	END_IF
-
-	 
-ELSE
+ 
+//ELSE
 	(*
 
 ttPE_Seta := 'Pulsar la seta o el botón para parada de emergencia';	
@@ -435,9 +432,8 @@ END_IF
 
 //----------------------------------------------------------------- Consigna F1_Empezar
 
-END_IF
+//END_IF
 
-UpdateUI(gmMode := dr.gmModeActual);
 ]]></ST>
       </Implementation>
     </Method>
@@ -471,6 +467,7 @@ CASE gmMode OF
 	L1_GEMMA.A4ParadaObtenida:
 		gmModeName				:= 'Mode A4';
 		gmModeDescr				:= 'Parada obtenida';
+		hwLM_LamparaMarcha		:= dr.Tic;
 		
 	L1_GEMMA.A5PreparandoTrasFallo:
 		gmModeName				:= 'Mode A5';
@@ -525,7 +522,7 @@ CASE gmMode OF
 		gmModeName				:= 'Mode D2';
 		gmModeDescr				:= 'Diagnósdr.tico/tratamiento de fallos';
 		hwAS_AvisadorSonoro 	:= dr.Tic;
-		hwLA_LamparaAlarma	:= dr.Tic;
+		hwLA_LamparaAlarma		:= dr.Tic;
 		
 	L1_GEMMA.D3ProducirConFallos:
 		gmModeName				:= 'Mode D3';

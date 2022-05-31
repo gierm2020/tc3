@@ -45,7 +45,7 @@ ELSE
 	ELSIF fbController.Executing AND anguloanim >-35.0 THEN  
 		AnguloAnim 	:= anguloanim - 0.2;	
 	END_IF	
-	Angulo 					:= AnguloAnim -45.0 * (NumGiros MOD 8); // 
+	Angulo 					:= AnguloAnim -45.0 * TO_REAL(NumGiros MOD 8); // 
 	// Actuadores y actualización de tapas
 	D_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.D_1);
 	E_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.E_1);

@@ -3,11 +3,6 @@
   <POU Name="L1_ControllerBase_SFC" Id="{b4a568e5-b860-4b97-ba61-d1f48d9d8c8d}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK L1_ControllerBase_SFC
 
-VAR CONSTANT
-	MAX_ERRORS	: UINT := 10;
-	MAX_TIMEOUT	: TIME := T#30S;
-END_VAR
-
 VAR_INPUT
 	dr			: REFERENCE TO L1_Director;		// acceso a todos los tiempos de espera
 	IC			: BOOL;
@@ -15,23 +10,21 @@ VAR_INPUT
 	Ack			: BOOL;	
 	SFCPause	: BOOL;
 	SFCReset	: BOOL;
-	UnsafeStop 	: BOOL := FALSE;
+	UnsafeStop 	: BOOL;
 	Clocks		: ARRAY[1..MAX_ERRORS]	OF TON; 
 END_VAR
 
 VAR_OUTPUT
 	Ready		: BOOL;
 	Executing	: BOOL;
-	_Performed	: BOOL := FALSE;				// Para poner la primera vez que se leen los sensores o se gira el plato
+	_Performed	: BOOL;					// Para poner la primera vez que se leen los sensores o se gira el plato
 	Done		: BOOL := FALSE;
 	Timed		: ARRAY[1..MAX_ERRORS]	OF BOOL; 
 	NumError	: UINT := 0;
-	gmModePrev	: L1_GEMMA := L1_GEMMA.A6Inicializando;
-	
+	gmModePrev	: L1_GEMMA := L1_GEMMA.A6Inicializando;	
 	colPicFill	: DWORD; // color para destacar en la foto según esté Ready (tranparente), Ejecutando (amarillo) o Esperando Ack (verde) 
 	colPicFram	: DWORD; // color del marco  	
 END_VAR
-
 ]]></Declaration>
     <Implementation>
       <SFC>
@@ -579,6 +572,7 @@ END_VAR
     </Implementation>
     <Method Name="FB_init" Id="{0d874f96-f55f-4d86-871c-77c076024b66}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
+
 VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
@@ -586,16 +580,19 @@ END_VAR
 
 VAR 
 	I: UINT;
-END_VAR]]></Declaration>
+END_VAR
+]]></Declaration>
       <Implementation>
         <ST><![CDATA[NumError		:= 0;					// Inicializar el estado a 0 (no hay error)
 _Performed		:= FALSE;
+UnsafeStop 		:= FALSE;
+Done			:= FALSE;
+gmModePrev		:= L1_GEMMA.A6Inicializando;
 
 FOR I:=1 TO MAX_ERRORS DO				// Inicializar todos los flags de etapas temporizadas
 	Timed[i] 		:= FALSE;
-	//Clocks[i].IN	:= Timed[i];
-	//Clocks[i].PT	:= MAX_TIMEOUT;	
-END_FOR]]></ST>
+END_FOR
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="IsPaused" Id="{e98f7813-c900-4fd4-9a12-006983f9c884}">
@@ -608,18 +605,17 @@ END_FOR]]></ST>
     <Property Name="Performed" Id="{b9e6cab5-1f67-4509-9f8d-000e246a379a}">
       <Declaration><![CDATA[PROPERTY Performed : BOOL]]></Declaration>
       <Get Name="Get" Id="{5eeaf013-c1e9-4c94-b5ec-9b5c789fbd11}">
-        <Declaration><![CDATA[
-]]></Declaration>
+        <Declaration><![CDATA[]]></Declaration>
         <Implementation>
-          <ST><![CDATA[Performed := _Performed;]]></ST>
+          <ST><![CDATA[Performed := _Performed;
+]]></ST>
         </Implementation>
       </Get>
       <Set Name="Set" Id="{354b6517-96fc-447b-943c-61d6bf724b7d}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
+        <Declaration><![CDATA[]]></Declaration>
         <Implementation>
-          <ST><![CDATA[_Performed := Performed;]]></ST>
+          <ST><![CDATA[_Performed := Performed;
+]]></ST>
         </Implementation>
       </Set>
     </Property>
@@ -651,7 +647,8 @@ END_IF
 gmModePrev := gmMode;
 
 // Tratamiento de la parada
-SFCPause := NOT UnsafeStop AND (NumError <> 0 OR gmMode=L1_GEMMA.A3ParadaEstado OR gmMode=L1_GEMMA.A4ParadaObtenida);
+SFCPause := NOT UnsafeStop AND (NumError <> 0 
+	OR gmMode=L1_GEMMA.A3ParadaEstado OR gmMode=L1_GEMMA.A4ParadaObtenida or gmMode=L1_GEMMA.D1ParadaEmergencia);
 
 // Tratamiento de errores
 FOR i:= 1 TO MAX_ERRORS DO			
