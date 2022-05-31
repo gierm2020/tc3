@@ -54,13 +54,14 @@ VAR_GLOBAL CONSTANT
 	MaxAlimeY		: REAL := 100;
 	MaxCargaX		: REAL := 80;
 	MaxDescaY		: REAL := 90;
+	MaxEvacuX		: REAL := 100;
 	MinCintaX		: REAL := -200;
 	MaxCintaX		: REAL := 145;
 	
-	MaxPosDesca		: REAL := 100;	// mismo valor que deja el brazo de descarga	
-	MaxPosEvacu		: REAL := 100;
-	MinPosCarro		: REAL := -200;
-	MaxPosCarro		: REAL := 145;
+	//MaxPosDesca		: REAL := 100;	// mismo valor que deja el brazo de descarga	
+	//MaxPosEvacu		: REAL := 100;
+	//MinPosCarro		: REAL := -200;
+	//MaxPosCarro		: REAL := 145;
 
 
 END_VAR]]></Declaration>

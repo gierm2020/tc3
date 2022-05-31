@@ -61,14 +61,15 @@ ELSE
 	fbController.ProcessCycle(dr.gmModeActual);
 	fbController(Evacuar:=Evacuar, dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 	IF Ready AND NOT _TapaEvacuada THEN 
-		Position := 0;											
+		tapas.MoverEvacu(Delta:=0); //  Position := 0;
+													
 	ELSIF Done AND NOT fbController.Performed AND Evacuar THEN
 		fbController.Performed 	:= TRUE;
 		_TapaEvacuada	 		:= TRUE;
-		Position				:= MaxPosEvacu;
+		tapas.MoverEvacu(Delta:=MoverMax); // Position				:= MaxPosEvacu;
 		tapas.PostEvacu();						 
-	ELSIF fbController.Executing AND Position < MaxPosEvacu AND Evacuar THEN
-		Position := Position + 1;											
+	ELSIF fbController.Executing AND Evacuar THEN // AND Position < MaxPosEvacu
+		tapas.MoverEvacu(Delta:=1); // Position := Position + 1;											
 	END_IF		
 	
 	// Actuadores y actualización de tapas		

@@ -166,7 +166,7 @@ ctrlF6Prueba.ResetError();
       <Implementation>
         <ST><![CDATA[// calcular consignas en función del panel y del modo Gemma
 dr.Failure 									:= IsFailied();
-fbPanel.ProcessCycle(dr:=dr, gmModeActual := dr.gmModeActual, tmReinicio := dr.tmTiempoReinicio);
+fbPanel.ProcessCycle(dr:=dr, gmModeActual 	:= dr.gmModeActual, tmReinicio := dr.tmTiempoReinicio);
 dr.ProcessCycle(); 
 
 // ejecutar el ciclo de cada Grafcet a nivel estación
@@ -178,15 +178,20 @@ ctrlF6Prueba.ProcessCycle(dr.gmModeActual);
 // decidir qué tiene que hacer cada módulo
 mdAlimentador.Alimentar					:= NOT dr.EndBatch AND NOT tapas.EstaAlimentada; // mdAlimentador.TapaAlimentada;
 mdPickAndPlaceCarga.Mover				:= NOT dr.EndBatch AND tapas.EstaAlimentada AND tapas.PuedeCargar(); //  mdAlimentador.TapaAlimentada 
+mdMedidorTapa.Medir						:= tapas.DebeMedir();
+mdEvacuador.Evacuar						:= tapas.PuedeEvacuar(gmMode:=dr.gmModeActual);
 //IF mdPickAndPlaceCarga.TapaMovida THEN
 	//mdAlimentador.TapaAlimentada		:= FALSE;
 	//tapas.EstaAlimentada				:= FALSE;
 	//mdPickAndPlaceCarga.TapaMovida		:= FALSE;	
 //END_IF
 
-mdMedidorTapa.Medir						:= tapas.DebeMedir();
-mdEvacuador.Evacuar						:= tapas.PuedeEvacuar(gmMode:=dr.gmModeActual);
-mdPickAndPlaceDescarga.Mover			:= NOT dr.EndBatch AND mdCinta.Carro_Situado AND tapas.PuedeDescargar();
+mdPickAndPlaceDescarga.Mover			:= NOT dr.EndBatch AND // mdCinta.Carro_Situado AND tapas.PuedeDescargar();
+	tapas.EstaSituada AND tapas.PuedeDescargar();
+
+mdCinta.Situar							:= NOT tapas.EstaSituada;
+mdCinta.Transferir						:= tapas.EstaSituada AND NOT tapas.EstaTransferida;
+	
 //IF mdPickAndPlaceDescarga.TapaMovida THEN
 	//mdCinta.TapaDescargada				:= TRUE;
 	//mdCinta.Transferir					:= TRUE;

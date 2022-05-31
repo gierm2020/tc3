@@ -266,7 +266,7 @@ END_IF
 
 			
         L1_GEMMA.A3ParadaEstado: 
-            IF Failure THEN																// A3 -> D2
+			IF Failure THEN																// A3 -> D2
                 gmModeActual := L1_GEMMA.D2TratamientoFallos;
 			ELSIF IsPaused THEN															// A3 -> A4
                 gmModeActual := L1_GEMMA.A4ParadaObtenida;

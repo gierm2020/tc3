@@ -54,11 +54,15 @@ VAR
 	_AlimeEsta	: BOOL; // Esta alimentada o no
 	_CargaEsta	: BOOL;
 	_DescaEsta	: BOOL;
+	_EvacuEsta	: BOOL;
+	_SituaEsta	: BOOL;
+	_TransEsta	: bool;
 	
 	AlimeY		: REAL; // posición vertical de la tapa alimentándose
 	CargaX		: REAL; 
 	DescaX		: REAL:=MaxCintaX;
 	DescaY		: REAL:=MaxDescaY;
+	EvacuX		: REAL:=MaxEvacuX;
 	CintaX		: REAL:=MaxCintaX;
 	
 	
@@ -311,6 +315,40 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
+    <Property Name="EstaSituada" Id="{f6b9ab73-9ffc-4a0d-bcbf-201c80913ae5}">
+      <Declaration><![CDATA[PROPERTY EstaSituada : BOOL]]></Declaration>
+      <Get Name="Get" Id="{1043024d-fe52-433a-bb0a-79531bfe51b0}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[EstaSituada := _SituaEsta;
+]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{b4c26589-bdc0-41b9-a546-340bfa6738cb}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_SituaEsta := EstaSituada;
+]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="EstaTransferida" Id="{1c650919-752a-4198-92e3-894a35cc2c8a}">
+      <Declaration><![CDATA[PROPERTY EstaTransferida : BOOL]]></Declaration>
+      <Get Name="Get" Id="{c1b87f72-5f03-4c05-86e7-202eae4233aa}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[EstaTransferida := _TransEsta;
+]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{0a9065be-480f-4910-b164-ec2ba43d7e55}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_TransEsta := EstaTransferida;
+]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="Inicializar" Id="{4758c6c6-4ea4-433c-a79f-8e413ab5f879}">
       <Declaration><![CDATA[METHOD Inicializar : BOOL
 
@@ -327,6 +365,7 @@ AlimeY			:= 0;
 CargaX			:= 0;
 DescaX			:= MaxCintaX; // oculta como después de transferir
 DescaY			:= MaxDescaY;
+EvacuX			:=
 CintaX			:= MaxCintaX;
 
 
@@ -390,6 +429,16 @@ END_IF
  ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="MoverEvacu" Id="{1373ce69-6252-4d49-8454-b56ccd811f09}">
+      <Declaration><![CDATA[METHOD MoverEvacu : BOOL
+VAR_INPUT
+	Delta		: REAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[EvacuX := SEL(Delta=0, SEL(EvacuX > MaxEvacuX or Delta=MoverMax, EvacuX+Delta, MaxEvacuX), 0); ]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="MoverPickAndPlace" Id="{2061315a-880b-4839-b978-3b9fde73a89e}">
       <Declaration><![CDATA[METHOD MoverPickAndPlace : BOOL
 VAR_INPUT
@@ -438,7 +487,8 @@ Vaciar(PosVacia	:= PosDesca);
       <Declaration><![CDATA[METHOD PostEvacu : BOOL
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[ResRech 			:= ResRech + 1;
+        <ST><![CDATA[_EvacuEsta			:= TRUE;
+ResRech 			:= ResRech + 1;
 Evacu_strUi			:= vstrUi[PosEvacu];
 Evacu_strToolTip	:= vstrToolTip[PosEvacu];
 Evacu_ColorFont		:= vColorFont[PosEvacu];
@@ -502,6 +552,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[IF Name = 'Carga' THEN
 	_AlimeEsta					:= FALSE; 	// ya no hay tapa en el alimentador
+	_CargaEsta					:= TRUE;
 	vInicializando[PosCarga]	:= FALSE;		
 	vTapa_Cargada[PosCarga]		:= TRUE;
 	vAltura_Medida[PosCarga]	:= FALSE;
@@ -514,6 +565,8 @@ END_VAR
 	
 ELSE // Brazo de descarga
 	_DescaEsta			:= TRUE;			// ya hay tapa en el carro
+	_TransEsta			:= FALSE;
+	
 	ResReal 			:= ResReal + 1;
 	ResPend				:= ReqNumero - ResReal;
 	
