@@ -18,11 +18,11 @@ VAR_OUTPUT
 	REV						: L1_Actuator;
 	R_1						: L1_Actuator;
 	S_1						: L1_Actuator;
-	Carro_Situado			: BOOL;
-	Carro_Transfer			: BOOL;
-	Position_Carro			: REAL := 0;
-	PosDescaX				: REAL := 0;		// posición X de la tapa descargada (0 bajo el plato)
-	_TapaDescargada			: BOOL;			
+	//Carro_Situado			: BOOL;
+	//Carro_Transfer			: BOOL;
+	//Position_Carro			: REAL := 0;
+	//PosDescaX				: REAL := 0;		// posición X de la tapa descargada (0 bajo el plato)
+	//_TapaDescargada			: BOOL;			
 	// tipo de tapa descargada
 	
 
@@ -49,8 +49,8 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF dr.gmModeActual = L1_GEMMA.A6Inicializando THEN
-	Carro_Situado	 			:= FALSE;
-	Carro_Transfer				:= FALSE;
+	//Carro_Situado	 			:= FALSE;
+	//Carro_Transfer				:= FALSE;
 	//Position_Carro				:= MinPosCarro; // empieza a la izquierda de la visu
 	//PosTapaY					:= 0; // empieza arriba en el plato
 	;
@@ -68,26 +68,26 @@ ELSE
 		dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 	
 	// Actuadores y actualización de tapas
-	IF Ready AND NOT Carro_Situado THEN
-		tapas.MoverCinta(Delta:=0, Situar:=TRUE);
+	IF Ready THEN
+		tapas.MoverCinta(Delta:=0, Situar:=Situar);
 		//Position_Carro			:= MinPosCarro; // carro a la izquierda
 		//PosTapaY				:= 0; // tapa arriba
-	ELSIF Ready AND NOT Carro_Transfer THEN
-		tapas.MoverCinta(Delta:=0, Situar:=FALSE);
+//	ELSIF Ready AND NOT tapas.estaCarro_Transfer THEN
+	//	tapas.MoverCinta(Delta:=0, Situar:=FALSE);
 		//Position_Carro			:= 0; // carro bajo el plato
 		//PosTapaY				:= SEL(_TapaDescargada, 0, MaxPosTapaY); // tapa arriba o abajo
 		//Pos_Situa				:= SEL(Carro_Situado,-MaxPosSitua, 0);
 		//Pos_Trans				:= SEL(Carro_Transfer, 0, MaxPosTrans); 
-	ELSIF Ready AND Carro_Transfer THEN
-		;//PosDescaX				:=0;	
+	//ELSIF Ready AND Carro_Transfer THEN
+		//;//PosDescaX				:=0;	
 		//Position_Carro			:= MaxPosCarro; // carro a la derecha
 		//PosTapaY				:= SEL(_TapaDescargada, 0, MaxPosTapaY); // tapa arriba o abajo
 	
 
 	ELSIF Done AND NOT fbController.Performed AND Situar THEN
 		fbController.Performed 	:= TRUE;
-		Carro_Situado			:= TRUE;
-		Carro_Transfer			:= FALSE;
+		//Carro_Situado			:= TRUE;
+		//Carro_Transfer			:= FALSE;
 		tapas.EstaSituada		:= TRUE;
 		tapas.EstaTransferida	:= FALSE;
 		//_TapaDescargada			:= FALSE;
@@ -96,8 +96,8 @@ ELSE
 		//PosTapaY				:= 0;
 	ELSIF Done AND NOT fbController.Performed AND Transferir THEN
 		fbController.Performed 	:= TRUE;
-		Carro_Transfer			:= TRUE;
-		Carro_Situado			:= FALSE;
+		//Carro_Transfer			:= TRUE;
+		//Carro_Situado			:= FALSE;
 		
 		//Position_Carro			:= MaxPosCarro; 
 		//PosDescaX				:= MaxPosCarro;
@@ -114,8 +114,8 @@ ELSE
 		//Position_Carro 			:= Position_Carro + 2;
 		//PosDescaX				:= SEL(_TapaDescargada, 0, Position_Carro); // al transferir el carro y la tapa se mueven al unísiono
 		//		PosTapaY				:= MaxPosTapaY;
-	ELSIF fbController.Executing THEN
-		tapas.MoverCinta(Delta:=1, Situar:=Situar);									
+	ELSIF fbController.Executing AND (Situar OR Transferir) THEN
+		tapas.MoverCinta(Delta:=0.5, Situar:=Situar);									
 	END_IF	
 	
 	RUN.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.RUN);
@@ -135,24 +135,5 @@ END_IF
 // tapas.PostCinta(Done := Done, Situa:=Situar, Trans:=Transferir);	]]></ST>
       </Implementation>
     </Method>
-    <Property Name="TapaDescargada" Id="{87bc64c7-3a04-489a-bdd9-5d2ae8163dda}">
-      <Declaration><![CDATA[PROPERTY TapaDescargada : bool]]></Declaration>
-      <Get Name="Get" Id="{a972cf1d-5337-407c-b337-0e38ace7f437}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[TapaDescargada := _TapaDescargada;]]></ST>
-        </Implementation>
-      </Get>
-      <Set Name="Set" Id="{a6ca71db-5116-4587-9528-aebed7647e4d}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[_TapaDescargada := TapaDescargada;]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
   </POU>
 </TcPlcObject>

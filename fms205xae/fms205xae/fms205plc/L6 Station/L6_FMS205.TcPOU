@@ -296,10 +296,12 @@ CASE dr.gmModeActual OF
 		mdPlatoDivisor.Execute       		:= fbPanel.swF5_Ejecutar AND fbPanel.swF5_Girar;				
 		mdCinta.Execute						:= fbPanel.swF5_Ejecutar AND  
 												((mdCinta.Situar AND fbPanel.swF5_Situar ) OR (mdCinta.Transferir AND fbPanel.swF5_Transferir));
-		IF NOT mdCinta.Carro_Situado AND fbPanel.swF5_Situar THEN
+		//IF NOT mdCinta.Carro_Situado AND fbPanel.swF5_Situar THEN
+		IF NOT tapas.EstaSituada AND fbPanel.swF5_Situar THEN
 			mdCinta.Situar						:= TRUE;
 			mdCinta.Transferir					:= FALSE;	
-		ELSIF mdCinta.Carro_Situado AND NOT mdCinta.Carro_Transfer AND fbPanel.swF5_Transferir THEN
+		//ELSIF mdCinta.Carro_Situado AND NOT mdCinta.Carro_Transfer AND fbPanel.swF5_Transferir THEN
+		ELSIF tapas.EstaSituada AND NOT tapas.EstaTransferida AND fbPanel.swF5_Transferir THEN		
 			mdCinta.Situar						:= FALSE;
 			mdCinta.Transferir					:= TRUE; 
 		END_IF

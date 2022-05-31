@@ -142,12 +142,6 @@ ELSIF dr.cnA3_Estado AND dr.gmModeActual=L1_GEMMA.A4ParadaObtenida THEN
 ELSIF fpPM_PulsadorMarcha.Q THEN
 	dr.cnF0_Empezar 				:= TRUE;
 	
-ELSIF gmModeActual=L1_GEMMA.A1ParadaInicial THEN
-	dr.cnF1_Producir			:= swF1_Producir AND NOT swF6_Probar;
-	dr.cnF2_Preparar 			:= swF2_Preparar AND NOT swF6_Probar;
-	dr.cnF3_Finalizar			:= swF3_Finalizar AND NOT swF6_Probar;
-	dr.cnF6_Probar				:= swF6_Probar AND NOT (swF1_Producir OR swF2_Preparar OR swF3_Finalizar);
-
 ELSIF mdF1Producir AND NOT dr.cnF1_Producir THEN								
 	mdF1Producir				:= TRUE;
 	mdF4Planta					:= FALSE;
@@ -185,6 +179,13 @@ ELSIF mdF5Funcion AND NOT dr.cnF5_Funcion THEN
 	dr.cnF4_Planta				:= FALSE;	
 	dr.cnF5_Funcion				:= TRUE;
 	swMensaje					:= 'Modo función activado';
+
+ELSIF gmModeActual=L1_GEMMA.A1ParadaInicial THEN
+	dr.cnF1_Producir			:= swF1_Producir AND NOT swF6_Probar;
+	dr.cnF2_Preparar 			:= swF2_Preparar AND NOT swF6_Probar;
+	dr.cnF3_Finalizar			:= swF3_Finalizar AND NOT swF6_Probar;
+	dr.cnF6_Probar				:= swF6_Probar AND NOT (swF1_Producir OR swF2_Preparar OR swF3_Finalizar);
+
 
 END_IF
             

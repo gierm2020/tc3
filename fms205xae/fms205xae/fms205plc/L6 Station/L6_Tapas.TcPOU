@@ -442,10 +442,10 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF Situar THEN
-	CintaX := SEL(Delta=0, SEL(CintaX >= 0 OR Delta=MoverMax, CintaX+Delta, 0), -MinCintaX);
+	CintaX := SEL(Delta=0, SEL(CintaX >= 0 OR Delta=MoverMax, CintaX+Delta, 0), MinCintaX);
 ELSE // transferir
 	CintaX := SEL(Delta=0, SEL(CintaX >= MaxCintaX OR Delta=MoverMax, CintaX+Delta, MaxCintaX), 0);
-	DescaX := CintaX;
+	DescaX := SEL(_DescaEsta AND Delta>0, MaxCintaX , CintaX);
 END_IF
  ]]></ST>
       </Implementation>
