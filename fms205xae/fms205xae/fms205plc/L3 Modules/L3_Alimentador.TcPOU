@@ -16,13 +16,10 @@ VAR_OUTPUT
 	k1 				: L1_Sensor;
 	K_1 			: L1_Actuator;
 	FM 				: L1_Actuator; 
-	_TapaAlimentada	: BOOL;
+	//_TapaAlimentada	: BOOL;
 	FaltaMaterial	: BOOL;
-	Position		: REAL:= 0;
-END_VAR
-
-VAR CONSTANT
-	MaxPosition		: REAL := 100;
+	// Position		: REAL:= 0;
+	Leyendo			: BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -37,7 +34,7 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF dr.gmModeActual = L1_GEMMA.A6Inicializando THEN
-	_TapaAlimentada 			:= FALSE;
+	//_TapaAlimentada 			:= FALSE;
 	FaltaMaterial				:= FALSE;
 ELSE
 	// Sensores y condiciones iniciales
@@ -46,42 +43,25 @@ ELSE
 
 	// Controlador
 	fbController.ProcessCycle(dr.gmModeActual);
-	fbController(Alimentar:=Alimentar, dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
+	fbController(Alimentar:=Alimentar, dr:=dr, IC:=IC, Leyendo=>Leyendo, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 	
 	// Actuadores y actualización de tapas
-	IF Ready AND NOT _TapaAlimentada THEN 
-		Position := 0;												// Inicialmente la posición es arriba
-	ELSIF Done AND NOT fbController.Performed AND Alimentar THEN
-		fbController.Performed 	:= TRUE;
+	IF Ready AND NOT tapas.EstaAlimentada THEN // 	TapaAlimentada THEN 
+		tapas.MoverAlime(Delta:=0); // 	Position := 0;												// Inicialmente la posición es arriba
+	ELSIF fbController.Leyendo AND NOT fbController.Performed THEN
+		fbController.Performed	:= TRUE;
 		FaltaMaterial			:= k1.uiValue;
-		_TapaAlimentada 		:= NOT FaltaMaterial;
-		Position				:= MaxPosition;						// Posición final junto al brazo de carga 
-	ELSIF fbController.Executing AND Position < MaxPosition AND Alimentar THEN
-		Position := Position + 1;									// animación de tapa moviendo hacia abajo		
+		//_TapaAlimentada 		:= NOT FaltaMaterial;
+		tapas.EstaAlimentada	:= NOT FaltaMaterial;
+	ELSIF Done AND NOT fbController.Performed AND Alimentar THEN
+		tapas.MoverAlime(Delta:=MoverMax);// Position				:= MaxPosAlime;						// Posición final junto al brazo de carga 
+	ELSIF fbController.Executing AND Alimentar THEN // Position < MaxPosAlime AND 
+		tapas.MoverAlime(Delta:=1); // Position := Position + 1;									// animación de tapa moviendo hacia abajo		
 	END_IF	
 	K_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.K_1);
-	FM.ProcessCycle (gmMode:=dr.gmModeActual, sfcValue:=FaltaMaterial AND dr.Tic); //fbController.FM);
-	//FM.ForceValue(FaltaMaterial AND dr.Tic); 
-	//tapas.PostAlime(Ready:=Ready, Done:=Done, FM:=FM.uiValue);
+	FM.ProcessCycle (gmMode:=dr.gmModeActual, sfcValue:=FaltaMaterial AND dr.Tic);
 END_IF]]></ST>
       </Implementation>
     </Method>
-    <Property Name="TapaAlimentada" Id="{3e98cc31-41f2-41e3-88a6-6de609790e5c}">
-      <Declaration><![CDATA[PROPERTY TapaAlimentada : bool]]></Declaration>
-      <Get Name="Get" Id="{71c03367-61a5-4cf3-9ad9-347a77c91cac}">
-        <Declaration><![CDATA[]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[TapaAlimentada := _TapaAlimentada;]]></ST>
-        </Implementation>
-      </Get>
-      <Set Name="Set" Id="{57645043-f2bc-4b20-a856-ab30ddda755a}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[_TapaAlimentada := TapaAlimentada;]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
   </POU>
 </TcPlcObject>

@@ -16,8 +16,6 @@ blanco
 VAR_OUTPUT
 	fbController		: L2_Simple_SFC:=(dr:=dr);
 	df 		        	: L1_Sensor;
-
-	//Lectura_Registrada	: BOOL := FALSE; 
 	Tapa_Clara			: BOOL;
 	strUi 				: STRING := '?';
 END_VAR

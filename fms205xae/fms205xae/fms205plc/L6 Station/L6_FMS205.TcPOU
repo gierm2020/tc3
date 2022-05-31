@@ -176,19 +176,23 @@ ctrlF3SeqFin.ProcessCycle(dr.gmModeActual);
 ctrlF6Prueba.ProcessCycle(dr.gmModeActual);
 
 // decidir qué tiene que hacer cada módulo
-mdAlimentador.Alimentar					:= NOT dr.EndBatch AND NOT mdAlimentador.TapaAlimentada;
-mdPickAndPlaceCarga.Mover				:= NOT dr.EndBatch AND mdAlimentador.TapaAlimentada AND tapas.PuedeCargar();
-IF mdPickAndPlaceCarga.TapaMovida THEN
-	mdAlimentador.TapaAlimentada		:= FALSE;
-	mdPickAndPlaceCarga.TapaMovida		:= FALSE;	
-END_IF
+mdAlimentador.Alimentar					:= NOT dr.EndBatch AND NOT tapas.EstaAlimentada; // mdAlimentador.TapaAlimentada;
+mdPickAndPlaceCarga.Mover				:= NOT dr.EndBatch AND tapas.EstaAlimentada AND tapas.PuedeCargar(); //  mdAlimentador.TapaAlimentada 
+//IF mdPickAndPlaceCarga.TapaMovida THEN
+	//mdAlimentador.TapaAlimentada		:= FALSE;
+	//tapas.EstaAlimentada				:= FALSE;
+	//mdPickAndPlaceCarga.TapaMovida		:= FALSE;	
+//END_IF
+
 mdMedidorTapa.Medir						:= tapas.DebeMedir();
 mdEvacuador.Evacuar						:= tapas.PuedeEvacuar(gmMode:=dr.gmModeActual);
 mdPickAndPlaceDescarga.Mover			:= NOT dr.EndBatch AND mdCinta.Carro_Situado AND tapas.PuedeDescargar();
-IF mdPickAndPlaceDescarga.TapaMovida THEN
-	mdCinta.TapaDescargada				:= TRUE;
-	mdPickAndPlaceDescarga.TapaMovida	:= FALSE;
-END_IF	
+//IF mdPickAndPlaceDescarga.TapaMovida THEN
+	//mdCinta.TapaDescargada				:= TRUE;
+	//mdCinta.Transferir					:= TRUE;
+	//mdPickAndPlaceDescarga.TapaMovida	:= FALSE;
+//END_IF
+
 
 // controlar el flujo a nivel de la estación
 CASE dr.gmModeActual OF
@@ -196,9 +200,9 @@ CASE dr.gmModeActual OF
 		dr.EndCycle	:= FALSE;
 		dr.EndBatch	:= FALSE;		
 
-	L1_GEMMA.A3ParadaEstado, 						// esperar la puesta en marcha o reanudar tras parada
-	L1_GEMMA.A4ParadaObtenida:
-		dr.IsPaused := IsPaused(); 
+	//L1_GEMMA.A3ParadaEstado: 						// esperar la puesta en marcha o reanudar tras parada		
+	//L1_GEMMA.A4ParadaObtenida:
+	//	dr.IsPaused := IsPaused(); 
 
 	L1_GEMMA.A5PreparandoTrasFallo:
 		ManageErrors();		
@@ -219,15 +223,16 @@ CASE dr.gmModeActual OF
 	L1_GEMMA.A2ParaFinCiclo:
 		ctrlF1Producir.IC 				:= InitialConditions();
 		dr.EndCycle 					:= ctrlF1Producir.Done;
-		IF ctrlF1Producir.Done AND dr.EndCycle THEN
-			dr.cnA3_Estado				:= true; // pasamos a parar		
-		ELSIF ctrlF1Producir.Ready AND NOT dr.EndCycle THEN
-			ctrlF1Producir.Execute		:= TRUE;
-			ctrlF1Producir.Ack			:= FALSE;
-		ELSIF ctrlF1Producir.Done THEN
+		IF ctrlF1Producir.Done THEN
+			dr.EndCycle					:= TRUE;
+			dr.cnA3_Estado				:= dr.cnA2_FinCiclo;
 			ctrlF1Producir.Execute		:= FALSE;
 			ctrlF1Producir.Ack			:= TRUE;			
-			dr.EndBatch 				:= tapas.ResReal >= tapas.ReqNumero;
+			dr.EndBatch 				:= tapas.ResReal >= tapas.ReqNumero;			
+		ELSIF ctrlF1Producir.Ready AND NOT dr.EndCycle THEN
+			dr.EndCycle					:= FALSE;
+			ctrlF1Producir.Execute		:= TRUE;
+			ctrlF1Producir.Ack			:= FALSE;
 		END_IF
 		ctrlF1Producir(	Alime:=mdAlimentador, Carga:=mdPickAndPlaceCarga, Medid:=mdMedidorTapa, 
 				Fotoe:=mdDetectorFotoelectrico, Induc:=mdCaptadorInductivo, Evacu:=mdEvacuador,	
@@ -255,6 +260,9 @@ CASE dr.gmModeActual OF
 			dr.cnF3_Finalizar 			:= FALSE;
 			ctrlF3SeqFin.Execute 		:= FALSE;
 			ctrlF3SeqFin.Ack			:= TRUE;
+			dr.cnF1_Producir			:= FALSE;
+			dr.cnF2_Preparar			:= FALSE;
+			dr.cnF3_Finalizar			:= FALSE;
 		END_IF
 		ctrlF3SeqFin(Evacu:=mdEvacuador, Plato:=mdPlatoDivisor);	
 							

@@ -12,8 +12,6 @@ plato sitúa frente a él cada vez que realiza un giro, sea de aluminio. *)
 VAR_OUTPUT
 	fbController		: L2_Simple_SFC:=(dr:=dr);		
 	di         			: L1_Sensor;					
-	
-	//Lectura_Registrada	: BOOL := FALSE; 				// Salida a la visualización
 	Tapa_Metalica		: BOOL;
 	strUi				: STRING := '?';
 END_VAR
@@ -42,7 +40,6 @@ fbController(
 
 // Actuadores y actualización de tapas
 IF Done AND NOT fbController.Performed THEN //  Lectura_Registrada THEN
-	//Lectura_Registrada		:= TRUE;
 	fbController.Performed 	:= TRUE;
 	IF dr.gmLocalHost THEN
 		simula();
@@ -54,7 +51,6 @@ IF Done AND NOT fbController.Performed THEN //  Lectura_Registrada THEN
 	tapas.PostInduc(Tapa_Metalica:=Tapa_Metalica);
 	
 ELSIF Ready THEN // una vez que cambia el ciclo la lectura ya no es fiable	
-	// Lectura_Registrada		:= FALSE;
 	strUi := '?';
 END_IF
 

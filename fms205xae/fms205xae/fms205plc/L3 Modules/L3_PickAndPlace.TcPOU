@@ -36,12 +36,12 @@ VAR_OUTPUT
 	HOR 			: L1_Actuator;
 	VER 			: L1_Actuator;
 	PIN 			: L1_Actuator;
-	_TapaMovida		: BOOL;
+	//_TapaMovida		: BOOL;
 	Position		: REAL:= 0;	
 END_VAR
 
 VAR CONSTANT
-	MaxPosition		: REAL := 100;
+	
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -55,7 +55,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF dr.gmModeActual = L1_GEMMA.A6Inicializando THEN
-	_TapaMovida	 				:= FALSE;
+	;//_TapaMovida	 				:= FALSE;
 ELSE
 	// Sensores y condiciones iniciales
 	h0.ProcessCycle(LocalHost:=dr.gmLocalHost, sfcValue=>fbController.h0);
@@ -70,19 +70,20 @@ ELSE
 		dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 		
 	// Actuadores y actualización de tapas		
-	IF Ready AND NOT _TapaMovida THEN 
-		Position := 0;												// Inicialmente la posición es arriba
+	IF Ready AND Mover THEN // NOT _TapaMovida THEN 
+		tapas.MoverPickAndPlace(Name:=Name, Delta:=0);// 	Position := 0;												// Inicialmente la posición es arriba
 	ELSIF Done AND NOT fbController.Performed AND Mover THEN
 		fbController.Performed	:= TRUE;
-		_TapaMovida				:= TRUE;
-		Position				:= MaxPosition;
-		IF Name='Carga' THEN
-			tapas.PostCarga();
-		ELSE // descarga
-			tapas.PostDesca();
-		END_IF
-	ELSIF fbController.Executing AND position < MaxPosition AND Mover THEN
-		Position				:= Position+1;		
+		//_TapaMovida				:= TRUE;
+		tapas.MoverPickAndPlace(Name:=Name, Delta:=MoverMax); // //Position				:= MaxPosition;
+		tapas.PostPickAndPlace(Name:=Name);  // actualizar las tapas según el nombre de brazo sea "Carga" o "Descarga"
+		//IF Name='Carga' THEN
+		//	tapas.PostCarga();
+		//ELSE // descarga
+		//	tapas.PostDesca();
+		//END_IF
+	ELSIF fbController.Executing AND Mover THEN // position < MaxPosition AND 
+		tapas.MoverPickAndPlace(Name:=Name, Delta:=1); //Position				:= Position+1;				
 	END_IF
 	HOR.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.HOR);
 	VER.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.VER);
@@ -91,22 +92,5 @@ END_IF
 ]]></ST>
       </Implementation>
     </Method>
-    <Property Name="TapaMovida" Id="{3082fd5e-2813-4c11-918d-ebe5b11dd833}">
-      <Declaration><![CDATA[PROPERTY TapaMovida : bool]]></Declaration>
-      <Get Name="Get" Id="{b61a4fbf-7c0e-42f1-91b0-1838828aef02}">
-        <Declaration><![CDATA[
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[TapaMovida := _TapaMovida;]]></ST>
-        </Implementation>
-      </Get>
-      <Set Name="Set" Id="{903a403d-6849-497f-9575-36e7dc5abe41}">
-        <Declaration><![CDATA[
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[_TapaMovida := TapaMovida;]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
   </POU>
 </TcPlcObject>

@@ -51,7 +51,8 @@ END_VAR]]></Declaration>
 VAR_INPUT
 	dr			: REFERENCE TO L1_Director;
 	tapas		: REFERENCE TO L6_Tapas;	
-END_VAR]]></Declaration>
+END_VAR
+]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Sensores y condiciones iniciales
 IC := TRUE;
@@ -63,7 +64,6 @@ fbController(Medir:=Medir, dh := dh,
 	
 // Actuadores y actualización de tapas
 L_1.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.L_1);
-//IF fbController.Leyendo AND NOT Lectura_Registrada THEN
 IF fbController.Leyendo AND NOT fbController.Performed THEN
 	fbController.Performed 	 		:= TRUE;
 	IF dr.gmLocalHost THEN // en pruebas sin estación, la altura es un número aleatorio
@@ -78,21 +78,15 @@ IF fbController.Leyendo AND NOT fbController.Performed THEN
 	END_IF	
 
 	Altura_mm		:= TO_INT(100*Altura_mm)/100.0; 		// dejar sólo 2 decimales
-	//Lectura_Registrada 	:= TRUE;
 	strUi := TO_STRING(Altura_mm);
 	strUi := concat(strUi, ' mm');
 	tapas.PostMedid(Altura_Mm:=Altura_mm, Altura_Pulsos:=Altura_Pulsos);
 
 ELSIF Ready THEN // Resetear la lectura para el siguiente ciclo
-	//Lectura_Registrada 	:= FALSE; 	
 	Altura_Pulsos	:= 0;
 	Altura_mm		:= 0;
 	strUi := '?';
 END_IF
-	 
-
-
-
 ]]></ST>
       </Implementation>
     </Method>

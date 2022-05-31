@@ -21,8 +21,8 @@ VAR_OUTPUT
 	Carro_Situado			: BOOL;
 	Carro_Transfer			: BOOL;
 	Position_Carro			: REAL := 0;
-	Position_Tapa			: REAL := 0;
-	_TapaDescargada			: BOOL;
+	PosDescaX				: REAL := 0;		// posición X de la tapa descargada (0 bajo el plato)
+	_TapaDescargada			: BOOL;			
 	// tipo de tapa descargada
 	
 
@@ -37,9 +37,6 @@ END_VAR
 
 
 VAR CONSTANT
-	MinPosCarro		: REAL := 150;
-	MaxPosCarro		: REAL := 150;
-	MaxPosTapaY		: REAL := 100;	// mismo valor que deja el brazo de descarga	
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -55,7 +52,7 @@ END_VAR]]></Declaration>
 	Carro_Situado	 			:= FALSE;
 	Carro_Transfer				:= FALSE;
 	Position_Carro				:= MinPosCarro; // empieza a la izquierda de la visu
-	PosTapaY					:= 0; // empieza arriba en el plato
+	//PosTapaY					:= 0; // empieza arriba en el plato
 ELSE
 	// Sensores y condiciones iniciales
 	pp.ProcessCycle (LocalHost:=dr.gmLocalHost, sfcValue=>fbController.pp);
@@ -70,39 +67,44 @@ ELSE
 		dr:=dr, IC:=IC, Execute:=Execute, Ack:=Ack, Ready=>Ready, Done=>Done);
 	
 	// Actuadores y actualización de tapas
-	Position_Tapa				:=0;
 	IF Ready AND NOT Carro_Situado THEN
-		Position_Carro			:= MinPosCarro; // carro a la izquierda
-		PosTapaY				:= 0; // tapa arriba
+		tapas.MoverCinta(Delta:=0, Situar:=TRUE);
+		//Position_Carro			:= MinPosCarro; // carro a la izquierda
+		//PosTapaY				:= 0; // tapa arriba
 	ELSIF Ready AND NOT Carro_Transfer THEN
-		Position_Carro			:= 0; // carro bajo el plato
-		PosTapaY				:= SEL(_TapaDescargada, 0, MaxPosTapaY); // tapa arriba o abajo
+		tapas.MoverCinta(Delta:=0, Situar:=FALSE);
+		//Position_Carro			:= 0; // carro bajo el plato
+		//PosTapaY				:= SEL(_TapaDescargada, 0, MaxPosTapaY); // tapa arriba o abajo
 		//Pos_Situa				:= SEL(Carro_Situado,-MaxPosSitua, 0);
 		//Pos_Trans				:= SEL(Carro_Transfer, 0, MaxPosTrans); 
 	ELSIF Ready AND Carro_Transfer THEN
+		PosDescaX				:=0;	
 		Position_Carro			:= MaxPosCarro; // carro a la derecha
-		PosTapaY				:= SEL(_TapaDescargada, 0, MaxPosTapaY); // tapa arriba o abajo
+		//PosTapaY				:= SEL(_TapaDescargada, 0, MaxPosTapaY); // tapa arriba o abajo
 	ELSIF Done AND NOT fbController.Performed AND Situar THEN
 		fbController.Performed 	:= TRUE;
 		Carro_Situado			:= TRUE;
 		Carro_Transfer			:= FALSE;
 		_TapaDescargada			:= FALSE;
-		Position_Carro			:= 0;
-		PosTapaY				:= 0;
+		tapas.MoverCinta(Delta:=MoverMax, Situar:=TRUE);
+		//Position_Carro			:= 0;
+		//PosTapaY				:= 0;
 	ELSIF Done AND NOT fbController.Performed AND Transferir THEN
 		fbController.Performed 	:= TRUE;
 		Carro_Transfer			:= TRUE;
 		Carro_Situado			:= FALSE;
-		Position_Carro			:= MaxPosCarro; 
-		PosTapaY				:= 0;
-		//Pos_Trans				:= MaxPosTrans;
+		//Position_Carro			:= MaxPosCarro; 
+		//PosDescaX				:= MaxPosCarro;
+		tapas.MoverCinta(Delta:=MoverMax, Situar:=FALSE);	
 		_TapaDescargada			:= FALSE;
-	ELSIF fbController.Executing AND Situar AND Position_Carro <0 THEN
-		Position_Carro := Position_Carro + 2;													
-	ELSIF fbController.Executing AND Transferir AND Position_Carro < MaxPosCarro THEN
-		Position_Carro 			:= Position_Carro + 2;
-		Position_Tapa			:= SEL(_TapaDescargada,0, Position_Carro); // al transferir el carro y la tapa se mueven al unísiono
-		PosTapaY				:= MaxPosTapaY;									
+	//ELSIF fbController.Executing AND Situar AND Position_Carro <0 THEN
+		//Position_Carro 			:= Position_Carro + 2;													
+	//ELSIF fbController.Executing AND Transferir AND Position_Carro < MaxPosCarro THEN
+		//Position_Carro 			:= Position_Carro + 2;
+		//PosDescaX				:= SEL(_TapaDescargada, 0, Position_Carro); // al transferir el carro y la tapa se mueven al unísiono
+		//		PosTapaY				:= MaxPosTapaY;
+	ELSIF fbController.Executing THEN
+		tapas.MoverCinta(Delta:=2, Situar:=Situar);									
 	END_IF	
 	RUN.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.RUN);
 	REV.ProcessCycle(gmMode:=dr.gmModeActual, sfcValue:=fbController.REV);

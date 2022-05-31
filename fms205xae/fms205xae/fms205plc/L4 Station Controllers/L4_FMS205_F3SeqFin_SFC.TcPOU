@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="L4_FMS205_F3SeqFin_SFC" Id="{22407fab-8c54-4f66-ad2d-4fd58091b013}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK L4_FMS205_F3SeqFin_SFC EXTENDS L1_ControllerBase_SFC
 // Girar 8 veces el plato para determinar qué tipo de tapa hay en cada sector del plato
@@ -677,7 +677,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"TapasOk"</v>
+                            <v n="Value">"TRUE"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">819L</v>
@@ -745,59 +745,6 @@ END_VAR
                       <l2 n="EmbeddedExitActionProperties" />
                       <o n="ElementList" t="SFCElementList">
                         <l2 n="InnerList" cet="SFCActionAssociation">
-                          <o>
-                            <l2 n="Attributes" cet="SFCAttribute">
-                              <o>
-                                <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
-                                <o n="Value" t="StringValue">
-                                  <v n="Value">"Evacu.Evacuar"</v>
-                                  <v n="DefaultValue">""</v>
-                                </o>
-                                <v n="Id">957L</v>
-                                <v n="IdParent">956L</v>
-                              </o>
-                              <o>
-                                <v n="AttributeId">{7d894980-aeea-405c-a0f6-e2b26429c58f}</v>
-                                <o n="Value" t="StringValue">
-                                  <v n="Value">""</v>
-                                  <v n="DefaultValue">""</v>
-                                </o>
-                                <v n="Id">958L</v>
-                                <v n="IdParent">956L</v>
-                              </o>
-                              <o>
-                                <v n="AttributeId">{01580b27-6378-448b-8ecb-0e4b795b58d6}</v>
-                                <o n="Value" t="BoolValue">
-                                  <v n="Value">"FALSE"</v>
-                                  <v n="DefaultValue">"FALSE"</v>
-                                </o>
-                                <v n="Id">959L</v>
-                                <v n="IdParent">956L</v>
-                              </o>
-                              <o>
-                                <v n="AttributeId">{bc882c11-1e91-4dd8-a6b8-2075724ed18b}</v>
-                                <o n="Value" t="EnumValue">
-                                  <v n="TemplateGuid">{79a4fdd5-c859-4de4-aa8d-c03372c880c2}</v>
-                                  <n n="BaseType" />
-                                  <v n="Value">"0"</v>
-                                  <v n="DefaultValue">"0"</v>
-                                </o>
-                                <v n="Id">960L</v>
-                                <v n="IdParent">956L</v>
-                              </o>
-                              <o>
-                                <v n="AttributeId">{e174fc0d-80b0-4a9e-a530-ca239c249a50}</v>
-                                <o n="Value" t="StringValue">
-                                  <v n="Value">"N"</v>
-                                  <v n="DefaultValue">""</v>
-                                </o>
-                                <v n="Id">961L</v>
-                                <v n="IdParent">956L</v>
-                              </o>
-                            </l2>
-                            <v n="Id">956L</v>
-                            <v n="IdParent">118L</v>
-                          </o>
                           <o>
                             <l2 n="Attributes" cet="SFCAttribute">
                               <o>
@@ -2653,5 +2600,11 @@ END_VAR
         </TypeList>
       </XmlArchive>
     </ObjectProperties>
+    <LineIds Name="L4_FMS205_F3SeqFin_SFC.A6Init_exit">
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="L4_FMS205_F3SeqFin_SFC.Girar_exit">
+      <LineId Id="1" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

@@ -15,10 +15,10 @@ VAR_INPUT
 	ReqAlta		: REAL := 18.5;  	// requisito de tapa alta
 	ReqVacio	: REAL := 2.0; 		// si mide menos el sector está vacío
 
-	ReqAluBaja	: BOOL := FALSE;
+	ReqAluBaja	: BOOL := TRUE;
 	ReqAluAlta	: BOOL := TRUE;
 	ReqBlnBaja  : BOOL := TRUE;
-    ReqBlnAlta  : BOOL := FALSE;
+    ReqBlnAlta  : BOOL := TRUE;
 	ReqNgrBaja  : BOOL := FALSE;
     ReqNgrAlta  : BOOL := FALSE; 
 
@@ -51,6 +51,17 @@ END_VAR
 
 
 VAR
+	_AlimeEsta	: BOOL; // Esta alimentada o no
+	_CargaEsta	: BOOL;
+	_DescaEsta	: BOOL;
+	
+	AlimeY		: REAL; // posición vertical de la tapa alimentándose
+	CargaX		: REAL; 
+	DescaX		: REAL:=MaxCintaX;
+	DescaY		: REAL:=MaxDescaY;
+	CintaX		: REAL:=MaxCintaX;
+	
+	
 	//NumGiros 	: DINT := 0;
 	PosCarga	: DINT;
 	PosFotoe	: DINT;
@@ -60,8 +71,8 @@ VAR
 	PosDesca	: DINT;
 	Alimentada	: BOOL; // HAY UNA TAPA EN EL ALIMENTADOR ESPERANDO A SER CARGADA
 
-	angulo	 	: REAL := 0.0;
-	anguloanim 	: REAL := 0.0; // angulo para animación que gira lentamente
+	//angulo	 	: REAL := 0.0;
+	//anguloanim 	: REAL := 0.0; // angulo para animación que gira lentamente
 	//HaGirado	: BOOL := FALSE;
 	//Falta_Material		: BOOL;
 
@@ -249,6 +260,57 @@ END_VAR
         <ST><![CDATA[DebeMedir := not vAltura_Medida[PosMedid];]]></ST>
       </Implementation>
     </Method>
+    <Property Name="EstaAlimentada" Id="{93f5dfb9-8844-41db-84d2-0fe100f55b19}">
+      <Declaration><![CDATA[PROPERTY EstaAlimentada : BOOL]]></Declaration>
+      <Get Name="Get" Id="{7d0cf919-f711-4f5c-b78e-6caf320d82c9}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[EstaAlimentada := _AlimeEsta;
+]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{eed6fdce-b0d5-461a-972d-7ad52f16dc04}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_AlimeEsta := EstaAlimentada;
+]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="EstaCargada" Id="{0e8840b0-91b2-4fff-aedf-3d40ed478c00}">
+      <Declaration><![CDATA[PROPERTY EstaCargada : BOOL]]></Declaration>
+      <Get Name="Get" Id="{008d4104-3fb3-4583-9a58-b329f07cafd4}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[EstaCargada := _CargaEsta;
+]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{fbb09154-50b5-42cf-ad27-f53e2813331c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_CargaEsta := EstaCargada;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="EstaDescargada" Id="{bbec502a-5669-44ce-9ce7-b4ae1a709b47}">
+      <Declaration><![CDATA[PROPERTY EstaDescargada : BOOL]]></Declaration>
+      <Get Name="Get" Id="{23bf5894-1c8f-4cd0-b97b-2280acf80a78}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[EstaDescargada := _DescaEsta;
+]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{0ac8ca9a-cd6b-4458-940e-aa381234fd32}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_DescaEsta := EstaDescargada;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="Inicializar" Id="{4758c6c6-4ea4-433c-a79f-8e413ab5f879}">
       <Declaration><![CDATA[METHOD Inicializar : BOOL
 
@@ -258,7 +320,17 @@ END_VAR
 
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[ReqAluBaja		:= TRUE;
+        <ST><![CDATA[_AlimeEsta		:= FALSE;
+_DescaEsta		:= FALSE;
+_CargaEsta		:= FALSE;
+AlimeY			:= 0;
+CargaX			:= 0;
+DescaX			:= MaxCintaX; // oculta como después de transferir
+DescaY			:= MaxDescaY;
+CintaX			:= MaxCintaX;
+
+
+ReqAluBaja		:= TRUE;
 ReqAluAlta		:= TRUE;
 ReqBlnBaja  	:= TRUE;
 ReqBlnAlta  	:= TRUE;
@@ -279,8 +351,8 @@ PosEvacu 		:= 2; // (NumGiros+2) MOD 8;
 PosDesca		:= 1; // (NumGiros+1) MOD 8;
 PosCarga		:= 0; //(NumGiros+0) MOD 8;
 
-angulo	 		:= 0.0;
-anguloanim 		:= 0.0; // angulo para animación que gira lentamente
+//angulo	 		:= 0.0;
+//anguloanim 		:= 0.0; // angulo para animación que gira lentamente
 //HaGirado		:= FALSE;
 //ExePlato		:= FALSE;
 
@@ -291,19 +363,47 @@ END_FOR
 Actualizar();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="PostCarga" Id="{276efb06-172e-4a1d-961d-2890acac9513}">
-      <Declaration><![CDATA[METHOD PostCarga : BOOL
+    <Method Name="MoverAlime" Id="{4b52ae56-4994-4136-bb7a-f418520a418c}">
+      <Declaration><![CDATA[METHOD MoverAlime : BOOL
+VAR_INPUT
+	Delta		: REAL;
+END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[vInicializando[PosCarga]	:= FALSE;		
-vTapa_Cargada[PosCarga]		:= TRUE;
-vAltura_Medida[PosCarga]	:= FALSE;
-vAltura_Pulsos[PosCarga]	:= 0;
-vAltura_Mm[PosCarga] 		:= 0;		
-vClaridad_Medida[PosCarga]	:= FALSE;
-vTapa_Clara[PosCarga] 		:= FALSE;		
-vMateral_Medido[PosCarga]	:= FALSE;	
-vTapa_Metalica[PosCarga] 	:= FALSE;
+        <ST><![CDATA[AlimeY := SEL(Delta=0, SEL(AlimeY > MaxAlimeY or Delta=MoverMax, AlimeY+Delta, MaxAlimeY), 0); ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MoverCinta" Id="{d2c95a17-848b-4302-96d3-38b45faf1d85}">
+      <Declaration><![CDATA[METHOD MoverCinta : BOOL
+VAR_INPUT
+	Delta		: REAL;
+	Situar		: BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Situar THEN
+	CintaX := SEL(Delta=0, SEL(CintaX >= 0 OR Delta=MoverMax, CintaX+Delta, 0), -MinCintaX);
+ELSE // transferir
+	CintaX := SEL(Delta=0, SEL(CintaX >= MaxCintaX OR Delta=MoverMax, CintaX+Delta, MaxCintaX), 0);
+	DescaX := CintaX;
+END_IF
+ ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MoverPickAndPlace" Id="{2061315a-880b-4839-b978-3b9fde73a89e}">
+      <Declaration><![CDATA[METHOD MoverPickAndPlace : BOOL
+VAR_INPUT
+	Name		: STRING;
+	Delta		: REAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Name='Carga' THEN
+	CargaX := SEL(Delta=0, SEL(CargaX > MaxCargaX OR Delta=MoverMax, CargaX+Delta, MaxCargaX), 0);
+ELSE
+	DescaX := 0;
+	DescaY := SEL(Delta=0, SEL(DescaY > MaxDescaY OR Delta=MoverMax, DescaY+Delta, MaxDescaY), 0);	
+END_IF
 ]]></ST>
       </Implementation>
     </Method>
@@ -313,14 +413,25 @@ vTapa_Metalica[PosCarga] 	:= FALSE;
       <Implementation>
         <ST><![CDATA[ResReal 			:= ResReal + 1;
 ResPend				:= ReqNumero - ResReal;
+
 Desca_strUi			:= vstrUi[PosDesca];
 Desca_strToolTip	:= vstrToolTip[PosDesca];
 Desca_ColorFont		:= vColorFont[PosDesca];
 Desca_ColorFrame	:= vColorFrame[PosDesca];
 Desca_ColorFill		:= vColorFill[PosDesca];
+Desca_PosX			:= 0;
+Desca_PosY			:= 0;
 Vaciar(PosVacia	:= PosDesca);	
+(*
+	Desca_strUi			: STRING;
+	Desca_strToolTip	: STRING;	
+	Desca_ColorFont		: DWORD;
+	Desca_ColorFrame	: DWORD;
+	Desca_ColorFill		: DWORD;
+	Desca_PosX			: REAL;
+	Desca_PosY			: REAL;
 
-]]></ST>
+*)]]></ST>
       </Implementation>
     </Method>
     <Method Name="PostEvacu" Id="{5caa088b-866e-4274-a9c7-1d9f312ea165}">
@@ -379,6 +490,52 @@ ELSE
 	vAltura_Mm[PosMedid]		:= Altura_mm;
 	vTapa_Alta[PosMedid]		:= Altura_mm > ReqAlta;
 END_IF	
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="PostPickAndPlace" Id="{276efb06-172e-4a1d-961d-2890acac9513}">
+      <Declaration><![CDATA[METHOD PostPickAndPlace : BOOL
+VAR_INPUT
+	Name		: STRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Name = 'Carga' THEN
+	_AlimeEsta					:= FALSE; 	// ya no hay tapa en el alimentador
+	vInicializando[PosCarga]	:= FALSE;		
+	vTapa_Cargada[PosCarga]		:= TRUE;
+	vAltura_Medida[PosCarga]	:= FALSE;
+	vAltura_Pulsos[PosCarga]	:= 0;
+	vAltura_Mm[PosCarga] 		:= 0;		
+	vClaridad_Medida[PosCarga]	:= FALSE;
+	vTapa_Clara[PosCarga] 		:= FALSE;		
+	vMateral_Medido[PosCarga]	:= FALSE;	
+	vTapa_Metalica[PosCarga] 	:= FALSE;
+	
+ELSE // Brazo de descarga
+	_DescaEsta			:= TRUE;			// ya hay tapa en el carro
+	ResReal 			:= ResReal + 1;
+	ResPend				:= ReqNumero - ResReal;
+	
+	Desca_strUi			:= vstrUi[PosDesca];
+	Desca_strToolTip	:= vstrToolTip[PosDesca];
+	Desca_ColorFont		:= vColorFont[PosDesca];
+	Desca_ColorFrame	:= vColorFrame[PosDesca];
+	Desca_ColorFill		:= vColorFill[PosDesca];
+	Desca_PosX			:= 0;
+	Desca_PosY			:= 0;
+	Vaciar(PosVacia	:= PosDesca);	
+	(*
+		Desca_strUi			: STRING;
+		Desca_strToolTip	: STRING;	
+		Desca_ColorFont		: DWORD;
+		Desca_ColorFrame	: DWORD;
+		Desca_ColorFill		: DWORD;
+		Desca_PosX			: REAL;
+		Desca_PosY			: REAL;
+	
+	*)	
+END_IF
 ]]></ST>
       </Implementation>
     </Method>

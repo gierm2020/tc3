@@ -5,21 +5,21 @@
 VAR_INPUT
 	dr								: REFERENCE TO L1_Director;
 
-	mdF1Producir					: BOOL;
+	mdF1Producir					: BOOL := TRUE;
 	//mdF6Probar						: BOOL;
 	mdF5Funcion						: BOOL;
 	mdF4Planta						: BOOL;
 
 	hwAS_AvisadorSonoro		AT %Q*	: BOOL; 
 	hwLA_LamparaAlarma		AT %Q*	: BOOL; 
-	hwDPO_DesconectaPO		AT %Q*	: BOOL := TRUE; 	
+	//hwDPO_DesconectaPO		AT %Q*	: BOOL; 	
 	hwLM_LamparaMarcha		AT %Q*	: BOOL;
 	hwLS_LamparaStop		AT %Q*	: BOOL;
 
 	swF0_Empezar					: BOOL;
-	swF1_Producir					: BOOL;
-	swF2_Preparar					: BOOL;
-	swF3_Finalizar					: BOOL;
+	swF1_Producir					: BOOL := TRUE;
+	swF2_Preparar					: BOOL := TRUE;
+	swF3_Finalizar					: BOOL := TRUE;
 	swF6_Probar						: BOOL;
 	
 	swF4_Planta						: BOOL; 
@@ -150,7 +150,7 @@ ELSIF gmModeActual=L1_GEMMA.A1ParadaInicial OR
 	ELSIF mdF1Producir AND NOT dr.cnF1_Producir THEN								// vuelta del modo F4
 		dr.cnF4_Planta				:= FALSE;
 		swF4_Planta					:= FALSE;
-		dr.cnA2_FinCiclo			:= fnPS_PulsadorStop.Q AND dr.cnF1_Producir AND NOT dr.cnF2_Preparar AND NOT dr.cnF3_Finalizar;
+		//dr.cnA2_FinCiclo			:= fnPS_PulsadorStop.Q AND dr.cnF1_Producir AND NOT dr.cnF2_Preparar AND NOT dr.cnF3_Finalizar;
 				
 		dr.cnF1_Producir			:= swF1_Producir AND NOT swF6_Probar;
 		dr.cnF2_Preparar 			:= swF2_Preparar AND NOT swF6_Probar;
@@ -428,7 +428,6 @@ END_VAR
 hwAS_AvisadorSonoro 			:= FALSE;
 hwLA_LamparaAlarma				:= FALSE;
 hwLM_LamparaMarcha				:= FALSE;
-hwDPO_DesconectaPO				:= TRUE;
 
 CASE gmMode OF
 	L1_GEMMA.A1ParadaInicial:
@@ -457,7 +456,7 @@ CASE gmMode OF
 		gmModeName				:= 'Mode A6';
 		gmModeDescr				:= 'Inicializando';
 		hwLA_LamparaAlarma		:= dr.Tic;
-		hwDPO_DesconectaPO		:= dr.Tic;
+		//hwDPO_DesconectaPO		:= dr.Tic;
 		
 	L1_GEMMA.A7SituandoEstado:
 		gmModeName				:= 'Mode A7';

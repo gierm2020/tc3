@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
-  <GVL Name="L5_Colores" Id="{dd77effe-8e00-4347-a9aa-4d870947a08d}" ParameterList="True">
+  <GVL Name="L5_Constantes" Id="{dd77effe-8e00-4347-a9aa-4d870947a08d}" ParameterList="True">
     <Declaration><![CDATA[// {attribute 'qualified_only'}
 VAR_GLOBAL CONSTANT
 	clModeAFill : DWORD := 16#FF808080;;
@@ -49,7 +49,20 @@ VAR_GLOBAL CONSTANT
 	colModFillReady	 : DWORD :=16#00FFFF00; // amarillo transparente
 	colModFramReady	 : DWORD :=16#00FFA500; // naranja transparente
 	
+	// Posiciones
+	MoverMax		: REAL := -1.0;
+	MaxAlimeY		: REAL := 100;
+	MaxCargaX		: REAL := 80;
+	MaxDescaY		: REAL := 90;
+	MinCintaX		: REAL := -200;
+	MaxCintaX		: REAL := 145;
 	
+	MaxPosDesca		: REAL := 100;	// mismo valor que deja el brazo de descarga	
+	MaxPosEvacu		: REAL := 100;
+	MinPosCarro		: REAL := -200;
+	MaxPosCarro		: REAL := 145;
+
+
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

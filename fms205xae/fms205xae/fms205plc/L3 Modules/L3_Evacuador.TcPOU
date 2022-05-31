@@ -34,9 +34,6 @@ VAR_OUTPUT
 	Position		: REAL:= 0;
 END_VAR
 
-VAR CONSTANT
-	MaxPosition		: REAL := 800;
-END_VAR
 
 ]]></Declaration>
     <Implementation>
@@ -68,9 +65,9 @@ ELSE
 	ELSIF Done AND NOT fbController.Performed AND Evacuar THEN
 		fbController.Performed 	:= TRUE;
 		_TapaEvacuada	 		:= TRUE;
-		Position				:= MaxPosition;
+		Position				:= MaxPosEvacu;
 		tapas.PostEvacu();						 
-	ELSIF fbController.Executing AND Position < MaxPosition AND Evacuar THEN
+	ELSIF fbController.Executing AND Position < MaxPosEvacu AND Evacuar THEN
 		Position := Position + 1;											
 	END_IF		
 	

@@ -96,7 +96,7 @@
     <Compile Include="L4 Station Controllers\L4_FMS205_F6Prueba_SFC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="L5 Station User Interfaces\L5_Colores.TcGVL">
+    <Compile Include="L5 Station User Interfaces\L5_Constantes.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
