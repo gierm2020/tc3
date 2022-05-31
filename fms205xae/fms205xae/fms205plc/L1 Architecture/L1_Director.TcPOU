@@ -190,6 +190,7 @@ END_IF
 			ELSIF cnF4_Planta THEN 				
                 gmModeActual := L1_GEMMA.F4VerificacionSinOrden;
             END_IF
+
 			
 			
 			
@@ -298,7 +299,7 @@ END_IF
 			
         (* ------------------------------------------------------------ Procedimientos de defecto *)
         L1_GEMMA.D1ParadaEmergencia: (* Parada de emergencia *)
-            IF NOT cnD1_Emergencia THEN //  TODO CONSIGNA DE EMERGENCIA DEBE TENER ENCUENTA LA POC
+			IF NOT cnD1_Emergencia THEN //  TODO CONSIGNA DE EMERGENCIA DEBE TENER ENCUENTA LA POC
                 gmModeActual := L1_GEMMA.A6Inicializando; // Al quitar la parada de emergencia hay que reinicializar la estación
 			ELSIF cnF4_Planta then							// desde A1 se puede entrar F4 para arreglar el problema
 				gmModePrev := L1_GEMMA.D1ParadaEmergencia;

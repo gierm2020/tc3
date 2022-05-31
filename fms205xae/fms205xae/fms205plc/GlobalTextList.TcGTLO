@@ -386,6 +386,16 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"390"</v>
+              <v n="TextDefault">"Estación"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"2182"</v>
+              <v n="TextDefault">"Estación (F6)"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"24"</v>
               <v n="TextDefault">"Evacuador"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -858,6 +868,11 @@
             <o>
               <v n="TextID">"1761"</v>
               <v n="TextDefault">"Preparar (F2)"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"1462"</v>
+              <v n="TextDefault">"Probar (F6)"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>

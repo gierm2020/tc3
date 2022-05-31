@@ -2,16 +2,17 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="L4_FMS205_F1Producir_SFC" Id="{3765931f-4c2c-4236-9e0f-0066856caec5}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK L4_FMS205_F1Producir_SFC EXTENDS L1_ControllerBase_SFC
-VAR_INPUT
-	Alime			: REFERENCE TO L3_Alimentador;
-	Carga		 	: REFERENCE TO L3_PickAndPlace;
-	Medid			: REFERENCE TO L3_MedidorTapa;
-	Induc		 	: REFERENCE TO L3_CaptadorInductivo;
-	Fotoe			: REFERENCE TO L3_DetectorFotoelectrico;
-	Evacu		 	: REFERENCE TO L3_Evacuador;
-	Desca			: REFERENCE TO L3_PickAndPlace;
-	Plato			: REFERENCE TO L3_PlatoDivisor;
-	Cinta			: REFERENCE TO L3_Cinta;
+
+VAR_IN_OUT
+	Alime			: L3_Alimentador;
+	Carga		 	: L3_PickAndPlace;
+	Medid			: L3_MedidorTapa;
+	Induc		 	: L3_CaptadorInductivo;
+	Fotoe			: L3_DetectorFotoelectrico;
+	Evacu		 	: L3_Evacuador;
+	Desca			: L3_PickAndPlace;
+	Plato			: L3_PlatoDivisor;
+	Cinta			: L3_Cinta;
 END_VAR
 ]]></Declaration>
     <Implementation>

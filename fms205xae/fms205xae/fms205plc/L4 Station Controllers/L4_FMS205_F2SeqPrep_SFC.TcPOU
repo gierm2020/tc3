@@ -3,13 +3,11 @@
   <POU Name="L4_FMS205_F2SeqPrep_SFC" Id="{306e8fb2-9473-4dd1-ac8a-7196779de084}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK L4_FMS205_F2SeqPrep_SFC EXTENDS L1_ControllerBase_SFC
 // Girar 8 veces el plato para determinar qué tipo de tapa hay en cada sector del plato
-VAR_INPUT
-	cnF2_Preparar	: BOOL;
-	Siguiente		: BOOL := FALSE;
-	Medid			: REFERENCE TO L3_MedidorTapa;
-	Induc		 	: REFERENCE TO L3_CaptadorInductivo;
-	Fotoe			: REFERENCE TO L3_DetectorFotoelectrico;
-	Plato			: REFERENCE TO L3_PlatoDivisor;
+VAR_IN_OUT
+	Medid			: L3_MedidorTapa;
+	Induc		 	: L3_CaptadorInductivo;
+	Fotoe			: L3_DetectorFotoelectrico;
+	Plato			: L3_PlatoDivisor;
 END_VAR
 
 VAR_OUTPUT
@@ -203,7 +201,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"Execute and cnF2_Preparar"</v>
+                            <v n="Value">"Execute"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">1005L</v>

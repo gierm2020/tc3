@@ -69,7 +69,7 @@ ELSE
 		fbController.Performed 	:= TRUE;
 		_TapaEvacuada	 		:= TRUE;
 		Position				:= MaxPosition;
-		tapas.PostEvacu(Ready:=Ready, Done:=Done, Evacuar:=Evacuar);						 
+		tapas.PostEvacu();						 
 	ELSIF fbController.Executing AND Position < MaxPosition AND Evacuar THEN
 		Position := Position + 1;											
 	END_IF		

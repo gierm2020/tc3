@@ -11,7 +11,7 @@ VAR CONSTANT
 END_VAR
 
 VAR_INPUT
-	ReqNumero	: DINT := 2; 		// requisito de número de tapas deseadas
+	ReqNumero	: DINT := 5; 		// requisito de número de tapas deseadas
 	ReqAlta		: REAL := 18.5;  	// requisito de tapa alta
 	ReqVacio	: REAL := 2.0; 		// si mide menos el sector está vacío
 
@@ -27,6 +27,7 @@ VAR_INPUT
 	ResRech   	: DINT := 0;
 END_VAR
 
+(*
 VAR_OUTPUT
 	FaltaMat	: BOOL; 
 	ExeAlime	: BOOL;	
@@ -46,6 +47,8 @@ VAR_OUTPUT
 	ExeSitua	: BOOL;
 	ExeTrans	: BOOL;
 END_VAR
+*)
+
 
 VAR
 	//NumGiros 	: DINT := 0;
@@ -249,10 +252,6 @@ END_VAR
     <Method Name="Inicializar" Id="{4758c6c6-4ea4-433c-a79f-8e413ab5f879}">
       <Declaration><![CDATA[METHOD Inicializar : BOOL
 
-VAR_INPUT
-	DebePreparar 	: BOOL := TRUE;
-END_VAR
-
 VAR
 	i : DINT;
 END_VAR
@@ -272,7 +271,7 @@ ResReal			:= 0;
 ResRech   		:= 0;
 
 //NumGiros	 	:= 0;
-FaltaMat		:= FALSE;
+//FaltaMat		:= FALSE;
 PosMedid 		:= 6; // (NumGiros+6) MOD 8;
 PosFotoe 		:= 5; // (NumGiros+5) MOD 8;
 PosInduc 		:= 4; // (NumGiros+4) MOD 8;
@@ -283,23 +282,17 @@ PosCarga		:= 0; //(NumGiros+0) MOD 8;
 angulo	 		:= 0.0;
 anguloanim 		:= 0.0; // angulo para animación que gira lentamente
 //HaGirado		:= FALSE;
-ExePlato		:= FALSE;
+//ExePlato		:= FALSE;
 
 
 FOR i:=0 TO 7 DO
-	//IF DebePreparar THEN
 		vInicializando[i] 	:= TRUE;
-	//ELSE
-	//	Vaciar(i);
-	//END_IF
 END_FOR
 Actualizar();]]></ST>
       </Implementation>
     </Method>
     <Method Name="PostCarga" Id="{276efb06-172e-4a1d-961d-2890acac9513}">
       <Declaration><![CDATA[METHOD PostCarga : BOOL
-VAR_INPUT
-END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[vInicializando[PosCarga]	:= FALSE;		
@@ -316,8 +309,6 @@ vTapa_Metalica[PosCarga] 	:= FALSE;
     </Method>
     <Method Name="PostDesca" Id="{35a2ad5e-41b0-4f8a-8514-f3f5cb606af3}">
       <Declaration><![CDATA[METHOD PostDesca : BOOL
-VAR_INPUT
-END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[ResReal 			:= ResReal + 1;
@@ -334,12 +325,6 @@ Vaciar(PosVacia	:= PosDesca);
     </Method>
     <Method Name="PostEvacu" Id="{5caa088b-866e-4274-a9c7-1d9f312ea165}">
       <Declaration><![CDATA[METHOD PostEvacu : BOOL
-
-VAR_INPUT
-	Ready	: BOOL;
-	Done	: BOOL;
-	Evacuar	: BOOL;
-END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[ResRech 			:= ResRech + 1;
@@ -357,15 +342,10 @@ Vaciar(PosVacia	:= PosEvacu);
 VAR_INPUT
 	Tapa_Clara: BOOL;
 END_VAR
-
-VAR
-END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[//ExeFotoe 					:= FALSE;
-vClaridad_Medida[PosFotoe]	:= TRUE;
+        <ST><![CDATA[vClaridad_Medida[PosFotoe]	:= TRUE;
 vTapa_Clara[PosFotoe]		:= Tapa_Clara;
-//Actualizar();
 ]]></ST>
       </Implementation>
     </Method>
@@ -374,13 +354,10 @@ vTapa_Clara[PosFotoe]		:= Tapa_Clara;
 VAR_INPUT
 	Tapa_Metalica: BOOL;
 END_VAR
-
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[//ExeInduc					:= FALSE;
-vMateral_Medido[PosInduc]	:= TRUE;
+        <ST><![CDATA[vMateral_Medido[PosInduc]	:= TRUE;
 vTapa_Metalica[PosInduc]	:= Tapa_Metalica;
-//Actualizar();
 ]]></ST>
       </Implementation>
     </Method>
@@ -392,8 +369,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[//ExeMedid 						:= FALSE;
-vInicializando[PosMedid]		:= FALSE;	
+        <ST><![CDATA[vInicializando[PosMedid]		:= FALSE;	
 IF Altura_Mm < ReqVacio THEN
 	Vaciar(PosVacia:=PosMedid);
 ELSE
@@ -402,7 +378,6 @@ ELSE
 	vAltura_Pulsos[PosMedid]	:= Altura_Pulsos;
 	vAltura_Mm[PosMedid]		:= Altura_mm;
 	vTapa_Alta[PosMedid]		:= Altura_mm > ReqAlta;
-	//Actualizar();
 END_IF	
 ]]></ST>
       </Implementation>
@@ -414,16 +389,16 @@ VAR_INPUT
 	pn				: REFERENCE TO L5_Panel;
 	NumGiros 		: DINT;
 	//TapaDisponible	: BOOL;
-	TapaCargada		: BOOL; // El brazo de carga ha movido la tapa cargada al plato
-	TapaEvacuada	: BOOL;
-	TapaDescargada	: BOOL;
+	//TapaCargada		: BOOL; // El brazo de carga ha movido la tapa cargada al plato
+	//TapaEvacuada	: BOOL;
+	//TapaDescargada	: BOOL;
 	
 	// Falta_Material	: BOOL;
 	//Hay_Pale		: BOOL;
-	ctrlF1			: REFERENCE TO L4_FMS205_F1Producir_SFC;
-	ctrlF2			: REFERENCE TO L4_FMS205_F2SeqPrep_SFC;
-	ctrlF3			: REFERENCE TO L4_FMS205_F3SeqFin_SFC;
-	ctrlF6			: REFERENCE TO L4_FMS205_F6Prueba_SFC;
+	//ctrlF1			: REFERENCE TO L4_FMS205_F1Producir_SFC;
+	//ctrlF2			: REFERENCE TO L4_FMS205_F2SeqPrep_SFC;
+	//ctrlF3			: REFERENCE TO L4_FMS205_F3SeqFin_SFC;
+	//ctrlF6			: REFERENCE TO L4_FMS205_F6Prueba_SFC;
 	//Ready			: BOOL;
 	//Done			: BOOL;
 	
@@ -453,12 +428,6 @@ END_VAR]]></Declaration>
 	ResReal			:= 0;
 	ResRech   		:= 0;
 
-	//NumGiros	 	:= 0;
-	//FaltaMat		:= FALSE;
-
-	//angulo	 		:= 0.0;
-	//anguloanim 		:= 0.0; // angulo para animación que gira lentamente
-
 	FOR i:=0 TO 7 DO
 		IF dr.cnF3_Finalizar THEN 
 			vInicializando[i] 	:= TRUE;
@@ -466,7 +435,6 @@ END_VAR]]></Declaration>
 			Vaciar(PosVacia := i);
 		END_IF
 	END_FOR	
-	ExeDescaAnt 	:= FALSE; // guarda si se descargó en el paso anterior
 END_IF
 
 PosMedid 			:= (NumGiros+6) MOD 8;					// -------------- Actualizar posiciones
@@ -475,13 +443,15 @@ PosInduc 			:= (NumGiros+4) MOD 8;
 PosEvacu 			:= (NumGiros+2) MOD 8;
 PosDesca			:= (NumGiros+1) MOD 8;
 PosCarga			:= (NumGiros+0) MOD 8;
+Actualizar();		// calcula qué posiciones hay que descargar o evacuar
 
-F1					:= ctrlf1.Ready AND dr.gmModeActual=L1_GEMMA.F1ProduccionNormal AND NOT dr.EndBatch;
-A2					:= ctrlf1.Ready AND dr.gmModeActual=L1_GEMMA.A2ParaFinCiclo AND NOT dr.EndBatch;
-F2					:= ctrlF2.Ready AND dr.gmModeActual=L1_GEMMA.F2SecuenciaPreparacion;
-F3					:= ctrlF3.Ready AND dr.gmModeActual=L1_GEMMA.F3SecuenciaFinalizacion;
-F6					:= ctrlF6.Ready AND dr.gmModeActual=L1_GEMMA.F6Probando;
-F5					:= pn.swF5_Ejecutar AND dr.gmModeActual=L1_GEMMA.F5VerificacionOrdenada;
+
+//F1					:= ctrlf1.Ready AND dr.gmModeActual=L1_GEMMA.F1ProduccionNormal AND NOT dr.EndBatch;
+//A2					:= ctrlf1.Ready AND dr.gmModeActual=L1_GEMMA.A2ParaFinCiclo AND NOT dr.EndBatch;
+//F2					:= ctrlF2.Ready AND dr.gmModeActual=L1_GEMMA.F2SecuenciaPreparacion;
+//F3					:= ctrlF3.Ready AND dr.gmModeActual=L1_GEMMA.F3SecuenciaFinalizacion;
+//F6					:= ctrlF6.Ready AND dr.gmModeActual=L1_GEMMA.F6Probando;
+//F5					:= pn.swF5_Ejecutar AND dr.gmModeActual=L1_GEMMA.F5VerificacionOrdenada;
 
 
 //IF TapaEvacuada THEN
@@ -490,37 +460,37 @@ F5					:= pn.swF5_Ejecutar AND dr.gmModeActual=L1_GEMMA.F5VerificacionOrdenada;
 //END_IF
 
 
-Actualizar();		// calcula qué posiciones hay que descargar o evacuar
 
-IF F1 OR A2 OR F2 OR F3 OR F6 OR F5 THEN
+//IF F1 OR A2 OR F2 OR F3 OR F6 OR F5 THEN
 	//ExeSitua			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Situar)) AND NOT Hay_Pale;
 	//ExeAlime			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Alimentar) AND NOT TapaAlimentada);  // Alimentada);
 	//ExeCarga			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Cargar)) AND TapaAlimentada AND  //NOT Falta_Material AND Alimentada AND
 	//						NOT vInicializando[PosCarga] AND NOT vTapa_Cargada[PosCarga];
-	ExeMedid			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Medir) OR F2);
-	ExeFotoe			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Claridad) OR F2);
-	ExeInduc			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Material) OR F2);
-	ExeEvacu			:= ((F1 OR A2 OR F6 OR (F5 AND pn.swF5_Evacuar)) AND vEvacuar_Tapa[PosEvacu]) OR
-						   (F3 AND vTapa_Cargada[PosEvacu]);
-	ExeDesca			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Descargar)) AND vDescargar_Tapa[PosDesca];
-	ExePlato			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Girar) OR F2 OR F3);
-	ExeTrans			:= ExeDescaAnt OR (F5 AND pn.swF5_Transferir); // se transfiere si se descargó en la etapa anterior
+	//ExeMedid			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Medir) OR F2);
+	//ExeFotoe			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Claridad) OR F2);
+	//ExeInduc			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Material) OR F2);
+	//ExeEvacu			:= ((F1 OR A2 OR F6 OR (F5 AND pn.swF5_Evacuar)) AND vEvacuar_Tapa[PosEvacu]) OR
+		//				   (F3 AND vTapa_Cargada[PosEvacu]);
+	//ExeDesca			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Descargar)) AND vDescargar_Tapa[PosDesca];
+	//ExePlato			:= (F1 OR A2 OR F6 OR (F5 AND pn.swF5_Girar) OR F2 OR F3);
+	//ExeTrans			:= ExeDescaAnt OR (F5 AND pn.swF5_Transferir); // se transfiere si se descargó en la etapa anterior
 	
-	IF ctrlf1.Ready AND ctrlF6.Ready THEN // guarda la decisión de descarga para la transferencia del siguiente ciclo
-		ExeDescaAnt		:= ExeDesca; 	
-	END_IF
-ELSE
-	ExeSitua			:= FALSE;
-	ExeAlime			:= FALSE;
-	ExeCarga			:= FALSE;
-	ExeMedid			:= FALSE;
-	ExeFotoe			:= FALSE;
-	ExeInduc			:= FALSE;
-	ExeEvacu			:= FALSE;
-	ExeDesca			:= FALSE;
-	ExePlato			:= FALSE;
-	ExeTrans			:= FALSE;
-END_IF
+	//IF ctrlf1.Ready AND ctrlF6.Ready THEN // guarda la decisión de descarga para la transferencia del siguiente ciclo
+		//ExeDescaAnt		:= ExeDesca; 	
+	//END_IF
+//ELSE
+	//ExeSitua			:= FALSE;
+	//ExeAlime			:= FALSE;
+	//ExeCarga			:= FALSE;
+	//ExeMedid			:= FALSE;
+	//ExeFotoe			:= FALSE;
+	//ExeInduc			:= FALSE;
+	//ExeEvacu			:= FALSE;
+	//ExeDesca			:= FALSE;
+	//ExePlato			:= FALSE;
+	//ExeTrans			:= FALSE;
+//END_IF
+//*}
 
 //angulo 					:= -45.0 * (NumGiros MOD 8); //  SEL(angulo=0, angulo-45.0, 315.0); // , angulo+45.0, 0);
 	
@@ -540,18 +510,18 @@ END_IF
     </Method>
     <Method Name="PuedeDescargar" Id="{6ff31fda-6284-47de-bde5-d1ff905a8ea2}">
       <Declaration><![CDATA[METHOD PuedeDescargar : BOOL
-VAR_INPUT
-END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[PuedeDescargar := vDescargar_Tapa[PosDesca];]]></ST>
+        <ST><![CDATA[PuedeDescargar := vDescargar_Tapa[PosDesca];
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="PuedeEvacuar" Id="{47537ed4-bf8a-43ed-8692-953ee9cb9e1f}">
       <Declaration><![CDATA[METHOD PuedeEvacuar : BOOL // TRUE SI EL SECTOR CONTIENE UNA TAPA INVÁLIDAD EN LA POSICIÓN DE EVACUACIÓN
 VAR_INPUT
 	gmMode		: L1_GEMMA;
-END_VAR]]></Declaration>
+END_VAR
+]]></Declaration>
       <Implementation>
         <ST><![CDATA[PuedeEvacuar := vEvacuar_Tapa[PosEvacu]  OR (gmMode=L1_GEMMA.F3SecuenciaFinalizacion AND vTapa_Cargada[PosEvacu]);
 ]]></ST>

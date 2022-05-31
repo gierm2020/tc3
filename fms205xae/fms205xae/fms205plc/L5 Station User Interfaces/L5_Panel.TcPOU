@@ -3,27 +3,27 @@
   <POU Name="L5_Panel" Id="{514e5db3-ac71-4add-977b-df9fa295436c}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK L5_Panel
 VAR_INPUT
+	dr								: REFERENCE TO L1_Director;
+
 	mdF1Producir					: BOOL;
-	mdF6Probar						: BOOL;
+	//mdF6Probar						: BOOL;
 	mdF5Funcion						: BOOL;
 	mdF4Planta						: BOOL;
 
-	dr: REFERENCE TO L1_Director;
+	hwAS_AvisadorSonoro		AT %Q*	: BOOL; 
+	hwLA_LamparaAlarma		AT %Q*	: BOOL; 
+	hwDPO_DesconectaPO		AT %Q*	: BOOL := TRUE; 	
+	hwLM_LamparaMarcha		AT %Q*	: BOOL;
+	hwLS_LamparaStop		AT %Q*	: BOOL;
 
-	hwAS_AvisadorSonoro			AT %Q*	: BOOL; // AS - Avisador Sonoro
-	hwLA_LamparaAlarma			AT %Q*	: BOOL; // DUDAS - Es lo mismo que falta de material?
-	hwDPO_DesconectaPO			AT %Q*	: BOOL; // DPO - Desconecta PO	
-	hwLM_LamparaMarcha			AT %Q*	: BOOL; // LM - Lámpara marcha (verde)
-	hwLS_LamparaStop			AT %Q*	: BOOL; // DUDAS - LA - Lámpara de alarma o lámpara de stop
-
-	swF0_Empezar						: BOOL;
-	swF1_Producir						: BOOL;
-	swF2_Preparar						: BOOL;
-	swF3_Finalizar						: bool;
-	//swF1_Reanudar						: BOOL;
-	swF4_Planta							: BOOL; // botón en la visualización
-	swMensaje							: STRING(255) :='';
-	//swF5_Funcion						: BOOL; // botón en la visualización
+	swF0_Empezar					: BOOL;
+	swF1_Producir					: BOOL;
+	swF2_Preparar					: BOOL;
+	swF3_Finalizar					: BOOL;
+	swF6_Probar						: BOOL;
+	
+	swF4_Planta						: BOOL; 
+	swMensaje						: STRING(255) :='';
 END_VAR
 
 VAR
@@ -37,19 +37,17 @@ VAR
 	swPM_PulsadorMarcha					: BOOL;
 	fpPM_PulsadorMarcha					: R_TRIG;
 	
-	hwPS_PulsadorStop			AT %I*	: BOOL; // PS - Pulsador de parada (rojo)
-	swPS_PulsadorStop					: BOOL; 
+	hwPS_PulsadorStop			AT %I*	: BOOL := TRUE; // PS - Pulsador de parada (rojo)
+	swPS_PulsadorStop					: BOOL := TRUE; 
+	fnPS_PulsadorStop					: F_TRIG; 
 	
 	hwSM_SelecAutoManual	 	AT %I*	: BOOL; // SM - Selector modo auto/man
 	swSM_SelecAutoManual	 			: BOOL; 	
 
-	
-	//FP_PM								: R_TRIG;
 END_VAR
 
 
 VAR_OUTPUT
-	// modos excluyentes de la interfaz de usuario
 	// consignas del panel, resultado de integrar la información que viene del hardware, el estado GEMMA, los temporizadores y flancos, y la interfaz de usuario		
 	swF4_Avanza						: BOOL := FALSE;
  	swF4_Retroc						: BOOL := FALSE;	
@@ -75,31 +73,22 @@ VAR_OUTPUT
 	swF5_Ack						: BOOL;
 	
 END_VAR
-(*
-VAR_INPUT
-	enA2_FinCiclo					: BOOL;
-	enA3_Estado						: BOOL;
-	enF1_Empezar					: BOOL;
-	enF1_Reanduar					: BOOL;
-	enF4_Planta						: BOOL; // consigna F4_Planta habilitada
-	enF5_Funcion					: BOOL; // consigna habilitada	
-END_VAR
-*)
+
 VAR
 	gmModeName		: STRING 	:= 'Mode A6';
 	gmModeDescr		: STRING 	:= 'Inicializando';	
 	
-	ttPE_Seta						: STRING := '';
+//	ttPE_Seta						: STRING := '';
 
-	swA2_FinCiclo					: BOOL := TRUE;
+	swA2_FinCiclo					: BOOL;
 	swA3_Estado						: BOOL;
-	swA6_Inicializar				: BOOL := TRUE;
+	swA6_Inicializar				: BOOL;
 
 	//swF2_Preparar					: BOOL;
 	//swF3_Finalizar				: BOOL;	
-	ttF4_Planta						: STRING :='';
-	enF6_Probar						: BOOL;
-	swF6_Probar						: BOOL;
+	//ttF4_Planta						: STRING :='';
+	//enF6_Probar						: BOOL;
+	//swF6_Probar						: BOOL;
 END_VAR
 
 ]]></Declaration>
@@ -136,33 +125,40 @@ ELSIF dr.cnD1_Emergencia AND NOT (hwPE_Seta OR swPE_Seta) THEN
 ELSIF gmModeActual=L1_GEMMA.A1ParadaInicial OR
 	  gmModeActual=L1_GEMMA.F2SecuenciaPreparacion OR
 	  gmModeActual=L1_GEMMA.F1ProduccionNormal OR 
-	  gmModeActual=L1_GEMMA.F3SecuenciaFinalizacion  THEN
+	  gmModeActual=L1_GEMMA.F3SecuenciaFinalizacion OR
+	  gmModeActual=L1_GEMMA.A2ParaFinCiclo OR	  
+	  gmModeActual=L1_GEMMA.F6Probando THEN
 	  
-	fpPM_PulsadorMarcha(CLK:=hwPM_PulsadorMarcha OR swPM_PulsadorMarcha);
+	fpPM_PulsadorMarcha(CLK:=hwPM_PulsadorMarcha OR  swPM_PulsadorMarcha);
+	fnPS_PulsadorStop  (CLK:=hwPS_PulsadorStop   AND swPS_PulsadorStop);
 	IF fpPM_PulsadorMarcha.Q THEN
 		dr.cnF0_Empezar 			:= TRUE;
-		dr.cnF1_Producir			:= TRUE;
-		IF swF2_Preparar AND mdF1Producir THEN
-			dr.cnF2_Preparar 		:= TRUE;
-		END_IF
-		IF swF3_Finalizar AND mdF1Producir THEN
-			dr.cnF3_Finalizar 		:= TRUE;
-		END_IF
-		
-		
-	ELSIF (hwSM_SelecAutoManual OR swSM_SelecAutoManual) AND NOT DR.cnF4_Planta THEN
+		dr.cnF1_Producir			:= swF1_Producir AND NOT swF6_Probar;
+		dr.cnF2_Preparar 			:= swF2_Preparar AND NOT swF6_Probar;
+		dr.cnF3_Finalizar			:= swF3_Finalizar AND NOT swF6_Probar;
+		dr.cnF6_Probar				:= swF6_Probar AND NOT (swF1_Producir OR swF2_Preparar OR swF3_Finalizar);
+	
+	ELSIF (hwSM_SelecAutoManual OR swSM_SelecAutoManual) AND NOT DR.cnF4_Planta THEN // paso al modo F4
 		dr.cnF4_Planta				:= TRUE;
 		dr.cnF1_Producir			:= FALSE;
+		dr.cnF6_Probar				:= FALSE;
 		dr.cnF5_Funcion				:= FALSE;
 		mdF1Producir				:= FALSE;
 		mdF5Funcion					:= FALSE;
 		swMensaje					:= 'Modo mando directo activado';
 
-	ELSIF mdF1Producir AND NOT dr.cnF1_Producir THEN
+	ELSIF mdF1Producir AND NOT dr.cnF1_Producir THEN								// vuelta del modo F4
 		dr.cnF4_Planta				:= FALSE;
 		swF4_Planta					:= FALSE;
-		dr.cnF1_Producir			:= TRUE;
+		dr.cnA2_FinCiclo			:= fnPS_PulsadorStop.Q AND dr.cnF1_Producir AND NOT dr.cnF2_Preparar AND NOT dr.cnF3_Finalizar;
+				
+		dr.cnF1_Producir			:= swF1_Producir AND NOT swF6_Probar;
+		dr.cnF2_Preparar 			:= swF2_Preparar AND NOT swF6_Probar;
+		dr.cnF3_Finalizar			:= swF3_Finalizar AND NOT swF6_Probar;
+		dr.cnF6_Probar				:= swF6_Probar AND NOT (swF1_Producir OR swF2_Preparar OR swF3_Finalizar);		
 		swMensaje					:= 'Modo producción activado';
+		
+	
 		
 	ELSIF mdF5Funcion AND NOT dr.cnF5_Funcion THEN
 		dr.cnF4_Planta				:= FALSE;
@@ -424,73 +420,44 @@ UpdateUI(gmMode := dr.gmModeActual);
     <Method Name="UpdateUi" Id="{2f7a7a64-69c4-4b55-9d9b-f8c62855d55d}">
       <Declaration><![CDATA[METHOD UpdateUi : BOOL
 VAR_INPUT
-	// pn				: REFERENCE TO L5_Panel;
 	gmMode				: L1_GEMMA;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[(*
-// actualizar qué botones de consignas se habilitan (enABLE) 
-enF1_Empezar					:= FALSE;
-enF1_Reanduar					:= FALSE;
-enF4_Planta						:= FALSE;
-enF5_Funcion					:= FALSE;
-
-enA2_FinCiclo 					:= FALSE;
-enA3_Estado						:= FALSE;
-*)
-
-// actualizar actuadores del panel
+        <ST><![CDATA[// actualizar actuadores del panel
 hwAS_AvisadorSonoro 			:= FALSE;
 hwLA_LamparaAlarma				:= FALSE;
 hwLM_LamparaMarcha				:= FALSE;
-//swF1_Empezar					:= FALSE;
-//swF1_Reanudar					:= FALSE;
-//swF4_Planta					:= FALSE;
-//swF5_Funcion					:= FALSE;	
-
+hwDPO_DesconectaPO				:= TRUE;
 
 CASE gmMode OF
 	L1_GEMMA.A1ParadaInicial:
 		gmModeName				:= 'Mode A1';
 		gmModeDescr				:= 'Parada en estado inicial';
-		//enF1_Empezar			:= TRUE;
-		//enF4_Planta				:= TRUE;
-		//enF5_Funcion			:= TRUE;
 		hwLM_LamparaMarcha		:= dr.Tic;
 		
 	L1_GEMMA.A2ParaFinCiclo:
 		gmModeName				:= 'Mode A2';
 		gmModeDescr				:= 'Parada a final de ciclo solicitada';
-		//enF4_Planta				:= TRUE;
-		//enA2_FinCiclo 			:= TRUE;
-		//enA3_Estado				:= TRUE;
 		hwLM_LamparaMarcha		:= TRUE;
 		
 	L1_GEMMA.A3ParadaEstado:
 		gmModeName				:= 'Mode A3';
 		gmModeDescr				:= 'Parada en estado actual solicitada';
-		//enA3_Estado				:= TRUE;
-		//enF4_Planta				:= TRUE;
 		
 	L1_GEMMA.A4ParadaObtenida:
 		gmModeName				:= 'Mode A4';
 		gmModeDescr				:= 'Parada obtenida';
-		//enF1_Reanduar			:= TRUE;
-		//enF4_Planta				:= TRUE;
-		//enF5_Funcion			:= TRUE;
-		//enA3_Estado				:= TRUE;
 		
 	L1_GEMMA.A5PreparandoTrasFallo:
 		gmModeName				:= 'Mode A5';
 		gmModeDescr				:= 'Preparando tras fallo';	
-		//enF4_Planta				:= TRUE;
-		//enF5_Funcion			:= TRUE;
 		
 	L1_GEMMA.A6Inicializando:
 		gmModeName				:= 'Mode A6';
 		gmModeDescr				:= 'Inicializando';
 		hwLA_LamparaAlarma		:= dr.Tic;
+		hwDPO_DesconectaPO		:= dr.Tic;
 		
 	L1_GEMMA.A7SituandoEstado:
 		gmModeName				:= 'Mode A7';
@@ -499,65 +466,50 @@ CASE gmMode OF
 	L1_GEMMA.F1ProduccionNormal:
 		gmModeName				:= 'Mode F1';
 		gmModeDescr				:= 'Producción normal';
-		//enA2_FinCiclo 			:= TRUE;
-		//enA3_Estado				:= TRUE;
 		hwLM_LamparaMarcha		:= TRUE;
 
 	L1_GEMMA.F2SecuenciaPreparacion:
 		gmModeName				:= 'Mode F2';
 		gmModeDescr				:= 'Secuencia de preparación';	
-		//enA3_Estado				:= TRUE;
 		hwAS_AvisadorSonoro 	:= dr.Tic;
 		hwLM_LamparaMarcha		:= TRUE;
 		
 	L1_GEMMA.F3SecuenciaFinalizacion:
 		gmModeName				:= 'Mode F3';
 		gmModeDescr				:= 'Secuencia de finalización';
-		//enA3_Estado				:= TRUE;
 		hwAS_AvisadorSonoro 	:= TRUE;
 		hwLM_LamparaMarcha		:= TRUE;
 		
 	L1_GEMMA.F4VerificacionSinOrden:
 		gmModeName				:= 'Mode F4';
 		gmModeDescr				:= 'Verificación sin orden (Planta)';
-		//enF4_Planta				:= TRUE;
-		//enF5_Funcion			:= TRUE;
-		//swF4_Planta			:= TRUE;
 		
 	L1_GEMMA.F5VerificacionOrdenada:
 		gmModeName				:= 'Mode F5';
 		gmModeDescr				:= 'Verificación ordenada (Función)';
-		//enF4_Planta				:= TRUE;
-		//enF5_Funcion			:= TRUE;
-		//enA3_Estado				:= TRUE;
 				
 	L1_GEMMA.F6Probando:
 		gmModeName				:= 'Mode F6';
 		gmModeDescr				:= 'Probando';
-		//enF4_Planta				:= TRUE;
-		//enA3_Estado				:= TRUE;
 		
 	L1_GEMMA.D1ParadaEmergencia:
 		gmModeName				:= 'Mode D1';
 		gmModeDescr				:= 'Parada de emergencia';
 		hwAS_AvisadorSonoro 	:= dr.Tic;
-		hwLA_LamparaAlarma	:= dr.Tic;
+		hwLA_LamparaAlarma		:= dr.Tic;
 
 	L1_GEMMA.D2TratamientoFallos:
 		gmModeName				:= 'Mode D2';
 		gmModeDescr				:= 'Diagnósdr.tico/tratamiento de fallos';
-		//enF4_Planta			:= TRUE;
-		//enF5_Funcion			:= TRUE;
 		hwAS_AvisadorSonoro 	:= dr.Tic;
 		hwLA_LamparaAlarma	:= dr.Tic;
 		
 	L1_GEMMA.D3ProducirConFallos:
 		gmModeName				:= 'Mode D3';
 		gmModeDescr				:= 'Producir con fallos';
-		//enF4_Planta			:= TRUE;
-		//enF5_Funcion			:= TRUE;
 
-END_CASE]]></ST>
+END_CASE
+]]></ST>
       </Implementation>
     </Method>
   </POU>

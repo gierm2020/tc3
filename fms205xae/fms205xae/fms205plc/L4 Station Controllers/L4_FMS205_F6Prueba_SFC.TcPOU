@@ -2,9 +2,6 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="L4_FMS205_F6Prueba_SFC" Id="{a81c472c-1220-4b76-860b-f7f6b111694f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK L4_FMS205_F6Prueba_SFC EXTENDS L1_ControllerBase_SFC
-VAR_INPUT
-	FinCiclo : BOOL;
-END_VAR
 
 VAR_IN_OUT
 	Alime			: L3_Alimentador;

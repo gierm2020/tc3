@@ -638,6 +638,13 @@ END_VAR]]></Declaration>
 IF gmModePrev<>gmMode AND gmMode=L1_GEMMA.A6Inicializando THEN
 	gmModePrev	:= gmMode;
 	SFCReset 	:= TRUE;
+	Ready		:= FALSE; 
+	Executing	:= FALSE;
+	_Performed	:= FALSE;				// Para poner la primera vez que se leen los sensores o se gira el plato
+	Done		:= FALSE;
+	NumError	:= 0;
+	colPicFill	:= colModFillReady;  
+	colPicFram	:= colModFramReady;   	
 ELSE
 	SFCReset 	:= FALSE;
 END_IF

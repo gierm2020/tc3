@@ -149,27 +149,22 @@
 						<Name>PlcTask Outputs</Name>
 						<Var>
 							<Name>MAIN.fbFMS205.fbPanel.hwAS_AvisadorSonoro</Name>
-							<Comment><![CDATA[ AS - Avisador Sonoro]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.fbPanel.hwLA_LamparaAlarma</Name>
-							<Comment><![CDATA[ DUDAS - Es lo mismo que falta de material?]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.fbPanel.hwDPO_DesconectaPO</Name>
-							<Comment><![CDATA[ DPO - Desconecta PO	]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.fbPanel.hwLM_LamparaMarcha</Name>
-							<Comment><![CDATA[ LM - Lámpara marcha (verde)]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.fbFMS205.fbPanel.hwLS_LamparaStop</Name>
-							<Comment><![CDATA[ DUDAS - LA - Lámpara de alarma o lámpara de stop]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
