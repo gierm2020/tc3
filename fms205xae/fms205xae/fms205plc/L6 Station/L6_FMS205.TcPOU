@@ -231,9 +231,9 @@ CASE dr.gmModeActual OF
 		dr.EndCycle 					:= ctrlF1Producir.Done;
 		IF ctrlF1Producir.Done THEN
 			dr.EndCycle					:= TRUE;
-			dr.cnA3_Estado				:= dr.cnA2_FinCiclo;
+			//dr.cnA3_Estado				:= dr.cnA2_FinCiclo;
 			ctrlF1Producir.Execute		:= FALSE;
-			ctrlF1Producir.Ack			:= TRUE;			
+			ctrlF1Producir.Ack			:= NOT dr.cnA2_FinCiclo;			
 			dr.EndBatch 				:= tapas.ResReal >= tapas.ReqNumero;			
 		ELSIF ctrlF1Producir.Ready AND NOT dr.EndCycle THEN
 			dr.EndCycle					:= FALSE;

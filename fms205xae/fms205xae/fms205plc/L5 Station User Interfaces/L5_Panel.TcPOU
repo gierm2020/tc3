@@ -136,20 +136,23 @@ ELSIF clPM_PulsadorMarcha.Q THEN			// 1o salta el empezar, si tardas más de 1s 
 ELSIF dr.cnF1_Producir AND fnPS_PulsadorStop.Q THEN
 	dr.cnA2_FinCiclo				:= TRUE;
 	
-ELSIF dr.cnA3_Estado AND dr.gmModeActual=L1_GEMMA.A4ParadaObtenida THEN
+ELSIF (dr.cnA3_Estado OR dr.cnA2_FinCiclo) AND dr.gmModeActual=L1_GEMMA.A4ParadaObtenida THEN
 	dr.cnA3_Estado 					:= FALSE;
+	dr.cnF0_Empezar					:= FALSE;
+	dr.cnA2_FinCiclo				:= FALSE;
 
 ELSIF fpPM_PulsadorMarcha.Q THEN
 	dr.cnF0_Empezar 				:= TRUE;
+	dr.cnA2_FinCiclo				:= FALSE;
 	
 ELSIF mdF1Producir AND NOT dr.cnF1_Producir THEN								
-	mdF1Producir				:= TRUE;
-	mdF4Planta					:= FALSE;
-	mdF5Funcion					:= FALSE;
-	dr.cnF1_Producir			:= TRUE;
-	dr.cnF4_Planta				:= FALSE;	
-	dr.cnF5_Funcion				:= FALSE;
-	swMensaje					:= 'Modo producción activado';
+	mdF1Producir					:= TRUE;
+	mdF4Planta						:= FALSE;
+	mdF5Funcion						:= FALSE;
+	dr.cnF1_Producir				:= TRUE;
+	dr.cnF4_Planta					:= FALSE;	
+	dr.cnF5_Funcion					:= FALSE;
+	swMensaje						:= 'Modo producción activado';
 			
 //	dr.cnF1_Producir			:= swF1_Producir AND NOT swF6_Probar;
 	//dr.cnF2_Preparar 			:= swF2_Preparar AND NOT swF6_Probar;
@@ -157,34 +160,34 @@ ELSIF mdF1Producir AND NOT dr.cnF1_Producir THEN
 	//dr.cnF6_Probar				:= swF6_Probar AND NOT (swF1_Producir OR swF2_Preparar OR swF3_Finalizar);		
 
 ELSIF (hwSM_SelecAutoManual OR swSM_SelecAutoManual) AND NOT DR.cnF4_Planta THEN // paso al modo F4
-	mdF1Producir				:= FALSE;
-	mdF4Planta					:= TRUE;
-	mdF5Funcion					:= FALSE;
-	dr.cnF1_Producir			:= FALSE;
-	dr.cnF4_Planta				:= TRUE;	
-	dr.cnF5_Funcion				:= FALSE;
-	swMensaje					:= 'Modo mando directo activado';
+	mdF1Producir					:= FALSE;
+	mdF4Planta						:= TRUE;
+	mdF5Funcion						:= FALSE;
+	dr.cnF1_Producir				:= FALSE;
+	dr.cnF4_Planta					:= TRUE;	
+	dr.cnF5_Funcion					:= FALSE;
+	swMensaje						:= 'Modo mando directo activado';
 
 ELSIF gmModeActual=L1_GEMMA.F4VerificacionSinOrden AND 
 	NOT (hwSM_SelecAutoManual OR swSM_SelecAutoManual) THEN
-	dr.cnF4_Planta				:= FALSE;
-	swSM_SelecAutoManual		:= FALSE;
-	swMensaje					:= 'Modo F4 desactivado';
+	dr.cnF4_Planta					:= FALSE;
+	swSM_SelecAutoManual			:= FALSE;
+	swMensaje						:= 'Modo F4 desactivado';
 
 ELSIF mdF5Funcion AND NOT dr.cnF5_Funcion THEN
-	mdF1Producir				:= FALSE;
-	mdF4Planta					:= FALSE;
-	mdF5Funcion					:= TRUE;
-	dr.cnF1_Producir			:= FALSE;
-	dr.cnF4_Planta				:= FALSE;	
-	dr.cnF5_Funcion				:= TRUE;
-	swMensaje					:= 'Modo función activado';
+	mdF1Producir					:= FALSE;
+	mdF4Planta						:= FALSE;
+	mdF5Funcion						:= TRUE;
+	dr.cnF1_Producir				:= FALSE;
+	dr.cnF4_Planta					:= FALSE;	
+	dr.cnF5_Funcion					:= TRUE;
+	swMensaje						:= 'Modo función activado';
 
 ELSIF gmModeActual=L1_GEMMA.A1ParadaInicial THEN
-	dr.cnF1_Producir			:= swF1_Producir AND NOT swF6_Probar;
-	dr.cnF2_Preparar 			:= swF2_Preparar AND NOT swF6_Probar;
-	dr.cnF3_Finalizar			:= swF3_Finalizar AND NOT swF6_Probar;
-	dr.cnF6_Probar				:= swF6_Probar AND NOT (swF1_Producir OR swF2_Preparar OR swF3_Finalizar);
+	dr.cnF1_Producir				:= swF1_Producir AND NOT swF6_Probar;
+	dr.cnF2_Preparar 				:= swF2_Preparar AND NOT swF6_Probar;
+	dr.cnF3_Finalizar				:= swF3_Finalizar AND NOT swF6_Probar;
+	dr.cnF6_Probar					:= swF6_Probar AND NOT (swF1_Producir OR swF2_Preparar OR swF3_Finalizar);
 
 
 END_IF
